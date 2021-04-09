@@ -1,11 +1,12 @@
 Package: MQanalyser
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Analyse the proteomics LC-MS/MS data from MaxQuant.
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Alvaro Sanchez-Villalba <sanchezvillalba.alvaro@gmail.com>
+Maintainer: Alvaro Sanchez-Villalba <sanchezvillalba.alvaro@gmail.com>
+Description: it takes as input the proteinGroups.txt table and applies statistical
+    tests to identify differentially expressed protein among groups. Several plots are
+    avaible together with a shinyApp.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
