@@ -1,5 +1,6 @@
 library(shiny)
 library(shinythemes)
+library(DEP)
 library(shinydashboard)
 library(gplots)
 library(ggplot2)

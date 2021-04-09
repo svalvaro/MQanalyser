@@ -22,7 +22,14 @@ navbarPage(h3("Proteomics results"),
                                             multiple = FALSE,
                                             accept = 'text/csv'),
 
+                                  radioButtons(inputId = "IntensityType",
+                                                h4("Intensity type to analyze"),
+                                                choices = c("Intensity" = 'Intensity',
+                                                            "LFQ" = 'LFQ',
+                                                            "iBAQ" = 'iBAQ'),
+                                                selected = 'Intensity'),
                                   hr(),
+                                  br(),
 
                                   fileInput(inputId = 'optional_exp_design',
                                             label='Provide the experiment design (Optional)',
@@ -70,8 +77,22 @@ navbarPage(h3("Proteomics results"),
                                   box(img(src='Proteomika_logo_hires.png', height = '60%', width = '60%', align = 'right'))
                               )
                           )
-                 ) ,
+                 ),
                  #SHiny busy
+
+           #First Panel is the heatmap
+           tabPanel(h4("Results"),
+                    sidebarLayout(
+                        sidebarPanel(
+                            h3("Select the adjustments")
+
+                        ),
+                        mainPanel(DT::dataTableOutput('proteomics_results'))
+
+                        )
+                    ),
+
+
 
 
                  #First Panel is the heatmap
