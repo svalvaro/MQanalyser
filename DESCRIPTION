@@ -10,3 +10,5 @@ Description: it takes as input the proteinGroups.txt table and applies statistic
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    shiny
