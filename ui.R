@@ -17,17 +17,18 @@ navbarPage(h3("Proteomics results"),
                  tabPanel(h4('Start'),
                           sidebarLayout(
                               sidebarPanel(
-
-                                  #Upload the table of results
-                                  h4('Upload the results file provided:'),
-
                                   fileInput(inputId = 'proteinGroups',
-                                            label = h4('Choose the proteinGroups.txt file'),
+                                            label = h4('Upload the proteinGroups.txt file'),
                                             multiple = FALSE,
                                             accept = 'text/csv'),
 
                                   hr(),
-                                  h5('Please Edit the next table and add the Group and Replicate'),
+
+                                  fileInput(inputId = 'optional_exp_design',
+                                            label='Provide the experiment design (Optional)',
+                                            multiple= FALSE,
+                                            accept= 'text/csv'),
+
                                   br(),
 
                                   fileInput(inputId = 'user_genes',
@@ -45,8 +46,9 @@ navbarPage(h3("Proteomics results"),
                                   h4('Exapmles of the file(s) to be uploaded:'),
                                   fluidRow(
 
-                                      column(5,a(href='example_results.txt','Results example', download=NA, target='_blank') ),
+                                      column(5,a(href='proteinGroup_example.txt','proteinGroups.txt', download=NA, target='_blank') ),
 
+                                      column(5,a(href='experiment_design_example.txt','experiment_design.txt', download=NA, target='_blank') ),
 
 
                                       column(5,a(href='user_genes_examples.txt','Genes example', download=NA, target='_blank') ),
@@ -56,12 +58,16 @@ navbarPage(h3("Proteomics results"),
 
                               mainPanel(
                                   box(title = h3('Experiment Design'),
+                                      width = 10,
                                       h4('Welcome to analysis of the results of LC-MS/MS'),
+                                      h5('Start by uploading the proteinGroups.txt table provided.'),
+                                      h5('Please Edit the next table and add the Group and Replicate.'),
+                                      h5('Alternatively an experiment design can be uploaded. Be sure that the Sample names are correct.'),
                                       hr(),
                                       #DTOutput('experiment_design')
-                                      DT::dataTableOutput('experiment_design'),
+                                      DT::dataTableOutput('experiment_design_out'),
                                   ),
-                                  box(img(src='Proteomika_logo_hires.png'))
+                                  box(img(src='Proteomika_logo_hires.png', height = '60%', width = '60%', align = 'right'))
                               )
                           )
                  ) ,

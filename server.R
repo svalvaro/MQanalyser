@@ -43,13 +43,25 @@ function(input, output) {
 
     })
 
-    output$experiment_design <- DT::renderDataTable({
+    experiment_design <- reactive({
 
-        df <- data.frame(Sample = experiment_names(),
-                         Group = NA,
-                         Replicate = NA)
+        inFile <- input$optional_exp_design
 
-        DT::datatable(df, editable = TRUE)
+        if (is.null(inFile)){
+
+            df <- data.frame(Sample = experiment_names(),
+                             Group = NA,
+                             Replicate = NA)
+        } else{
+            df <- read_delim(inFile$datapath,"\t", escape_double = FALSE, trim_ws = TRUE)
+        }
+
+        return(df)
+    })
+
+    output$experiment_design_out <- DT::renderDataTable({
+
+         DT::datatable(experiment_design(), editable = TRUE)
 
     })
 
