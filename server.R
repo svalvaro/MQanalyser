@@ -109,23 +109,36 @@ function(input, output) {
 
     })
 
-    data_results <- reactive({
+    dep <- reactive({
         # Test every sample versus control
         data_diff <- test_diff(data_imp(), type = "control", control = "Ctrl")
 
-
-
-
         dep <- add_rejections(data_diff, alpha = 0.05, lfc = log2(1.5))
 
-        data_results <- get_results(dep)
+
+    })
+
+    output$significant_proteins <- renderText({
+
+        # Generate a results table
+        data_results <- get_results(dep())
+
+        # Number of significant proteins
+        significant_proteins <- data_results %>% filter(significant) %>% nrow()
+        HTML(
+            paste0("There are: ", "<b>",significant_proteins," out of ",nrow(data_results),"</b>"," signifcant proteins.")
+        )
+
+
     })
 
 
     output$proteomics_results <- DT::renderDataTable({
 
-        DT::datatable(data_results())
+        # Generate a results table
+        data_results <- get_results(dep())
 
+        DT::datatable(data_results)
     })
 
 
