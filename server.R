@@ -128,8 +128,6 @@ function(input, output) {
         HTML(
             paste0("There are: ", "<b>",significant_proteins," out of ",nrow(data_results),"</b>"," signifcant proteins.")
         )
-
-
     })
 
 
