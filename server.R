@@ -13,8 +13,8 @@ function(input, output) {
 
         df <- read_delim(inFile$datapath, "\t", escape_double = FALSE, trim_ws = TRUE)
 
-        # df <- read_delim("www/proteinGroups_example.txt",
-        #                                   "\t", escape_double = FALSE, trim_ws = TRUE)
+        #df <- read_delim("www/proteinGroups_example.txt",
+         #                                  "\t", escape_double = FALSE, trim_ws = TRUE)
 
         #Remove reverse and reverse and contaminants and only identified by site
         df <- df[is.na(df$`Potential contaminant`) & is.na(df$Reverse)  & is.na(df$`Only identified by site`),]
@@ -81,39 +81,65 @@ function(input, output) {
             columns = grep('iBAQ.', colnames(proteinGroups()))
         }
 
+        #Adds two columns at the end with an unique gene and protein name.
         data_unique <- DEP::make_unique(proteinGroups(), 'Gene names', 'Protein IDs', delim = ';')
 
-        data_se <- DEP::make_se(data_unique, columns = columns, experiment_design())
+
+        #Creates a SummarizedExperiment
+        data_se <- DEP::make_se(data_unique, columns = columns, experiment_design)
 
     })
 
     data_filt <- reactive({
 
-        #Filter for proteins that are identified in all replicates of at least one condition
-        data_filt <- filter_missval(data_se(),thr = 0)
-        #plot_missval(data_filt)
+        #Imputation should not be done for proteins with too many NAs
+        #We set a threshold for the allowed number of missing values per condition
+
+        # Check number of replicates
+        if(max(experiment_design()$replicate)<3){
+            threshold <-0 #If there are two replicates, NA accepted is 0.
+        } else  if(max(experiment_design()$replicate)==3){
+            threshold <-1 #If there are three replicates,  NA accepted is 1.
+        } else if(max(experiment_design()$replicate)<6 ){
+            threshold <-2 #If there are 4 or 5 replicates,  NA accepted is 2.
+        } else if (max(experiment_design()$replicate)>=6){
+            threshold<-trunc(max(experiment_design()$replicate)/2) #If there are 6 or more. NA accepted is half of the max.
+        }
+
+        data_filt <- filter_missval(data_se,thr = threshold)
+        plot_missval(filter_missval(data_se,thr = 5))
+
+        plot_detect(data_filt)
+        #plot_coverage(data_filt)
     })
 
     data_norm <- reactive({
 
-        data_norm <- normalize_vsn(data_filt())
-
-        #plot_normalization(data_filt, data_norm)
+        data_norm <- normalize_vsn(data_filt)
+        meanSdPlot(data_norm)
+        #data_norm <- normalize_vsn(data_filt)
+        plot_normalization(data_filt, data_norm)
     })
 
     data_imp <- reactive({
 
-        data_imp <- impute(data_norm(), fun = "knn", rowmax = 0.9)
+        data_imp <- impute(data_norm, fun = "MinProb", q = 0.01)
 
-        #plot_imputation(data_norm, data_imp)
+        plot_imputation(data_norm, data_imp)
+
+        #data_imp <- impute(data_norm, fun = "knn", rowmax = 0.9)
+    #   plot_imputation(data_norm, data_imp)
 
     })
 
     dep <- reactive({
         # Test every sample versus control
-        data_diff <- test_diff(data_imp(), type = "control", control = "Ctrl")
+        #data_diff <- test_diff(data_imp, type = "control", control = "Benign")
 
-        dep <- add_rejections(data_diff, alpha = 0.05, lfc = log2(1.5))
+        data_diff_all_contrasts <- test_diff(data_imp, type = "all")
+        #dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
+
+        dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
 
 
     })
@@ -121,7 +147,7 @@ function(input, output) {
     output$significant_proteins <- renderText({
 
         # Generate a results table
-        data_results <- get_results(dep())
+        data_results <- get_results(dep)
 
         # Number of significant proteins
         significant_proteins <- data_results %>% filter(significant) %>% nrow()
