@@ -11,4 +11,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    shiny
+    dplyr,
+    purrr,
+    shiny,
+    tidyr

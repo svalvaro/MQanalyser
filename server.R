@@ -29,9 +29,7 @@ function(input, output) {
 
     experiment_names <- reactive({
 
-        proteinGroups <- proteinGroups()
-
-        experiment_names <- proteinGroups %>%
+        experiment_names <- proteinGroups() %>%
                              select(contains('Intensity ')) %>%
                              select(-contains('LFQ'))
 
@@ -86,7 +84,7 @@ function(input, output) {
 
 
         #Creates a SummarizedExperiment
-        data_se <- DEP::make_se(data_unique, columns = columns, experiment_design)
+        data_se <- DEP::make_se(data_unique, columns = columns, experiment_design())
 
     })
 
@@ -106,26 +104,26 @@ function(input, output) {
             threshold<-trunc(max(experiment_design()$replicate)/2) #If there are 6 or more. NA accepted is half of the max.
         }
 
-        data_filt <- filter_missval(data_se,thr = threshold)
-        plot_missval(filter_missval(data_se,thr = 5))
+        data_filt <- filter_missval(data_se(),thr = threshold)
+        #plot_missval(filter_missval(data_se,thr = 5))
 
-        plot_detect(data_filt)
+        #plot_detect(data_filt)
         #plot_coverage(data_filt)
     })
 
     data_norm <- reactive({
 
-        data_norm <- normalize_vsn(data_filt)
-        meanSdPlot(data_norm)
+        data_norm <- normalize_vsn(data_filt())
+        #meanSdPlot(data_norm)
         #data_norm <- normalize_vsn(data_filt)
-        plot_normalization(data_filt, data_norm)
+        #plot_normalization(data_filt, data_norm)
     })
 
     data_imp <- reactive({
 
-        data_imp <- impute(data_norm, fun = "MinProb", q = 0.01)
+        data_imp <- impute(data_norm(), fun = "MinProb", q = 0.01)
 
-        plot_imputation(data_norm, data_imp)
+        #plot_imputation(data_norm, data_imp)
 
         #data_imp <- impute(data_norm, fun = "knn", rowmax = 0.9)
     #   plot_imputation(data_norm, data_imp)
@@ -136,7 +134,9 @@ function(input, output) {
         # Test every sample versus control
         #data_diff <- test_diff(data_imp, type = "control", control = "Benign")
 
-        data_diff_all_contrasts <- test_diff(data_imp, type = "all")
+        #data_diff_all_contrasts <- test_diff(data_imp, type = "all")
+
+        data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(), type = "all")
         #dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
 
         dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
@@ -147,7 +147,7 @@ function(input, output) {
     output$significant_proteins <- renderText({
 
         # Generate a results table
-        data_results <- get_results(dep)
+        data_results <- get_results(dep())
 
         # Number of significant proteins
         significant_proteins <- data_results %>% filter(significant) %>% nrow()
