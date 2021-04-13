@@ -23,11 +23,13 @@ navbarPage(h3("Proteomics results"),
                                             accept = 'text/csv'),
 
                                   radioButtons(inputId = "IntensityType",
-                                                h4("Intensity type to analyze"),
+                                                h4("Intensity type to analyze:"),
                                                 choices = c("Intensity" = 'Intensity',
                                                             "LFQ" = 'LFQ',
                                                             "iBAQ" = 'iBAQ'),
                                                 selected = 'Intensity'),
+
+                                  verbatimTextOutput('IntensityFound'),
                                   hr(),
                                   br(),
 

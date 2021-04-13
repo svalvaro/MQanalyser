@@ -65,6 +65,26 @@ function(input, output) {
     })
 
 
+
+    output$IntensityFound <- renderText({
+
+        columns = grep(paste0(input$IntensityType,'.'), colnames(proteinGroups()))
+
+        if (length(columns) == 0) {
+
+            print(paste0(input$IntensityType, ' was not found. \nSelect another type of intensity.'))
+
+        } else{
+            print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
+
+        }
+
+
+
+
+        })
+
+
     data_se <- reactive({
 
         if (input$IntensityType == 'Intensity') {
