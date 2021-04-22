@@ -1,5 +1,11 @@
 function(input, output) {
 
+
+    # exp_design_na <- data.frame(label = experiment_names(),
+    #                             condition = NA,
+    #                             replicate = NA)
+
+
     options(shiny.maxRequestSize=100*1024^2)## Set maximum upload size to 100MB
 
     #proteinGroups.txt input
@@ -46,8 +52,8 @@ function(input, output) {
         if (is.null(inFile)){
 
             df <- data.frame(label = experiment_names(),
-                             condition = NA,
-                             replicate = NA)
+                             condition = ' ',
+                             replicate = ' ')
         } else{
             df <- read_delim(inFile$datapath,"\t", escape_double = FALSE, trim_ws = TRUE)
         }
@@ -56,11 +62,17 @@ function(input, output) {
     })
 
 
-    output$experiment_design_out <- DT::renderDataTable({
+    ed_final <- reactiveValues()
 
-         DT::datatable(experiment_design(), editable = TRUE)
-
+    output$ed_out <- renderRHandsontable({
+        rhandsontable(experiment_design())
     })
+
+
+    observeEvent(input$runButton, {
+        ed_final$data <-  hot_to_r(input$ed_out)
+    })
+
 
 
 
@@ -91,7 +103,7 @@ function(input, output) {
         # Creates a SummarizedExperiment,
 
         # This does not take into account the editable format, probably experiment_design_out()
-        data_se <- DEP::make_se(data_unique, columns = columns, experiment_design())
+        data_se <- DEP::make_se(data_unique, columns = columns, exp_design_final())
 
     })
 

@@ -11,6 +11,7 @@
 #' @import purr
 #' @import tidyr
 #' @import limma
+#' @import rhandsontable
 #'
 #' @return
 #' @export
