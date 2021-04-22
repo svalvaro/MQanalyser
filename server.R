@@ -65,12 +65,15 @@ function(input, output) {
     ed_final <- reactiveValues()
 
     output$ed_out <- renderRHandsontable({
-        rhandsontable(experiment_design())
+        rhandsontable(experiment_design()) %>%
+            hot_col('label', readOnly = TRUE) %>%
+            hot_col('replicate', format = '0a')
     })
 
 
     observeEvent(input$runButton, {
         ed_final$data <-  hot_to_r(input$ed_out)
+
     })
 
 
@@ -103,7 +106,7 @@ function(input, output) {
         # Creates a SummarizedExperiment,
 
         # This does not take into account the editable format, probably experiment_design_out()
-        data_se <- DEP::make_se(data_unique, columns = columns, exp_design_final())
+        data_se <- DEP::make_se(data_unique, columns = columns, ed_final$data)
 
     })
 
