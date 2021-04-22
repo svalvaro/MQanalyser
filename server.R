@@ -55,7 +55,7 @@ function(input, output) {
                              condition = ' ',
                              replicate = ' ')
         } else{
-            df <- read_delim(inFile$datapath,"\t", escape_double = FALSE, trim_ws = TRUE)
+            df <- read.delim(inFile$datapath)
         }
 
         return(df)
@@ -72,12 +72,9 @@ function(input, output) {
 
 
     observeEvent(input$runButton, {
-        ed_final$data <-  hot_to_r(input$ed_out)
+        ed_final$data <-  rhandsontable::hot_to_r(input$ed_out)
 
     })
-
-
-
 
     output$IntensityFound <- renderText({
 
@@ -102,13 +99,12 @@ function(input, output) {
         # Adds two columns at the end with an unique gene and protein name.
         data_unique <- DEP::make_unique(proteinGroups(), 'Gene.names', 'Protein.IDs', delim = ';')
 
-
         # Creates a SummarizedExperiment,
-
-        # This does not take into account the editable format, probably experiment_design_out()
         data_se <- DEP::make_se(data_unique, columns = columns, ed_final$data)
 
     })
+
+
 
     data_filt <- reactive({
 
@@ -116,14 +112,14 @@ function(input, output) {
         #We set a threshold for the allowed number of missing values per condition
 
         # Check number of replicates
-        if(max(experiment_design()$replicate)<3){
+        if(max(ed_final$data$replicate)<3){
             threshold <-0 #If there are two replicates, NA accepted is 0.
-        } else  if(max(experiment_design()$replicate)==3){
+        } else  if(max(ed_final$data$replicate)==3){
             threshold <-1 #If there are three replicates,  NA accepted is 1.
-        } else if(max(experiment_design()$replicate)<6 ){
+        } else if(max(ed_final$data$replicate)<6 ){
             threshold <-2 #If there are 4 or 5 replicates,  NA accepted is 2.
-        } else if (max(experiment_design()$replicate)>=6){
-            threshold<-trunc(max(experiment_design()$replicate)/2) #If there are 6 or more. NA accepted is half of the max.
+        } else if (max(ed_final$data$replicate)>=6){
+            threshold<-trunc(max(ed_final$data$replicate)/2) #If there are 6 or more. NA accepted is half of the max.
         }
 
         data_filt <- DEP::filter_missval(data_se(),thr = threshold)
@@ -143,12 +139,16 @@ function(input, output) {
 
     data_imp <- reactive({
 
-        data_imp <- DEP::impute(data_norm(), fun = "MinProb", q = 0.01)
+        data_imp <- DEP::impute(data_norm(), fun = "MinProb", q = 0.05)
+
+        #data_imp <- DEP::impute(data_norm, fun = "man", shift = 1.8, scale = 0.3)
+
+        #data_imp <- DEP::impute(data_norm, fun = "knn", rowmax = 0.9)
 
         #plot_imputation(data_norm, data_imp)
 
         #data_imp <- impute(data_norm, fun = "knn", rowmax = 0.9)
-    #   plot_imputation(data_norm, data_imp)
+    #  plot_imputation(data_norm, data_imp)
 
     })
 
@@ -159,6 +159,8 @@ function(input, output) {
         #data_diff_all_contrasts <- test_diff(data_imp, type = "all")
 
         data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(), type = "all")
+        data_diff_all_contrasts <- DEP::test_diff(data_imp, type = "all")
+
         #dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
 
         dep <- DEP::add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))

@@ -33,6 +33,8 @@ navbarPage(h3("Proteomics results"),
                                   hr(),
                                   br(),
 
+
+
                                   fileInput(inputId = 'optional_exp_design',
                                             label='Provide the experiment design (Optional)',
                                             multiple= FALSE,
