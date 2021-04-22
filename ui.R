@@ -74,7 +74,8 @@ navbarPage(h3("Proteomics results"),
                                       h5('Alternatively an experiment design can be uploaded. Be sure that the Sample names are correct.'),
                                       hr(),
                                       #DTOutput('experiment_design')
-                                      DT::dataTableOutput('experiment_design_out'),
+                                      #DT::dataTableOutput('experiment_design_out'),
+                                      DT::dataTableOutput('experiment_design'),
                                   ),
                                   box(img(src='Proteomika_logo_hires.png', height = '60%', width = '60%', align = 'right'))
                               )

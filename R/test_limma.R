@@ -10,6 +10,7 @@
 #' @import dplyr
 #' @import purr
 #' @import tidyr
+#' @import limma
 #'
 #' @return
 #' @export

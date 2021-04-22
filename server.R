@@ -11,13 +11,10 @@ function(input, output) {
         if (is.null(inFile))
             return(NULL)
 
-        df <- read_delim(inFile$datapath, "\t", escape_double = FALSE, trim_ws = TRUE)
-
-        #df <- read_delim("www/proteinGroups_example.txt",
-         #                                  "\t", escape_double = FALSE, trim_ws = TRUE)
+        df <- read.delim(inFile$datapath)
 
         #Remove reverse and reverse and contaminants and only identified by site
-        df <- df[is.na(df$`Potential contaminant`) & is.na(df$Reverse)  & is.na(df$`Only identified by site`),]
+        df <- df[(df$Potential.contaminant == '') & (df$Reverse == '')  & (df$Only.identified.by.site==''),]
 
         #Separate the Protein IDs into different rows separated by ;
 
@@ -30,12 +27,13 @@ function(input, output) {
     experiment_names <- reactive({
 
         experiment_names <- proteinGroups() %>%
-                             select(contains('Intensity ')) %>%
-                             select(-contains('LFQ'))
+                            select(contains('Intensity.')) %>%
+                            select(-contains('LFQ'))
+
 
         experiment_names <- colnames(experiment_names)
 
-        experiment_names <- gsub('Intensity', '', experiment_names)
+        experiment_names <- gsub('Intensity.', '', experiment_names)
 
         return(experiment_names)
 
@@ -70,6 +68,7 @@ function(input, output) {
 
         columns = grep(paste0(input$IntensityType,'.'), colnames(proteinGroups()))
 
+
         if (length(columns) == 0) {
 
             print(paste0(input$IntensityType, ' was not found. \nSelect another type of intensity.'))
@@ -78,32 +77,20 @@ function(input, output) {
             print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
 
         }
-
-
-
-
         })
 
 
     data_se <- reactive({
 
-        if (input$IntensityType == 'Intensity') {
+        columns = grep(paste0(input$IntensityType,'.'), colnames(proteinGroups()))
 
-            columns = grep('Intensity.', colnames(proteinGroups()))
-
-        } else if (input$IntensityType == 'LFQ') {
-
-            columns = grep('LFQ.', colnames(proteinGroups()))
-
-        } else if (input$IntensityType == 'iBAQ'){
-            columns = grep('iBAQ.', colnames(proteinGroups()))
-        }
-
-        #Adds two columns at the end with an unique gene and protein name.
-        data_unique <- DEP::make_unique(proteinGroups(), 'Gene names', 'Protein IDs', delim = ';')
+        # Adds two columns at the end with an unique gene and protein name.
+        data_unique <- DEP::make_unique(proteinGroups(), 'Gene.names', 'Protein.IDs', delim = ';')
 
 
-        #Creates a SummarizedExperiment
+        # Creates a SummarizedExperiment,
+
+        # This does not take into account the editable format, probably experiment_design_out()
         data_se <- DEP::make_se(data_unique, columns = columns, experiment_design())
 
     })
@@ -124,7 +111,7 @@ function(input, output) {
             threshold<-trunc(max(experiment_design()$replicate)/2) #If there are 6 or more. NA accepted is half of the max.
         }
 
-        data_filt <- filter_missval(data_se(),thr = threshold)
+        data_filt <- DEP::filter_missval(data_se(),thr = threshold)
         #plot_missval(filter_missval(data_se,thr = 5))
 
         #plot_detect(data_filt)
@@ -133,7 +120,7 @@ function(input, output) {
 
     data_norm <- reactive({
 
-        data_norm <- normalize_vsn(data_filt())
+        data_norm <- DEP::normalize_vsn(data_filt())
         #meanSdPlot(data_norm)
         #data_norm <- normalize_vsn(data_filt)
         #plot_normalization(data_filt, data_norm)
@@ -141,7 +128,7 @@ function(input, output) {
 
     data_imp <- reactive({
 
-        data_imp <- impute(data_norm(), fun = "MinProb", q = 0.01)
+        data_imp <- DEP::impute(data_norm(), fun = "MinProb", q = 0.01)
 
         #plot_imputation(data_norm, data_imp)
 
@@ -159,7 +146,7 @@ function(input, output) {
         data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(), type = "all")
         #dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
 
-        dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
+        dep <- DEP::add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
 
 
     })
@@ -167,7 +154,7 @@ function(input, output) {
     output$significant_proteins <- renderText({
 
         # Generate a results table
-        data_results <- get_results(dep())
+        data_results <- DEP::get_results(dep())
 
         # Number of significant proteins
         significant_proteins <- data_results %>% filter(significant) %>% nrow()
