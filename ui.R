@@ -33,8 +33,6 @@ navbarPage(h3("Proteomics results"),
                                   hr(),
                                   br(),
 
-
-
                                   fileInput(inputId = 'optional_exp_design',
                                             label='Provide the experiment design (Optional)',
                                             multiple= FALSE,
@@ -42,17 +40,52 @@ navbarPage(h3("Proteomics results"),
 
                                   br(),
 
+                                  dropdown(
+                                      tags$h3("Advanced Parameters"),
+
+                                      sliderInput(inputId = 'input_pvalue',
+                                                  label = 'Adjusted p-value cut off',
+                                                  value = 0.05,
+                                                  min = 0, max = 1),
+
+                                      numericInput(inputId = 'input_log2',
+                                                  label = 'Log2 fold change cut off',
+                                                  value = 1.5,
+                                                  min = 0, max = 100),
+
+                                      selectInput(inputId = 'input_imputation',
+                                                  label = 'Imputation',
+                                                  choices = c('Perseus' = 'Perseus',
+                                                              'bpca' = 'bpca',
+                                                              'QRILC'= 'QRILC',
+                                                              'MinProb'= 'MinProb',
+                                                              'min' = 'min',
+                                                              'knn' = 'knn',
+                                                              'MLE' = 'MLE',
+                                                              'MinDet' = 'MinDet',
+                                                              'MinProb' = 'MinProb',
+                                                              'man' = 'man',
+                                                              'mixed' = 'mixed',
+                                                              'nbavg' = 'nbavg',
+                                                              'zero' = 'zero'),
+                                                 selected = 'Perseus'),
+
+                                      options = list(`style` = "btn-info"),
+                                      style = "unite", icon = icon("gear"),
+                                      status = "default", width = "300px",
+                                      animate = animateOptions(
+                                          enter = animations$fading_entrances$fadeInLeftBig,
+                                          exit = animations$fading_exits$fadeOutRightBig
+                                      )
+                                  ),
+
                                   fileInput(inputId = 'user_genes',
                                             label='Provide a list of desired genes to check in the analysis: (Optional)',
                                             multiple= FALSE,
                                             accept= 'text/csv'),
-
                                   hr(),
-
-
-
-
                                   br(),
+
                                   #Download a file example
                                   h4('Exapmles of the file(s) to be uploaded:'),
                                   fluidRow(
@@ -64,7 +97,6 @@ navbarPage(h3("Proteomics results"),
 
                                       column(5,a(href='user_genes_examples.txt','Genes example', download=NA, target='_blank') ),
                                   )
-
                               ),
 
                               mainPanel(
