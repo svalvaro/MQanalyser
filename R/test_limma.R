@@ -146,8 +146,8 @@ message("Tested contrasts: ",
 
 # Test for differential expression by empirical Bayes moderation
 # of a linear model on the predefined contrasts
-fit <- lmFit(raw, design = design)
-made_contrasts <- makeContrasts(contrasts = cntrst, levels = design)
+fit <- limma::lmFit(raw, design = design)
+made_contrasts <- limma::makeContrasts(contrasts = cntrst, levels = design)
 contrast_fit <- contrasts.fit(fit, made_contrasts)
 
 if(any(is.na(raw))) {

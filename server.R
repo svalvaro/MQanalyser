@@ -139,11 +139,19 @@ function(input, output) {
 
     data_imp <- reactive({
 
-        data_imp <- DEP::impute(data_norm(), fun = "MinProb", q = 0.05)
+        if(input$input_imputation == 'MinProb'){
+            data_imp <- DEP::impute(data_norm(), fun = "MinProb", q = 0.05)
+        } else if(input$input_imputation == 'knn'){
+            data_imp <- DEP::impute(data_norm(), fun = "knn", k = 10, rowmax = 0.9)
+        }else if(input$input_imputation == 'MLE'){
+            data_imp <- DEP::impute(data_norm(), fun = "MLE")
+        }else if(input$input_imputation == 'none'){
+            data_imp <- data_norm()
+        } else{
+            data_imp <- DEP::impute(data_norm(), fun = input$input_imputation)
+        }
 
-        #data_imp <- DEP::impute(data_norm, fun = "man", shift = 1.8, scale = 0.3)
 
-        #data_imp <- DEP::impute(data_norm, fun = "knn", rowmax = 0.9)
 
         #plot_imputation(data_norm, data_imp)
 
@@ -159,7 +167,7 @@ function(input, output) {
         #data_diff_all_contrasts <- test_diff(data_imp, type = "all")
 
         data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(), type = "all")
-        data_diff_all_contrasts <- DEP::test_diff(data_imp, type = "all")
+        #data_diff_all_contrasts <- DEP::test_diff(data_imp(), type = "all")
 
         #dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
 
