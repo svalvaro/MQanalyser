@@ -9,7 +9,9 @@
 #' @examples
 plot_volcano <- function(proteomics_results = NULL,
                          sample_comparison = NULL,
-                         gene_list = NULL){
+                         gene_list = NULL,
+                         log2_cutoff = 1.5,
+                         p_value_cutoff = 0.05){
 
     results <- proteomics_results %>% select(contains(c('name','ID', sample_comparison, 'p.adj', 'ratio')))
 
