@@ -268,7 +268,7 @@ navbarPage(h3("Proteomics results"),
 
                                   # #Sample for y axis
                                   #
-                                  uiOutput("volcano_selector"),
+                                  uiOutput("comparisons_out"),
 
 
                                   hr(),
@@ -328,7 +328,7 @@ navbarPage(h3("Proteomics results"),
                               ),
                               mainPanel(
                                   #Plot the volcano plot in the third tab
-                                  box(height = 2500,width = 2000,plotOutput('volcano'))
+                                  box(height = 2500,width = 2000,plotOutput('volcano_plot'))
 
                               )
                           )

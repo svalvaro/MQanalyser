@@ -176,24 +176,23 @@ function(input, output) {
 
     })
 
-    output$significant_proteins <- renderText({
+    data_results <- reactive({
 
         # Generate a results table
         data_results <- DEP::get_results(dep())
+    })
 
+    output$significant_proteins <- renderText({
         # Number of significant proteins
-        significant_proteins <- data_results %>% filter(significant) %>% nrow()
+        significant_proteins <- data_results() %>% filter(significant) %>% nrow()
         HTML(
-            paste0("There are: ", "<b>",significant_proteins," out of ",nrow(data_results),"</b>"," signifcant proteins.")
+            paste0("There are: ", "<b>",significant_proteins," out of ",nrow(data_results()),"</b>"," signifcant proteins.")
         )
     })
 
     output$proteomics_results <- DT::renderDataTable({
 
-        # Generate a results table
-        data_results <- get_results(dep())
-
-        DT::datatable(data_results)
+        DT::datatable(data_results())
     })
 
     # Download the proteomics_results
@@ -201,12 +200,40 @@ function(input, output) {
     output$download_proteomics <- downloadHandler(
         filename = function(){'proteomics_results.csv'},
         content = function(fname){
-            write.csv(get_results(dep()), fname)
+            write.csv(data_results(), fname)
         }
     )
 
 
+    #Comparison to check.
 
+    comparisons <- reactive({
+
+        comparisons <- data_results() %>% select(contains('vs') & contains('significant'))
+
+        comparisons$Bueno_vs_malo_significant <- NA
+
+        comparisons <- gsub(pattern = '_significant', replacement = '',colnames(comparisons))
+
+
+    })
+
+
+    output$comparisons_out  <- renderUI({
+        selectInput(inputId = 'comparison_input',
+                    label = h4('Select the comparison:'),
+                    choices = unlist(comparisons()),
+                    selected = comparisons()[1])
+    })
+
+
+    output$volcano_plot <- renderPlot({
+
+        MQanalyser::plot_volcano(proteomics_results = data_results(),
+                                 sample_comparison = input$comparison_input
+                                )
+
+        })
 
 
 
