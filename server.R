@@ -188,7 +188,6 @@ function(input, output) {
         )
     })
 
-
     output$proteomics_results <- DT::renderDataTable({
 
         # Generate a results table
@@ -196,6 +195,17 @@ function(input, output) {
 
         DT::datatable(data_results)
     })
+
+    # Download the proteomics_results
+
+    output$download_proteomics <- downloadHandler(
+        filename = function(){'proteomics_results.csv'},
+        content = function(fname){
+            write.csv(get_results(dep()), fname)
+        }
+    )
+
+
 
 
 

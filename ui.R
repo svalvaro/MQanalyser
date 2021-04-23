@@ -124,11 +124,17 @@ navbarPage(h3("Proteomics results"),
                             h3("Select the adjustments")
 
                         ),
-                        mainPanel(uiOutput('significant_proteins'),
-                                  br(),
-                                  br(),
-                                  br(),
-                                 DT::dataTableOutput('proteomics_results'))
+                        mainPanel(
+                            uiOutput('significant_proteins'),
+                            br(),
+                            br(),
+                            br(),
+
+                            DT::dataTableOutput('proteomics_results'),
+                            br(),
+                            downloadButton(outputId = 'download_proteomics',
+                                            label = 'Download'),
+                        )
 
                         )
                     ),
