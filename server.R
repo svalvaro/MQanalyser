@@ -171,7 +171,7 @@ function(input, output) {
 
         #dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
 
-        dep <- DEP::add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
+        dep <- DEP::add_rejections(data_diff_all_contrasts, alpha = input$input_pvalue, lfc = log2(input$input_fc))
 
 
     })
@@ -205,13 +205,30 @@ function(input, output) {
     )
 
 
+    # Heatmap
+
+    output$heatmap <- renderPlot({
+
+       p <-   DEP::plot_heatmap(dep(), type = "centered", kmeans = TRUE,
+                          k = 6, col_limit = 4, show_row_names = FALSE,
+                          indicate = c("condition", "replicate"))
+
+
+
+    })
+
+
+
+
+
+
+
+
     #Comparison to check.
 
     comparisons <- reactive({
 
         comparisons <- data_results() %>% select(contains('vs') & contains('significant'))
-
-        comparisons$Bueno_vs_malo_significant <- NA
 
         comparisons <- gsub(pattern = '_significant', replacement = '',colnames(comparisons))
 
@@ -227,11 +244,14 @@ function(input, output) {
     })
 
 
-    output$volcano_plot <- renderPlot({
+    output$volcano_plot <- renderPlotly({
 
         MQanalyser::plot_volcano(proteomics_results = data_results(),
-                                 sample_comparison = input$comparison_input
+                                 sample_comparison = input$comparison_input,
+                                 foldchange_cutoff = input$input_fc,
+                                 p_value_cutoff = input$input_pvalue
                                 )
+
 
         })
 

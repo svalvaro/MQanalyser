@@ -48,7 +48,7 @@ navbarPage(h3("Proteomics results"),
                                                   value = 0.05,
                                                   min = 0, max = 1),
 
-                                      numericInput(inputId = 'input_log2',
+                                      numericInput(inputId = 'input_fc',
                                                   label = 'Log2 fold change cut off',
                                                   value = 1.5,
                                                   min = 0, max = 100),
@@ -176,7 +176,9 @@ navbarPage(h3("Proteomics results"),
                               ),
                               mainPanel(shiny_busy(),
                                         #Plot the heatmap in the first tab
-                                        box(height = 2500,width = 2000, plotlyOutput('heatmap') )
+                                        box(height = 10000,width = 2000, plotOutput('heatmap') ),
+
+                                        height = 10000
 
                               )
                           )
@@ -271,41 +273,40 @@ navbarPage(h3("Proteomics results"),
                                   uiOutput("comparisons_out"),
 
 
+
+                                  dropdown(
+                                      tags$h3("Advanced Parameters"),
+
+                                sliderInput(inputId = 'log_input',
+                                            label = h4('Log2(Fold-Change) Range'),
+                                            min = -10,
+                                            max = 10,
+                                            step = 0.1,
+                                            value = c(-6,6) ),
+
+                                sliderInput(inputId = 'log_p',
+                                            label = h4('-Log10(P-Value): Range'),
+                                            min = 0,
+                                            max = 100,
+                                            value = 5 ),
+                                #Select the color for Down regulated
+                                colourpicker::colourInput("col1", h4("Select colour downregulated:"), "dodgerblue3",palette = "square", returnName = TRUE,showColour = c("background")),
+                                #Select the Colour for UPregulated
+                                colourpicker::colourInput("col2", h4("Select colour upregulated:"), "red2",palette = "square", returnName = TRUE,showColour = c("background")),
+
+
+
+                                      options = list(`style` = "btn-info"),
+                                      style = "unite", icon = icon("gear"),
+                                      status = "success", width = "300px",
+                                      animate = animateOptions(
+                                          enter = animations$fading_entrances$fadeInLeftBig,
+                                          exit = animations$fading_exits$fadeOutRightBig
+                                      )
+                                  ),
+
                                   hr(),
 
-                                  sliderInput(inputId = 'log_input',
-                                              label = h4('Log2(Fold-Change) Range'),
-                                              min = -10,
-                                              max = 10,
-                                              step = 0.1,
-                                              value = c(-6,6) ),
-
-                                  sliderInput(inputId = 'log_p',
-                                              label = h4('-Log10(P-Value): Range'),
-                                              min = 0,
-                                              max = 100,
-                                              value = 5 ),
-                                  #Select the color for Down regulated
-                                  colourpicker::colourInput("col1", h4("Select colour downregulated:"), "dodgerblue3",palette = "square", returnName = TRUE,showColour = c("background")),
-                                  #Select the Colour for UPregulated
-                                  colourpicker::colourInput("col2", h4("Select colour upregulated:"), "red2",palette = "square", returnName = TRUE,showColour = c("background")),
-
-
-                                  hr(),
-                                  sliderInput(inputId = 'pvalue_thresh',
-                                              label = h4('P-value Threshhold:'),
-                                              min = 1,
-                                              max = 15,
-                                              value = 1.3,
-                                              step = 0.1),
-
-                                  sliderInput(inputId = 'fc_thresh',
-                                              label = h4('log2(Fold Change) Threshold:'),
-                                              min = 0,
-                                              max = 10,
-                                              value = 1.5
-                                              ,
-                                              step = 0.1),
 
                                   #Checkbox for Gene names
                                   checkboxInput(inputId = 'check_names',
@@ -328,7 +329,10 @@ navbarPage(h3("Proteomics results"),
                               ),
                               mainPanel(
                                   #Plot the volcano plot in the third tab
-                                  box(height = 2500,width = 2000,plotOutput('volcano_plot'))
+                                  box(height = 6000,width = 2000,plotlyOutput('volcano_plot')),
+
+                                  height = 6000
+
 
                               )
                           )

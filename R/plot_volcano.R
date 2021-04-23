@@ -2,6 +2,11 @@
 #'
 #' @param proteomics_results
 #' @param gene_list
+#' @param sample_comparison
+#' @param foldchange_cutoff
+#' @param p_value_cutoff
+#'
+#' @import plotly
 #'
 #' @return
 #' @export
@@ -40,14 +45,16 @@ plot_volcano <- function(proteomics_results = NULL,
 
 
     #Plot
-    ggplot(results,  aes(x = fold_change, y = log10_p.adj, color = color))+
-        geom_point()+
-        geom_vline(xintercept=c(-log2(foldchange_cutoff), log2(foldchange_cutoff)), color = "black",lwd=1.0,alpha=0.5,lty=3)+
-        geom_hline(yintercept=-log10(p_value_cutoff), color = "black",lwd=1.0,alpha=0.5,lty=3)+
-        labs(x=expression('Log'[2]*'(Fold-change)'), y=expression('-Log'[10]*'(P-value)'))+
-        theme_bw()+
-        theme(legend.position = 'none')+
-        scale_color_identity()
+    p <- ggplot(results,  aes(x = fold_change, y = log10_p.adj,  key = name))+
+                geom_point(aes(color = color))+
+                geom_vline(xintercept=c(-log2(foldchange_cutoff), log2(foldchange_cutoff)), color = "black",lwd=1.0,alpha=0.5,lty=3)+
+                geom_hline(yintercept=-log10(p_value_cutoff), color = "black",lwd=1.0,alpha=0.5,lty=3)+
+                #labs(x=expression('Log'[2]*'(Fold-change)'), y=expression('-Log'[10]*'(P-value)'))+
+                theme_bw()+
+                theme(legend.position = 'none')+
+                scale_color_identity()
 
+  plotly::ggplotly(p = p ,
+                   tooltip = c("fold_change", "log10_p.adj", 'name'))
 
-}
+  }
