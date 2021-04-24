@@ -16,7 +16,8 @@ plot_heatmaply <- function(dep,
     coul <- colorRampPalette(c('dodgerblue2','white','red2'))(75)
     dodgerblue2
 
-    heatmaply(as.matrix(df), colors = coul)
+    #heatmaply(as.matrix(df), colors = coul)
 
-
+    # Decide whether to do it from the beginning or use the plot_volcano from DEP::
+    # it might be interesting to check the centered parameter.
 }
