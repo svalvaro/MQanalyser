@@ -20,4 +20,6 @@ plot_heatmaply <- function(dep,
 
     # Decide whether to do it from the beginning or use the plot_volcano from DEP::
     # it might be interesting to check the centered parameter.
+
+    #The centered parameter for the intensities is explained in the DEP proteomics package.
 }
