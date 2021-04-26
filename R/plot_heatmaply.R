@@ -12,14 +12,53 @@ plot_heatmaply <- function(dep,
 
     colnames(df) <- gsub(paste0(intensity_type, '.'), '', colnames(df))
 
-    #coul <- reactive(colorRampPalette(c(input$col_heatdown,input$col_heatmedium,input$col_heatup))(75))
-    coul <- colorRampPalette(c('dodgerblue2','white','red2'))(75)
-    dodgerblue2
-
     #heatmaply(as.matrix(df), colors = coul)
 
     # Decide whether to do it from the beginning or use the plot_volcano from DEP::
     # it might be interesting to check the centered parameter.
 
+    # Extract row and col data
+    row_data <- SummarizedExperiment::rowData(dep, use.names = FALSE)
+
+
+    col_data <- SummarizedExperiment::colData(dep) %>%
+        as.data.frame()
+
+    filtered <- dep[row_data$significant, ]
+
+
+    #Groupings <- filtered %>% select(contains(c('ID','condition')))
+
+    Groupings <- cbind( filtered$replicate, filtered$condition)
+
+    colnames(Groupings) <- c('replicate', 'condition')
     #The centered parameter for the intensities is explained in the DEP proteomics package.
+
+    if(type == "centered") {
+        rowData(filtered)$mean <- rowMeans(assay(filtered), na.rm = TRUE)
+        df <- assay(filtered) - rowData(filtered, use.names = FALSE)$mean
+    }
+    # Get contrast fold changes ('contrast')
+    if(type == "contrast") {
+        df <- rowData(filtered, use.names = FALSE) %>%
+            data.frame() %>%
+            column_to_rownames(var = "name") %>%
+            select(ends_with("_diff"))
+        colnames(df) <-
+            gsub("_diff", "", colnames(df)) %>%
+            gsub("_vs_", " vs ", .)
+        df <- as.matrix(df)
+    }
+
+
+    heatmaply(as.matrix(df),
+              colors =  rev(RColorBrewer::brewer.pal(11, "RdBu")),
+              col_side_colors = Groupings)
+
+
+
+
+
+
+
 }

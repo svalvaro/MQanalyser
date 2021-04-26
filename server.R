@@ -19,6 +19,8 @@ function(input, output) {
 
         df <- read.delim(inFile$datapath)
 
+        #df <- read.delim('/home/alvaro/Downloads/proteinGroups_example(2).txt')
+
         #Remove reverse and reverse and contaminants and only identified by site
         df <- df[(df$Potential.contaminant == '') & (df$Reverse == '')  & (df$Only.identified.by.site==''),]
 
@@ -46,6 +48,8 @@ function(input, output) {
     })
 
     experiment_design <- reactive({
+
+        #experiment_design <- read.delim('/home/alvaro/Downloads/experimental_design_example(2).txt')
 
         inFile <- input$optional_exp_design
 
@@ -207,12 +211,15 @@ function(input, output) {
 
     # Heatmap
 
-    output$heatmap <- renderPlot({
+    output$heatmaply <- renderPlotly({
 
-       p <-   DEP::plot_heatmap(dep(), type = "centered", kmeans = TRUE,
-                          k = 6, col_limit = 4, show_row_names = FALSE,
-                          indicate = c("condition", "replicate"))
+       # p <-   DEP::plot_heatmap(dep(), type = "centered", kmeans = TRUE,
+       #                    k = 6, col_limit = 4, show_row_names = FALSE,
+       #                    indicate = c("condition", "replicate"))
 
+
+    MQanalyser::plot_heatmaply(dep(),
+                               intensity_type = input$IntensityType)
 
 
     })

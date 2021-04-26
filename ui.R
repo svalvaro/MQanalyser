@@ -176,8 +176,8 @@ navbarPage(h3("Proteomics results"),
                               ),
                               mainPanel(shiny_busy(),
                                         #Plot the heatmap in the first tab
-                                        box(height = 10000,width = 2000, plotOutput('heatmap') ),
-
+                                        # box(height = 10000,width = 2000, plotOutput('heatmap') ),
+                                        box(height = 10000,width = 2000, plotlyOutput('heatmaply') ),
                                         height = 10000
 
                               )
