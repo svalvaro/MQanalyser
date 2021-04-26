@@ -212,7 +212,11 @@ function(input, output) {
     # Heatmap
 
     output$heatmaply <- renderPlotly(MQanalyser::plot_heatmaply(dep(),
-                                                                intensity_type = input$IntensityType
+                                                                intensity_type = input$IntensityType,
+                                                                dendogram = input$dendogram_input,
+                                                                k_row = input$k_row_input,
+                                                                k_col = input$k_col_input
+
                                                                 ) %>%
                                    layout(height = 1000, width = 1000)
 

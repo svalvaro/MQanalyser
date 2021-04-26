@@ -146,32 +146,36 @@ navbarPage(h3("Proteomics results"),
                  tabPanel(h4("Heatmap"),
                           sidebarLayout(
                               sidebarPanel(
-                                  h3("Select the adjustments"),
+                                  #Drop down with Parameters for heatmap
+                                  dropdown(
+                                      tags$h3("Advanced Parameters"),
 
-                                  # #Select whether the user wants the dendogram or not
-                                  # selectInput('dendogram',h4('Select an option for the dendogram'), choices = c('none','row','column','both'),selected = 'both'),
-                                  #
-                                  uiOutput('k_row'),
+                                      sliderInput(inputId = 'k_row_input',
+                                                  label = 'Select clusters, genes:',
+                                                  value = 0,
+                                                  min = 0, max = 50),
 
-                                  uiOutput('k_col'),
-                                  #horizontal bar to separate the heatmap parameters with the key parameters
-                                  hr(),
-                                  #
-                                  # #Size of the key
-                                  # sliderInput('keysize',h4('Introduce the size of the key'),min = 0.1,max = 2,value = 1),
-                                  #
-                                  # #Density info
-                                  # selectInput('density',h4('Select the density information'), choices= c('histogram','density','none'),selected = 'none'),
-                                  # #Select the color for Down regulated
-                                  colourpicker::colourInput("col_heatdown", h4("Select colour for downregulated:"), "dodgerblue2",palette = "square", returnName = TRUE,showColour = c("background")),
-                                  #Select the Colour for UPregulated
-                                  colourpicker::colourInput("col_heatup", h4("Select colour upregulated:"), "red2",palette = "square", returnName = TRUE,showColour = c("background")),
-                                  #Select the Colour for non significant
-                                  colourpicker::colourInput("col_heatmedium", h4("Select colour non significant:"), "white",palette = "square", returnName = TRUE,showColour = c("background")),
+                                      sliderInput(inputId = 'k_col_input',
+                                                   label = 'Select clusters, samples',
+                                                   value = 0,
+                                                   min = 0, max = 50),
 
-                                  #Download button for the plot
-                                  downloadButton(outputId = 'downloadheatmap',
-                                                 label = 'Download the heatmap')
+                                      selectInput(inputId = 'dendogram_input',
+                                                  label = 'Dendogram',
+                                                  choices = c('Both dendograms.' = 'both',
+                                                              'Only for the genes.'= 'column',
+                                                              'Only for the samples.'= 'row',
+                                                              'Without dendogramns' = 'none'),
+                                                  selected = 'both'),
+
+                                      options = list(`style` = "btn-info"),
+                                      style = "unite", icon = icon("gear"),
+                                      status = "default", width = "300px",
+                                      animate = animateOptions(
+                                          enter = animations$fading_entrances$fadeInLeftBig,
+                                          exit = animations$fading_exits$fadeOutRightBig
+                                      )
+                                  )
 
                               ),
                               mainPanel(shiny_busy(),

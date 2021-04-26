@@ -9,7 +9,10 @@
 #' @examples
 plot_heatmaply <- function(dep,
                            intensity_type = 'Intensity',
-                           type = 'centered'){
+                           #type = 'centered',
+                           dendogram = 'both',
+                           k_row = 0,
+                           k_col = 0){
 
     df <- as.data.frame(dep@elementMetadata) %>% select(contains(c('name',paste0(intensity_type, '.')))) %>%
           select(-contains('names'))
@@ -44,30 +47,32 @@ plot_heatmaply <- function(dep,
     colnames(Groupings) <- c('replicate', 'condition')
     #The centered parameter for the intensities is explained in the DEP proteomics package.
 
-    if(type == "centered") {
+   # if(type == "centered") {
         rowData(filtered)$mean <- rowMeans(assay(filtered), na.rm = TRUE)
         df <- assay(filtered) - rowData(filtered, use.names = FALSE)$mean
-    }
-    # Get contrast fold changes ('contrast')
-    if(type == "contrast") {
-        df <- rowData(filtered, use.names = FALSE) %>%
-            data.frame() %>%
-            column_to_rownames(var = "name") %>%
-            select(ends_with("_diff"))
-        colnames(df) <-
-            gsub("_diff", "", colnames(df)) %>%
-            gsub("_vs_", " vs ", .)
-        df <- as.matrix(df)
-    }
+    # }
+    # # Get contrast fold changes ('contrast')
+    # if(type == "contrast") {
+    #     df <- rowData(filtered, use.names = FALSE) %>%
+    #         data.frame() %>%
+    #         column_to_rownames(var = "name") %>%
+    #         select(ends_with("_diff"))
+    #     colnames(df) <-
+    #         gsub("_diff", "", colnames(df)) %>%
+    #         gsub("_vs_", " vs ", .)
+    #     df <- as.matrix(df)
+    # }
 
 
     heatmaply(as.matrix(df),
               colors =  rev(RColorBrewer::brewer.pal(11, "RdBu")),
-              col_side_colors = Groupings)
-
-
-
-
+              col_side_colors = Groupings,
+              label_names = c('Gene', 'ID', 'Log2 FC'),
+              key.title = 'Log 2 \nFold Change',
+              k_row = k_row,
+              k_col = k_col,
+              dendrogram = dendogram,
+              plot_method = 'plotly')
 
 
 
