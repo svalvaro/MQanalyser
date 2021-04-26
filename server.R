@@ -211,8 +211,9 @@ function(input, output) {
 
     # Heatmap
 
-    output$heatmaply <- renderPlotly( MQanalyser::plot_heatmaply(dep(),
-                               intensity_type = input$IntensityType) %>%
+    output$heatmaply <- renderPlotly(MQanalyser::plot_heatmaply(dep(),
+                                                                intensity_type = input$IntensityType
+                                                                ) %>%
                                    layout(height = 1000, width = 1000)
 
     )
@@ -250,6 +251,11 @@ function(input, output) {
                                                                  p_value_cutoff = input$input_pvalue) %>%
 
                                                                 layout(height = 1000, width = 1000))
+
+
+    output$plot_correlation <- renderPlotly(MQanalyser::plot_correlationly(dep()) %>%
+
+                                               layout(height = 1000, width = 1000))
 
 
 

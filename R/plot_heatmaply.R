@@ -1,5 +1,15 @@
+#' Title
+#'
+#' @param dep
+#' @param intensity_type
+#'
+#' @return
+#' @export
+#'
+#' @examples
 plot_heatmaply <- function(dep,
-                           intensity_type = 'Intensity'){
+                           intensity_type = 'Intensity',
+                           type = 'centered'){
 
     df <- as.data.frame(dep@elementMetadata) %>% select(contains(c('name',paste0(intensity_type, '.')))) %>%
           select(-contains('names'))

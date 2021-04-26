@@ -207,7 +207,7 @@ navbarPage(h3("Proteomics results"),
                                     "Scatter Plot"'),
                                   hr(),
                                   shiny_busy(),
-                                  plotOutput('multiscatter')
+                                  plotlyOutput('plot_correlation')
 
                               )
                           )
