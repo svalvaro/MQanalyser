@@ -17,4 +17,5 @@ Imports:
     purrr,
     rhandsontable,
     shiny,
+    SummarizedExperiment,
     tidyr

@@ -12,6 +12,7 @@
 #' @import tidyr
 #' @import limma
 #' @import rhandsontable
+#' @import SummarizedExperiment
 #'
 #' @return
 #' @export
@@ -37,10 +38,10 @@ if (paired == FALSE){
 # Show error if inputs do not contain required columns
 type <- match.arg(type)
 
-col_data <- colData(se)
-raw <- assay(se)
+col_data <- SummarizedExperiment::colData(se)
+raw <- SummarizedExperiment::assay(se)
 
-if(any(!c("name", "ID") %in% colnames(rowData(se)))) {
+if(any(!c("name", "ID") %in% colnames(SummarizedExperiment::rowData(se)))) {
     stop("'name' and/or 'ID' columns are not present in '",
          deparse(substitute(se)),
          "'\nRun make_unique() and make_se() to obtain the required columns",
