@@ -177,8 +177,8 @@ navbarPage(h3("Proteomics results"),
                               mainPanel(shiny_busy(),
                                         #Plot the heatmap in the first tab
                                         # box(height = 10000,width = 2000, plotOutput('heatmap') ),
-                                        box(height = 10000,width = 2000, plotlyOutput('heatmaply') ),
-                                        height = 10000
+                                        box(plotlyOutput('heatmaply')
+                                            )
 
                               )
                           )
@@ -329,11 +329,7 @@ navbarPage(h3("Proteomics results"),
                               ),
                               mainPanel(
                                   #Plot the volcano plot in the third tab
-                                  box(height = 6000,width = 2000,plotlyOutput('volcano_plot')),
-
-                                  height = 6000
-
-
+                                  box(plotlyOutput('volcano_plot'))
                               )
                           )
                  ),

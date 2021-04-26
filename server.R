@@ -211,18 +211,11 @@ function(input, output) {
 
     # Heatmap
 
-    output$heatmaply <- renderPlotly({
+    output$heatmaply <- renderPlotly( MQanalyser::plot_heatmaply(dep(),
+                               intensity_type = input$IntensityType) %>%
+                                   layout(height = 1000, width = 1000)
 
-       # p <-   DEP::plot_heatmap(dep(), type = "centered", kmeans = TRUE,
-       #                    k = 6, col_limit = 4, show_row_names = FALSE,
-       #                    indicate = c("condition", "replicate"))
-
-
-    MQanalyser::plot_heatmaply(dep(),
-                               intensity_type = input$IntensityType)
-
-
-    })
+    )
 
 
 
@@ -251,16 +244,12 @@ function(input, output) {
     })
 
 
-    output$volcano_plot <- renderPlotly({
+    output$volcano_plot <- renderPlotly(MQanalyser::plot_volcano(proteomics_results = data_results(),
+                                                                 sample_comparison = input$comparison_input,
+                                                                 foldchange_cutoff = input$input_fc,
+                                                                 p_value_cutoff = input$input_pvalue) %>%
 
-        MQanalyser::plot_volcano(proteomics_results = data_results(),
-                                 sample_comparison = input$comparison_input,
-                                 foldchange_cutoff = input$input_fc,
-                                 p_value_cutoff = input$input_pvalue
-                                )
-
-
-        })
+                                                                layout(height = 1000, width = 1000))
 
 
 
