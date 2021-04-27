@@ -66,7 +66,7 @@ plot_heatmaply <- function(dep,
 
     heatmaply(as.matrix(df),
               colors =  rev(RColorBrewer::brewer.pal(11, "RdBu")),
-              col_side_colors = Groupings,
+              col_side_colors = Groupings, #Maybe its possible to add a title?
               label_names = c('Gene', 'ID', 'Log2 FC'),
               key.title = 'Log 2 \nFold Change',
               k_row = k_row,
