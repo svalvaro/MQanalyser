@@ -14,6 +14,9 @@ plot_heatmaply <- function(dep,
                            k_row = 0,
                            k_col = 0){
 
+    #Fix this since it is obtaining the wrong data. I believe.
+
+
     df <- as.data.frame(dep@elementMetadata) %>% select(contains(c('name',paste0(intensity_type, '.')))) %>%
           select(-contains('names'))
     df[-1] <- log2(df[-1])
