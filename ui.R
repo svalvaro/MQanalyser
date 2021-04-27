@@ -27,7 +27,7 @@ navbarPage(h3("Proteomics results"),
                                                 choices = c("Intensity" = 'Intensity',
                                                             "LFQ" = 'LFQ',
                                                             "iBAQ" = 'iBAQ'),
-                                                selected = 'Intensity'),
+                                                selected = 'LFQ'),
 
                                   verbatimTextOutput('IntensityFound'),
                                   hr(),
@@ -190,7 +190,7 @@ navbarPage(h3("Proteomics results"),
 
 
                  #Multi Scatter PLot
-                 tabPanel(h4('Multi Scatter Plot'),
+                 tabPanel(h4('Correlation'),
                           sidebarLayout(
                               sidebarPanel(
                                   h3("Select the adjustments"),
@@ -254,11 +254,10 @@ navbarPage(h3("Proteomics results"),
                               mainPanel(
 
                                   #Plot the scatter plot  in the second tab
-                                  box(height = 900,width = 900,
-
-                                      plotlyOutput('scatterplot')),
-                                  box(height = 900, width =900,
-                                      DT::dataTableOutput('table_plot'))
+                                  box(height = 1200,width = 1200,
+                                      DT::dataTableOutput('scatterplot'))#,
+                                  # box(height = 900, width =900,
+                                  #     DT::dataTableOutput('table_plot'))
 
 
 
