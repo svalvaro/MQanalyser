@@ -3,7 +3,8 @@ plot_scatterly <- function(dep,
                            x_sample = NULL,
                            y_sample = NULL,
                            intensity_type = 'Intensity',
-                           gene_list = NULL){
+                           gene_list = NULL,
+                           alpha = 0.5){
 
 
     df <- as.data.frame(dep@elementMetadata) %>% select(contains(c('name',paste0(intensity_type, '.')))) %>%
@@ -55,11 +56,15 @@ plot_scatterly <- function(dep,
 
 
 
-    p <- ggplot(df, aes(x = X_sample, y = Y_sample, key = Gene))+
-        geom_point()+
+    p <- ggplot(df, aes(x = X_sample,
+                        y = Y_sample,
+                        text = paste(x_sample,':', format(round(X_sample, 1), nsmall = 1),
+                                     paste0('\n',y_sample),':', format(round(Y_sample, 1), nsmall = 1),
+                                     '\nGene:', Gene)))+
+        geom_point(alpha = alpha)+
         xlab(label = x_sample)+
         ylab(label = y_sample)
 
 
-    plotly::ggplotly(p = p, tooltip = 'Gene')
+    plotly::ggplotly(p = p, tooltip = c('text'))
 }
