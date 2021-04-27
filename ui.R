@@ -225,10 +225,10 @@ navbarPage(h3("Proteomics results"),
                                   h3("Select the adjustments"),
 
                                   #Sample for X axis
-                                  uiOutput("names_x_selector"),
+                                  uiOutput("x_sample_selector"),
                                   #Sample for y axis
 
-                                  uiOutput("names_y_selector"),
+                                  uiOutput("y_sample_selector"),
 
 
                                   #add or not a regression line
@@ -256,7 +256,7 @@ navbarPage(h3("Proteomics results"),
                                   #Plot the scatter plot  in the second tab
                                   box(height = 900,width = 900,
 
-                                      plotOutput('scatter')),
+                                      plotlyOutput('scatterplot')),
                                   box(height = 900, width =900,
                                       DT::dataTableOutput('table_plot'))
 

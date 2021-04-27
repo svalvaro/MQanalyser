@@ -1,23 +1,41 @@
-plot_scatterly <- function(dep,
+plot_scatterly <- function(dep = NULL,
                            log_base = 10, # 10, 2, 'none',
                            x_sample = NULL,
                            y_sample = NULL,
-                           intensity_type = 'Intensity',
+                           intensity_type = 'LFQ',
                            gene_list = NULL,
-                           alpha = 0.5){
+                           alpha = 0.5,
+                           color = '#56B4E9'){
 
 
     df <- as.data.frame(dep@elementMetadata) %>% select(contains(c('name',paste0(intensity_type, '.')))) %>%
         select(-contains('names'))
 
 
-    colnames(df) <- gsub(paste0(intensity_type, '.'), '', colnames(df))
+
+    if(intensity_type == 'Intensity'){
+
+        colnames(df) <- gsub(paste0(intensity_type, '.'), '', colnames(df))
+    } else{#For LFQ/iBAQ
+        colnames(df) <- gsub(paste0(intensity_type, '.intensity.'), '', colnames(df))
+    }
+
+
+
+
+    # Match the column name with the id
+
+    names_to_match <- data.frame(label = dep$label,
+                                 ID = dep$ID)
+
+
+    names(df) <- plyr::mapvalues(names(df), from = names_to_match$label, to = names_to_match$ID)
+
+
 
 
     # df only with the samples selected
 
-    x_sample = 'Total_309M'
-    y_sample = 'Total_309B'
 
     df <- df %>% select(contains(c('name', x_sample, y_sample)))
 
@@ -40,20 +58,17 @@ plot_scatterly <- function(dep,
     if(log_base == 10){
         df[-1] = log10(df[-1])
 
-
-
+        tittle = paste0('Log10 ', intensity_type)
 
     } else if(log_base == 2){
 
         df[-1] = log2(df[-1])
-
+        tittle = paste0('Log2 ', intensity_type)
 
     } else if(log_base == 'none') {
+        tittle = paste0('Raw ', intensity_type, ' values')
         next
     }
-
-
-
 
 
     p <- ggplot(df, aes(x = X_sample,
@@ -61,7 +76,9 @@ plot_scatterly <- function(dep,
                         text = paste(x_sample,':', format(round(X_sample, 1), nsmall = 1),
                                      paste0('\n',y_sample),':', format(round(Y_sample, 1), nsmall = 1),
                                      '\nGene:', Gene)))+
-        geom_point(alpha = alpha)+
+        geom_point(alpha = alpha, size = 2,
+                   color = color)+
+        ggtitle(tittle)+
         xlab(label = x_sample)+
         ylab(label = y_sample)
 

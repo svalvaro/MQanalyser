@@ -26,6 +26,8 @@ function(input, output) {
 
         #Separate the Protein IDs into different rows separated by ;
 
+        #proteinGroups <- df
+
         #df_separated <- df %>%  separate_rows(c(`Protein IDs`), sep = ';')
 
         return(df)
@@ -37,7 +39,6 @@ function(input, output) {
         experiment_names <- proteinGroups() %>%
                             select(contains('Intensity.')) %>%
                             select(-contains('LFQ'))
-
 
         experiment_names <- colnames(experiment_names)
 
@@ -105,6 +106,7 @@ function(input, output) {
 
         # Creates a SummarizedExperiment,
         data_se <- DEP::make_se(data_unique, columns = columns, ed_final$data)
+        #data_se <- DEP::make_se(data_unique, columns, experiment_design)
 
     })
 
@@ -224,11 +226,6 @@ function(input, output) {
 
 
 
-
-
-
-
-
     #Comparison to check.
 
     comparisons <- reactive({
@@ -247,6 +244,35 @@ function(input, output) {
                     choices = unlist(comparisons()),
                     selected = comparisons()[1])
     })
+
+
+    # Select the sample to plot in the scatter plot
+
+    output$x_sample_selector <- renderUI({
+
+        selectInput(inputId = 'x_sample_input',label = h4('Select the sample to plot in the x_axis:'),
+
+                    choices = unlist(dep()$ID),selected = unlist(dep()$ID)[1])
+    })
+
+
+    output$y_sample_selector <- renderUI({
+
+        selectInput(inputId = 'y_sample_input',label = h4('Select the sample to plot in the x_axis:'),
+
+                    choices = unlist(dep()$ID),selected = unlist(dep()$ID)[2])
+    })
+
+
+    output$scatterplot <- renderPlotly(MQanalyser::plot_scatterly(dep = dep(),
+                                                                  x_sample = input$x_sample_input,
+                                                                  y_sample = input$y_sample_input,
+                                                                  gene_list = NULL,
+                                                                  alpha = 0.05,
+                                                                  intensity_type = input$IntensityType
+                                                                    ) %>%
+
+                                           layout(height = 1000, width = 1000))
 
 
     output$volcano_plot <- renderPlotly(MQanalyser::plot_volcano(proteomics_results = data_results(),
