@@ -367,6 +367,42 @@ navbarPage(h3("Proteomics results"),
                               sidebarPanel(
                                   h3("Select the adjustments"),
 
+                                  br(),
+                                  dropdown(
+                                      tags$h3("Advanced Parameters"),
+
+
+                                      colourpicker::colourInput(inputId = "input_col_prof",
+                                                                label = h4("Select colour:"),
+                                                                value = "#56B4E9",
+                                                                palette = "square",
+                                                                returnName = TRUE,
+                                                                showColour = c("background")),
+
+                                      colourpicker::colourInput(inputId = "input_col_sel",
+                                                                label = h4("Select colour \nSelected genes:"),
+                                                                value = "red",
+                                                                palette = "square",
+                                                                returnName = TRUE,
+                                                                showColour = c("background")),
+
+                                      sliderInput(inputId = 'input_angle_samples',
+                                                  label = 'Select the angle of the lables',
+                                                  value = 45,
+                                                  min = 0, max = 90),
+
+
+                                      options = list(`style` = "btn-info"),
+                                      style = "unite", icon = icon("gear"),
+                                      status = "default", width = "300px",
+                                      animate = animateOptions(
+                                          enter = animations$fading_entrances$fadeInLeftBig,
+                                          exit = animations$fading_exits$fadeOutRightBig
+                                      )
+                                  ),
+                                  br(),
+
+
                                   checkboxInput(inputId = 'check_profiles',
                                                 label =h4('Show gene  names of table selection:'),
                                                 value = FALSE),
@@ -377,15 +413,15 @@ navbarPage(h3("Proteomics results"),
 
                               ),
                               mainPanel(shiny_busy(),
-                                        box(#height = 800, width = 900,
+                                        box(height = 800, width = 900,
 
                                             plotlyOutput('plot_profile')),
 
-                                        box(height = 800, width =900,
-                                            DT::dataTableOutput('profiletable'))
+                                        br(),
+                                        hr(),
 
-
-
+                                        box(height = 400, width =300,
+                                            DT::dataTableOutput('plot_profile_table'))
 
                               )
                           )
