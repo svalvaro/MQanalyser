@@ -29,5 +29,9 @@ library(MQanalyser)
 runApp()
 ```
 
+This is how it should look like when you have uploaded your
+proteinGroups.txt and the experiment design. Just press Start Analysis…
+and Enjoy\!
+
 ![MQanalyser interface
-example](/home/alvaro/Documents/R/proteomics/MQanalyser/www/MQanalyser_picture.png)
+example](/home/alvaro/Documents/R/proteomics/MQanalyser/MQanalyser_picture.png)
