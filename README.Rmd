@@ -45,6 +45,6 @@ This is how it should look like when you have uploaded your proteinGroups.txt an
 the experiment design. Just press Start Analysis...
 and Enjoy!
 
-![MQanalyser interface example](/home/alvaro/Documents/R/proteomics/MQanalyser/MQanalyser_picture.png)
+![MQanalyser interface example](system.file('www/MQanalyser_picture.png', package = 'MQanalyser'))
 
 
