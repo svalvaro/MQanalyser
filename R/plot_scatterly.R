@@ -1,5 +1,5 @@
 plot_scatterly <- function(dep = NULL,
-                           log_base = 10, # 10, 2, 'none',
+                           #log_base = 10, # 10, 2, 'none',
                            x_sample = NULL,
                            y_sample = NULL,
                            intensity_type = NULL,
@@ -16,7 +16,37 @@ plot_scatterly <- function(dep = NULL,
 
     df <- as.data.frame(dep@elementMetadata)
 
-#
+    df <- as.data.frame(dep@assays@data@listData[[1]])
+
+    df$name <- rownames(df)
+
+    # x_sample <- 'Benign_1'
+    #
+    # y_sample <- 'Malignant_1'
+
+
+    df <- df[,c('name', x_sample, y_sample)]
+
+    colnames(df) = c('Gene', 'X_sample', 'Y_sample')
+
+
+
+        p <- ggplot(df, aes(x = X_sample,
+                            y = Y_sample,
+                            text = paste(x_sample,':', format(round(X_sample, 1), nsmall = 1),
+                                         paste0('\n',y_sample),':', format(round(Y_sample, 1), nsmall = 1),
+                                         '\nGene:', Gene)))+
+            geom_point(alpha = alpha, size = 2,
+                       color = color)+
+            ggtitle(label = paste0('Log2 ', intensity_type))+
+            xlab(label = x_sample)+
+            ylab(label = y_sample)
+
+
+        plotly::ggplotly(p = p, tooltip = c('text'))
+
+
+
 #     if(intensity_type == 'Intensity'){
 #
 #         colnames(df) <- gsub(paste0(intensity_type, '.'), '', colnames(df))
@@ -44,7 +74,7 @@ plot_scatterly <- function(dep = NULL,
 #     df$name <- df[,1]
 #     df <- df[,-1]
 
-    return(df)
+    # return(df)
 
     # df only with the samples selected
 }

@@ -231,10 +231,7 @@ navbarPage(h3("Proteomics results"),
                                   uiOutput("y_sample_selector"),
 
 
-                                  #add or not a regression line
-                                  checkboxInput(inputId = 'checkbox',
-                                                label = h4('Add regression line'),
-                                                value = FALSE),
+
 
 
                                   #check if they want to see their genes
@@ -242,6 +239,31 @@ navbarPage(h3("Proteomics results"),
                                   checkboxInput(inputId = 'showgenes',
                                                 label = h4('Show the genes that you have uploaded:'),
                                                 value=FALSE),
+
+
+                                  dropdown(
+                                      tags$h3("Advanced Parameters"),
+
+                                      sliderInput(inputId = 'input_alpha',
+                                                  label = 'Adjust the alpha parameter:',
+                                                  value = 0.8,
+                                                  min = 0, max = 1),
+
+                                      #add or not a regression line
+                                      checkboxInput(inputId = 'input_lm',
+                                                    label = h4('Add regression line'),
+                                                    value = FALSE),
+
+
+                                      options = list(`style` = "btn-info"),
+                                      style = "unite", icon = icon("gear"),
+                                      status = "default", width = "300px",
+                                      animate = animateOptions(
+                                          enter = animations$fading_entrances$fadeInLeftBig,
+                                          exit = animations$fading_exits$fadeOutRightBig
+                                      )
+                                  ),
+
 
                                   # Download button for the plot
                                   downloadButton(outputId = 'downloadscatter',
@@ -255,7 +277,7 @@ navbarPage(h3("Proteomics results"),
 
                                   #Plot the scatter plot  in the second tab
                                   box(height = 1200,width = 1200,
-                                      DT::dataTableOutput('scatterplot'))#,
+                                      plotlyOutput('scatterplot'))#,
                                   # box(height = 900, width =900,
                                   #     DT::dataTableOutput('table_plot'))
 

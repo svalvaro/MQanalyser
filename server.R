@@ -91,9 +91,8 @@ function(input, output) {
             print(paste0(input$IntensityType, ' was not found. \nSelect another type of intensity.'))
 
         } else{
-            #print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
+            print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
 
-            print(paste0(input$IntensityType, ' rows: ', columns))
 
         }
         })
@@ -101,38 +100,12 @@ function(input, output) {
 
     data_se <- reactive({
 
-        # LFQ_columns <- grep("Intensity.", colnames(data_unique))
-        # data_se <- make_se(data_unique, LFQ_columns, experiment_design)
-        #
-        # experimental_design <- UbiLength_ExpDesign
-        # data <- UbiLength
-        # data_unique <- make_unique(data, "Gene.names", "Protein.IDs", delim = ";")
-        # LFQ_columns <- grep("LFQ.", colnames(data_unique))
-        #
-        #
-        # data_se <- make_se(data_unique, LFQ_columns, experimental_design)
-        #
-        # data_se@elementMetadata$
-        # head(proteinGroups[,grep(paste0('Intensity','.'),colnames(proteinGroups))])
-        #
-        # columns2 = grep("LFQ.intensity.",colnames(proteinGroups))
-
         columns = grep(paste0(input$IntensityType,'.'), colnames(proteinGroups()))
 
         # Adds two columns at the end with an unique gene and protein name.
         data_unique <- DEP::make_unique(proteinGroups(), 'Gene.names', 'Protein.IDs', delim = ';')
 
         #data_unique <- DEP::make_unique(proteinGroups, 'Gene.names', 'Protein.IDs', delim = ';')
-
-        column_lfq <- grep('LFQ.intensity.', colnames(proteinGroups))
-        column_lfq2 <- grep('LFQ.intensity.', colnames(data_unique))
-
-        column_lfq2
-
-        data_lfq <- DEP::make_se(proteins_unique = data_unique, columns = columns2, experiment_design)
-        data_lfq@elementMetadata$
-
-        column_int
 
         # Creates a SummarizedExperiment,
         data_se <- DEP::make_se(data_unique, columns = columns, ed_final$data)
@@ -289,20 +262,22 @@ function(input, output) {
 
     output$y_sample_selector <- renderUI({
 
-        selectInput(inputId = 'y_sample_input',label = h4('Select the sample to plot in the x_axis:'),
+        selectInput(inputId = 'y_sample_input',label = h4('Select the sample to plot in the y_axis:'),
 
                     choices = unlist(dep()$ID),selected = unlist(dep()$ID)[2])
     })
 
 
-    output$scatterplot <- renderDataTable(MQanalyser::plot_scatterly(dep = dep(),
-                                                                     log_base =2,
+    output$scatterplot <- renderPlotly(MQanalyser::plot_scatterly(dep = dep(),
+                                                                    # log_base =2,
                                                                      x_sample = input$x_sample_input,
                                                                      y_sample = input$y_sample_input,
                                                                      gene_list = NULL,
-                                                                     alpha = 0.05,
-                                                                     intensity_type = input$IntensityType
-                                                                        ) )
+                                                                     alpha = input$input_alpha,
+                                                                     intensity_type = input$IntensityType) %>%
+
+                                                                      layout(height = 1000, width = 1000 )
+                                       )
 
     # output$scatterplot <- renderPlotly(MQanalyser::plot_scatterly(dep = dep(),
     #                                                               log_base =2,
