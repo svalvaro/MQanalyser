@@ -120,12 +120,13 @@ navbarPage(h3("Proteomics results"),
            #First Panel is the heatmap
            tabPanel(h4("Results"),
                     sidebarLayout(
-                        sidebarPanel(
-                            h3("Select the adjustments")
+                    sidebarPanel(
+                        h3("Select the adjustments")
 
-                        ),
+                    ),
                         mainPanel(
-                            uiOutput('significant_proteins'),
+                            #uiOutput('significant_proteins'),
+                            infoBoxOutput('significant_proteins'),
                             br(),
                             br(),
                             br(),

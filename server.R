@@ -205,13 +205,31 @@ function(input, output) {
         data_results <- DEP::get_results(dep())
     })
 
-    output$significant_proteins <- renderText({
+    # output$significant_proteins <- renderText({
+    #     # Number of significant proteins
+    #     significant_proteins <- data_results() %>% filter(significant) %>% nrow()
+    #     HTML(
+    #         paste0("There are: ", "<b>",significant_proteins," out of ",nrow(data_results()),"</b>"," signifcant proteins.")
+    #     )
+    # })
+
+    output$significant_proteins <- renderInfoBox({
         # Number of significant proteins
         significant_proteins <- data_results() %>% filter(significant) %>% nrow()
-        HTML(
-            paste0("There are: ", "<b>",significant_proteins," out of ",nrow(data_results()),"</b>"," signifcant proteins.")
-        )
+        total_proteins <- data_results() %>% nrow()
+        info <- infoBox(
+                        'Differentially expressed proteins',
+                        paste0(significant_proteins, ' out of ', total_proteins, ' proteins.'),
+                        icon = icon("stats", lib = "glyphicon"),
+                        color = 'green',
+                        width = 7,
+                        fill = TRUE
+                        )
+        return(info)
     })
+
+
+
 
     output$proteomics_results <- DT::renderDataTable({
 

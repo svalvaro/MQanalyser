@@ -71,6 +71,8 @@ plot_profilely <- function(dep,
                                 color = color_selected)
     }
 
+    p
+
     if (plot == FALSE) {
 
       rownames(df) <- NULL
