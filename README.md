@@ -29,4 +29,5 @@ library(MQanalyser)
 runApp()
 ```
 
-![alt text here](/home/alvaro/Pictures/MQanalyser_picture.png)
+![MQanalyser interface
+example](/home/alvaro/Documents/R/proteomics/MQanalyser/www/MQanalyser_picture.png)
