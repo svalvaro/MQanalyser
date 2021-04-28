@@ -34,4 +34,4 @@ proteinGroups.txt and the experiment design. Just press Start Analysis…
 and Enjoy\!
 
 ![MQanalyser interface
-example](system.file\('www/MQanalyser_picture.png',%20package%20=%20'MQanalyser'\))
+example](https://user-images.githubusercontent.com/71273913/116370048-4e327100-a80a-11eb-9452-9fc29a38c6c6.png)
