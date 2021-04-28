@@ -68,7 +68,7 @@ navbarPage(h3("Proteomics results"),
 
                                       options = list(`style` = "btn-info"),
                                       style = "unite", icon = icon("gear"),
-                                      status = "default", width = "300px",
+                                      status = "success", width = "300px",
                                       animate = animateOptions(
                                           enter = animations$fading_entrances$fadeInLeftBig,
                                           exit = animations$fading_exits$fadeOutRightBig
@@ -171,7 +171,7 @@ navbarPage(h3("Proteomics results"),
 
                                       options = list(`style` = "btn-info"),
                                       style = "unite", icon = icon("gear"),
-                                      status = "default", width = "300px",
+                                      status = "success", width = "300px",
                                       animate = animateOptions(
                                           enter = animations$fading_entrances$fadeInLeftBig,
                                           exit = animations$fading_exits$fadeOutRightBig
@@ -255,10 +255,17 @@ navbarPage(h3("Proteomics results"),
                                                     label = h4('Add regression line'),
                                                     value = FALSE),
 
+                                      colourpicker::colourInput(inputId = "color_scatter",
+                                                                h4("Select colour:"),
+                                                                '#56B4E9',
+                                                                palette = "square",
+                                                                returnName = TRUE,
+                                                                showColour = c("background")),
+
 
                                       options = list(`style` = "btn-info"),
                                       style = "unite", icon = icon("gear"),
-                                      status = "default", width = "300px",
+                                      status = "success", width = "300px",
                                       animate = animateOptions(
                                           enter = animations$fading_entrances$fadeInLeftBig,
                                           exit = animations$fading_exits$fadeOutRightBig
@@ -315,10 +322,21 @@ navbarPage(h3("Proteomics results"),
                                             min = 0,
                                             max = 100,
                                             value = 5 ),
-                                #Select the color for Down regulated
-                                colourpicker::colourInput("col1", h4("Select colour downregulated:"), "dodgerblue3",palette = "square", returnName = TRUE,showColour = c("background")),
                                 #Select the Colour for UPregulated
-                                colourpicker::colourInput("col2", h4("Select colour upregulated:"), "red2",palette = "square", returnName = TRUE,showColour = c("background")),
+                                colourpicker::colourInput("col_upregulated",
+                                                          h4("Select colour upregulated:"),
+                                                          'brown2',
+                                                          palette = "square",
+                                                          returnName = TRUE,
+                                                          showColour = c("background")),
+
+                                #Select the color for Down regulated
+                                colourpicker::colourInput("col_downregulated",
+                                                          h4("Select colour downregulated:"),
+                                                          'cyan3',
+                                                          palette = "square",
+                                                          returnName = TRUE,
+                                                          showColour = c("background")),
 
 
 
@@ -395,7 +413,7 @@ navbarPage(h3("Proteomics results"),
 
                                       options = list(`style` = "btn-info"),
                                       style = "unite", icon = icon("gear"),
-                                      status = "default", width = "300px",
+                                      status = "success", width = "300px",
                                       animate = animateOptions(
                                           enter = animations$fading_entrances$fadeInLeftBig,
                                           exit = animations$fading_exits$fadeOutRightBig

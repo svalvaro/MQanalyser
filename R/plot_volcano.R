@@ -16,7 +16,9 @@ plot_volcano <- function(proteomics_results = NULL,
                          sample_comparison = NULL,
                          gene_list = NULL,
                          foldchange_cutoff = 1.5,
-                         p_value_cutoff = 0.05){
+                         p_value_cutoff = 0.05,
+                         color_down = 'cyan3',
+                         color_up = 'brown2'){
 
     results <- proteomics_results %>% select(contains(c('name','ID', sample_comparison, 'p.adj', 'ratio')))
 
@@ -32,12 +34,12 @@ plot_volcano <- function(proteomics_results = NULL,
     results$log10_p.adj <- -log10(results[,which(names(results)==pvalue_adj)])
 
     #Color for the right side significant
-    results$color[results$fold_change > log2(foldchange_cutoff) & results$log10_p.adj > -log10(p_value_cutoff)] <- 'brown2'
+    results$color[results$fold_change > log2(foldchange_cutoff) & results$log10_p.adj > -log10(p_value_cutoff)] <- color_up
 
 
     #Color for the left side significant
 
-    results$color[results$fold_change < -log2(foldchange_cutoff) & results$log10_p.adj > -log10(p_value_cutoff)] <- 'cyan3'
+    results$color[results$fold_change < -log2(foldchange_cutoff) & results$log10_p.adj > -log10(p_value_cutoff)] <- color_down
 
     #Color for the non significant
 
