@@ -14,7 +14,7 @@ plot_scatterly <- function(dep = NULL,
     # df <- as.data.frame(dep@elementMetadata) %>% select(contains(c('name',paste0(intensity_type, '.')))) %>%
     #     select(-contains('names'))
 
-    df <- as.data.frame(dep@elementMetadata)
+
 
     df <- as.data.frame(dep@assays@data@listData[[1]])
 

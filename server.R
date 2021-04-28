@@ -22,11 +22,14 @@ function(input, output) {
         #df <- read.delim('/home/alvaro/Downloads/proteinGroups_example(2).txt')
 
         #Remove reverse and reverse and contaminants and only identified by site
+
+
         df <- df[(df$Potential.contaminant == '') & (df$Reverse == '')  & (df$Only.identified.by.site==''),]
 
         #Separate the Protein IDs into different rows separated by ;
 
-        #proteinGroups <- df
+        # proteinGroups <- df
+        # df <- NULL
 
         #df_separated <- df %>%  separate_rows(c(`Protein IDs`), sep = ';')
 
@@ -85,6 +88,7 @@ function(input, output) {
 
         columns = grep(paste0(input$IntensityType,'.'), colnames(proteinGroups()))
 
+        # columns = grep('LFQ.', colnames(proteinGroups))
 
         if (length(columns) == 0) {
 
@@ -105,11 +109,11 @@ function(input, output) {
         # Adds two columns at the end with an unique gene and protein name.
         data_unique <- DEP::make_unique(proteinGroups(), 'Gene.names', 'Protein.IDs', delim = ';')
 
-        #data_unique <- DEP::make_unique(proteinGroups, 'Gene.names', 'Protein.IDs', delim = ';')
+        # data_unique <- DEP::make_unique(proteinGroups, 'Gene.names', 'Protein.IDs', delim = ';')
 
         # Creates a SummarizedExperiment,
         data_se <- DEP::make_se(data_unique, columns = columns, ed_final$data)
-        #data_se <- DEP::make_se(data_unique, columns = columns, experiment_design)
+        # data_se <- DEP::make_se(data_unique, columns = columns, experiment_design)
         #View(as.data.frame(data_se@elementMetadata))
 
     })
@@ -133,6 +137,9 @@ function(input, output) {
         }
 
         data_filt <- DEP::filter_missval(data_se(),thr = threshold)
+
+        # data_filt <- DEP::filter_missval(data_se,thr = threshold)
+
         #plot_missval(filter_missval(data_se,thr = 5))
 
         #plot_detect(data_filt)
@@ -142,6 +149,9 @@ function(input, output) {
     data_norm <- reactive({
 
         data_norm <- DEP::normalize_vsn(data_filt())
+
+        # data_norm <- DEP::normalize_vsn(data_filt)
+
         #meanSdPlot(data_norm)
         #data_norm <- normalize_vsn(data_filt)
         #plot_normalization(data_filt, data_norm)
@@ -161,7 +171,7 @@ function(input, output) {
             data_imp <- DEP::impute(data_norm(), fun = input$input_imputation)
         }
 
-
+        # data_imp <- DEP::impute(data_norm, fun = 'MinProb', q = 0.05)
 
         #plot_imputation(data_norm, data_imp)
 
@@ -171,15 +181,17 @@ function(input, output) {
     })
 
     dep <- reactive({
-        # Test every sample versus control
-        #data_diff <- test_diff(data_imp, type = "control", control = "Benign")
 
-        #data_diff_all_contrasts <- test_diff(data_imp, type = "all")
+
+
+        # data_diff_all_contrasts <- MQanalyser::test_limma(data_imp, type = "all")
 
         data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(), type = "all")
+
+
         #data_diff_all_contrasts <- DEP::test_diff(data_imp(), type = "all")
 
-        #dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
+        # dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
 
         dep <- DEP::add_rejections(data_diff_all_contrasts, alpha = input$input_pvalue, lfc = log2(input$input_fc))
 
