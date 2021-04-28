@@ -19,9 +19,10 @@ function(input, output) {
 
         df <- read.delim(inFile$datapath)
 
-        #df <- read.delim('/home/alvaro/Downloads/proteinGroups_example(2).txt')
+        # df <- read.delim('/home/alvaro/Downloads/proteinGroups_example(2).txt')
 
         #Remove reverse and reverse and contaminants and only identified by site
+
 
 
         df <- df[(df$Potential.contaminant == '') & (df$Reverse == '')  & (df$Only.identified.by.site==''),]
@@ -53,7 +54,7 @@ function(input, output) {
 
     experiment_design <- reactive({
 
-        #experiment_design <- read.delim('/home/alvaro/Downloads/experimental_design_example(2).txt')
+        # experiment_design <- read.delim('/home/alvaro/Downloads/experimental_design_example(2).txt')
 
         inFile <- input$optional_exp_design
 
@@ -318,6 +319,14 @@ function(input, output) {
     output$plot_correlation <- renderPlotly(MQanalyser::plot_correlationly(dep()) %>%
 
                                                layout(height = 1000, width = 1000))
+
+
+
+    output$plot_profile<- renderPlotly(MQanalyser::plot_profilely(dep = dep(),
+                                                                  intensity_type = input$IntensityType) %>%
+
+                                                layout(height = 1000, width = 1000))
+
 
 
 

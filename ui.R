@@ -377,9 +377,9 @@ navbarPage(h3("Proteomics results"),
 
                               ),
                               mainPanel(shiny_busy(),
-                                        box(height = 800, width = 900,
+                                        box(#height = 800, width = 900,
 
-                                            plotOutput('profile')),
+                                            plotlyOutput('plot_profile')),
 
                                         box(height = 800, width =900,
                                             DT::dataTableOutput('profiletable'))
