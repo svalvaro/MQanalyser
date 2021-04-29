@@ -26,7 +26,9 @@ To run it locally:
 ``` r
 library(MQanalyser)
 ## basic example code
-runApp()
+appDir <- system.file("shiny_app", package = "MQanalyser")
+
+shiny::runApp(appDir)
 ```
 
 This is how it should look like when you have uploaded your
