@@ -19,6 +19,8 @@ plot_volcano <- function(proteomics_results = NULL,
                          p_value_cutoff = 0.05,
                          color_down = 'cyan3',
                          color_up = 'brown2'){
+    # proteomics_results <- data_results
+    # sample_comparison <- 'Malignant_vs_Benign'
 
     results <- proteomics_results %>% select(contains(c('name','ID', sample_comparison, 'p.adj', 'ratio')))
 
@@ -46,17 +48,28 @@ plot_volcano <- function(proteomics_results = NULL,
     results$color[is.na(results$color)] <- 'grey'
 
 
+    colnames(results)[colnames(results) == "name"] <- "Gene"
+
+
     #Plot
-    p <- ggplot(results,  aes(x = fold_change, y = log10_p.adj,  key = name))+
+    p <- ggplot(results,  aes(x = fold_change, y = log10_p.adj,  key = Gene))+
                 geom_point(aes(color = color))+
-                geom_vline(xintercept=c(-log2(foldchange_cutoff), log2(foldchange_cutoff)), color = "black",lwd=1.0,alpha=0.5,lty=3)+
-                geom_hline(yintercept=-log10(p_value_cutoff), color = "black",lwd=1.0,alpha=0.5,lty=3)+
-                #labs(x=expression('Log'[2]*'(Fold-change)'), y=expression('-Log'[10]*'(P-value)'))+
+                geom_vline(xintercept=c(-log2(foldchange_cutoff),
+                                        log2(foldchange_cutoff)),
+                           color = "black",
+                           lwd=1.0,
+                           alpha=0.5,
+                           lty=3)+
+                geom_hline(yintercept=-log10(p_value_cutoff),
+                           color = "black",
+                           lwd=1.0,
+                           alpha=0.5,
+                           lty=3)+
                 theme_bw()+
                 theme(legend.position = 'none')+
                 scale_color_identity()
 
   plotly::ggplotly(p = p ,
-                   tooltip = c("fold_change", "log10_p.adj", 'name'))
+                   tooltip = c("fold_change", "log10_p.adj", 'Gene'))
 
   }

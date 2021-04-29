@@ -352,11 +352,12 @@ function(input, output) {
                                                                   angle_labels = input$input_angle_samples,
                                                                   selected_genes = input$plot_profile_table_rows_selected,
                                                                   color_selected = input$input_col_sel,
-                                                                  plot = TRUE
+                                                                  plot = TRUE,
+                                                                  clear_selection = input$clear_selection
 
                                                                     ) %>%
 
-                                                layout(height = 800, width = 800))
+                                                layout(height = 800, width = 1200))
 
     output$plot_profile_table <- DT::renderDataTable({
 

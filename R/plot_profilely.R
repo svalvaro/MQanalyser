@@ -12,7 +12,14 @@ plot_profilely <- function(dep,
                            angle_labels = 45,
                            selected_genes = NULL,
                            color_selected = 'red',
-                           plot = TRUE){
+                           plot = TRUE,
+                           clear_selection = FALSE){
+  # clear_selection <- TRUE
+   #selected_genes <- c(4,15,200,500)
+
+    if(clear_selection == TRUE){
+      selected_genes <- NULL
+    }
 
     row_data <- rowData(dep, use.names = FALSE)
 
@@ -71,7 +78,7 @@ plot_profilely <- function(dep,
                                 color = color_selected)
     }
 
-    p
+
 
     if (plot == FALSE) {
 

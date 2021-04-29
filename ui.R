@@ -161,6 +161,24 @@ navbarPage(h3("Proteomics results"),
                                                    value = 0,
                                                    min = 0, max = 50),
 
+                                      #Select the Colour for UPregulated
+                                      colourpicker::colourInput("heat_upregulated",
+                                                                h4("Select colour upregulated:"),
+                                                                'brown2',
+                                                                palette = "square",
+                                                                returnName = TRUE,
+                                                                showColour = c("background")),
+
+                                      #Select the color for Down regulated
+                                      colourpicker::colourInput("heat_downregulated",
+                                                                h4("Select colour downregulated:"),
+                                                                'cyan3',
+                                                                palette = "square",
+                                                                returnName = TRUE,
+                                                                showColour = c("background")),
+
+
+
                                       selectInput(inputId = 'dendogram_input',
                                                   label = 'Dendogram',
                                                   choices = c('Both dendograms.' = 'both',
@@ -422,9 +440,7 @@ navbarPage(h3("Proteomics results"),
                                   br(),
 
 
-                                  checkboxInput(inputId = 'check_profiles',
-                                                label =h4('Show gene  names of table selection:'),
-                                                value = FALSE),
+
 
                                   checkboxInput(inputId = 'profile_favs',
                                                 label = h4('Show the genes that you have uploaded:',
@@ -432,10 +448,18 @@ navbarPage(h3("Proteomics results"),
 
                               ),
                               mainPanel(shiny_busy(),
-                                        box(height = 800, width = 900,
+                                        box(height = 800, width = 1300,
 
                                             plotlyOutput('plot_profile')),
 
+                                        br(),
+                                        # Not sure if this checbox is that useful because at the end
+                                        # the user has to remove the selection of the rows manually.
+                                        # Ideally, I can find a way that after using the checkbox,
+                                        # the selected rows are removed. That's would be a good solution.
+                                        checkboxInput(inputId = 'clear_selection',
+                                                      label =h4('Remove the selected genes from the table.'),
+                                                      value = FALSE),
                                         br(),
                                         hr(),
 
