@@ -22,6 +22,10 @@ plot_scatterly <- function(dep = NULL,
      p <- ggplot(df, aes(x = X_sample,
                          y = Y_sample))+
          theme_bw()+
+         theme(panel.border = element_blank(),
+               panel.grid.major = element_blank(),
+               panel.grid.minor = element_blank(),
+               axis.line = element_line(colour = "black"))+
          geom_point(alpha = alpha,
                     size = 2,
                     color = color,
@@ -35,35 +39,12 @@ plot_scatterly <- function(dep = NULL,
          ylab(label = y_sample)
 
 
-     # p <- ggplot(df, aes(x = X_sample,
-     #                     y = Y_sample,
-     #                     text = paste(x_sample,':', format(round(X_sample, 1), nsmall = 1),
-     #                                  paste0('\n',y_sample),':', format(round(Y_sample, 1), nsmall = 1),
-     #                                  '\nGene:', Gene)))+
-     #     theme_bw()+
-     #     geom_point(alpha = alpha, size = 2,
-     #                color = color)+
-     #     ggtitle(label = paste0('Log2 ', intensity_type))+
-     #     xlab(label = x_sample)+
-     #     ylab(label = y_sample)
-     #
-#
-#      p <- df %>%
-#          ggplot(aes(x = X_sample,
-#                 y = Y_sample,
-#                 text = paste(x_sample,':', format(round(X_sample, 1), nsmall = 1),
-#                              paste0('\n',y_sample),':', format(round(Y_sample, 1), nsmall = 1),
-#                              '\nGene:', Gene)))+
-#         theme_bw()+
-#         geom_point(alpha = alpha, size = 2,
-#                    color = color)+
-#         ggtitle(label = paste0('Log2 ', intensity_type))+
-#         xlab(label = x_sample)+
-#         ylab(label = y_sample)+
-#         geom_smooth()
 
 
-
+    #  s <- ggpubr::ggscatter(df, x = 'X_sample',y = 'Y_sample')
+    #
+    #
+    # plotly::ggplotly(s)
 
 
 

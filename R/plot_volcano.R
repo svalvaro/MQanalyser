@@ -19,6 +19,10 @@ plot_volcano <- function(proteomics_results = NULL,
                          p_value_cutoff = 0.05,
                          color_down = 'cyan3',
                          color_up = 'brown2'){
+
+    # data_results <- read_delim('/home/alvaro/Downloads/h3Proteomics resultsh3.csv', '\t')
+
+    # proteomics_results <-  DEP::get_results(dep)
     # proteomics_results <- data_results
     # sample_comparison <- 'Malignant_vs_Benign'
 
@@ -66,6 +70,10 @@ plot_volcano <- function(proteomics_results = NULL,
                            alpha=0.5,
                            lty=3)+
                 theme_bw()+
+                theme(panel.border = element_blank(),
+                      panel.grid.major = element_blank(),
+                      panel.grid.minor = element_blank(),
+                      axis.line = element_line(colour = "black"))+
                 theme(legend.position = 'none')+
                 scale_color_identity()
 
