@@ -449,7 +449,7 @@ function(input, output) {
 
     output$enr_circusplot <- renderPlot(height = 1000,{
 
-        cnetplot(edox,  circular = TRUE, colorEdge = TRUE)
+        cnetplot(edox(),  circular = TRUE, colorEdge = TRUE)
 
     })
 
@@ -457,7 +457,7 @@ function(input, output) {
 
     output$enr_networkplot <- renderPlot(height = 900, {
 
-        cnetplot(edox, node_label = "all")
+        cnetplot(edox(), node_label = "all")
     })
 
     #Heatmap plot of enriched terms
@@ -466,41 +466,28 @@ function(input, output) {
 
     output$heatmapnrich <- renderPlotly(height = 1000, {
 
-        ggplotly(heatplot(edox() ,foldChange=geneList()))
+        ggplotly(heatplot(edox ,foldChange=geneList()))
     })
 
 
     #Enrichment Map
 
-    enr_map <-  reactive({
-        enr_map <- emapplot(pairwise_termsim(edo())#, node_scale=input$enrich_nodes
-                            ,layout="kk")
-
-        return(enr_map)
-
-    })
 
     output$enr_mapplot <- renderPlot(height = 1000, {
 
-        enr_map()
+        enrichplot::emapplot(pairwise_termsim(edo)#, node_scale=input$enrich_nodes
+                 ,layout="kk")
+
+
     })
     #Biological Comparison
 
-    bio_comp <- reactive({
-        bp <-  pairwise_termsim(enrichGO(de(), ont="BP", OrgDb = 'org.Hs.eg.db'))
-
-
-        #bp2 <- pairwise_termsim(simplify(bp, cutoff=0.7, by="p.adjust", select_fun=min))
-
-        bio_comp <-  emapplot(bp)
-
-        return(bio_comp)
-
-    })
 
     output$bio_comparison <- renderPlot(height = 900, {
+        #bp2 <- pairwise_termsim(simplify(bp, cutoff=0.7, by="p.adjust", select_fun=min))
+        bp <- pairwise_termsim(enrichGO(de, ont="BP", OrgDb = 'org.Hs.eg.db'))
+        enrichplot::emapplot(bp)
 
-        bio_comp()
     })
 
 
@@ -516,26 +503,27 @@ function(input, output) {
     running_reactive <- reactive({
 
 
-        p1 <- clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
+        # clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
+        clusterProfiler::gseaplot(edo2, geneSetID = 1)
 
         return(p1)
 
     })
     output$enr_gseaplot <- renderPlot(height = 500, {
-        running_reactive()
+        # clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
+
+        # by = c('runningScore', 'preranked')
+
+        clusterProfiler::gseaplot(edo2, geneSetID = 1)
 
     })
 
     #Gsea plot 2
 
-    gsea2 <- reactive({
-        gsea2 <-    gseaplot2(edo2(), geneSetID = 1)
-        return(gsea2)
 
-    })
     output$enr_gsea2 <- renderPlot(height = 500,{
 
-        gsea2()
+        gseaplot2(edo2(), geneSetID = 1)
     })
     #KEGG analysis1
 
