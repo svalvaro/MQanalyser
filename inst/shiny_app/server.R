@@ -400,7 +400,7 @@ function(input, output) {
         # Be sure about the >2, it's the absolute that's fine but I already
         # it is already implemented the log2fc.
 
-        de <- names(geneList())[abs(geneList) > 2]
+        de <- names(geneList())[abs(geneList()) > 2]
 
         edo <- DOSE::enrichDGN(de)
 
@@ -464,9 +464,9 @@ function(input, output) {
 
 
 
-    output$heatmapnrich <- renderPlotly(height = 1000, {
+    output$heatmapnrich <- renderPlotly({
 
-        ggplotly(heatplot(edox ,foldChange=geneList()))
+        ggplotly(heatplot(edox() ,foldChange=geneList()))
     })
 
 
@@ -475,7 +475,7 @@ function(input, output) {
 
     output$enr_mapplot <- renderPlot(height = 1000, {
 
-        enrichplot::emapplot(pairwise_termsim(edo)#, node_scale=input$enrich_nodes
+        enrichplot::emapplot(pairwise_termsim(edo())#, node_scale=input$enrich_nodes
                  ,layout="kk")
 
 

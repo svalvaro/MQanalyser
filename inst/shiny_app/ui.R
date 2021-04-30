@@ -560,7 +560,7 @@ navbarPage(h3("Proteomics results"),
                                                          identify expression patterns.'),
                                                            hr(),
                                                            shiny_busy(),
-                                                           plotOutput('heatmapnrich')),
+                                                           plotlyOutput('heatmapnrich')),
 
                                                   tabPanel('Enrichment Map',
                                                            hr(),
