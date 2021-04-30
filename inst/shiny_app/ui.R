@@ -113,9 +113,6 @@ navbarPage(h3("Proteomics results"),
 
                                   ),
 
-                                  # tags$img(src = "Proteomika_logo_hires.png",
-                                  #          width = "50px", height = "50px"),
-
                                   img(src="Proteomika_logo_hires.png",
                                           height = '60%',
                                           width = '60%',
@@ -123,9 +120,6 @@ navbarPage(h3("Proteomics results"),
                               )
                           )
                  ),
-                 #SHiny busyhttp://127.0.0.1:5766/www/Proteomika_logo_hires.pnghttp://127.0.0.1:5546/Proteomika_logo_hires.png
-
-           # http://127.0.0.1:5546/www/Proteomika_logo_hires.png
            #First Panel is the heatmap
            tabPanel(h4("Results"),
                     sidebarLayout(
@@ -149,10 +143,7 @@ navbarPage(h3("Proteomics results"),
                         )
                     ),
 
-
-
-
-                 #First Panel is the heatmap
+      #First Panel is the heatmap
                  tabPanel(h4("Heatmap"),
                           sidebarLayout(
                               sidebarPanel(
@@ -228,11 +219,7 @@ navbarPage(h3("Proteomics results"),
                                               label=h4('Select what do you want to visualize:'),
                                               choices=c('Multi Scatter Plot'='multiplot','Correlation Matrix'='cor_matrix'),
                                               selected = 'multiplot')
-
-
-
                               ),
-
 
                               mainPanel(
                                   print('If you would like to analyse each plot individually, go to the next tab
@@ -240,11 +227,9 @@ navbarPage(h3("Proteomics results"),
                                   hr(),
                                   shiny_busy(),
                                   plotlyOutput('plot_correlation')
-
                               )
                           )
                  ),
-
 
                  #Second Panel is the ScatterPLot
                  tabPanel(h4("Scatter Plot"),
@@ -258,16 +243,11 @@ navbarPage(h3("Proteomics results"),
 
                                   uiOutput("y_sample_selector"),
 
-
-
-
-
                                   #check if they want to see their genes
 
                                   checkboxInput(inputId = 'showgenes',
                                                 label = h4('Show the genes that you have uploaded:'),
                                                 value=FALSE),
-
 
                                   dropdown(
                                       tags$h3("Advanced Parameters"),
@@ -299,13 +279,9 @@ navbarPage(h3("Proteomics results"),
                                       )
                                   ),
 
-
                                   # Download button for the plot
                                   downloadButton(outputId = 'downloadscatter',
                                                  label = 'Download the Scatter Plot')
-
-
-
 
                               ),
                               mainPanel(
@@ -315,9 +291,6 @@ navbarPage(h3("Proteomics results"),
                                       plotlyOutput('scatterplot'))#,
                                   # box(height = 900, width =900,
                                   #     DT::dataTableOutput('table_plot'))
-
-
-
                               )
                           )
                  ),
@@ -326,44 +299,40 @@ navbarPage(h3("Proteomics results"),
                           sidebarLayout(
                               sidebarPanel(
                                   h3("Select the adjustments"),
-
-
                                   # #Sample for y axis
                                   #
                                   uiOutput("comparisons_out"),
 
-
-
                                   dropdown(
                                       tags$h3("Advanced Parameters"),
 
-                                sliderInput(inputId = 'log_input',
-                                            label = h4('Log2(Fold-Change) Range'),
-                                            min = -10,
-                                            max = 10,
-                                            step = 0.1,
-                                            value = c(-6,6) ),
+                                        sliderInput(inputId = 'log_input',
+                                                    label = h4('Log2(Fold-Change) Range'),
+                                                    min = -10,
+                                                    max = 10,
+                                                    step = 0.1,
+                                                    value = c(-6,6) ),
 
-                                sliderInput(inputId = 'log_p',
-                                            label = h4('-Log10(P-Value): Range'),
-                                            min = 0,
-                                            max = 100,
-                                            value = 5 ),
-                                #Select the Colour for UPregulated
-                                colourpicker::colourInput("col_upregulated",
-                                                          h4("Select colour upregulated:"),
-                                                          'brown2',
-                                                          palette = "square",
-                                                          returnName = TRUE,
-                                                          showColour = c("background")),
+                                        sliderInput(inputId = 'log_p',
+                                                    label = h4('-Log10(P-Value): Range'),
+                                                    min = 0,
+                                                    max = 100,
+                                                    value = 5 ),
+                                        #Select the Colour for UPregulated
+                                        colourpicker::colourInput("col_upregulated",
+                                                                  h4("Select colour upregulated:"),
+                                                                  'brown2',
+                                                                  palette = "square",
+                                                                  returnName = TRUE,
+                                                                  showColour = c("background")),
 
-                                #Select the color for Down regulated
-                                colourpicker::colourInput("col_downregulated",
-                                                          h4("Select colour downregulated:"),
-                                                          'cyan3',
-                                                          palette = "square",
-                                                          returnName = TRUE,
-                                                          showColour = c("background")),
+                                        #Select the color for Down regulated
+                                        colourpicker::colourInput("col_downregulated",
+                                                                  h4("Select colour downregulated:"),
+                                                                  'cyan3',
+                                                                  palette = "square",
+                                                                  returnName = TRUE,
+                                                                  showColour = c("background")),
 
 
 
@@ -377,8 +346,6 @@ navbarPage(h3("Proteomics results"),
                                   ),
 
                                   hr(),
-
-
                                   #Checkbox for Gene names
                                   checkboxInput(inputId = 'check_names',
                                                 label =h4('Show gene  names:'),
@@ -447,9 +414,6 @@ navbarPage(h3("Proteomics results"),
                                       )
                                   ),
                                   br(),
-
-
-
 
                                   checkboxInput(inputId = 'profile_favs',
                                                 label = h4('Show the genes that you have uploaded:',
