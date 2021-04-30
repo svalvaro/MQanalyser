@@ -74,6 +74,7 @@ navbarPage(h3("Proteomics results"),
                                           exit = animations$fading_exits$fadeOutRightBig
                                       )
                                   ),
+                                  br(),
 
                                   fileInput(inputId = 'user_genes',
                                             label='Provide a list of desired genes to check in the analysis: (Optional)',
@@ -111,12 +112,20 @@ navbarPage(h3("Proteomics results"),
                                       actionButton("runButton","Start Analysis"),
 
                                   ),
-                                  box(img(src='Proteomika_logo_hires.png', height = '60%', width = '60%', align = 'right'))
+
+                                  # tags$img(src = "Proteomika_logo_hires.png",
+                                  #          width = "50px", height = "50px"),
+
+                                  img(src="Proteomika_logo_hires.png",
+                                          height = '60%',
+                                          width = '60%',
+                                          align = 'right')
                               )
                           )
                  ),
-                 #SHiny busy
+                 #SHiny busyhttp://127.0.0.1:5766/www/Proteomika_logo_hires.pnghttp://127.0.0.1:5546/Proteomika_logo_hires.png
 
+           # http://127.0.0.1:5546/www/Proteomika_logo_hires.png
            #First Panel is the heatmap
            tabPanel(h4("Results"),
                     sidebarLayout(

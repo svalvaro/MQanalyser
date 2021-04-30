@@ -1,3 +1,13 @@
+#' geneList for enrichemnt.
+#'
+#' @param data_results
+#' @param comparison_samples
+#' @param organism
+#'
+#' @return
+#' @export
+#'
+#' @examples
 create_geneList <- function(data_results = data_results,
                             comparison_samples = NULL,
                             organism = "org.Hs.eg.db"){
