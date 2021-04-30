@@ -85,6 +85,13 @@ function(input, output) {
 
     })
 
+
+    # message analysis has started move to the next tab.
+    observeEvent(input$runButton, {
+        ed_final$data <-  rhandsontable::hot_to_r(input$ed_out)
+
+    })
+
     output$IntensityFound <- renderText({
 
         columns = grep(paste0(input$IntensityType,'.'), colnames(proteinGroups()))
@@ -159,8 +166,9 @@ function(input, output) {
     })
 
     data_imp <- reactive({
-
-        if(input$input_imputation == 'MinProb'){
+        if(input$input_imputation == 'Perseus'){
+            data_imp <-DEP::impute(data_norm(), fun = "man", shift = 1.8, scale = 0.3)
+        }else if(input$input_imputation == 'MinProb'){
             data_imp <- DEP::impute(data_norm(), fun = "MinProb", q = 0.05)
         } else if(input$input_imputation == 'knn'){
             data_imp <- DEP::impute(data_norm(), fun = "knn", k = 10, rowmax = 0.9)
