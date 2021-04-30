@@ -477,7 +477,15 @@ navbarPage(h3("Proteomics results"),
                               sidebarPanel(
                                   h3("Select the adjustments"),
 
-                                  uiOutput('enrichment_selector'),
+                                  uiOutput('comparisons_enrichment'),
+
+
+                                  #
+                                  # selectInput(inputId = 'organism_input',
+                                  #             label=h4('Select the organism:'),
+                                  #             choices = c('runningScore','preranked'),
+                                  #             selected = 'runningScore'),
+
 
                                   hr(),
 

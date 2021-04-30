@@ -378,36 +378,19 @@ function(input, output) {
 
     #Enrichment
 
+
+    output$comparisons_enrichment  <- renderUI({
+        selectInput(inputId = 'comparison_enrch',
+                    label = h4('Select the comparison:'),
+                    choices = unlist(comparisons()),
+                    selected = comparisons()[1])
+    })
+
     geneList <- reactive({
-        # First select the type of FoldChange same as in volcano.
 
-        # Benign_vs_Malignant
-
-
-        # we need ids and Fold Changes
-
-        geneList <- data_results$Benign_vs_Malignant_ratio
-
-        names(geneList) <- data_results$ID
-        #
-        #
-        #
-        # library(DOSE)
-        # data(geneList)
-        # gene <- names(geneList)[abs(geneList) > 1.5]
-        # head(gene)
-        #
-        # x <- enrichDO(gene          = gene,
-        #               ont           = "DO",
-        #               pvalueCutoff  = 0.05,
-        #               pAdjustMethod = "BH",
-        #               universe      = names(geneList),
-        #               minGSSize     = 5,
-        #               maxGSSize     = 500,
-        #               qvalueCutoff  = 0.05,
-        #               readable      = FALSE)
-        # head(x)
-
+        MQanalyser::create_geneList(data_results = data_results(),
+                                    comparison_samples = input$comparison_enrch,
+                                    organism = 'org.Hs.eg.db') # adapt it to more organisms.
 
 
     })
