@@ -396,5 +396,204 @@ function(input, output) {
     })
 
 
+    edo <- reactive({
+        # Be sure about the >2, it's the absolute that's fine but I already
+        # it is already implemented the log2fc.
+
+        de <- names(geneList())[abs(geneList) > 2]
+
+        edo <- DOSE::enrichDGN(de)
+
+    })
+
+    #Enrichment for gsea
+    edo2 <- reactive({
+        edo2 <- DOSE::gseDO(geneList())
+        return(edo2)
+    })
+
+
+    #Enrichment dot plot
+    output$enr_dotplot <- renderPlot(height = 1000,{
+
+        enrichplot::dotplot(edo(),showCategory = 25)
+
+    })
+
+    #Enrichment Barplot
+    output$enr_barplot <- renderPlot(height = 1000,{
+
+        barplot(edo(),showCategory = 25)
+
+    })
+
+
+    #Enrich
+    output$enr_gseadotplot <- renderPlot(height = 1000,{
+
+
+        dotplot(edo2(), showCategory=20) + ggtitle("dotplot for GSEA")
+
+
+    })
+
+    #Circus PLot
+
+    edox <- reactive({
+        edox <- setReadable(edo(), 'org.Hs.eg.db', 'ENTREZID')
+
+        return(edox)
+    })
+
+
+
+    output$enr_circusplot <- renderPlot(height = 1000,{
+
+        cnetplot(edox,  circular = TRUE, colorEdge = TRUE)
+
+    })
+
+    #Gene Network
+
+    output$enr_networkplot <- renderPlot(height = 900, {
+
+        cnetplot(edox, node_label = "all")
+    })
+
+    #Heatmap plot of enriched terms
+
+
+
+    output$heatmapnrich <- renderPlotly(height = 1000, {
+
+        ggplotly(heatplot(edox() ,foldChange=geneList()))
+    })
+
+
+    #Enrichment Map
+
+    enr_map <-  reactive({
+        enr_map <- emapplot(pairwise_termsim(edo())#, node_scale=input$enrich_nodes
+                            ,layout="kk")
+
+        return(enr_map)
+
+    })
+
+    output$enr_mapplot <- renderPlot(height = 1000, {
+
+        enr_map()
+    })
+    #Biological Comparison
+
+    bio_comp <- reactive({
+        bp <-  pairwise_termsim(enrichGO(de(), ont="BP", OrgDb = 'org.Hs.eg.db'))
+
+
+        #bp2 <- pairwise_termsim(simplify(bp, cutoff=0.7, by="p.adjust", select_fun=min))
+
+        bio_comp <-  emapplot(bp)
+
+        return(bio_comp)
+
+    })
+
+    output$bio_comparison <- renderPlot(height = 900, {
+
+        bio_comp()
+    })
+
+
+
+    #Output overlapping distributions
+    output$enr_ridgeplot <- renderPlot(height = 600, width = 800,{
+
+
+        ridgeplot(edo2())
+    })
+
+    #Running score and preranked list of GSEA result
+    running_reactive <- reactive({
+
+
+        p1 <- clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
+
+        return(p1)
+
+    })
+    output$enr_gseaplot <- renderPlot(height = 500, {
+        running_reactive()
+
+    })
+
+    #Gsea plot 2
+
+    gsea2 <- reactive({
+        gsea2 <-    gseaplot2(edo2(), geneSetID = 1)
+        return(gsea2)
+
+    })
+    output$enr_gsea2 <- renderPlot(height = 500,{
+
+        gsea2()
+    })
+    #KEGG analysis1
+
+    kegg_react1 <- reactive({
+
+        kk <- clusterProfiler::enrichKEGG(gene=de(),
+                                          organism = 'hsa',
+                                          #minGSSize = 120,
+                                          pvalueCutoff = 0.05,
+                                          #verbose = FALSE
+        )
+        return(kk)
+    })
+
+    output$enr_kegg1 <- renderPlot({
+
+
+        print(kegg_react1())
+        dotplot(kegg_react1(),showCategory =20)
+    })
+
+
+
+
+
+    pathways_des <- reactive({
+        pathways_vec <- kegg_react1()$Description
+        return(pathways_vec)
+    })
+
+    pathways_id <- reactive({
+        patwaisID_vec <- kegg_react1()$ID
+
+        names(patwaisID_vec) <- pathways_des()
+
+        return(patwaisID_vec)
+
+    })
+
+    output$pathway_selector <- renderUI({
+
+        selectInput(inputId = 'pathselec',label = h4('Select the pathway to check:'),
+                    choices = as.list(pathways_id()),selected = as.list(pathways_id()[1]))
+
+    })
+
+
+
+
+
+    output$enr_kegg2 <- renderPlot(height = 1, width = 1,{
+
+
+        browseKEGG(kegg_react1(),input$pathselec)
+
+    })
+
+
+
 
 }
