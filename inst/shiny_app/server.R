@@ -418,29 +418,6 @@ function(input, output) {
 
 
 
-
-    # output$scatterplot <- renderPlotly(MQanalyser::plot_scatterly(dep = dep(),
-    #                                                               log_base =2,
-    #                                                               x_sample = input$x_sample_input,
-    #                                                               y_sample = input$y_sample_input,
-    #                                                               gene_list = NULL,
-    #                                                               alpha = 0.05,
-    #                                                               intensity_type = input$IntensityType
-    # ) %>%
-    #
-    #     layout(height = 1000, width = 1000))
-    #
-
-
-
-
-
-
-
-
-
-
-
     output$plot_profile_table <- DT::renderDataTable({
 
         DT::datatable(MQanalyser::plot_profilely(dep = dep(),

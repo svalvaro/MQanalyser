@@ -14,7 +14,7 @@ navbarPage(h3("Proteomics results"),
            theme = shinytheme(theme ='flatly'),
 
 
-           tabPanel(h4('Start'),
+           tabPanel(h4('Data \nInput'),
                     sidebarLayout(
                         sidebarPanel(
                           shinyalert::useShinyalert(),
@@ -115,11 +115,10 @@ navbarPage(h3("Proteomics results"),
 
                                        )
                                        ),
-                                column(3,
-                                       img(src="Proteomika_logo_hires.png",
-                                              height = '100%',
-                                              width = '100%',
-                                              align = 'right'),
+                                column(3,box(img(src="Proteomika_logo_hires.png",
+                                                 height = '100%',
+                                                 width = '100%',
+                                                 align = 'right')),
 
                                        br(),
                                        br(),
@@ -127,7 +126,8 @@ navbarPage(h3("Proteomics results"),
                                        br(),
                                        br(),
                                        br(),
-                                       actionButton("start_input","Start Analysis")
+                                       box(actionButton("start_input","Start Analysis"))
+
                                        )
                             )
                         )
@@ -138,22 +138,22 @@ navbarPage(h3("Proteomics results"),
               includeCSS("www/info_box.css"),
 
 
-              fluidRow(box(
-                          #uiOutput('significant_proteins'),
-                          shinydashboard::infoBoxOutput('significant_proteins', width = NULL)
-                          ),
+
+                  shinydashboard::infoBoxOutput('significant_proteins',
+                                                width = NULL),
+
                           br(),
                           br(),
 
                           hr(),
 
-                          box(
-                          DT::dataTableOutput('proteomics_results')
-                          ),
+
+                          DT::dataTableOutput('proteomics_results'),
+
                           br(),
                           downloadButton(outputId = 'download_proteomics',
                                           label = 'Download'),
-                    )
+
               ),
 
 

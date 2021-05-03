@@ -73,3 +73,12 @@ margin: 0;
 .modal-warning .modal-body {
   background-color: #f39c12 !important;
 }
+
+
+.shiny-notification {
+              height: 100px;
+              width: 800px;
+              position:fixed;
+              top: calc(50% - 50px);;
+              left: calc(50% - 400px);;
+            }
