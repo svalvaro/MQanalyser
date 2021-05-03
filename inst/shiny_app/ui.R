@@ -147,32 +147,6 @@ navbarPage(h3("Proteomics results"),
               ),
 
 
-     # #First Panel is the heatmap
-     # tabPanel(h4("Results"),
-     #    dashboardPage(
-     #        dashboardHeader('none'),
-     #
-     #        dashboardBody(
-     #            fluidRow(box(
-     #              #uiOutput('significant_proteins'),
-     #             )
-     #            ),
-     #            br(),
-     #            br(),
-     #
-     #            hr(),
-     #
-     #            box(
-     #              DT::dataTableOutput('proteomics_results')
-     #            ),
-     #            br(),
-     #            downloadButton(outputId = 'download_proteomics',
-     #                           label = 'Download'),
-     #            )
-     #        )
-     #    )
-     #
-     # ),
 
 #First Panel is the heatmap
            tabPanel(h4("Heatmap"),
@@ -228,16 +202,12 @@ navbarPage(h3("Proteomics results"),
                             )
 
                         ),
-                        mainPanel(shiny_busy(),
-                                  #Plot the heatmap in the first tab
-                                  # box(height = 10000,width = 2000, plotOutput('heatmap') ),
-                                  box(plotlyOutput('heatmaply')
+                        mainPanel(box(plotlyOutput('heatmaply')
                                       )
 
                         )
                     )
            ),
-
 
            #Multi Scatter PLot
            tabPanel(h4('Correlation'),
