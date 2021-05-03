@@ -106,7 +106,7 @@ function(input, output) {
                                    type="error",
                                    closeOnClickOutside = TRUE,
                                    closeOnEsc = TRUE,
-                                   timer = 10000)
+                                   timer = 6000)
 
         }else{
 
@@ -116,33 +116,8 @@ function(input, output) {
                                    closeOnClickOutside = TRUE,
                                    closeOnEsc = TRUE,
                                    timer = 10000)
-
         }
-
-
-
     })
-
-
-    # observe({
-    #     if (input$start_input & is.null(input$proteinGroups) ){
-    #         shinyalert::shinyalert("Analysis not started", "proteinGroups.txt not uploaded",
-    #                                type="error",
-    #                                closeOnClickOutside = TRUE,
-    #                                closeOnEsc = TRUE,
-    #                                timer = 6000)
-    #     } else if(input$start_input & input$proteinGroups){
-    #
-    #             shinyalert::shinyalert("Analysis Started!",
-    #                                   "You can now move to the next tab.",
-    #                                    type="success",
-    #                                    closeOnClickOutside = TRUE,
-    #                                    closeOnEsc = TRUE,
-    #                                    timer = 10000)
-    #
-    #     }
-    # })
-
 
 
 
@@ -158,9 +133,8 @@ function(input, output) {
 
         } else{
             print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
-
-
         }
+
         })
 
 
@@ -179,8 +153,6 @@ function(input, output) {
         #View(as.data.frame(data_se@elementMetadata))
 
     })
-
-
 
     data_filt <- reactive({
 
@@ -245,8 +217,6 @@ function(input, output) {
 
     dep <- reactive({
 
-
-
         # data_diff_all_contrasts <- MQanalyser::test_limma(data_imp, type = "all")
 
         data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(), type = "all")
@@ -282,13 +252,27 @@ function(input, output) {
         info <- infoBox(
                         'Differentially expressed proteins',
                         paste0(significant_proteins, ' out of ', total_proteins, ' proteins.'),
-                        icon = icon("stats", lib = "glyphicon"),
-                        color = 'green',
-                        width = 7,
-                        fill = TRUE
+                         icon = icon("stats", lib = "glyphicon")#,
+                        # color = 'green',
+                        # width = 7,
+                        # fill = TRUE
                         )
         return(info)
+
     })
+
+    # output$significant_proteins <- renderInfoBox({
+    #     infoBox(
+    #         "Time",
+    #         paste(format(Sys.time(), "%H:%M:%S"), "h"),
+    #         icon = icon("time", lib = "glyphicon"),
+    #         color = "teal", fill =TRUE, width = 3
+    #     )
+    #
+    # })
+
+
+
 
 
 
