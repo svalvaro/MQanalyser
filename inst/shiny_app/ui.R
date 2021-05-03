@@ -99,27 +99,37 @@ navbarPage(h3("Proteomics results"),
                         ),
 
                         mainPanel(
-                            box(title = h3('Experiment Design'),
-                                width = 10,
-                                h4('Welcome to analysis of the results of LC-MS/MS'),
-                                h5('Start by uploading the proteinGroups.txt table provided.'),
-                                h5('Please Edit the next table and add the Group and Replicate.'),
-                                h5('Alternatively an experiment design can be uploaded. Be sure that the Sample names are correct.'),
-                                hr(),
-                                #DTOutput('experiment_design')
-                                #DT::dataTableOutput('ed_out'),
-                                rHandsontableOutput('ed_out'),
-                                br(),
-                                br(),
-                                actionButton("start_input","Start Analysis"),
+                            fluidRow(
+                                column(8,
+                                       box(title = h3('Experiment Design'),
+                                           width = 10,
+                                           h4('Welcome to analysis of the results of LC-MS/MS'),
+                                           h5('Start by uploading the proteinGroups.txt table provided.'),
+                                           h5('Please Edit the next table and add the Group and Replicate.'),
+                                           h5('Alternatively an experiment design can be uploaded. Be sure that the Sample names are correct.'),
+                                           hr(),
+                                           #DTOutput('experiment_design')
+                                           #DT::dataTableOutput('ed_out'),
+                                           rHandsontableOutput('ed_out')
 
 
-                            ),
+                                       )
+                                       ),
+                                column(3,
+                                       img(src="Proteomika_logo_hires.png",
+                                              height = '100%',
+                                              width = '100%',
+                                              align = 'right'),
 
-                            img(src="Proteomika_logo_hires.png",
-                                    height = '60%',
-                                    width = '60%',
-                                    align = 'right')
+                                       br(),
+                                       br(),
+                                       br(),
+                                       br(),
+                                       br(),
+                                       br(),
+                                       actionButton("start_input","Start Analysis")
+                                       )
+                            )
                         )
                     )
            ),
@@ -211,25 +221,13 @@ navbarPage(h3("Proteomics results"),
 
            #Multi Scatter PLot
            tabPanel(h4('Correlation'),
-                    sidebarLayout(
-                        sidebarPanel(
-                            h3("Select the adjustments"),
 
-                            #Input for selection of multi plot or correlations
-                            selectInput(inputId='multiselection',
-                                        label=h4('Select what do you want to visualize:'),
-                                        choices=c('Multi Scatter Plot'='multiplot','Correlation Matrix'='cor_matrix'),
-                                        selected = 'multiplot')
-                        ),
+                print('If you would like to analyse each plot individually, go to the next tab
+                      "Scatter Plot"'),
+                hr(),
+                #shiny_busy(),
+                plotlyOutput('plot_correlation')
 
-                        mainPanel(
-                            print('If you would like to analyse each plot individually, go to the next tab
-                              "Scatter Plot"'),
-                            hr(),
-                            shiny_busy(),
-                            plotlyOutput('plot_correlation')
-                        )
-                    )
            ),
 
            #Second Panel is the ScatterPLot
@@ -421,8 +419,7 @@ navbarPage(h3("Proteomics results"),
                                                      value=FALSE))
 
                         ),
-                        mainPanel(shiny_busy(),
-                                  box(height = 800, width = 1300,
+                        mainPanel(box(height = 800, width = 1300,
 
                                       plotlyOutput('plot_profile')),
 

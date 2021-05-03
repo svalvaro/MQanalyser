@@ -291,26 +291,10 @@ function(input, output) {
         }
     )
 
-#
-#     # Heatmap
-#
-#     output$heatmaply <- renderPlotly(
-#
-#
-#
-#
-#         MQanalyser::plot_heatmaply(dep(),
-#                                    intensity_type = input$IntensityType,
-#                                    dendogram = input$dendogram_input,
-#                                    k_row = input$k_row_input,
-#                                    k_col = input$k_col_input) %>%
-#                                    layout(height = 1000, width = 1000)
-#
-#     )
 
+    # PLOTS
 
-
-    # Heatmap
+    # heatmap
 
     output$heatmaply <- renderPlotly({
 
@@ -325,6 +309,71 @@ function(input, output) {
        })
 
     })
+
+
+    # correlation
+    output$plot_correlation <- renderPlotly({
+
+        shiny::withProgress(message = 'Creating a correlation pot...',{
+            MQanalyser::plot_correlationly(dep()) %>%
+                layout(height = 1000, width = 1000)
+        })
+
+    })
+
+    # scatterplot
+    output$scatterplot <- renderPlotly(
+        MQanalyser::plot_scatterly(dep = dep(),
+                                   x_sample = input$x_sample_input,
+                                   y_sample = input$y_sample_input,
+                                   color = input$color_scatter,
+                                   gene_list = NULL,
+                                   alpha = input$input_alpha,
+                                   intensity_type = input$IntensityType,
+                                   show_lm = input$input_lm) %>%
+                        layout(height = 1000, width = 1000 )
+    )
+
+
+
+    # volcano
+    output$volcano_plot <- renderPlotly({
+
+        shiny::withProgress(message = 'Creating a volcano plot...',{
+
+            MQanalyser::plot_volcano(proteomics_results = data_results(),
+                                     sample_comparison = input$comparison_input,
+                                     foldchange_cutoff = input$input_fc,
+                                     p_value_cutoff = input$input_pvalue,
+                                     color_up = input$col_upregulated,
+                                     color_down = input$col_downregulated) %>%
+
+                layout(height = 1000, width = 1000)
+        })
+
+    })
+
+    # profile
+
+    output$plot_profile <- renderPlotly({
+
+        shiny::withProgress(message = 'Creating profile plot...',{
+            MQanalyser::plot_profilely(dep = dep(),
+                                       intensity_type = input$IntensityType,
+                                       color = input$input_col_prof,
+                                       angle_labels = input$input_angle_samples,
+                                       selected_genes = input$plot_profile_table_rows_selected,
+                                       color_selected = input$input_col_sel,
+                                       plot = TRUE,
+                                       clear_selection = input$clear_selection) %>%
+
+                layout(height = 800, width = 1200)
+        })
+    })
+
+
+
+
 
 
 
@@ -366,17 +415,6 @@ function(input, output) {
     })
 
 
-    output$scatterplot <- renderPlotly(MQanalyser::plot_scatterly(dep = dep(),
-                                                                  x_sample = input$x_sample_input,
-                                                                  y_sample = input$y_sample_input,
-                                                                  color = input$color_scatter,
-                                                                  gene_list = NULL,
-                                                                  alpha = input$input_alpha,
-                                                                  intensity_type = input$IntensityType,
-                                                                  show_lm = input$input_lm) %>%
-
-                                                                      layout(height = 1000, width = 1000 )
-                                       )
 
 
 
@@ -397,34 +435,11 @@ function(input, output) {
 
 
 
-    output$volcano_plot <- renderPlotly(MQanalyser::plot_volcano(proteomics_results = data_results(),
-                                                                 sample_comparison = input$comparison_input,
-                                                                 foldchange_cutoff = input$input_fc,
-                                                                 p_value_cutoff = input$input_pvalue,
-                                                                 color_up = input$col_upregulated,
-                                                                 color_down = input$col_downregulated) %>%
-
-                                                                layout(height = 1000, width = 1000))
-
-
-    output$plot_correlation <- renderPlotly(MQanalyser::plot_correlationly(dep()) %>%
-
-                                               layout(height = 1000, width = 1000))
 
 
 
-    output$plot_profile<- renderPlotly(MQanalyser::plot_profilely(dep = dep(),
-                                                                  intensity_type = input$IntensityType,
-                                                                  color = input$input_col_prof,
-                                                                  angle_labels = input$input_angle_samples,
-                                                                  selected_genes = input$plot_profile_table_rows_selected,
-                                                                  color_selected = input$input_col_sel,
-                                                                  plot = TRUE,
-                                                                  clear_selection = input$clear_selection
 
-                                                                    ) %>%
 
-                                                layout(height = 800, width = 1200))
 
     output$plot_profile_table <- DT::renderDataTable({
 
