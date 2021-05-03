@@ -100,7 +100,15 @@ function(input, output) {
                                    closeOnEsc = TRUE,
                                    timer = 6000)
 
-        }else {
+        }else if(all(experiment_design()$condition == ' ')){
+            shinyalert::shinyalert("Analysis not started",
+                                   "Provide an Experiment Design",
+                                   type="error",
+                                   closeOnClickOutside = TRUE,
+                                   closeOnEsc = TRUE,
+                                   timer = 10000)
+
+        }else{
 
             shinyalert::shinyalert("Analysis Started!",
                                    "You can now move to the next tab.",
