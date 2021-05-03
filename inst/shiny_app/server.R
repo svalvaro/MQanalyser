@@ -1,12 +1,27 @@
 function(input, output) {
 
-
-    # exp_design_na <- data.frame(label = experiment_names(),
-    #                             condition = NA,
-    #                             replicate = NA)
-
-
     options(shiny.maxRequestSize=100*1024^2)## Set maximum upload size to 100MB
+
+
+
+    ## Shinyalert for when analysis has been started
+
+    # observeEvent(input$start_input ,{
+    #     if(input$start_input == 0){
+    #         return()
+    #     }
+    #
+    #     shinyalert::shinyalert("In Progress!", "Data analysis has started, wait until table and plots
+    #             appear on the screen", type="info",
+    #                closeOnClickOutside = TRUE,
+    #                closeOnEsc = TRUE,
+    #                timer = 10000) # timer in miliseconds (10 sec)
+    # })
+
+
+
+
+
 
     #proteinGroups.txt input
 
@@ -80,17 +95,35 @@ function(input, output) {
     })
 
 
-    observeEvent(input$runButton, {
+    observeEvent(input$start_input, {
+
         ed_final$data <-  rhandsontable::hot_to_r(input$ed_out)
 
     })
 
 
-    # message analysis has started move to the next tab.
-    observeEvent(input$runButton, {
-        ed_final$data <-  rhandsontable::hot_to_r(input$ed_out)
+    observeEvent(input$start_input, {
+
+        shinyalert::shinyalert("Analysis Started!",
+                              "You can now move to the next tab.",
+                               type="success",
+                               closeOnClickOutside = TRUE,
+                               closeOnEsc = TRUE,
+                               timer = 10000)
+
 
     })
+
+
+#
+#
+#
+#
+#     # message analysis has started move to the next tab.
+#     observeEvent(input$runButton, {
+#         ed_final$data <-  rhandsontable::hot_to_r(input$ed_out)
+#
+#     })
 
     output$IntensityFound <- renderText({
 
@@ -198,7 +231,7 @@ function(input, output) {
         data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(), type = "all")
 
 
-        #data_diff_all_contrasts <- DEP::test_diff(data_imp(), type = "all")
+         #data_diff_all_contrasts <- DEP::test_diff(data_imp(), type = "all")
 
         # dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
 

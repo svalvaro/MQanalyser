@@ -17,6 +17,7 @@ navbarPage(h3("Proteomics results"),
                  tabPanel(h4('Start'),
                           sidebarLayout(
                               sidebarPanel(
+                                shinyalert::useShinyalert(),
                                   fileInput(inputId = 'proteinGroups',
                                             label = h4('Upload the proteinGroups.txt file'),
                                             multiple = FALSE,
@@ -110,7 +111,8 @@ navbarPage(h3("Proteomics results"),
                                       rHandsontableOutput('ed_out'),
                                       br(),
                                       br(),
-                                      actionButton("runButton","Start Analysis"),
+                                      actionButton("start_input","Start Analysis"),
+
 
                                   ),
 
