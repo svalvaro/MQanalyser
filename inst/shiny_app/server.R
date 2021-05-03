@@ -3,26 +3,6 @@ function(input, output) {
     options(shiny.maxRequestSize=100*1024^2)## Set maximum upload size to 100MB
 
 
-
-    ## Shinyalert for when analysis has been started
-
-    # observeEvent(input$start_input ,{
-    #     if(input$start_input == 0){
-    #         return()
-    #     }
-    #
-    #     shinyalert::shinyalert("In Progress!", "Data analysis has started, wait until table and plots
-    #             appear on the screen", type="info",
-    #                closeOnClickOutside = TRUE,
-    #                closeOnEsc = TRUE,
-    #                timer = 10000) # timer in miliseconds (10 sec)
-    # })
-
-
-
-
-
-
     #proteinGroups.txt input
 
     proteinGroups <- reactive({
@@ -89,41 +69,74 @@ function(input, output) {
     ed_final <- reactiveValues()
 
     output$ed_out <- renderRHandsontable({
+
+
+
         rhandsontable(experiment_design()) %>%
             hot_col('label', readOnly = TRUE) %>%
             hot_col('replicate', format = '0a')
+
     })
 
 
     observeEvent(input$start_input, {
+
+        if (is.null(input$proteinGroups) && is.null(input$optional_exp_design) ) {
+            return(NULL)
+        } else{
 
         ed_final$data <-  rhandsontable::hot_to_r(input$ed_out)
+        }
 
     })
 
 
     observeEvent(input$start_input, {
 
-        shinyalert::shinyalert("Analysis Started!",
-                              "You can now move to the next tab.",
-                               type="success",
-                               closeOnClickOutside = TRUE,
-                               closeOnEsc = TRUE,
-                               timer = 10000)
+        if(is.null(input$proteinGroups)){
+            shinyalert::shinyalert("Analysis not started", "proteinGroups.txt not uploaded",
+                                   type="error",
+                                   closeOnClickOutside = TRUE,
+                                   closeOnEsc = TRUE,
+                                   timer = 6000)
+
+        }else {
+
+            shinyalert::shinyalert("Analysis Started!",
+                                   "You can now move to the next tab.",
+                                   type="success",
+                                   closeOnClickOutside = TRUE,
+                                   closeOnEsc = TRUE,
+                                   timer = 10000)
+
+        }
+
 
 
     })
 
 
-#
-#
-#
-#
-#     # message analysis has started move to the next tab.
-#     observeEvent(input$runButton, {
-#         ed_final$data <-  rhandsontable::hot_to_r(input$ed_out)
-#
-#     })
+    # observe({
+    #     if (input$start_input & is.null(input$proteinGroups) ){
+    #         shinyalert::shinyalert("Analysis not started", "proteinGroups.txt not uploaded",
+    #                                type="error",
+    #                                closeOnClickOutside = TRUE,
+    #                                closeOnEsc = TRUE,
+    #                                timer = 6000)
+    #     } else if(input$start_input & input$proteinGroups){
+    #
+    #             shinyalert::shinyalert("Analysis Started!",
+    #                                   "You can now move to the next tab.",
+    #                                    type="success",
+    #                                    closeOnClickOutside = TRUE,
+    #                                    closeOnEsc = TRUE,
+    #                                    timer = 10000)
+    #
+    #     }
+    # })
+
+
+
 
     output$IntensityFound <- renderText({
 
