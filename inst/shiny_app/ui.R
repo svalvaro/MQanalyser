@@ -137,8 +137,6 @@ navbarPage(h3("Proteomics results"),
      tabPanel(h4("Results"),
               includeCSS("www/info_box.css"),
 
-
-
                   shinydashboard::infoBoxOutput('significant_proteins',
                                                 width = NULL),
 
@@ -155,7 +153,6 @@ navbarPage(h3("Proteomics results"),
                                           label = 'Download'),
 
               ),
-
 
 
 #First Panel is the heatmap
@@ -221,12 +218,15 @@ navbarPage(h3("Proteomics results"),
 
            #Multi Scatter PLot
            tabPanel(h4('Correlation'),
+                    fluidRow(column(width = 12,
+                                    align = 'center',
+                                    print('If you would like to analyse each plot individually,
+                                    go to the next tab "Scatter Plot"'),
+                                    hr(),
 
-                print('If you would like to analyse each plot individually, go to the next tab
-                      "Scatter Plot"'),
-                hr(),
-                #shiny_busy(),
-                plotlyOutput('plot_correlation')
+                                    plotlyOutput('plot_correlation')))
+
+
 
            ),
 

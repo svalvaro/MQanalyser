@@ -261,21 +261,6 @@ function(input, output) {
 
     })
 
-    # output$significant_proteins <- renderInfoBox({
-    #     infoBox(
-    #         "Time",
-    #         paste(format(Sys.time(), "%H:%M:%S"), "h"),
-    #         icon = icon("time", lib = "glyphicon"),
-    #         color = "teal", fill =TRUE, width = 3
-    #     )
-    #
-    # })
-
-
-
-
-
-
 
     output$proteomics_results <- DT::renderDataTable({
 
@@ -300,13 +285,22 @@ function(input, output) {
 
 
        shiny::withProgress(message = 'Creating heatmap of significant proteins...',{
-           MQanalyser::plot_heatmaply(dep(),
-                                      intensity_type = input$IntensityType,
-                                      dendogram = input$dendogram_input,
-                                      k_row = input$k_row_input,
-                                      k_col = input$k_col_input) %>%
-               layout(height = 1000, width = 1000)
+           for (i in 1:50) {
+
+               shiny::incProgress(1/50)
+               Sys.sleep(0.25)
+           }
+
        })
+
+
+
+        MQanalyser::plot_heatmaply(dep(),
+                                   intensity_type = input$IntensityType,
+                                   dendogram = input$dendogram_input,
+                                   k_row = input$k_row_input,
+                                   k_col = input$k_col_input) %>%
+            layout(height = 1000, width = 1000)
 
     })
 
@@ -315,9 +309,17 @@ function(input, output) {
     output$plot_correlation <- renderPlotly({
 
         shiny::withProgress(message = 'Creating a correlation pot...',{
-            MQanalyser::plot_correlationly(dep()) %>%
-                layout(height = 1000, width = 1000)
+
+            for (i in 1:15) {
+
+                shiny::incProgress(1/15)
+                Sys.sleep(0.25)
+            }
+
         })
+
+        MQanalyser::plot_correlationly(dep()) %>%
+            layout(height = 1000, width = 1000)
 
     })
 
@@ -341,15 +343,22 @@ function(input, output) {
 
         shiny::withProgress(message = 'Creating a volcano plot...',{
 
-            MQanalyser::plot_volcano(proteomics_results = data_results(),
-                                     sample_comparison = input$comparison_input,
-                                     foldchange_cutoff = input$input_fc,
-                                     p_value_cutoff = input$input_pvalue,
-                                     color_up = input$col_upregulated,
-                                     color_down = input$col_downregulated) %>%
+            for (i in 1:15) {
 
-                layout(height = 1000, width = 1000)
+                shiny::incProgress(1/15)
+                Sys.sleep(0.25)
+            }
+
         })
+
+        MQanalyser::plot_volcano(proteomics_results = data_results(),
+                                 sample_comparison = input$comparison_input,
+                                 foldchange_cutoff = input$input_fc,
+                                 p_value_cutoff = input$input_pvalue,
+                                 color_up = input$col_upregulated,
+                                 color_down = input$col_downregulated) %>%
+
+            layout(height = 1000, width = 1000)
 
     })
 
@@ -358,17 +367,24 @@ function(input, output) {
     output$plot_profile <- renderPlotly({
 
         shiny::withProgress(message = 'Creating profile plot...',{
-            MQanalyser::plot_profilely(dep = dep(),
-                                       intensity_type = input$IntensityType,
-                                       color = input$input_col_prof,
-                                       angle_labels = input$input_angle_samples,
-                                       selected_genes = input$plot_profile_table_rows_selected,
-                                       color_selected = input$input_col_sel,
-                                       plot = TRUE,
-                                       clear_selection = input$clear_selection) %>%
 
-                layout(height = 800, width = 1200)
+            for (i in 1:15) {
+
+                shiny::incProgress(1/15)
+                Sys.sleep(0.25)
+            }
+
         })
+        MQanalyser::plot_profilely(dep = dep(),
+                                   intensity_type = input$IntensityType,
+                                   color = input$input_col_prof,
+                                   angle_labels = input$input_angle_samples,
+                                   selected_genes = input$plot_profile_table_rows_selected,
+                                   color_selected = input$input_col_sel,
+                                   plot = TRUE,
+                                   clear_selection = input$clear_selection) %>%
+
+            layout(height = 800, width = 1200)
     })
 
 
