@@ -17,5 +17,6 @@ Imports:
     purrr,
     rhandsontable,
     shiny,
+    shinycssloaders,
     SummarizedExperiment,
     tidyr

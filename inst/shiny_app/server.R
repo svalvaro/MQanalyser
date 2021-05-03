@@ -279,27 +279,36 @@ function(input, output) {
 
     # PLOTS
 
+    # # heatmap
+    #
+    # output$heatmaply <- renderPlotly({
+    #
+    #
+    #    shiny::withProgress(message = 'Creating heatmap of significant proteins...',{
+    #
+    #        MQanalyser::plot_heatmaply(dep(),
+    #                                   intensity_type = input$IntensityType,
+    #                                   dendogram = input$dendogram_input,
+    #                                   k_row = input$k_row_input,
+    #                                   k_col = input$k_col_input) %>%
+    #            layout(height = 1000, width = 1000)
+    #
+    #    })
+
+
     # heatmap
 
-    output$heatmaply <- renderPlotly({
+    output$heatmaply <- renderPlotly(MQanalyser::plot_heatmaply(dep(),
+                                       intensity_type = input$IntensityType,
+                                       dendogram = input$dendogram_input,
+                                       k_row = input$k_row_input,
+                                       k_col = input$k_col_input) %>%
+                layout(height = 1000, width = 1000)
 
-
-       shiny::withProgress(message = 'Creating heatmap of significant proteins...',{
-
-           MQanalyser::plot_heatmaply(dep(),
-                                      intensity_type = input$IntensityType,
-                                      dendogram = input$dendogram_input,
-                                      k_row = input$k_row_input,
-                                      k_col = input$k_col_input) %>%
-               layout(height = 1000, width = 1000)
-
-       })
+        )
 
 
 
-
-
-    })
 
 
     # correlation

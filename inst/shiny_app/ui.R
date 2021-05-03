@@ -209,12 +209,15 @@ navbarPage(h3("Proteomics results"),
                             )
 
                         ),
-                        mainPanel(box(plotlyOutput('heatmaply')
-                                      )
-
+                        mainPanel(
+                            box(
+                                shinycssloaders::withSpinner(
+                                    plotlyOutput('heatmaply')
+                                    )
+                                )
+                            )
                         )
-                    )
-           ),
+                    ),
 
            #Multi Scatter PLot
            tabPanel(h4('Correlation'),
