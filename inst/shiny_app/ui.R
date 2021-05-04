@@ -1,15 +1,3 @@
-shiny_busy <- function() {
-    # use &nbsp; for some alignment, if needed
-    HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", paste0(
-        '<span data-display-if="',
-        '$(&#39;html&#39;).attr(&#39;class&#39;)==&#39;shiny-busy&#39;',
-        '">',
-        '<i class="fa fa-spinner fa-spin fa-fw" style="color:darkblue; font-size:70px"></i>',
-        '</span>'
-    ))
-}
-
-
 navbarPage(h3("Proteomics results"),
     theme = shinytheme(theme ='flatly'),
 
@@ -18,6 +6,7 @@ navbarPage(h3("Proteomics results"),
             sidebarLayout(
                 sidebarPanel(
                   shinyalert::useShinyalert(),
+
                     fileInput(inputId = 'proteinGroups',
                               label = h4('Upload the proteinGroups.txt file'),
                               multiple = FALSE,
@@ -188,8 +177,6 @@ navbarPage(h3("Proteomics results"),
                                                   palette = "square",
                                                   returnName = TRUE,
                                                   showColour = c("background")),
-
-
 
                         selectInput(inputId = 'dendogram_input',
                                     label = 'Dendogram',
@@ -573,59 +560,59 @@ navbarPage(h3("Proteomics results"),
     ),
 
 
-    tabPanel(title = h4('Gene Network'),
-             sidebarLayout(
-                 sidebarPanel(uiOutput("pathway_selector")),
-
-                 mainPanel(
-                     box(height = 2500, width = 2000,
-                         tabsetPanel( type = 'tabs',
-
-                                     tabPanel('Circus',
-                                              hr(),
-                                              shinycssloaders::withSpinner(plotOutput('enr_circusplot'))
-                                              ),
-
-                                     tabPanel('Gene Network',
-                                              hr(),
-                                              shinycssloaders::withSpinner(plotOutput('enr_networkplot'))
-                                              )
-                                     )
-                         )
-                     )
-                 )
-             ),
-
-
-    tabPanel(title = h4('Pathway Analysis'),
-             sidebarLayout(
-                 sidebarPanel(uiOutput("pathway_selector")),
-
-                 mainPanel(
-                     box(height = 2500, width = 2000,
-                         tabsetPanel( type = 'tabs',
-
-
-
-                                      #KEGG
-                                      tabPanel('KEGG Pathway 1',
-                                               hr(),
-                                               shinycssloaders::withSpinner(plotOutput('enr_kegg1'))
-                                      ),
-                                      tabPanel('Pathway WebBrowser',
-                                               hr(),
-                                               print('Select in the adjustments the pathway that you would
-                                           like to visualize and it will automatically open in a web
-                                           browser'),
-                                               shinycssloaders::withSpinner(plotOutput('enr_kegg2')),
-                                      )
-
-
-                         )
-                     )
-                 )
-             )
-    ),
+#     tabPanel(title = h4('Gene Network'),
+#              sidebarLayout(
+#                  sidebarPanel(uiOutput("pathway_selector")),
+#
+#                  mainPanel(
+#                      box(height = 2500, width = 2000,
+#                          tabsetPanel( type = 'tabs',
+#
+#                                      tabPanel('Circus',
+#                                               hr(),
+#                                               shinycssloaders::withSpinner(plotOutput('enr_circusplot'))
+#                                               ),
+#
+#                                      tabPanel('Gene Network',
+#                                               hr(),
+#                                               shinycssloaders::withSpinner(plotOutput('enr_networkplot'))
+#                                               )
+#                                      )
+#                          )
+#                      )
+#                  )
+#              ),
+# #
+#
+    # tabPanel(title = h4('Pathway Analysis'),
+    #          sidebarLayout(
+    #              sidebarPanel(uiOutput("pathway_selector")),
+    #
+    #              mainPanel(
+    #                  box(height = 2500, width = 2000,
+    #                      tabsetPanel( type = 'tabs',
+    #
+    #
+    #
+    #                                   #KEGG
+    #                                   tabPanel('KEGG Pathway 1',
+    #                                            hr(),
+    #                                            shinycssloaders::withSpinner(plotOutput('enr_kegg1'))
+    #                                   ),
+    #                                   tabPanel('Pathway WebBrowser',
+    #                                            hr(),
+    #                                            print('Select in the adjustments the pathway that you would
+    #                                        like to visualize and it will automatically open in a web
+    #                                        browser'),
+    #                                            shinycssloaders::withSpinner(plotOutput('enr_kegg2')),
+    #                                   )
+    #
+    #
+    #                      )
+    #                  )
+    #              )
+    #          )
+    # ),
 
 
 
