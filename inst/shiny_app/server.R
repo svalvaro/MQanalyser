@@ -208,7 +208,7 @@ function(input, output) {
             data_imp <- DEP::impute(data_norm(), fun = input$input_imputation)
         }
 
-        # data_imp <- DEP::impute(data_norm, fun = 'MinProb', q = 0.05)
+        # data_imp <-DEP::impute(data_norm, fun = "man", shift = 1.8, scale = 0.3)
 
         #plot_imputation(data_norm, data_imp)
 
@@ -239,13 +239,6 @@ function(input, output) {
         data_results <- DEP::get_results(dep())
     })
 
-    # output$significant_proteins <- renderText({
-    #     # Number of significant proteins
-    #     significant_proteins <- data_results() %>% filter(significant) %>% nrow()
-    #     HTML(
-    #         paste0("There are: ", "<b>",significant_proteins," out of ",nrow(data_results()),"</b>"," signifcant proteins.")
-    #     )
-    # })
 
     output$significant_proteins <- renderInfoBox({
         # Number of significant proteins
@@ -254,11 +247,7 @@ function(input, output) {
         info <- infoBox(
                         'Differentially expressed proteins',
                         paste0(significant_proteins, ' out of ', total_proteins, ' proteins.'),
-                         icon = icon("stats", lib = "glyphicon")#,
-                        # color = 'green',
-                        # width = 7,
-                        # fill = TRUE
-                        )
+                         icon = icon("stats", lib = "glyphicon"))
         return(info)
 
     })
@@ -416,20 +405,33 @@ function(input, output) {
 
     geneList <- reactive({
 
-        MQanalyser::create_geneList(data_results = data_results(),
+        geneList <- MQanalyser::create_geneList(data_results = data_results(),
                                     comparison_samples = input$comparison_enrch,
                                     organism = 'org.Hs.eg.db') # adapt it to more organisms.
+
+        # geneList <- MQanalyser::create_geneList(data_results = data_results,
+        #                             comparison_samples = 'Benign_vs_Malignant',
+        #                             organism = 'org.Hs.eg.db')
+
+
+        # apply log2fc cut off:
+
+        geneList <- geneList[abs(geneList) > log2(input$fc_enrichment)]
     })
 
 
     diffExpress <- reactive({
-        # Be sure about the >2, it's the absolute that's fine but I already
-        # it is already implemented the log2fc.
+
 
         # de <-  names(geneList())[abs(geneList()) > 2]
 
 
-        de <-  names(geneList())[abs(geneList()) > log2(input$fc_enrichment)]
+        # de <-  names(geneList())[abs(geneList()) > log2(input$fc_enrichment)]
+
+
+        # diffExpress <- geneList[abs(geneList) > log2(2.5)]
+
+        de <- names(geneList())
     })
 
 
