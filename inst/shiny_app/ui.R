@@ -437,8 +437,8 @@ navbarPage(h3("Proteomics results"),
                 )
             ),
 
-    #Tab for Enrichment analysis
-
+    # #Tab for Enrichment analysis
+    #
     tabPanel(h4('Enrichment Analysis'),
             sidebarLayout(
                 sidebarPanel(
@@ -486,77 +486,68 @@ navbarPage(h3("Proteomics results"),
                     box(height = 2500, width = 2000,
                         tabsetPanel(type = 'tabs',
 
-                                    # dot plot is more indicative
+                                    tabPanel('GSEA 2',
+                                             hr(),
+                                             shinycssloaders::withSpinner(plotOutput('enr_gsea2'))
+                                    ),
 
-                                    # tabPanel('Bar Plot',
-                                    #          hr(),
-                                    #
-                                    #          print('Bar plot is the most widely used method to visualize
-                                    #  enriched terms. It depicts the enrichment scores
-                                    # (e.g. p values) and gene count or ratio as bar height and color.'),
-                                    #          hr(),
-                                    #          shinycssloaders::withSpinner(plotOutput('enr_barplot'))
-                                    #          ),
 
-                                    tabPanel('Dot plot',
+                                    tabPanel('GSEA 1',
+                                             hr(),
+                                             shinycssloaders::withSpinner(plotOutput('enr_gseaplot'))
+                                    ),
+
+                                    tabPanel('Disease Enrichment',
                                              hr(),
                                              print('Dot plot is similar to bar
-                                           plot with the capability to encode another score as dot size.'),
+                                                    plot with the capability to encode another score as dot size.'),
                                              hr(),
                                              shinycssloaders::withSpinner(plotOutput('enr_dotplot'))
                                              ),
 
-                                    tabPanel('GSEA',
+                                    tabPanel('Disease GSEA',
                                              hr(),
                                              shinycssloaders::withSpinner(plotOutput('enr_gseadotplot'))
                                              ),
 
 
 
-                                    tabPanel('Heatmap',
+                                    tabPanel('Disease Heatmap',
                                              hr(),
                                              print('The gene-concept network may become too complicated
-                                           if user want to show a large number significant terms.
-                                           The heatmap can simplify the results making it easier to
-                                           identify expression patterns.'),
+                                                   if user want to show a large number significant terms.
+                                                   The heatmap can simplify the results making it easier to
+                                                   identify expression patterns.'),
                                              hr(),
                                              shinycssloaders::withSpinner(plotlyOutput('heatmapnrich'))
                                              ),
 
-                                    tabPanel('Enrichment Map',
-                                             hr(),
-                                             print('Enrichment map organizes enriched terms into a network
-                                           with edges connecting overlapping gene sets. In this way,
-                                           mutually overlapping gene sets are tend to cluster together,
-                                           making it easy to identify functional module.'),
-                                             hr(),
-                                             shinycssloaders::withSpinner(plotOutput('enr_mapplot'))
-                                             ),
 
 
+
+                                    # Warning: Error in h: error in evaluating the
+                                    # argument 'x' in selecting a method for function 'pairwise_termsim':
+                                    #   unique() applies only to vectors
 
                                     tabPanel('Biological Function',
                                              hr(),
                                              shinycssloaders::withSpinner(plotOutput('bio_comparison'))
                                              ),
 
-                                    tabPanel('Overlapping densities',
+                                    tabPanel('Disease density',
                                              hr(),
                                              print('The ridgeplot will visualize expression distributions
-                                           of core enriched genes for GSEA enriched categories.
-                                           It helps users to interpret up/down-regulated pathways.'),
+                                                    of core enriched genes for GSEA enriched categories.
+                                                    It helps users to interpret up/down-regulated pathways.'),
                                              hr(),
                                              shinycssloaders::withSpinner(plotOutput('enr_ridgeplot'))
-                                             ),
-
-                                    tabPanel('GSEA 1',
-                                             hr(),
-                                             shinycssloaders::withSpinner(plotOutput('enr_gseaplot'))
-                                             ),
-                                    tabPanel('GSEA 2',
-                                             hr(),
-                                             shinycssloaders::withSpinner(plotOutput('enr_gsea2'))
                                              )
+
+                                    # unable to find an inherited method for function
+                                    # ‘gseaplot’ for signature ‘"reactiveExpr"’
+
+
+
                                     )
                         )
                     )
@@ -564,31 +555,42 @@ navbarPage(h3("Proteomics results"),
             ),
 
 
-    tabPanel(title = h4('Gene Network'),
-             sidebarLayout(
-                 sidebarPanel(
-                   #uiOutput("pathway_selector")
-                   ),
+  tabPanel(title = h4('Gene Network'),
+           sidebarLayout(
+               sidebarPanel(
+                 #uiOutput("network_selector")
+                 ),
 
-                 mainPanel(
-                     box(height = 2500, width = 2000,
-                         tabsetPanel( type = 'tabs',
+               mainPanel(
+                   box(height = 2500, width = 2000,
+                       tabsetPanel(type = 'tabs',
 
-                                     tabPanel('Circus',
-                                              hr(),
-                                              shinycssloaders::withSpinner(plotOutput('enr_circusplot'))
-                                              ),
+                                   tabPanel('Circus',
+                                            hr(),
+                                            shinycssloaders::withSpinner(plotOutput('enr_circusplot'))
+                                            ),
 
-                                     tabPanel('Gene Network',
-                                              hr(),
-                                              shinycssloaders::withSpinner(plotOutput('enr_networkplot'))
-                                              )
-                                     )
-                         )
-                     )
-                 )
-             ),
-#
+                                   tabPanel('Gene Network',
+                                            hr(),
+                                            shinycssloaders::withSpinner(plotOutput('enr_networkplot'))
+                                            ),
+
+                                   tabPanel('Enrichment Map',
+                                            hr(),
+                                            print('Enrichment map organizes enriched terms into a network
+                                                   with edges connecting overlapping gene sets. In this way,
+                                                   mutually overlapping gene sets are tend to cluster together,
+                                                   making it easy to identify functional module.'),
+                                            hr(),
+                                            shinycssloaders::withSpinner(plotOutput('enr_mapplot')
+                                                                         )
+                                            )
+                                   )
+                       )
+                   )
+               )
+           ),
+
 
   tabPanel(title = h4('Pathway Analysis'),
            sidebarLayout(
@@ -598,10 +600,7 @@ navbarPage(h3("Proteomics results"),
 
                mainPanel(
                    box(height = 2500, width = 2000,
-                       tabsetPanel( type = 'tabs',
-
-
-
+                       tabsetPanel(type = 'tabs',
                                     #KEGG
                                     tabPanel('KEGG Pathway 1',
                                              hr(),
@@ -610,20 +609,15 @@ navbarPage(h3("Proteomics results"),
                                     tabPanel('Pathway WebBrowser',
                                              hr(),
                                              print('Select in the adjustments the pathway that you would
-                                         like to visualize and it will automatically open in a web
-                                         browser'),
-                                             shinycssloaders::withSpinner(plotOutput('enr_kegg2')),
-                                    )
-
-
+                                                    like to visualize and it will automatically open in a web
+                                                    browser'),
+                                             shinycssloaders::withSpinner(plotOutput('enr_kegg2'))
+                                             )
+                                   )
                        )
                    )
                )
-           )
-  ),
-
-
-
+           ),
 
 
     tags$style(type="text/css",

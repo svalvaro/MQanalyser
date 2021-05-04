@@ -3,7 +3,7 @@ function(input, output) {
     options(shiny.maxRequestSize=100*1024^2)## Set maximum upload size to 100MB
 
 
-    #proteinGroups.txt input
+    # FILE INPUTS
 
     proteinGroups <- reactive({
 
@@ -137,6 +137,8 @@ function(input, output) {
 
         })
 
+
+    # DEP ANALYSIS
 
     data_se <- reactive({
 
@@ -278,23 +280,6 @@ function(input, output) {
 
 
     # PLOTS
-
-    # # heatmap
-    #
-    # output$heatmaply <- renderPlotly({
-    #
-    #
-    #    shiny::withProgress(message = 'Creating heatmap of significant proteins...',{
-    #
-    #        MQanalyser::plot_heatmaply(dep(),
-    #                                   intensity_type = input$IntensityType,
-    #                                   dendogram = input$dendogram_input,
-    #                                   k_row = input$k_row_input,
-    #                                   k_col = input$k_col_input) %>%
-    #            layout(height = 1000, width = 1000)
-    #
-    #    })
-
 
     # heatmap
 
@@ -457,7 +442,7 @@ function(input, output) {
     })
 
 
-    #Enrichment
+    #### ENRICHMENT PLOTS
 
 
     output$comparisons_enrichment  <- renderUI({
@@ -472,8 +457,6 @@ function(input, output) {
         MQanalyser::create_geneList(data_results = data_results(),
                                     comparison_samples = input$comparison_enrch,
                                     organism = 'org.Hs.eg.db') # adapt it to more organisms.
-
-
     })
 
 
@@ -487,63 +470,28 @@ function(input, output) {
 
     })
 
-    #Enrichment for gsea
+    # Enrichment for gsea
     edo2 <- reactive({
         edo2 <- DOSE::gseDO(geneList())
         return(edo2)
     })
 
 
-    #Enrichment dot plot
+    # Enrichment dot plot
     output$enr_dotplot <- renderPlot(height = 1000,{
 
         enrichplot::dotplot(edo(),showCategory = 25)
 
     })
 
-    #Enrichment Barplot
-    output$enr_barplot <- renderPlot(height = 1000,{
-
-        barplot(edo(),showCategory = 25)
-
-    })
-
-
-    #Enrich
+    # Enrich
     output$enr_gseadotplot <- renderPlot(height = 1000,{
-
 
         dotplot(edo2(), showCategory=20) + ggtitle("dotplot for GSEA")
 
-
     })
 
-    #Circus PLot
-
-    edox <- reactive({
-        edox <- setReadable(edo(), 'org.Hs.eg.db', 'ENTREZID')
-
-        return(edox)
-    })
-
-
-
-    output$enr_circusplot <- renderPlot(height = 1000,{
-
-        cnetplot(edox(),  circular = TRUE, colorEdge = TRUE)
-
-    })
-
-    #Gene Network
-
-    output$enr_networkplot <- renderPlot(height = 900, {
-
-        cnetplot(edox(), node_label = "all")
-    })
-
-    #Heatmap plot of enriched terms
-
-
+    # Heatmap plot of enriched terms
 
     output$heatmapnrich <- renderPlotly({
 
@@ -551,18 +499,8 @@ function(input, output) {
     })
 
 
-    #Enrichment Map
 
-
-    output$enr_mapplot <- renderPlot(height = 1000, {
-
-        enrichplot::emapplot(pairwise_termsim(edo())#, node_scale=input$enrich_nodes
-                 ,layout="kk")
-
-
-    })
-    #Biological Comparison
-
+    # Biological Comparison
 
     output$bio_comparison <- renderPlot(height = 900, {
         #bp2 <- pairwise_termsim(simplify(bp, cutoff=0.7, by="p.adjust", select_fun=min))
@@ -585,7 +523,7 @@ function(input, output) {
 
 
         # clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
-        clusterProfiler::gseaplot(edo2, geneSetID = 1)
+        clusterProfiler::gseaplot(edo2(), geneSetID = 1)
 
         return(p1)
 
@@ -595,7 +533,7 @@ function(input, output) {
 
         # by = c('runningScore', 'preranked')
 
-        clusterProfiler::gseaplot(edo2, geneSetID = 1)
+        clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
 
     })
 
@@ -606,6 +544,51 @@ function(input, output) {
 
         gseaplot2(edo2(), geneSetID = 1)
     })
+
+
+
+    #### GENE NETWORK
+
+
+
+    edox <- reactive({
+        edox <- setReadable(edo(), 'org.Hs.eg.db', 'ENTREZID')
+
+        return(edox)
+    })
+
+
+    #Gene Network
+
+    output$enr_networkplot <- renderPlot(height = 900, {
+
+        cnetplot(edox(), node_label = "all")
+    })
+
+
+    #Enrichment Map
+
+
+    output$enr_mapplot <- renderPlot(height = 1000, {
+
+        enrichplot::emapplot(pairwise_termsim(edo())#, node_scale=input$enrich_nodes
+                             ,layout="kk")
+    })
+
+
+    # Circus PLot
+
+    output$enr_circusplot <- renderPlot(height = 1000,{
+
+        cnetplot(edox(),  circular = TRUE, colorEdge = TRUE)
+
+    })
+
+
+
+    #### PATHWAY ANALYSIS
+
+
     #KEGG analysis1
 
     kegg_react1 <- reactive({
@@ -647,6 +630,14 @@ function(input, output) {
     output$pathway_selector <- renderUI({
 
         selectInput(inputId = 'pathselec',label = h4('Select the pathway to check:'),
+                    choices = as.list(pathways_id()),selected = as.list(pathways_id()[1]))
+
+    })
+
+
+    output$network_selector <- renderUI({
+
+        selectInput(inputId = 'netselec',label = h4('Select the pathway to check:'),
                     choices = as.list(pathways_id()),selected = as.list(pathways_id()[1]))
 
     })
