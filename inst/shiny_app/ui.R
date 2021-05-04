@@ -450,6 +450,21 @@ navbarPage(h3("Proteomics results"),
 
                     uiOutput('comparisons_enrichment'),
 
+                    # Number of proteins selected:
+
+                    sliderInput(inputId = 'fc_enrichment',
+                                h4('The Log2 Fold Change can be modified to run
+                                   the enrichment analysis with proteins more significant.'),
+                                min = 1,
+                                max = 20,
+                                value = 1.5,
+                                step = 0.5),
+
+
+                    verbatimTextOutput('diffExpress_number'),
+
+
+
 
                     #
                     # selectInput(inputId = 'organism_input',
@@ -466,7 +481,7 @@ navbarPage(h3("Proteomics results"),
                     #             choices = c('category','gene','all','none'),
                     #             selected = 'all'),
 
-                    #INput for enrichment map
+                    # INput for enrichment map
                     # sliderInput(inputId = 'enrich_nodes',
                     #             h4('Select the scale of the nodes for Enrichment Map'),
                     #             min = 0,

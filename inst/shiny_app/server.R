@@ -293,9 +293,6 @@ function(input, output) {
         )
 
 
-
-
-
     # correlation
     output$plot_correlation <- renderPlotly(
 
@@ -349,13 +346,7 @@ function(input, output) {
             layout(height = 800, width = 1200)
     )
 
-
-
-
-
-
-
-    #Comparison to check.
+    # Comparison to check.
 
     comparisons <- reactive({
 
@@ -435,8 +426,24 @@ function(input, output) {
         # Be sure about the >2, it's the absolute that's fine but I already
         # it is already implemented the log2fc.
 
-        de <-  names(geneList())[abs(geneList()) > 2]
+        # de <-  names(geneList())[abs(geneList()) > 2]
+
+
+        de <-  names(geneList())[abs(geneList()) > log2(input$fc_enrichment)]
     })
+
+
+
+    output$diffExpress_number <- renderText({
+
+        a <- length(diffExpress())
+
+        print(paste0('There are: ', a, ' proteins that will
+                      be used for the enrichment, gene
+                      network and pathway analysis.'))
+
+    })
+
 
     edo <- reactive({
 
