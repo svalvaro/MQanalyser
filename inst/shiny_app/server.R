@@ -297,22 +297,12 @@ function(input, output) {
 
 
     # correlation
-    output$plot_correlation <- renderPlotly({
-
-        shiny::withProgress(message = 'Creating a correlation pot...',{
-
-            for (i in 1:15) {
-
-                shiny::incProgress(1/15)
-                Sys.sleep(0.25)
-            }
-
-        })
+    output$plot_correlation <- renderPlotly(
 
         MQanalyser::plot_correlationly(dep()) %>%
             layout(height = 1000, width = 1000)
 
-    })
+    )
 
     # scatterplot
     output$scatterplot <- renderPlotly(
@@ -330,17 +320,7 @@ function(input, output) {
 
 
     # volcano
-    output$volcano_plot <- renderPlotly({
-
-        shiny::withProgress(message = 'Creating a volcano plot...',{
-
-            for (i in 1:15) {
-
-                shiny::incProgress(1/15)
-                Sys.sleep(0.25)
-            }
-
-        })
+    output$volcano_plot <- renderPlotly(
 
         MQanalyser::plot_volcano(proteomics_results = data_results(),
                                  sample_comparison = input$comparison_input,
@@ -351,21 +331,12 @@ function(input, output) {
 
             layout(height = 1000, width = 1000)
 
-    })
+    )
 
     # profile
 
-    output$plot_profile <- renderPlotly({
+    output$plot_profile <- renderPlotly(
 
-        shiny::withProgress(message = 'Creating profile plot...',{
-
-            for (i in 1:15) {
-
-                shiny::incProgress(1/15)
-                Sys.sleep(0.25)
-            }
-
-        })
         MQanalyser::plot_profilely(dep = dep(),
                                    intensity_type = input$IntensityType,
                                    color = input$input_col_prof,
@@ -376,7 +347,7 @@ function(input, output) {
                                    clear_selection = input$clear_selection) %>%
 
             layout(height = 800, width = 1200)
-    })
+    )
 
 
 
@@ -460,13 +431,16 @@ function(input, output) {
     })
 
 
-    edo <- reactive({
+    diffExpress <- reactive({
         # Be sure about the >2, it's the absolute that's fine but I already
         # it is already implemented the log2fc.
 
-        de <- names(geneList())[abs(geneList()) > 2]
+        de <-  names(geneList())[abs(geneList()) > 2]
+    })
 
-        edo <- DOSE::enrichDGN(de)
+    edo <- reactive({
+
+        edo <- DOSE::enrichDGN(diffExpress())
 
     })
 
@@ -500,14 +474,7 @@ function(input, output) {
 
 
 
-    # Biological Comparison
 
-    output$bio_comparison <- renderPlot(height = 900, {
-        #bp2 <- pairwise_termsim(simplify(bp, cutoff=0.7, by="p.adjust", select_fun=min))
-        bp <- pairwise_termsim(enrichGO(de, ont="BP", OrgDb = 'org.Hs.eg.db'))
-        enrichplot::emapplot(bp)
-
-    })
 
 
 
@@ -548,6 +515,19 @@ function(input, output) {
 
 
     #### GENE NETWORK
+
+
+    # Biological Comparison
+
+    output$bio_comparison <- renderPlot(height = 900, {
+        #bp2 <- pairwise_termsim(simplify(bp, cutoff=0.7, by="p.adjust", select_fun=min))
+
+        bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress(),
+                                                    ont="BP",
+                                                    OrgDb = 'org.Hs.eg.db'))
+        enrichplot::emapplot(bp)
+
+    })
 
 
 
@@ -593,7 +573,7 @@ function(input, output) {
 
     kegg_react1 <- reactive({
 
-        kk <- clusterProfiler::enrichKEGG(gene=de(),
+        kk <- clusterProfiler::enrichKEGG(gene=diffExpress(),
                                           organism = 'hsa',
                                           #minGSSize = 120,
                                           pvalueCutoff = 0.05,

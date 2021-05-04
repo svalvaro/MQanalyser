@@ -129,27 +129,27 @@ navbarPage(h3("Proteomics results"),
     tabPanel(h4("Results"),
       includeCSS("www/info_box.css"),
 
-          shinydashboard::infoBoxOutput('significant_proteins',
+      shinydashboard::infoBoxOutput('significant_proteins',
                                         width = NULL),
+      br(),
+      br(),
 
-                  br(),
-                  br(),
+      hr(),
 
-                  hr(),
+      shinycssloaders::withSpinner(
+        DT::dataTableOutput('proteomics_results')
+      ),
 
-
-                  DT::dataTableOutput('proteomics_results'),
-
-                  br(),
-                  downloadButton(outputId = 'download_proteomics',
-                                  label = 'Download'),
+      br(),
+      downloadButton(outputId = 'download_proteomics',
+                      label = 'Download'),
       ),
 
 
     #First Panel is the heatmap
     tabPanel(h4("Heatmap"),
-            sidebarLayout(
-                sidebarPanel(
+             sidebarLayout(
+               sidebarPanel(
                     #Drop down with Parameters for heatmap
                     dropdown(
                         tags$h3("Advanced Parameters"),
@@ -213,8 +213,9 @@ navbarPage(h3("Proteomics results"),
                             print('If you would like to analyse each plot individually,
                             go to the next tab "Scatter Plot"'),
                             hr(),
-
-                            plotlyOutput('plot_correlation')
+                            shinycssloaders::withSpinner(
+                              plotlyOutput('plot_correlation')
+                              )
                             )
                      )
             ),
@@ -355,10 +356,11 @@ navbarPage(h3("Proteomics results"),
                 ),
 
                 mainPanel(
-                    #Plot the volcano plot in the third tab
-                    box(plotlyOutput('volcano_plot')
-                        )
+                  box(shinycssloaders::withSpinner(
+                    plotlyOutput('volcano_plot')
                     )
+                    )
+                  )
                 )
             ),
 
@@ -415,7 +417,9 @@ navbarPage(h3("Proteomics results"),
 
                 mainPanel(box(height = 800, width = 1300,
 
-                              plotlyOutput('plot_profile')
+                              shinycssloaders::withSpinner(
+                                plotlyOutput('plot_profile')
+                                )
                               ),
 
                           br(),
@@ -479,7 +483,7 @@ navbarPage(h3("Proteomics results"),
                     #Input for pathway to check
 
 
-                    uiOutput("pathway_selector"),
+
 
                 ),
                 mainPanel(
@@ -523,17 +527,6 @@ navbarPage(h3("Proteomics results"),
                                              ),
 
 
-
-
-                                    # Warning: Error in h: error in evaluating the
-                                    # argument 'x' in selecting a method for function 'pairwise_termsim':
-                                    #   unique() applies only to vectors
-
-                                    tabPanel('Biological Function',
-                                             hr(),
-                                             shinycssloaders::withSpinner(plotOutput('bio_comparison'))
-                                             ),
-
                                     tabPanel('Disease density',
                                              hr(),
                                              print('The ridgeplot will visualize expression distributions
@@ -565,6 +558,11 @@ navbarPage(h3("Proteomics results"),
                    box(height = 2500, width = 2000,
                        tabsetPanel(type = 'tabs',
 
+                                   tabPanel('Biological Function',
+                                            hr(),
+                                            shinycssloaders::withSpinner(plotOutput('bio_comparison'))
+                                   ),
+
                                    tabPanel('Circus',
                                             hr(),
                                             shinycssloaders::withSpinner(plotOutput('enr_circusplot'))
@@ -595,7 +593,7 @@ navbarPage(h3("Proteomics results"),
   tabPanel(title = h4('Pathway Analysis'),
            sidebarLayout(
                sidebarPanel(
-                 #uiOutput("pathway_selector")
+                 uiOutput("pathway_selector")
                  ),
 
                mainPanel(
