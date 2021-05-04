@@ -63,8 +63,9 @@ navbarPage(h3("Proteomics results"),
                         animate = animateOptions(
                             enter = animations$fading_entrances$fadeInLeftBig,
                             exit = animations$fading_exits$fadeOutRightBig
-                        )
-                    ),
+                            )
+                        ),
+
                     br(),
 
                     fileInput(inputId = 'user_genes',
@@ -83,9 +84,10 @@ navbarPage(h3("Proteomics results"),
                         column(5,a(href='experiment_design_example.txt','experiment_design.txt', download=NA, target='_blank') ),
 
 
-                        column(5,a(href='user_genes_examples.txt','Genes example', download=NA, target='_blank') ),
-                    )
-                ),
+                        column(5,a(href='user_genes_examples.txt','Genes example', download=NA, target='_blank')
+                               ),
+                        )
+                  ),
 
                 mainPanel(
                     fluidRow(
@@ -100,14 +102,14 @@ navbarPage(h3("Proteomics results"),
                                    #DTOutput('experiment_design')
                                    #DT::dataTableOutput('ed_out'),
                                    rHandsontableOutput('ed_out')
-
-
-                               )
+                                   )
                                ),
+
                         column(3,box(img(src="Proteomika_logo_hires.png",
                                          height = '100%',
                                          width = '100%',
-                                         align = 'right')),
+                                         align = 'right')
+                                     ),
 
                                br(),
                                br(),
@@ -115,13 +117,14 @@ navbarPage(h3("Proteomics results"),
                                br(),
                                br(),
                                br(),
-                               box(actionButton("start_input","Start Analysis"))
-
+                               box(actionButton("start_input","Start Analysis")
+                                   )
                                )
+                        )
                     )
                 )
-            )
-    ),
+            ),
+
     #First Panel is the heatmap
     tabPanel(h4("Results"),
       includeCSS("www/info_box.css"),
@@ -140,7 +143,6 @@ navbarPage(h3("Proteomics results"),
                   br(),
                   downloadButton(outputId = 'download_proteomics',
                                   label = 'Download'),
-
       ),
 
 
@@ -191,11 +193,9 @@ navbarPage(h3("Proteomics results"),
                         status = "success", width = "300px",
                         animate = animateOptions(
                             enter = animations$fading_entrances$fadeInLeftBig,
-                            exit = animations$fading_exits$fadeOutRightBig
+                            exit = animations$fading_exits$fadeOutRightBig)
                         )
-                    )
-
-                ),
+                    ),
                 mainPanel(
                     box(
                         shinycssloaders::withSpinner(
@@ -214,11 +214,10 @@ navbarPage(h3("Proteomics results"),
                             go to the next tab "Scatter Plot"'),
                             hr(),
 
-                            plotlyOutput('plot_correlation')))
-
-
-
-    ),
+                            plotlyOutput('plot_correlation')
+                            )
+                     )
+            ),
 
     #Second Panel is the ScatterPLot
     tabPanel(h4("Scatter Plot"),
@@ -258,38 +257,37 @@ navbarPage(h3("Proteomics results"),
                                                   returnName = TRUE,
                                                   showColour = c("background")),
 
-
                         options = list(`style` = "btn-info"),
                         style = "unite", icon = icon("gear"),
                         status = "success", width = "300px",
                         animate = animateOptions(
                             enter = animations$fading_entrances$fadeInLeftBig,
-                            exit = animations$fading_exits$fadeOutRightBig
-                        )
-                    ),
+                            exit = animations$fading_exits$fadeOutRightBig)
+                        ),
 
                     # Download button for the plot
                     downloadButton(outputId = 'downloadscatter',
                                    label = 'Download the Scatter Plot')
 
                 ),
-                mainPanel(
 
+                mainPanel(
                     #Plot the scatter plot  in the second tab
                     box(height = 1200,width = 1200,
-                        plotlyOutput('scatterplot'))#,
-                    # box(height = 900, width =900,
-                    #     DT::dataTableOutput('table_plot'))
+                        shinycssloaders::withSpinner(
+                          plotlyOutput('scatterplot')
+                          )
+                        )
+                    )
                 )
-            )
-    ),
+            ),
+
     #Panel for the Volcano Plot
     tabPanel(h4('Volcano Plot'),
             sidebarLayout(
                 sidebarPanel(
                     h3("Select the adjustments"),
-                    # #Sample for y axis
-                    #
+
                     uiOutput("comparisons_out"),
 
                     dropdown(
@@ -307,6 +305,7 @@ navbarPage(h3("Proteomics results"),
                                       min = 0,
                                       max = 100,
                                       value = 5 ),
+
                           #Select the Colour for UPregulated
                           colourpicker::colourInput("col_upregulated",
                                                     h4("Select colour upregulated:"),
@@ -321,9 +320,8 @@ navbarPage(h3("Proteomics results"),
                                                     'cyan3',
                                                     palette = "square",
                                                     returnName = TRUE,
-                                                    showColour = c("background")),
-
-
+                                                    showColour = c("background")
+                                                    ),
 
                         options = list(`style` = "btn-info"),
                         style = "unite", icon = icon("gear"),
@@ -335,10 +333,12 @@ navbarPage(h3("Proteomics results"),
                     ),
 
                     hr(),
+
                     #Checkbox for Gene names
                     checkboxInput(inputId = 'check_names',
                                   label =h4('Show gene  names:'),
                                   value = FALSE),
+
                     #check box for protein IDs
                     checkboxInput(inputId = 'protein_id',
                                   label =h4('Show protein IDs:'),
@@ -352,14 +352,15 @@ navbarPage(h3("Proteomics results"),
                     #Download button for the volcano plot
                     downloadButton(outputId = 'downloadvolcano',
                                    label = 'Download the Volcano Plot')
-
                 ),
+
                 mainPanel(
                     #Plot the volcano plot in the third tab
-                    box(plotlyOutput('volcano_plot'))
+                    box(plotlyOutput('volcano_plot')
+                        )
+                    )
                 )
-            )
-    ),
+            ),
 
     #Profile
     #Tab for Profile Plot
@@ -379,45 +380,50 @@ navbarPage(h3("Proteomics results"),
                                                   value = "#56B4E9",
                                                   palette = "square",
                                                   returnName = TRUE,
-                                                  showColour = c("background")),
+                                                  showColour = c("background")
+                                                  ),
 
                         colourpicker::colourInput(inputId = "input_col_sel",
                                                   label = h4("Select colour \nSelected genes:"),
                                                   value = "red",
                                                   palette = "square",
                                                   returnName = TRUE,
-                                                  showColour = c("background")),
+                                                  showColour = c("background")
+                                                  ),
 
                         sliderInput(inputId = 'input_angle_samples',
                                     label = 'Select the angle of the lables',
                                     value = 45,
                                     min = 0, max = 90),
 
-
                         options = list(`style` = "btn-info"),
                         style = "unite", icon = icon("gear"),
                         status = "success", width = "300px",
                         animate = animateOptions(
                             enter = animations$fading_entrances$fadeInLeftBig,
-                            exit = animations$fading_exits$fadeOutRightBig
-                        )
-                    ),
+                            exit = animations$fading_exits$fadeOutRightBig)
+                        ),
+
                     br(),
 
                     checkboxInput(inputId = 'profile_favs',
                                   label = h4('Show the genes that you have uploaded:',
-                                             value=FALSE))
+                                             value=FALSE)
+                                  )
 
                 ),
+
                 mainPanel(box(height = 800, width = 1300,
 
-                              plotlyOutput('plot_profile')),
+                              plotlyOutput('plot_profile')
+                              ),
 
                           br(),
                           # Not sure if this checbox is that useful because at the end
                           # the user has to remove the selection of the rows manually.
                           # Ideally, I can find a way that after using the checkbox,
                           # the selected rows are removed. That's would be a good solution.
+
                           checkboxInput(inputId = 'clear_selection',
                                         label =h4('Remove the selected genes from the table.'),
                                         value = FALSE),
@@ -425,11 +431,11 @@ navbarPage(h3("Proteomics results"),
                           hr(),
 
                           box(height = 400, width =300,
-                              DT::dataTableOutput('plot_profile_table'))
-
+                              DT::dataTableOutput('plot_profile_table')
+                              )
+                          )
                 )
-            )
-    ),
+            ),
 
     #Tab for Enrichment analysis
 
@@ -551,68 +557,70 @@ navbarPage(h3("Proteomics results"),
                                              hr(),
                                              shinycssloaders::withSpinner(plotOutput('enr_gsea2'))
                                              )
+                                    )
                         )
-
-
                     )
                 )
-            )
-    ),
+            ),
 
 
-#     tabPanel(title = h4('Gene Network'),
-#              sidebarLayout(
-#                  sidebarPanel(uiOutput("pathway_selector")),
+    tabPanel(title = h4('Gene Network'),
+             sidebarLayout(
+                 sidebarPanel(
+                   #uiOutput("pathway_selector")
+                   ),
+
+                 mainPanel(
+                     box(height = 2500, width = 2000,
+                         tabsetPanel( type = 'tabs',
+
+                                     tabPanel('Circus',
+                                              hr(),
+                                              shinycssloaders::withSpinner(plotOutput('enr_circusplot'))
+                                              ),
+
+                                     tabPanel('Gene Network',
+                                              hr(),
+                                              shinycssloaders::withSpinner(plotOutput('enr_networkplot'))
+                                              )
+                                     )
+                         )
+                     )
+                 )
+             ),
 #
-#                  mainPanel(
-#                      box(height = 2500, width = 2000,
-#                          tabsetPanel( type = 'tabs',
-#
-#                                      tabPanel('Circus',
-#                                               hr(),
-#                                               shinycssloaders::withSpinner(plotOutput('enr_circusplot'))
-#                                               ),
-#
-#                                      tabPanel('Gene Network',
-#                                               hr(),
-#                                               shinycssloaders::withSpinner(plotOutput('enr_networkplot'))
-#                                               )
-#                                      )
-#                          )
-#                      )
-#                  )
-#              ),
-# #
-#
-    # tabPanel(title = h4('Pathway Analysis'),
-    #          sidebarLayout(
-    #              sidebarPanel(uiOutput("pathway_selector")),
-    #
-    #              mainPanel(
-    #                  box(height = 2500, width = 2000,
-    #                      tabsetPanel( type = 'tabs',
-    #
-    #
-    #
-    #                                   #KEGG
-    #                                   tabPanel('KEGG Pathway 1',
-    #                                            hr(),
-    #                                            shinycssloaders::withSpinner(plotOutput('enr_kegg1'))
-    #                                   ),
-    #                                   tabPanel('Pathway WebBrowser',
-    #                                            hr(),
-    #                                            print('Select in the adjustments the pathway that you would
-    #                                        like to visualize and it will automatically open in a web
-    #                                        browser'),
-    #                                            shinycssloaders::withSpinner(plotOutput('enr_kegg2')),
-    #                                   )
-    #
-    #
-    #                      )
-    #                  )
-    #              )
-    #          )
-    # ),
+
+  tabPanel(title = h4('Pathway Analysis'),
+           sidebarLayout(
+               sidebarPanel(
+                 #uiOutput("pathway_selector")
+                 ),
+
+               mainPanel(
+                   box(height = 2500, width = 2000,
+                       tabsetPanel( type = 'tabs',
+
+
+
+                                    #KEGG
+                                    tabPanel('KEGG Pathway 1',
+                                             hr(),
+                                             shinycssloaders::withSpinner(plotOutput('enr_kegg1'))
+                                    ),
+                                    tabPanel('Pathway WebBrowser',
+                                             hr(),
+                                             print('Select in the adjustments the pathway that you would
+                                         like to visualize and it will automatically open in a web
+                                         browser'),
+                                             shinycssloaders::withSpinner(plotOutput('enr_kegg2')),
+                                    )
+
+
+                       )
+                   )
+               )
+           )
+  ),
 
 
 
