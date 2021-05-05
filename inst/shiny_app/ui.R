@@ -306,6 +306,10 @@ navbarPage(h3("Proteomics results"),
                                       min = 0,
                                       max = 100,
                                       value = 5 ),
+                        #check box for protein IDs
+                        checkboxInput(inputId = 'p_adj_input',
+                                      label =h4('Use adjusted P values:'),
+                                      value = FALSE),
 
                           #Select the Colour for UPregulated
                           colourpicker::colourInput("col_upregulated",

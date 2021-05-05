@@ -18,17 +18,20 @@ plot_volcano <- function(proteomics_results = NULL,
                          foldchange_cutoff = 1.5,
                          p_value_cutoff = 0.05,
                          color_down = 'cyan3',
-                         color_up = 'brown2'){
+                         color_up = 'brown2',
+                         p_adj = FALSE){
 
     # data_results <- read_delim('/home/alvaro/Downloads/h3Proteomics resultsh3.csv', '\t')
 
     # proteomics_results <-  DEP::get_results(dep)
     # proteomics_results <- data_results
-    # sample_comparison <- 'Malignant_vs_Benign'
+    # sample_comparison <- 'Benign_vs_Malignant'
 
     results <- proteomics_results %>% select(contains(c('name','ID', sample_comparison, 'p.adj', 'ratio')))
 
     pvalue_adj <- paste0(sample_comparison, '_p.adj')
+
+    pval <- paste0(sample_comparison, '_p.val')
 
     foldchange <- paste0(sample_comparison, '_ratio')
 
@@ -37,15 +40,23 @@ plot_volcano <- function(proteomics_results = NULL,
     #Applying the -log10 to the pvalue_adj
     results$fold_change <- results[,which(names(results)==foldchange)]
 
-    results$log10_p.adj <- -log10(results[,which(names(results)==pvalue_adj)])
+    if (p_adj == TRUE) {
+      results$log10_pvalues <- -log10(results[,which(names(results)==pvalue_adj)])
+      ylab = '-Log10 (P ajusted)'
+    } else{
+      results$log10_pvalues <- -log10(results[,which(names(results)==pval)])
+      ylab = '-Log10 (P values)'
+    }
+
+
 
     #Color for the right side significant
-    results$color[results$fold_change > log2(foldchange_cutoff) & results$log10_p.adj > -log10(p_value_cutoff)] <- color_up
+    results$color[results$fold_change > log2(foldchange_cutoff) & results$log10_pvalues > -log10(p_value_cutoff)] <- color_up
 
 
     #Color for the left side significant
 
-    results$color[results$fold_change < -log2(foldchange_cutoff) & results$log10_p.adj > -log10(p_value_cutoff)] <- color_down
+    results$color[results$fold_change < -log2(foldchange_cutoff) & results$log10_pvalues > -log10(p_value_cutoff)] <- color_down
 
     #Color for the non significant
 
@@ -55,29 +66,72 @@ plot_volcano <- function(proteomics_results = NULL,
     colnames(results)[colnames(results) == "name"] <- "Gene"
 
 
+    # comparison names
+
+    name1 <- gsub("_vs_.*", "", sample_comparison)
+    name2 <- gsub(".*_vs_", "", sample_comparison)
+
+
     #Plot
-    p <- ggplot(results,  aes(x = fold_change, y = log10_p.adj,  key = Gene))+
+    p <- ggplot(results,  aes(x = fold_change, y = log10_pvalues,  key = Gene))+
+
                 geom_point(aes(color = color))+
+
                 geom_vline(xintercept=c(-log2(foldchange_cutoff),
                                         log2(foldchange_cutoff)),
                            color = "black",
                            lwd=1.0,
                            alpha=0.5,
                            lty=3)+
+
+                ylab(ylab)+
+
+                xlab('Log2(Fold Change)')+
+
                 geom_hline(yintercept=-log10(p_value_cutoff),
                            color = "black",
                            lwd=1.0,
                            alpha=0.5,
                            lty=3)+
+
                 theme_bw()+
+
                 theme(panel.border = element_blank(),
                       panel.grid.major = element_blank(),
                       panel.grid.minor = element_blank(),
                       axis.line = element_line(colour = "black"))+
+
                 theme(legend.position = 'none')+
-                scale_color_identity()
+
+                scale_color_identity()+
+
+                annotate("text",
+                         x = max(results$fold_change),
+                         y = 0,
+                         label = name1,
+                         size = 5,
+                         fontface = 'bold')+
+
+                annotate("text",
+                         x = min(results$fold_change),
+                         y = 0,
+                         label = name2,
+                         size = 5,
+                         fontface = 'bold')
+
+    #+
+                # geom_text(data = data.frame(), mapping = aes(x = c(Inf, -Inf),
+                #                                              y = c(-Inf, -Inf),
+                #                                              hjust = c(1, 0),
+                #                                              vjust = c(-1, -1),
+                #                                              label = c(name1, name2),
+                #                                              size = 5,
+                #                                              fontface = "bold"))
+
+    p
+
 
   plotly::ggplotly(p = p ,
-                   tooltip = c("fold_change", "log10_p.adj", 'Gene'))
+                   tooltip = c("fold_change", "log10_pvalues", 'Gene'))
 
   }

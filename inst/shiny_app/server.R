@@ -313,7 +313,8 @@ function(input, output) {
                                  foldchange_cutoff = input$input_fc,
                                  p_value_cutoff = input$input_pvalue,
                                  color_up = input$col_upregulated,
-                                 color_down = input$col_downregulated) %>%
+                                 color_down = input$col_downregulated,
+                                 p_adj = input$p_adj_input) %>%
 
             layout(height = 1000, width = 1000)
 
