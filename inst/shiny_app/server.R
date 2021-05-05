@@ -70,8 +70,6 @@ function(input, output) {
 
     output$ed_out <- renderRHandsontable({
 
-
-
         rhandsontable(experiment_design()) %>%
             hot_col('label', readOnly = TRUE) %>%
             hot_col('replicate', format = '0a')
@@ -100,7 +98,7 @@ function(input, output) {
                                    closeOnEsc = TRUE,
                                    timer = 6000)
 
-        }else if(all(experiment_design()$condition == ' ')){
+        }else if(all(ed_final$data$condition == ' ')){
             shinyalert::shinyalert("Analysis not started",
                                    "Provide an Experiment Design",
                                    type="error",

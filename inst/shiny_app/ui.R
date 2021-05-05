@@ -96,7 +96,7 @@ navbarPage(h3("Proteomics results"),
                                    width = 10,
                                    h4('Welcome to analysis of the results of LC-MS/MS'),
                                    h5('Start by uploading the proteinGroups.txt table provided.'),
-                                   h5('Please Edit the next table and add the Group and Replicate.'),
+                                   h5('Please Edit the next table by adding the Condition and Replicate.'),
                                    h5('Alternatively an experiment design can be uploaded. Be sure that the Sample names are correct.'),
                                    hr(),
                                    #DTOutput('experiment_design')
