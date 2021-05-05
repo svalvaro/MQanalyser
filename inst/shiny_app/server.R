@@ -221,7 +221,7 @@ function(input, output) {
 
         # data_diff_all_contrasts <- MQanalyser::test_limma(data_imp, type = "all")
 
-        data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(), type = "all")
+         data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(), type = "all")
 
 
          #data_diff_all_contrasts <- DEP::test_diff(data_imp(), type = "all")
