@@ -163,22 +163,22 @@ navbarPage(h3("Proteomics results"),
                                      label = 'Select clusters, samples',
                                      value = 0,
                                      min = 0, max = 50),
-
-                        #Select the Colour for UPregulated
-                        colourpicker::colourInput("heat_upregulated",
-                                                  h4("Select colour upregulated:"),
-                                                  'brown2',
-                                                  palette = "square",
-                                                  returnName = TRUE,
-                                                  showColour = c("background")),
-
-                        #Select the color for Down regulated
-                        colourpicker::colourInput("heat_downregulated",
-                                                  h4("Select colour downregulated:"),
-                                                  'cyan3',
-                                                  palette = "square",
-                                                  returnName = TRUE,
-                                                  showColour = c("background")),
+#
+#                         #Select the Colour for UPregulated
+#                         colourpicker::colourInput("heat_upregulated",
+#                                                   h4("Select colour upregulated:"),
+#                                                   'brown2',
+#                                                   palette = "square",
+#                                                   returnName = TRUE,
+#                                                   showColour = c("background")),
+#
+#                         #Select the color for Down regulated
+#                         colourpicker::colourInput("heat_downregulated",
+#                                                   h4("Select colour downregulated:"),
+#                                                   'cyan3',
+#                                                   palette = "square",
+#                                                   returnName = TRUE,
+#                                                   showColour = c("background")),
 
                         selectInput(inputId = 'dendogram_input',
                                     label = 'Dendogram',
@@ -488,12 +488,7 @@ navbarPage(h3("Proteomics results"),
                     #             max = 4,
                     #             value = 1.5,
                     #             step = 0.5),
-                    #Input for type of preranked score
 
-                    selectInput(inputId = 'runscore',
-                                label=h4('For the Running Score, select the choice:'),
-                                choices = c('runningScore','preranked'),
-                                selected = 'runningScore'),
 
                     #Input for pathway to check
 
@@ -513,6 +508,14 @@ navbarPage(h3("Proteomics results"),
 
                                     tabPanel('GSEA 1',
                                              hr(),
+                                             #Input for type of preranked score
+
+                                             selectInput(inputId = 'runscore',
+                                                         label=h4('For the Running Score, select the choice:'),
+                                                         choices = c('runningScore','preranked'),
+                                                         selected = 'runningScore'),
+                                             br(),
+
                                              shinycssloaders::withSpinner(plotOutput('enr_gseaplot'))
                                     ),
 
