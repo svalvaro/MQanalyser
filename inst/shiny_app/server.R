@@ -396,7 +396,11 @@ function(input, output) {
                                  p_value_cutoff = input$input_pvalue,
                                  color_up = input$col_upregulated,
                                  color_down = input$col_downregulated,
-                                 p_adj = input$p_adj_input) %>%
+                                 p_adj = input$p_adj_input,
+                                 show_genes_user = input$showgenes_volcano,
+                                 user_genes_de = user_genes_de(),
+                                 color_genes_de = input$col_selected,
+                                 alpha = input$volc_alpha) %>%
 
             layout(height = 1000, width = 1000)
 

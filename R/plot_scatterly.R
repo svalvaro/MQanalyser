@@ -7,7 +7,7 @@ plot_scatterly <- function(dep = NULL,
                            color = '#56B4E9',
                            show_genes_user = FALSE,
                            user_genes_de = NULL,
-                           color_genes_de = '#C0362C'
+                           color_genes_de = 'dc143c'
                            ){
 
     df <- as.data.frame(dep@assays@data@listData[[1]])

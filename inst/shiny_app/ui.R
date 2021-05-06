@@ -328,6 +328,12 @@ navbarPage(h3("Proteomics results"),
                                       min = 0,
                                       max = 100,
                                       value = 5 ),
+
+                        sliderInput(inputId = 'volc_alpha',
+                                    label = 'Adjust the alpha parameter:',
+                                    value = 0.8,
+                                    min = 0, max = 1),
+
                         #check box for protein IDs
                         checkboxInput(inputId = 'p_adj_input',
                                       label =h4('Use adjusted P values:'),
@@ -350,6 +356,15 @@ navbarPage(h3("Proteomics results"),
                                                     showColour = c("background")
                                                     ),
 
+                        #Select the color for selected genes
+                        colourpicker::colourInput("col_selected",
+                                                  h4("Select colour your proteins of interest:"),
+                                                  '#800080',
+                                                  palette = "square",
+                                                  returnName = TRUE,
+                                                  showColour = c("background")
+                        ),
+
                         options = list(`style` = "btn-info"),
                         style = "unite", icon = icon("gear"),
                         status = "success", width = "300px",
@@ -361,15 +376,15 @@ navbarPage(h3("Proteomics results"),
 
                     hr(),
 
-                    #Checkbox for Gene names
-                    checkboxInput(inputId = 'check_names',
-                                  label =h4('Show gene  names:'),
-                                  value = FALSE),
-
-                    #check box for protein IDs
-                    checkboxInput(inputId = 'protein_id',
-                                  label =h4('Show protein IDs:'),
-                                  value = FALSE),
+                    # #Checkbox for Gene names
+                    # checkboxInput(inputId = 'check_names',
+                    #               label =h4('Show gene  names:'),
+                    #               value = FALSE),
+                    #
+                    # #check box for protein IDs
+                    # checkboxInput(inputId = 'protein_id',
+                    #               label =h4('Show protein IDs:'),
+                    #               value = FALSE),
 
                     #Check box for fav genes
                     checkboxInput(inputId = 'showgenes_volcano',

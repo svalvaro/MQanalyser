@@ -14,12 +14,17 @@
 #' @examples
 plot_volcano <- function(proteomics_results = NULL,
                          sample_comparison = NULL,
+                         alpha = 0.8,
                          gene_list = NULL,
                          foldchange_cutoff = 1.5,
                          p_value_cutoff = 0.05,
                          color_down = 'cyan3',
                          color_up = 'brown2',
-                         p_adj = FALSE){
+                         p_adj = TRUE,
+                         show_genes_user = FALSE,
+                         user_genes_de = NULL,
+                         color_genes_de = '#800080'
+                         ){
 
     # data_results <- read_delim('/home/alvaro/Downloads/h3Proteomics resultsh3.csv', '\t')
 
@@ -75,7 +80,7 @@ plot_volcano <- function(proteomics_results = NULL,
     #Plot
     p <- ggplot(results,  aes(x = fold_change, y = log10_pvalues,  key = Gene))+
 
-                geom_point(aes(color = color))+
+                geom_point(aes(color = color), alpha = alpha)+
 
                 geom_vline(xintercept=c(-log2(foldchange_cutoff),
                                         log2(foldchange_cutoff)),
@@ -119,16 +124,16 @@ plot_volcano <- function(proteomics_results = NULL,
                          size = 5,
                          fontface = 'bold')
 
-    #+
-                # geom_text(data = data.frame(), mapping = aes(x = c(Inf, -Inf),
-                #                                              y = c(-Inf, -Inf),
-                #                                              hjust = c(1, 0),
-                #                                              vjust = c(-1, -1),
-                #                                              label = c(name1, name2),
-                #                                              size = 5,
-                #                                              fontface = "bold"))
 
-    p
+
+    if(!is.null(user_genes_de) & show_genes_user ==TRUE){
+      p <- p+geom_point(data = results[which(results$Gene %in% user_genes_de),],
+                        color = color_genes_de,
+                        alpha = alpha)
+    }
+
+
+
 
 
   plotly::ggplotly(p = p ,
