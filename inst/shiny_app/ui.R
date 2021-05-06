@@ -319,7 +319,8 @@ navbarPage(h3("Proteomics results"),
 
                         #check box for protein IDs
                         checkboxInput(inputId = 'modify_axis',
-                                      label =h4('Would you prefer to modify the axis values:'),
+                                      label =h4('Would you prefer to modify the axis values:
+                                                \n(Uncheck to restore values)'),
                                       value = FALSE),
 
                         conditionalPanel(
@@ -336,7 +337,7 @@ navbarPage(h3("Proteomics results"),
                                       label = h4('-Log10(P-Value): Range'),
                                       min = 0,
                                       max = 50,
-                                      value = 0.5,
+                                      step = 0.5,
                                       value = c(0,5))
 
                         ),
