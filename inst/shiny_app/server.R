@@ -148,20 +148,11 @@ function(input, output) {
 
         df <- read.csv(inFile$datapath, col.names = 'Gene')
 
-        # user_genes <- read_csv("inst/shiny_app/www/user_genes_examples.txt", col_names = FALSE)
+        # user_genes <- read.csv("inst/shiny_app/www/user_genes_examples.txt", col.names = 'Gene')
 
         return(df)
 
     })
-
-
-
-
-
-
-
-
-
 
 
     # DEP ANALYSIS
@@ -266,6 +257,9 @@ function(input, output) {
     })
 
 
+
+    # Info box with the number of diff expressed proteins
+
     output$significant_proteins <- renderInfoBox({
         # Number of significant proteins
         significant_proteins <- data_results() %>% filter(significant) %>% nrow()
@@ -280,24 +274,54 @@ function(input, output) {
 
 
 
-    output$significant_user_genes <- renderInfoBox({
+    # User genes diff expressed
 
-        inFile <- input$user_genes
 
-        if (is.null(inFile))
+
+    user_genes_de <- reactive({
+
+        if (is.null(user_genes())) {
             return(NULL)
+        }
 
         significant_proteins <- data_results() %>% filter(significant)
-     #  significant_proteins <- data_results %>% filter(significant)
 
-        user_genes_sig <- significant_proteins[which(significant_proteins$name %in% user_genes()$Gene),] %>% nrow()
+        user_genes_de <- user_genes()[which(user_genes()$Gene %in% significant_proteins$name),]
 
+        return(user_genes_de)
+
+
+    })
+
+
+    # info box with the number of diff expressed proteins
+    output$significant_user_genes <- renderInfoBox({
+
+        if (is.null(user_genes())) {
+            return(NULL)
+        }
 
         info <- infoBox(
-            'From your selected genes, there are:',
-            paste0(user_genes_sig, ' out of ', nrow(user_genes()), ' proteins.'),
+            'From your selected proteins, there are:',
+            paste0(length(user_genes_de()), ' out of ', nrow(user_genes()), ' proteins.'),
             icon = icon("stats", lib = "glyphicon"))
         return(info)
+
+    })
+
+    # table with the significant user genes
+    output$table_user_genes <- renderUI({
+
+        if (is.null(user_genes())) {
+            return(NULL)
+        }
+
+
+        selectInput(inputId = 'selected_df_user_prots',
+                    label = h4('These are the differentially expressed \nproteins that you provided:'),
+                    choices = unlist(user_genes_de()),
+                    selected = user_genes_de()[1])
+
 
 
     })
