@@ -136,6 +136,34 @@ function(input, output) {
         })
 
 
+
+    ## User Genes
+
+    user_genes <- reactive({
+
+        inFile <- input$user_genes
+
+        if (is.null(inFile))
+            return(NULL)
+
+        df <- read.csv(inFile$datapath, col.names = 'Gene')
+
+        # user_genes <- read_csv("inst/shiny_app/www/user_genes_examples.txt", col_names = FALSE)
+
+        return(df)
+
+    })
+
+
+
+
+
+
+
+
+
+
+
     # DEP ANALYSIS
 
     data_se <- reactive({
@@ -249,6 +277,35 @@ function(input, output) {
         return(info)
 
     })
+
+
+
+    output$significant_user_genes <- renderInfoBox({
+
+        inFile <- input$user_genes
+
+        if (is.null(inFile))
+            return(NULL)
+
+        significant_proteins <- data_results() %>% filter(significant)
+     #  significant_proteins <- data_results %>% filter(significant)
+
+        user_genes_sig <- significant_proteins[which(significant_proteins$name %in% user_genes()$Gene),] %>% nrow()
+
+
+        info <- infoBox(
+            'From your selected genes, there are:',
+            paste0(user_genes_sig, ' out of ', nrow(user_genes()), ' proteins.'),
+            icon = icon("stats", lib = "glyphicon"))
+        return(info)
+
+
+    })
+
+
+
+
+
 
 
     output$proteomics_results <- DT::renderDataTable({

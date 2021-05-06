@@ -129,8 +129,13 @@ navbarPage(h3("Proteomics results"),
     tabPanel(h4("Results"),
       includeCSS("www/info_box.css"),
 
+
+
       shinydashboard::infoBoxOutput('significant_proteins',
                                         width = NULL),
+
+      shinydashboard::infoBoxOutput('significant_user_genes',
+                                    width = NULL),
       br(),
       br(),
 
