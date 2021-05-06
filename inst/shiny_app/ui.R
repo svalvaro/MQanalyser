@@ -319,8 +319,7 @@ navbarPage(h3("Proteomics results"),
 
                         #check box for protein IDs
                         checkboxInput(inputId = 'modify_axis',
-                                      label =h4('Would you prefer to modify the axis values:
-                                                \n(Uncheck to restore values)'),
+                                      label =h4('Would you prefer to modify the axis values: \n(Uncheck to restore values)'),
                                       value = FALSE),
 
                         conditionalPanel(
@@ -487,7 +486,7 @@ navbarPage(h3("Proteomics results"),
                           # the selected rows are removed. That's would be a good solution.
 
                           checkboxInput(inputId = 'clear_selection',
-                                        label =h4('Remove the selected genes from the table.'),
+                                        label =h4('Remove the selected genes from the table. (Press twice)'),
                                         value = FALSE),
                           br(),
                           hr(),

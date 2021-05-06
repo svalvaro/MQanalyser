@@ -492,18 +492,36 @@ function(input, output) {
 
     output$plot_profile_table <- DT::renderDataTable({
 
-        DT::datatable(MQanalyser::plot_profilely(dep = dep(),
-                                                intensity_type = input$IntensityType,
-                                                color = NULL,
-                                                angle_labels = NULL,
-                                                selected_genes = NULL,
-                                                color_selected = NULL,
-                                                plot = FALSE),
-                      extensions = 'Scroller',
+        if(input$clear_selection == TRUE){
+            DT::datatable(MQanalyser::plot_profilely(dep = dep(),
+                                                     intensity_type = input$IntensityType,
+                                                     color = NULL,
+                                                     angle_labels = NULL,
+                                                     selected_genes = NULL,
+                                                     color_selected = NULL,
+                                                     plot = FALSE),
+                          selection = 0,
+                          extensions = 'Scroller',
 
-                      options = list(scrollY=500,
-                                     scrollX=100)
-                      )
+                          options = list(scrollY=500,
+                                         scrollX=100)
+            )
+        }else{
+            DT::datatable(MQanalyser::plot_profilely(dep = dep(),
+                                                     intensity_type = input$IntensityType,
+                                                     color = NULL,
+                                                     angle_labels = NULL,
+                                                     selected_genes = NULL,
+                                                     color_selected = NULL,
+                                                     plot = FALSE),
+                          extensions = 'Scroller',
+
+                          options = list(scrollY=500,
+                                         scrollX=100)
+            )
+        }
+
+
     })
 
 
