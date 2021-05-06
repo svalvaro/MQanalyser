@@ -16,7 +16,7 @@ You can install it from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("BioAlvaro/MQanalyser")
+devtools::install_github("svalvaro/MQanalyser")
 ```
 
 ## Example
