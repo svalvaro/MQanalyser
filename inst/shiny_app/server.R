@@ -288,6 +288,7 @@ function(input, output) {
 
         user_genes_de <- user_genes()[which(user_genes()$Gene %in% significant_proteins$name),]
 
+        # user_genes_de <- user_genes[which(user_genes$Gene %in% significant_proteins$name),]
         return(user_genes_de)
 
 
@@ -375,7 +376,9 @@ function(input, output) {
                                    x_sample = input$x_sample_input,
                                    y_sample = input$y_sample_input,
                                    color = input$color_scatter,
-                                   gene_list = NULL,
+                                   show_genes_user = input$showgenes,
+                                   user_genes_de = user_genes_de(),
+                                   color_genes_de = input$color_de_scatter,
                                    alpha = input$input_alpha,
                                    intensity_type = input$IntensityType,
                                    show_lm = input$input_lm) %>%

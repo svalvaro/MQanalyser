@@ -2,10 +2,13 @@ plot_scatterly <- function(dep = NULL,
                            x_sample = NULL,
                            y_sample = NULL,
                            intensity_type = NULL,
-                           gene_list = NULL,
                            alpha = 0.5,
                            show_lm = TRUE,
-                           color = '#56B4E9'){
+                           color = '#56B4E9',
+                           show_genes_user = FALSE,
+                           user_genes_de = NULL,
+                           color_genes_de = '#C0362C'
+                           ){
 
     df <- as.data.frame(dep@assays@data@listData[[1]])
 
@@ -53,6 +56,20 @@ plot_scatterly <- function(dep = NULL,
     if(show_lm == TRUE){
         p <- p+geom_smooth(method = 'lm' )
         # p <- p+geom_smooth(method = "lm", se = 0, color ='black')
+    }
+
+
+    if(!is.null(user_genes_de) & show_genes_user ==TRUE){
+        p <- p+geom_point(data = df[which(df$Gene %in% user_genes_de),],
+                          aes(x = X_sample,
+                              y = Y_sample,
+                              text = paste(x_sample,':', format(round(X_sample, 1), nsmall = 1),
+                                           paste0('\n',y_sample),':', format(round(Y_sample, 1), nsmall = 1),
+                                           '\nGene:', Gene)
+                          ),
+                          alpha = alpha,
+                          size = 2,
+                          color = color_genes_de)
     }
 
 

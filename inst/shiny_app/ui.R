@@ -249,7 +249,7 @@ navbarPage(h3("Proteomics results"),
                     #check if they want to see their genes
 
                     checkboxInput(inputId = 'showgenes',
-                                  label = h4('Show the genes that you have uploaded:'),
+                                  label = h4('Show the differentially expressed proteins of the list that you have uploaded:'),
                                   value=FALSE),
 
                     dropdown(
@@ -268,6 +268,14 @@ navbarPage(h3("Proteomics results"),
                         colourpicker::colourInput(inputId = "color_scatter",
                                                   h4("Select colour:"),
                                                   '#56B4E9',
+                                                  palette = "square",
+                                                  returnName = TRUE,
+                                                  showColour = c("background")),
+
+
+                        colourpicker::colourInput(inputId = "color_de_scatter",
+                                                  h4("Select colour for your proteins of interest:"),
+                                                  '#C0362C',
                                                   palette = "square",
                                                   returnName = TRUE,
                                                   showColour = c("background")),
