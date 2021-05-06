@@ -499,7 +499,7 @@ navbarPage(h3("Proteomics results"),
             ),
 
     # #Tab for Enrichment analysis
-    #
+
     tabPanel(h4('Enrichment Analysis'),
             sidebarLayout(
                 sidebarPanel(
