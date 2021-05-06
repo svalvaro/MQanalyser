@@ -15,7 +15,6 @@
 plot_volcano <- function(proteomics_results = NULL,
                          sample_comparison = NULL,
                          alpha = 0.8,
-                         gene_list = NULL,
                          foldchange_cutoff = 1.5,
                          p_value_cutoff = 0.05,
                          color_down = 'cyan3',
@@ -23,7 +22,9 @@ plot_volcano <- function(proteomics_results = NULL,
                          p_adj = TRUE,
                          show_genes_user = FALSE,
                          user_genes_de = NULL,
-                         color_genes_de = '#800080'
+                         color_genes_de = '#800080',
+                         coord_x = NULL,
+                         coord_y = NULL
                          ){
 
     # data_results <- read_delim('/home/alvaro/Downloads/h3Proteomics resultsh3.csv', '\t')
@@ -47,10 +48,10 @@ plot_volcano <- function(proteomics_results = NULL,
 
     if (p_adj == TRUE) {
       results$log10_pvalues <- -log10(results[,which(names(results)==pvalue_adj)])
-      ylab = '-Log10 (P ajusted)'
+      ylab = '-Log10 (Adjusted P-Value'
     } else{
       results$log10_pvalues <- -log10(results[,which(names(results)==pval)])
-      ylab = '-Log10 (P values)'
+      ylab = '-Log10 (P-Value)'
     }
 
 
@@ -86,7 +87,7 @@ plot_volcano <- function(proteomics_results = NULL,
                                         log2(foldchange_cutoff)),
                            color = "black",
                            lwd=1.0,
-                           alpha=0.5,
+                           alpha=0.2,
                            lty=3)+
 
                 ylab(ylab)+
@@ -96,7 +97,7 @@ plot_volcano <- function(proteomics_results = NULL,
                 geom_hline(yintercept=-log10(p_value_cutoff),
                            color = "black",
                            lwd=1.0,
-                           alpha=0.5,
+                           alpha=0.2,
                            lty=3)+
 
                 theme_bw()+
@@ -118,7 +119,7 @@ plot_volcano <- function(proteomics_results = NULL,
                          fontface = 'bold')+
 
                 annotate("text",
-                         x = min(results$fold_change),
+                         x = min(results$fold_change)+0.1,
                          y = 0,
                          label = name2,
                          size = 5,
@@ -130,6 +131,24 @@ plot_volcano <- function(proteomics_results = NULL,
       p <- p+geom_point(data = results[which(results$Gene %in% user_genes_de),],
                         color = color_genes_de,
                         alpha = alpha)
+    }
+
+
+
+    # coord_x = c(-15,6)
+    if(!is.null(coord_x)){
+      p <- p+coord_cartesian(xlim = coord_x)
+
+      }
+
+    # coord_y = c(0,5)
+    if(!is.null(coord_y)){
+      p <- p+coord_cartesian(ylim = coord_y)
+    }
+
+    if(!is.null(coord_x) &!is.null(coord_y)){
+
+      p <- p+coord_cartesian(xlim = coord_x, ylim = coord_y)
     }
 
 

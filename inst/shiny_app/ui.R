@@ -316,18 +316,34 @@ navbarPage(h3("Proteomics results"),
                     dropdown(
                         tags$h3("Advanced Parameters"),
 
-                          sliderInput(inputId = 'log_input',
+
+                        #check box for protein IDs
+                        checkboxInput(inputId = 'modify_axis',
+                                      label =h4('Would you prefer to modify the axis values:'),
+                                      value = FALSE),
+
+                        conditionalPanel(
+                          "input.modify_axis == 1",
+
+                          sliderInput(inputId = 'range_fc',
                                       label = h4('Log2(Fold-Change) Range'),
                                       min = -10,
                                       max = 10,
                                       step = 0.1,
                                       value = c(-6,6) ),
 
-                          sliderInput(inputId = 'log_p',
+                          sliderInput(inputId = 'range_pvalue',
                                       label = h4('-Log10(P-Value): Range'),
                                       min = 0,
-                                      max = 100,
-                                      value = 5 ),
+                                      max = 50,
+                                      value = 0.5,
+                                      value = c(0,5))
+
+                        ),
+
+                        br(),
+                        hr(),
+
 
                         sliderInput(inputId = 'volc_alpha',
                                     label = 'Adjust the alpha parameter:',

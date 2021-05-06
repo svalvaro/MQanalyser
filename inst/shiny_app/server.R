@@ -390,6 +390,11 @@ function(input, output) {
     # volcano
     output$volcano_plot <- renderPlotly(
 
+        # if(input$modify_axis == FALSE){
+        #     input$range_fc <- NULL
+        #     input$range_pvalue <- NULL
+        # }
+
         MQanalyser::plot_volcano(proteomics_results = data_results(),
                                  sample_comparison = input$comparison_input,
                                  foldchange_cutoff = input$input_fc,
@@ -400,7 +405,9 @@ function(input, output) {
                                  show_genes_user = input$showgenes_volcano,
                                  user_genes_de = user_genes_de(),
                                  color_genes_de = input$col_selected,
-                                 alpha = input$volc_alpha) %>%
+                                 alpha = input$volc_alpha,
+                                 coord_x = input$range_fc,
+                                 coord_y = input$range_pvalue) %>%
 
             layout(height = 1000, width = 1000)
 
