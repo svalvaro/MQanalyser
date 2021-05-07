@@ -443,12 +443,21 @@ navbarPage(h3("Proteomics results"),
                                                   ),
 
                         colourpicker::colourInput(inputId = "input_col_sel",
-                                                  label = h4("Select colour \nSelected genes:"),
+                                                  label = h4("Select colour \nSelected proteins:"),
                                                   value = "red",
                                                   palette = "square",
                                                   returnName = TRUE,
                                                   showColour = c("background")
                                                   ),
+
+
+                        colourpicker::colourInput(inputId = "input_col_prof_de",
+                                                  label = h4("Select colour your proteins of interest:"),
+                                                  value = "#800080",
+                                                  palette = "square",
+                                                  returnName = TRUE,
+                                                  showColour = c("background")
+                        ),
 
                         sliderInput(inputId = 'input_angle_samples',
                                     label = 'Select the angle of the lables',
@@ -465,7 +474,7 @@ navbarPage(h3("Proteomics results"),
 
                     br(),
 
-                    checkboxInput(inputId = 'profile_favs',
+                    checkboxInput(inputId = 'prof_genes_de',
                                   label = h4('Show the genes that you have uploaded:',
                                              value=FALSE)
                                   )

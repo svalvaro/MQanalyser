@@ -286,6 +286,8 @@ function(input, output) {
 
         significant_proteins <- data_results() %>% filter(significant)
 
+        # significant_proteins <- data_results %>% filter(significant)
+
         user_genes_de <- user_genes()[which(user_genes()$Gene %in% significant_proteins$name),]
 
         # user_genes_de <- user_genes[which(user_genes$Gene %in% significant_proteins$name),]
@@ -444,7 +446,10 @@ function(input, output) {
                                    selected_genes = input$plot_profile_table_rows_selected,
                                    color_selected = input$input_col_sel,
                                    plot = TRUE,
-                                   clear_selection = input$clear_selection) %>%
+                                   clear_selection = input$clear_selection,
+                                   prof_genes_de = input$prof_genes_de,
+                                   user_genes_de = user_genes_de(),
+                                   color_genes_de = input$input_col_prof_de) %>%
 
             layout(height = 800, width = 1200)
     )

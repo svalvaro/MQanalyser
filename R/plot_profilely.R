@@ -13,7 +13,10 @@ plot_profilely <- function(dep,
                            selected_genes = NULL,
                            color_selected = 'red',
                            plot = TRUE,
-                           clear_selection = FALSE){
+                           clear_selection = FALSE,
+                           prof_genes_de = FALSE,
+                           user_genes_de = NULL,
+                           color_genes_de = '#800080'){
   # clear_selection <- TRUE
    #selected_genes <- c(4,15,200,500)
 
@@ -36,6 +39,7 @@ plot_profilely <- function(dep,
 #     rowData(filtered)$mean <- rowMeans(assay(filtered), na.rm = TRUE)
 #
 #     df <- as.data.frame(assay(filtered) - rowData(filtered, use.names = FALSE)$mean)
+
 
     df <- as.data.frame(assay(filtered))
 #
@@ -77,6 +81,15 @@ plot_profilely <- function(dep,
                             mapping = aes(x=Label,y= Intensity,group = Gene),
                                 color = color_selected)
     }
+
+
+    if(!is.null(user_genes_de) & prof_genes_de == TRUE){
+      p <- p +geom_line(data = df_melt[which(df_melt$Gene %in% user_genes_de),],
+                        mapping = aes(group=Gene),
+                        color = color_genes_de)
+    }
+
+
 
 
 
