@@ -522,6 +522,14 @@ navbarPage(h3("Proteomics results"),
 
                     uiOutput('comparisons_enrichment'),
 
+                    selectInput(inputId = 'enrich_organism',
+                                label = 'Select the species',
+                                choices = c('Human' = 'org.Hs.eg.db',
+                                            'Mouse'= 'org.Mm.eg.db',
+                                            'Rat'= 'org.Rn.eg.db',
+                                            'Yeast' = 'org.Sc.sgd.db'),
+                                selected = 'org.Hs.eg.db'),
+
 
                     selectInput(inputId = 'go_ontology',
                                 label = 'Select the GO term',

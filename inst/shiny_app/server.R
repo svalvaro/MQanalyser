@@ -544,8 +544,8 @@ function(input, output) {
     geneList <- reactive({
 
         geneList <- MQanalyser::create_geneList(data_results = data_results(),
-                                    comparison_samples = input$comparison_enrch,
-                                    organism = 'org.Hs.eg.db') # adapt it to more organisms.
+                                                comparison_samples = input$comparison_enrch,
+                                                organism = input$enrich_organism) # adapt it to more organisms.
 
         # geneList <- MQanalyser::create_geneList(data_results = data_results,
         #                             comparison_samples = 'Benign_vs_Malignant',
@@ -602,7 +602,7 @@ function(input, output) {
 
        df <-  clusterProfiler::groupGO(gene = diffExpress(),
                                  keyType = 'ENTREZID',
-                                 OrgDb = org.Hs.eg.db,
+                                 OrgDb = input$enrich_organism,
                                  ont = input$go_ontology,
                                  level = input$go_level) %>%
            as.data.frame() %>%
@@ -618,6 +618,15 @@ function(input, output) {
        #     select(contains(c('Description', 'count')))
 
 
+       if(input$go_ontology == 'CC'){
+           title = 'Cellular Component'
+       } else if (input$go_ontology == 'MF'){
+           title = 'Molecular Function'
+       } else{
+           title = 'Biological Function'
+       }
+
+
        df[df == 0] <- NA
 
        df <- drop_na(df)
@@ -628,6 +637,9 @@ function(input, output) {
 
        p <- ggplot(df, aes(x = Count, y = reorder(Description, Count), fill = Description))+
            geom_bar(stat = 'identity')+
+           theme_bw()+
+           ylab('Description')+
+           ggtitle(title)+
            theme(legend.position = 'none')
 
 
