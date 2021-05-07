@@ -624,7 +624,7 @@ function(input, output) {
     })
 
 
-    output$upset <- renderplot(height = 1000,{
+    output$upset <- renderPlot(height = 1000,{
 
         enrichplot::upsetplot(edo())
 
@@ -687,7 +687,31 @@ function(input, output) {
 
 
     edox <- reactive({
-        edox <- setReadable(edo(), 'org.Hs.eg.db', 'ENTREZID')
+        edox <- clusterProfiler::setReadable(edo(), input$organism_input, 'ENTREZID')
+
+         # edox <- clusterProfiler::setReadable(edo, org.Hs.eg.db, 'ENTREZID')
+         #
+         # edox <- clusterProfiler::setReadable(edo, org.Sc.sgd.db, 'ENTREZID')
+         #
+         # edox <- clusterProfiler::setReadable(edo, org.Rn.eg.db, 'ENTREZID')
+
+        # edox <- clusterProfiler::setReadable(edo, org.Mm.eg.db, 'ENTREZID')
+         #
+         # DOSE::setReadable(edo, org.Rn.eg.db, 'ENTREZID')
+
+
+        # TO DO: other species
+
+        # cellular component, biological function,
+        # ggo <- groupGO(gene     = names(geneList),
+        # OrgDb    = org.Mm.eg.db,
+        # ont      = "CC",
+        # level    = 3,
+        # readable = TRUE)
+        # #
+
+
+
 
         return(edox)
     })

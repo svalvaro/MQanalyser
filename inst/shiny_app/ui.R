@@ -537,11 +537,7 @@ navbarPage(h3("Proteomics results"),
 
 
 
-                    #
-                    # selectInput(inputId = 'organism_input',
-                    #             label=h4('Select the organism:'),
-                    #             choices = c('runningScore','preranked'),
-                    #             selected = 'runningScore'),
+
 
 
                     hr(),
@@ -588,54 +584,7 @@ navbarPage(h3("Proteomics results"),
                                              br(),
 
                                              shinycssloaders::withSpinner(plotOutput('enr_gseaplot'))
-                                    ),
-
-                                    tabPanel('Disease Enrichment',
-                                             hr(),
-                                             # print('Dot plot is similar to bar
-                                             #        plot with the capability to encode another score as dot size.'),
-                                             hr(),
-                                             shinycssloaders::withSpinner(plotOutput('enr_dotplot'))
-                                             ),
-
-                                    tabPanel('Disease GSEA',
-                                             hr(),
-                                             shinycssloaders::withSpinner(plotOutput('enr_gseadotplot'))
-                                             ),
-
-
-
-                                    tabPanel('Disease Heatmap',
-                                             hr(),
-                                             print('The heatmap can simplify the results making it easier to
-                                                   identify expression patterns.'),
-                                             hr(),
-                                             shinycssloaders::withSpinner(plotlyOutput('heatmapnrich'))
-                                             ),
-
-
-                                    tabPanel('Disease density',
-                                             hr(),
-                                             print('The ridgeplot will visualize expression distributions
-                                                    of core enriched genes for GSEA enriched categories.
-                                                    It helps users to interpret up/down-regulated pathways.'),
-                                             hr(),
-                                             shinycssloaders::withSpinner(plotOutput('enr_ridgeplot'))
-                                             ),
-
-                                    tabPanel('Disease association',
-                                             hr(),
-                                             print('visualizing the complex association between genes and gene sets.
-                                                   It emphasizes the gene overlapping among different gene sets.'),
-                                             hr(),
-                                             shinycssloaders::withSpinner(plotOutput('upset'))
-                                    )
-
-                                    # unable to find an inherited method for function
-                                    # ‘gseaplot’ for signature ‘"reactiveExpr"’
-
-
-
+                                             )
                                     )
                         )
                     )
@@ -643,10 +592,87 @@ navbarPage(h3("Proteomics results"),
             ),
 
 
+  tabPanel(title = h4('Disease Analysis'),
+           sidebarLayout(
+             sidebarPanel(
+
+               selectInput(inputId = 'disease_organism',
+                           label = 'Select the species',
+                           choices = c('Human' = 'org.Hs.eg.db',
+                                       'Mouse'= 'org.Mm.eg.db',
+                                       'Rat'= 'org.Rn.eg.db',
+                                       'Yeast' = 'org.Sc.sgd.db'),
+                           selected = 'org.Hs.eg.db')
+             ),
+
+             mainPanel(
+               box(height = 2500, width = 2000,
+                   tabsetPanel(type = 'tabs',
+
+
+                               tabPanel('Disease Enrichment',
+                                        hr(),
+                                        # print('Dot plot is similar to bar
+                                        #        plot with the capability to encode another score as dot size.'),
+                                        hr(),
+                                        shinycssloaders::withSpinner(plotOutput('enr_dotplot'))
+                               ),
+
+                               tabPanel('Disease GSEA',
+                                        hr(),
+                                        shinycssloaders::withSpinner(plotOutput('enr_gseadotplot'))
+                               ),
+
+
+
+                               tabPanel('Disease Heatmap',
+                                        hr(),
+                                        print('The heatmap can simplify the results making it easier to
+                                                   identify expression patterns.'),
+                                        hr(),
+                                        shinycssloaders::withSpinner(plotlyOutput('heatmapnrich'))
+                               ),
+
+
+                               tabPanel('Disease density',
+                                        hr(),
+                                        print('The ridgeplot will visualize expression distributions
+                                                    of core enriched genes for GSEA enriched categories.
+                                                    It helps users to interpret up/down-regulated pathways.'),
+                                        hr(),
+                                        shinycssloaders::withSpinner(plotOutput('enr_ridgeplot'))
+                               ),
+
+                               tabPanel('Disease association',
+                                        hr(),
+                                        print('visualizing the complex association between genes and gene sets.
+                                                   It emphasizes the gene overlapping among different gene sets.'),
+                                        hr(),
+                                        shinycssloaders::withSpinner(plotOutput('upset')
+                                                                     )
+                                        )
+                               )
+
+                   )
+               )
+             )
+           ),
+
+
+
+
+
   tabPanel(title = h4('Gene Network'),
            sidebarLayout(
                sidebarPanel(
-                 #uiOutput("network_selector")
+
+                 selectInput(inputId = 'organism_input',
+                             label = 'Select the species',
+                             choices = c('Human' = 'org.Hs.eg.db',
+                                         'Mouse'= 'org.Mm.eg.db',
+                                         'Rat'= 'org.Rn.eg.db',
+                                         'Yeast' = 'org.Sc.sgd.db'),
+                             selected = 'org.Hs.eg.db')
                  ),
 
                mainPanel(

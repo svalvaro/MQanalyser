@@ -14,7 +14,8 @@ library(readr)
 library(ggrepel)
 library(DOSE)
 library(enrichplot)
-library(org.Hs.eg.db)
+library(org.Hs.eg.db) # genome wide association human
+library(org.Mm.eg.db) #genome wide association mouse
 library(clusterProfiler)
 library(ggridges)
 library(pathview)
