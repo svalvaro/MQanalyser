@@ -7,6 +7,7 @@
 #'
 #' @examples
 plot_profilely <- function(dep,
+                           centered = FALSE,
                            intensity_type = 'LFQ',
                            color = '#56B4E9',
                            angle_labels = 45,
@@ -34,15 +35,21 @@ plot_profilely <- function(dep,
 
 
 
-    # Get centered intensity values ('centered')
-#
-#     rowData(filtered)$mean <- rowMeans(assay(filtered), na.rm = TRUE)
-#
-#     df <- as.data.frame(assay(filtered) - rowData(filtered, use.names = FALSE)$mean)
+# Get centered intensity values ('centered')
+
+    if(centered == TRUE){
+
+      rowData(filtered)$mean <- rowMeans(assay(filtered), na.rm = TRUE)
+
+      df <- as.data.frame(assay(filtered) - rowData(filtered, use.names = FALSE)$mean)
+
+    }else{
+      # not centered
+
+      df <- as.data.frame(assay(filtered))
+    }
 
 
-    df <- as.data.frame(assay(filtered))
-#
     df$name <- rownames(df)
 
     df_melt <- melt(df, id.vars = 'name')

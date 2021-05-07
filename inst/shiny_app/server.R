@@ -440,6 +440,7 @@ function(input, output) {
     output$plot_profile <- renderPlotly(
 
         MQanalyser::plot_profilely(dep = dep(),
+                                   centered = input$prof_centered,
                                    intensity_type = input$IntensityType,
                                    color = input$input_col_prof,
                                    angle_labels = input$input_angle_samples,

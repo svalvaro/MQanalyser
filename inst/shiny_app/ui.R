@@ -464,6 +464,11 @@ navbarPage(h3("Proteomics results"),
                                     value = 45,
                                     min = 0, max = 90),
 
+                        checkboxInput(inputId = 'prof_centered',
+                                      label = h4('Show centered intensities (remove mean):',
+                                                 value=FALSE)
+                        ),
+
                         options = list(`style` = "btn-info"),
                         style = "unite", icon = icon("gear"),
                         status = "success", width = "300px",
