@@ -512,6 +512,7 @@ navbarPage(h3("Proteomics results"),
                 )
             ),
 
+
     # Tab for Enrichment analysis
 
     tabPanel(h4('Enrichment Analysis'),
@@ -520,6 +521,21 @@ navbarPage(h3("Proteomics results"),
                     h3("Select the adjustments"),
 
                     uiOutput('comparisons_enrichment'),
+
+
+                    selectInput(inputId = 'go_ontology',
+                                label = 'Select the GO term',
+                                choices = c('Cellular Component' = 'CC',
+                                            'Biological Function'= 'BP',
+                                            'Molecular Function'= 'MF'),
+                                selected = 'CC'),
+
+                    sliderInput(inputId = 'go_level',
+                                h4('Degree of specificity, or GO level. The higher the more specific:'),
+                                min = 1,
+                                max = 20,
+                                value = 3,
+                                step = 1),
 
                     # Number of proteins selected:
 
@@ -566,6 +582,12 @@ navbarPage(h3("Proteomics results"),
                 mainPanel(
                     box(height = 2500, width = 2000,
                         tabsetPanel(type = 'tabs',
+
+                                    tabPanel('Gene Ontology',
+                                             hr(),
+                                             shinycssloaders::withSpinner(plotlyOutput('go_classification_plot'))
+                                    ),
+
 
                                     tabPanel('GSEA 2',
                                              hr(),

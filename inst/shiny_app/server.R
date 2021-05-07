@@ -571,7 +571,7 @@ function(input, output) {
 
         de <- names(geneList())
 
-        #de <- names(geneList)
+        # de <- names(geneList)[abs(geneList) > log2(3.5)]
     })
 
 
@@ -595,6 +595,48 @@ function(input, output) {
 
     })
 
+
+    # GO terms plots
+
+    output$go_classification_plot <- renderPlotly({
+
+       df <-  clusterProfiler::groupGO(gene = diffExpress(),
+                                 keyType = 'ENTREZID',
+                                 OrgDb = org.Hs.eg.db,
+                                 ont = input$go_ontology,
+                                 level = input$go_level) %>%
+           as.data.frame() %>%
+           select(contains(c('Description', 'count')))
+
+
+       # df <-  clusterProfiler::groupGO(gene = de,
+       #                                 keyType = 'ENTREZID',
+       #                                 OrgDb = org.Hs.eg.db,
+       #                                 ont = 'CC',
+       #                                 level = 10) %>%
+       #     as.data.frame() %>%
+       #     select(contains(c('Description', 'count')))
+
+
+       df[df == 0] <- NA
+
+       df <- drop_na(df)
+
+       df <- df[order(df$Count, decreasing = TRUE),]
+
+
+
+       p <- ggplot(df, aes(x = Count, y = reorder(Description, Count), fill = Description))+
+           geom_bar(stat = 'identity')+
+           theme(legend.position = 'none')
+
+
+
+       ggplotly(p)
+    })
+
+
+
     # Enrichment for gsea
     edo2 <- reactive({
         edo2 <- DOSE::gseDO(geneList())
@@ -602,7 +644,7 @@ function(input, output) {
     })
 
 
-    # Enrichment dot plot
+    # Disease dotplot
     output$enr_dotplot <- renderPlot(height = 1000,{
 
         enrichplot::dotplot(edo(),showCategory = 25)
@@ -616,7 +658,7 @@ function(input, output) {
 
     })
 
-    # Heatmap plot of enriched terms
+    # Disease plot of enriched terms
 
     output$heatmapnrich <- renderPlotly({
 
