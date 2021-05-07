@@ -48,7 +48,7 @@ plot_volcano <- function(proteomics_results = NULL,
 
     if (p_adj == TRUE) {
       results$log10_pvalues <- -log10(results[,which(names(results)==pvalue_adj)])
-      ylab = '-Log10 (Adjusted P-Value'
+      ylab = '-Log10 (Adjusted P-Value)'
     } else{
       results$log10_pvalues <- -log10(results[,which(names(results)==pval)])
       ylab = '-Log10 (P-Value)'
@@ -89,6 +89,8 @@ plot_volcano <- function(proteomics_results = NULL,
                            lwd=1.0,
                            alpha=0.2,
                            lty=3)+
+
+                ggtitle(sample_comparison)+
 
                 ylab(ylab)+
 

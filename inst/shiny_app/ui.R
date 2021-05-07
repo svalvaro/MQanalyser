@@ -592,8 +592,8 @@ navbarPage(h3("Proteomics results"),
 
                                     tabPanel('Disease Enrichment',
                                              hr(),
-                                             print('Dot plot is similar to bar
-                                                    plot with the capability to encode another score as dot size.'),
+                                             # print('Dot plot is similar to bar
+                                             #        plot with the capability to encode another score as dot size.'),
                                              hr(),
                                              shinycssloaders::withSpinner(plotOutput('enr_dotplot'))
                                              ),
@@ -607,9 +607,7 @@ navbarPage(h3("Proteomics results"),
 
                                     tabPanel('Disease Heatmap',
                                              hr(),
-                                             print('The gene-concept network may become too complicated
-                                                   if user want to show a large number significant terms.
-                                                   The heatmap can simplify the results making it easier to
+                                             print('The heatmap can simplify the results making it easier to
                                                    identify expression patterns.'),
                                              hr(),
                                              shinycssloaders::withSpinner(plotlyOutput('heatmapnrich'))
@@ -623,7 +621,15 @@ navbarPage(h3("Proteomics results"),
                                                     It helps users to interpret up/down-regulated pathways.'),
                                              hr(),
                                              shinycssloaders::withSpinner(plotOutput('enr_ridgeplot'))
-                                             )
+                                             ),
+
+                                    tabPanel('Disease association',
+                                             hr(),
+                                             print('visualizing the complex association between genes and gene sets.
+                                                   It emphasizes the gene overlapping among different gene sets.'),
+                                             hr(),
+                                             shinycssloaders::withSpinner(plotOutput('upset'))
+                                    )
 
                                     # unable to find an inherited method for function
                                     # ‘gseaplot’ for signature ‘"reactiveExpr"’

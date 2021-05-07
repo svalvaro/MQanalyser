@@ -570,6 +570,8 @@ function(input, output) {
         # diffExpress <- geneList[abs(geneList) > log2(2.5)]
 
         de <- names(geneList())
+
+        #de <- names(geneList)
     })
 
 
@@ -588,6 +590,8 @@ function(input, output) {
     edo <- reactive({
 
         edo <- DOSE::enrichDGN(diffExpress())
+
+        # edo <- DOSE::enrichDGN(diffExpress)
 
     })
 
@@ -620,7 +624,11 @@ function(input, output) {
     })
 
 
+    output$upset <- renderplot(height = 1000,{
 
+        enrichplot::upsetplot(edo())
+
+    })
 
 
 
