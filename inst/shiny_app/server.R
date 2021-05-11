@@ -212,17 +212,24 @@ function(input, output) {
 
     data_imp <- reactive({
         if(input$input_imputation == 'Perseus'){
-            data_imp <-DEP::impute(data_norm(), fun = "man", shift = 1.8, scale = 0.3)
+            data_imp <-DEP::impute(data_norm(),
+                                   fun = "man",
+                                   shift = 1.8,
+                                   scale = 0.3)
         }else if(input$input_imputation == 'MinProb'){
-            data_imp <- DEP::impute(data_norm(), fun = "MinProb", q = 0.05)
+            data_imp <- DEP::impute(data_norm(),
+                                    fun = "MinProb", q = 0.05)
         } else if(input$input_imputation == 'knn'){
-            data_imp <- DEP::impute(data_norm(), fun = "knn", k = 10, rowmax = 0.9)
+            data_imp <- DEP::impute(data_norm(),
+                                    fun = "knn",
+                                    k = 10, rowmax = 0.9)
         }else if(input$input_imputation == 'MLE'){
             data_imp <- DEP::impute(data_norm(), fun = "MLE")
         }else if(input$input_imputation == 'none'){
             data_imp <- data_norm()
         } else{
-            data_imp <- DEP::impute(data_norm(), fun = input$input_imputation)
+            data_imp <- DEP::impute(data_norm(),
+                                    fun = input$input_imputation)
         }
 
         # data_imp <-DEP::impute(data_norm, fun = "man", shift = 1.8, scale = 0.3)
@@ -238,7 +245,8 @@ function(input, output) {
 
         # data_diff_all_contrasts <- MQanalyser::test_limma(data_imp, type = "all")
 
-         data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(), type = "all")
+         data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(),
+                                                           type = "all")
 
 
          #data_diff_all_contrasts <- DEP::test_diff(data_imp(), type = "all")
@@ -264,7 +272,8 @@ function(input, output) {
 
     output$significant_proteins <- renderInfoBox({
         # Number of significant proteins
-        significant_proteins <- data_results() %>% filter(significant) %>% nrow()
+        significant_proteins <- data_results() %>%
+            filter(significant) %>% nrow()
         total_proteins <- data_results() %>% nrow()
         info <- infoBox(
                         'Differentially expressed proteins',
@@ -461,9 +470,12 @@ function(input, output) {
 
     comparisons <- reactive({
 
-        comparisons <- data_results() %>% select(contains('vs') & contains('significant'))
+        comparisons <- data_results() %>%
+            select(contains('vs') & contains('significant'))
 
-        comparisons <- gsub(pattern = '_significant', replacement = '',colnames(comparisons))
+        comparisons <- gsub(pattern = '_significant',
+                            replacement = '',
+                            colnames(comparisons))
 
 
     })
@@ -481,7 +493,8 @@ function(input, output) {
 
     output$x_sample_selector <- renderUI({
 
-        selectInput(inputId = 'x_sample_input',label = h4('Select the sample to plot in the x_axis:'),
+        selectInput(inputId = 'x_sample_input',
+                    label = h4('Select the sample to plot in the x_axis:'),
 
                     choices = unlist(dep()$ID),selected = unlist(dep()$ID)[1])
     })
@@ -489,7 +502,8 @@ function(input, output) {
 
     output$y_sample_selector <- renderUI({
 
-        selectInput(inputId = 'y_sample_input',label = h4('Select the sample to plot in the y_axis:'),
+        selectInput(inputId = 'y_sample_input',
+                    label = h4('Select the sample to plot in the y_axis:'),
 
                     choices = unlist(dep()$ID),selected = unlist(dep()$ID)[2])
     })
@@ -637,7 +651,9 @@ function(input, output) {
 
 
 
-       p <- ggplot(df, aes(x = Count, y = reorder(Description, Count), fill = Description))+
+       p <- ggplot(df, aes(x = Count,
+                           y = reorder(Description, Count),
+                           fill = Description))+
            geom_bar(stat = 'identity')+
            theme_bw()+
            ylab('Description')+
