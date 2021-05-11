@@ -559,6 +559,11 @@ function(input, output) {
 
     geneList <- reactive({
 
+        # organisms <- org.Mm.eg.db - Mouse
+        #               org.Hs.eg.db - Human
+        #            org.Hs.eg.db - Rat
+        # yeast = org.Sc.sgd.db - not working
+
         geneList <- MQanalyser::create_geneList(data_results = data_results(),
                                                 comparison_samples = input$comparison_enrch,
                                                 organism = input$enrich_organism) # adapt it to more organisms.
@@ -587,7 +592,7 @@ function(input, output) {
 
         de <- names(geneList())
 
-        # de <- names(geneList)[abs(geneList) > log2(3.5)]
+        # diffExpress <- names(geneList)[abs(geneList) > log2(3.5)]
     })
 
 
@@ -625,9 +630,9 @@ function(input, output) {
            select(contains(c('Description', 'count')))
 
 
-       # df <-  clusterProfiler::groupGO(gene = de,
+       # df <-  clusterProfiler::groupGO(gene = diffExpress,
        #                                 keyType = 'ENTREZID',
-       #                                 OrgDb = org.Hs.eg.db,
+       #                                 OrgDb = org.Mm.eg.db,
        #                                 ont = 'CC',
        #                                 level = 10) %>%
        #     as.data.frame() %>%
