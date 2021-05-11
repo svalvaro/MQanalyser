@@ -245,7 +245,9 @@ function(input, output) {
 
         # dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
 
-        dep <- DEP::add_rejections(data_diff_all_contrasts, alpha = input$input_pvalue, lfc = log2(input$input_fc))
+        dep <- DEP::add_rejections(data_diff_all_contrasts,
+                                   alpha = input$input_pvalue,
+                                   lfc = log2(input$input_fc))
 
 
     })

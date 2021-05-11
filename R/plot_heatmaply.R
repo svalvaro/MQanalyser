@@ -35,22 +35,24 @@ plot_heatmaply <- function(dep,
     df <- assay(filtered) - rowData(filtered, use.names = FALSE)$mean
 
 
-    heatmaply(as.matrix(df),
+    p <- heatmaply(as.matrix(df),
               colors =  rev(RColorBrewer::brewer.pal(11, "RdBu")),
-              col_side_colors = Groupings, #Maybe its possible to add a title?
+              col_side_colors = Groupings,
               label_names = c('Gene', 'ID', 'Log2 FC'),
               key.title = 'Log 2 \nFold Change',
               k_row = k_row,
               k_col = k_col,
               dendrogram = dendogram,
-              plot_method = 'plotly')+
+              plot_method = 'plotly')#+
 
-       annotate('rect',
-                xmin = 0,
-                xmax = 20,
-                ymin = 200,
-                ymax = 250,
-                alpha=0.3)
+       # annotate('rect',
+       #          xmin = 0,
+       #          xmax = 20,
+       #          ymin = 200,
+       #          ymax = 250,
+       #          alpha=0.3)
+
+    p
 
 
 }
