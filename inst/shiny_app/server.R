@@ -632,7 +632,7 @@ function(input, output) {
 
        # df <-  clusterProfiler::groupGO(gene = diffExpress,
        #                                 keyType = 'ENTREZID',
-       #                                 OrgDb = org.Mm.eg.db,
+       #                                 OrgDb = org.Hs.eg.db,
        #                                 ont = 'CC',
        #                                 level = 10) %>%
        #     as.data.frame() %>%
@@ -656,14 +656,17 @@ function(input, output) {
 
 
 
+       mycolors <- grDevices::colorRampPalette(brewer.pal(8, "Set2"))(nrow(df))
+
        p <- ggplot(df, aes(x = Count,
                            y = reorder(Description, Count),
                            fill = Description))+
-           geom_bar(stat = 'identity')+
-           theme_bw()+
-           ylab('Description')+
-           ggtitle(title)+
-           theme(legend.position = 'none')
+            geom_bar(stat = 'identity')+
+            theme_bw()+
+            ylab('Description')+
+            ggtitle(title)+
+            theme(legend.position = 'none')+
+            scale_fill_manual(values = mycolors)
 
 
 
@@ -676,34 +679,23 @@ function(input, output) {
 
     # Enrichment for gsea
     edo2 <- reactive({
+        # edo2 <- DOSE::gseDO(geneList)
         edo2 <- DOSE::gseDO(geneList())
         return(edo2)
     })
 
 
-    # Enrichment plot
-
-     output$enr_gseaplot <- renderPlot(height = 500,{
-
-        gseaplot2(edo2(), geneSetID = 1)
-    })
-
-
     output$enr_gseaplot <- renderPlot(height = 800, {
-        # clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
-
-        # by = c('runningScore', 'preranked')
 
         if(input$runscore == 'all'){
-            gseaplot2(edo2(), geneSetID = 1)
+            enrichplot::gseaplot2(edo2(), geneSetID = 1)
         } else{
-           clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
+           enrichplot::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
         }
-
-
-
     })
 
+
+    # DISEASE TAB
 
     # Disease dotplot
     output$enr_dotplot <- renderPlot(height = 1000,{
