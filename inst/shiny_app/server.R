@@ -667,7 +667,9 @@ function(input, output) {
 
 
 
-       ggplotly(p)
+       ggplotly(p)%>%
+
+            layout(height = 800, width = 1200)
     })
 
 
