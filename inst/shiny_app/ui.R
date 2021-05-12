@@ -553,12 +553,6 @@ navbarPage(h3("Proteomics results"),
 
                     verbatimTextOutput('diffExpress_number'),
 
-
-
-
-
-
-
                     hr(),
 
                 ),
@@ -629,6 +623,7 @@ navbarPage(h3("Proteomics results"),
                                         # print('Dot plot is similar to bar
                                         #        plot with the capability to encode another score as dot size.'),
                                         hr(),
+
                                         shinycssloaders::withSpinner(plotOutput('enr_dotplot'))
                                ),
 

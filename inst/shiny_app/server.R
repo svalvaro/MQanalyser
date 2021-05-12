@@ -677,12 +677,7 @@ function(input, output) {
 
 
 
-    # Enrichment for gsea
-    edo2 <- reactive({
-        # edo2 <- DOSE::gseDO(geneList)
-        edo2 <- DOSE::gseDO(geneList())
-        return(edo2)
-    })
+
 
 
     output$enr_gseaplot <- renderPlot(height = 800, {
@@ -704,6 +699,14 @@ function(input, output) {
 
     })
 
+
+    # Enrichment for gsea
+    edo2 <- reactive({
+        # edo2 <- DOSE::gseDO(geneList)
+        edo2 <- DOSE::gseDO(geneList())
+        return(edo2)
+    })
+
     # Disease GSEA
 
     output$enr_gseadotplot <- renderPlot(height = 1000,{
@@ -718,7 +721,7 @@ function(input, output) {
 
         ggplotly(heatplot(edox() ,foldChange=geneList())) %>%
 
-            layout(height = 800, width = 1200)
+            layout(height = 800, width = 1400)
     })
 
 
