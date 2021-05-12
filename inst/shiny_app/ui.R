@@ -746,44 +746,33 @@ navbarPage(h3("Proteomics results"),
   tabPanel(title = h4('Pathway Analysis'),
            sidebarLayout(
                sidebarPanel(
-                 #uiOutput("pathway_selector")
+                  uiOutput("pathway_selector"),
+
+                 actionBttn(inputId = 'GoToPathway',
+                            label = 'Go to KEGG website',
+                            icon = NULL,
+                            style = "unite",
+                            color = "default",
+                            size = "md",
+                            block = FALSE,
+                            no_outline = TRUE
+                            ),
+
+
+
+                 plotOutput('enr_kegg2')
                  ),
 
                mainPanel(
                    box(height = 2500, width = 2000,
-                       tabsetPanel(type = 'tabs',
-                                    #KEGG
-                                    tabPanel('KEGG Pathway 1',
-                                             hr(),
-                                             shinycssloaders::withSpinner(plotOutput('enr_kegg1'))
-                                    ),
-                                    tabPanel('Pathway WebBrowser',
-                                             hr(),
-                                             print('Select in the adjustments the pathway that you would
-                                                    like to visualize and it will automatically open in a web
-                                                    browser'),
-
-                                             uiOutput("pathway_selector"),
-
-                                             actionBttn(inputId = 'GoToPathway',
-                                                        label = 'Go to KEGG website',
-                                                        icon = NULL,
-                                                        style = "unite",
-                                                        color = "default",
-                                                        size = "md",
-                                                        block = FALSE,
-                                                        no_outline = TRUE
-                                                        ),
-
-
-
-                                             shinycssloaders::withSpinner(plotOutput('enr_kegg2'))
-                                             )
-                                   )
+                        h4('KEGG Pathway'),
+                        hr(),
+                        shinycssloaders::withSpinner(plotOutput('enr_kegg1'))
                        )
                    )
-               )
-           ),
+           )
+  ),
+
 
 
     tags$style(type="text/css",

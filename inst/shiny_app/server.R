@@ -884,15 +884,16 @@ function(input, output) {
 
     observeEvent(input$GoToPathway, {
 
+        clusterProfiler::browseKEGG(kegg_react1(),input$pathselec)
 
-        if(is.null(input$GoToPathway)){
-            return(NULL)
-        }else{
-            output$enr_kegg2 <- renderPlot(height = 1, width = 1,{
-                browseKEGG(kegg_react1(),input$pathselec)
-                }
-                )
-        }
+        # if(is.null(input$GoToPathway)){
+        #     return(NULL)
+        # }else{
+        #     output$enr_kegg2 <- renderPlot(height = 1, width = 1,{
+        #
+        #         }
+        #         )
+        # }
 
 
     })
