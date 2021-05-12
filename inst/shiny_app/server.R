@@ -669,7 +669,7 @@ function(input, output) {
 
        ggplotly(p)%>%
 
-            layout(height = 800, width = 1200)
+            layout(height = 1000, width = 1200)
     })
 
 
@@ -882,14 +882,24 @@ function(input, output) {
 
 
 
+    observeEvent(input$GoToPathway, {
 
 
-    output$enr_kegg2 <- renderPlot(height = 1, width = 1,{
+        if(is.null(input$GoToPathway)){
+            return(NULL)
+        }else{
+            output$enr_kegg2 <- renderPlot(height = 1, width = 1,{
+                browseKEGG(kegg_react1(),input$pathselec)
+                }
+                )
+        }
 
-
-        browseKEGG(kegg_react1(),input$pathselec)
 
     })
+
+
+
+
 
 
 

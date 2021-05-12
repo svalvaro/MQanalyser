@@ -531,12 +531,7 @@ navbarPage(h3("Proteomics results"),
                                 selected = 'org.Hs.eg.db'),
 
 
-                    selectInput(inputId = 'go_ontology',
-                                label = 'Select the GO term',
-                                choices = c('Cellular Component' = 'CC',
-                                            'Biological Function'= 'BP',
-                                            'Molecular Function'= 'MF'),
-                                selected = 'CC'),
+
 
                     sliderInput(inputId = 'go_level',
                                 h4('Degree of specificity, or GO level. The higher the more specific:'),
@@ -592,18 +587,25 @@ navbarPage(h3("Proteomics results"),
                         tabsetPanel(type = 'tabs',
 
                                     tabPanel('Gene Ontology',
+                                             br(),
+                                             selectInput(inputId = 'go_ontology',
+                                                label = 'Select the GO term',
+                                                choices = c('Cellular Component' = 'CC',
+                                                            'Biological Function'= 'BP',
+                                                            'Molecular Function'= 'MF'),
+                                                selected = 'CC'),
                                              hr(),
                                              shinycssloaders::withSpinner(plotlyOutput('go_classification_plot'))
                                     ),
 
 
-                                    tabPanel('GSEA 2',
+                                    tabPanel('GSEA Enrichment',
                                              hr(),
                                              shinycssloaders::withSpinner(plotOutput('enr_gsea2'))
                                     ),
 
 
-                                    tabPanel('GSEA 1',
+                                    tabPanel('GSEA Enrichment Simplified',
                                              hr(),
                                              #Input for type of preranked score
 
@@ -744,7 +746,7 @@ navbarPage(h3("Proteomics results"),
   tabPanel(title = h4('Pathway Analysis'),
            sidebarLayout(
                sidebarPanel(
-                 uiOutput("pathway_selector")
+                 #uiOutput("pathway_selector")
                  ),
 
                mainPanel(
@@ -760,6 +762,21 @@ navbarPage(h3("Proteomics results"),
                                              print('Select in the adjustments the pathway that you would
                                                     like to visualize and it will automatically open in a web
                                                     browser'),
+
+                                             uiOutput("pathway_selector"),
+
+                                             actionBttn(inputId = 'GoToPathway',
+                                                        label = 'Go to KEGG website',
+                                                        icon = NULL,
+                                                        style = "unite",
+                                                        color = "default",
+                                                        size = "md",
+                                                        block = FALSE,
+                                                        no_outline = TRUE
+                                                        ),
+
+
+
                                              shinycssloaders::withSpinner(plotOutput('enr_kegg2'))
                                              )
                                    )
