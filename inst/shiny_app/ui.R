@@ -105,6 +105,7 @@ navbarPage(h3("Proteomics results"),
                                    )
                                ),
 
+
                         column(3,box(img(src="Proteomika_logo_hires.png",
                                          height = '100%',
                                          width = '100%',
@@ -603,7 +604,6 @@ navbarPage(h3("Proteomics results"),
   tabPanel(title = h4('Disease Analysis'),
            sidebarLayout(
              sidebarPanel(
-
                selectInput(inputId = 'disease_organism',
                            label = 'Select the species',
                            choices = c('Human' = 'org.Hs.eg.db',
@@ -666,9 +666,6 @@ navbarPage(h3("Proteomics results"),
                )
              )
            ),
-
-
-
 
 
   tabPanel(title = h4('Gene Network'),

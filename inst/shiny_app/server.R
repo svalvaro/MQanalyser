@@ -621,6 +621,8 @@ function(input, output) {
 
     output$go_classification_plot <- renderPlotly({
 
+
+
        df <-  clusterProfiler::groupGO(gene = diffExpress(),
                                  keyType = 'ENTREZID',
                                  OrgDb = input$enrich_organism,
@@ -692,8 +694,15 @@ function(input, output) {
 
     # DISEASE TAB
 
+
     # Disease Enrichment
     output$enr_dotplot <- renderPlot(height = 1000,{
+
+        validate(
+            need(c(edo(), geneList(), diffExpress()), "Sorry, there is no data for you requested combination.
+                      Please change your input selections"
+            )
+        )
 
         enrichplot::dotplot(edo(),showCategory = 25)
 
@@ -711,7 +720,13 @@ function(input, output) {
 
     output$enr_gseadotplot <- renderPlot(height = 1000,{
 
-        dotplot(edo2(), showCategory=20) + ggtitle("dotplot for GSEA")
+        if(nrow(edo()) <1){
+            print('Cant print')
+        }else{
+            dotplot(edo2(), showCategory=20) + ggtitle("dotplot for GSEA")
+        }
+
+
 
     })
 
