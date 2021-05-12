@@ -681,6 +681,30 @@ function(input, output) {
     })
 
 
+    # Enrichment plot
+
+     output$enr_gseaplot <- renderPlot(height = 500,{
+
+        gseaplot2(edo2(), geneSetID = 1)
+    })
+
+
+    output$enr_gseaplot <- renderPlot(height = 800, {
+        # clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
+
+        # by = c('runningScore', 'preranked')
+
+        if(input$runscore == 'all'){
+            gseaplot2(edo2(), geneSetID = 1)
+        } else{
+           clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
+        }
+
+
+
+    })
+
+
     # Disease dotplot
     output$enr_dotplot <- renderPlot(height = 1000,{
 
@@ -694,6 +718,9 @@ function(input, output) {
         dotplot(edo2(), showCategory=20) + ggtitle("dotplot for GSEA")
 
     })
+
+
+
 
     # Disease plot of enriched terms
 
@@ -729,22 +756,12 @@ function(input, output) {
         return(p1)
 
     })
-    output$enr_gseaplot <- renderPlot(height = 500, {
-        # clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
 
-        # by = c('runningScore', 'preranked')
-
-        clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
-
-    })
 
     #Gsea plot 2
 
 
-    output$enr_gsea2 <- renderPlot(height = 500,{
 
-        gseaplot2(edo2(), geneSetID = 1)
-    })
 
 
 

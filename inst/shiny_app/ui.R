@@ -561,26 +561,6 @@ navbarPage(h3("Proteomics results"),
 
                     hr(),
 
-                    # #Input for choices gene network
-                    # selectInput(inputId = 'gene_choices',
-                    #             label = h4('Select choices for gene network:'),
-                    #             choices = c('category','gene','all','none'),
-                    #             selected = 'all'),
-
-                    # INput for enrichment map
-                    # sliderInput(inputId = 'enrich_nodes',
-                    #             h4('Select the scale of the nodes for Enrichment Map'),
-                    #             min = 0,
-                    #             max = 4,
-                    #             value = 1.5,
-                    #             step = 0.5),
-
-
-                    #Input for pathway to check
-
-
-
-
                 ),
                 mainPanel(
                     box(height = 2500, width = 2000,
@@ -599,20 +579,22 @@ navbarPage(h3("Proteomics results"),
                                     ),
 
 
+                                    # tabPanel('GSEA Enrichment',
+                                    #          hr(),
+                                    #          shinycssloaders::withSpinner(plotOutput('enr_gsea2'))
+                                    # ),
+
+
                                     tabPanel('GSEA Enrichment',
-                                             hr(),
-                                             shinycssloaders::withSpinner(plotOutput('enr_gsea2'))
-                                    ),
-
-
-                                    tabPanel('GSEA Enrichment Simplified',
                                              hr(),
                                              #Input for type of preranked score
 
                                              selectInput(inputId = 'runscore',
                                                          label=h4('For the Running Score, select the choice:'),
-                                                         choices = c('runningScore','preranked'),
-                                                         selected = 'runningScore'),
+                                                         choices = c('Running Score + Ranked List' = 'all',
+                                                                     'Only Running Enrhichment Score' ='runningScore',
+                                                                     'Only Ranked List' = 'preranked'),
+                                                         selected = 'all'),
                                              br(),
 
                                              shinycssloaders::withSpinner(plotOutput('enr_gseaplot'))
