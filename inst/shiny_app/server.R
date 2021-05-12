@@ -697,62 +697,47 @@ function(input, output) {
 
     # DISEASE TAB
 
-    # Disease dotplot
+    # Disease Enrichment
     output$enr_dotplot <- renderPlot(height = 1000,{
 
         enrichplot::dotplot(edo(),showCategory = 25)
 
     })
 
-    # Enrich
+    # Disease GSEA
+
     output$enr_gseadotplot <- renderPlot(height = 1000,{
 
         dotplot(edo2(), showCategory=20) + ggtitle("dotplot for GSEA")
 
     })
 
-
-
-
     # Disease plot of enriched terms
 
     output$heatmapnrich <- renderPlotly({
 
-        ggplotly(heatplot(edox() ,foldChange=geneList()))
+        ggplotly(heatplot(edox() ,foldChange=geneList())) %>%
+
+            layout(height = 800, width = 1200)
     })
-
-
-    output$upset <- renderPlot(height = 1000,{
-
-        enrichplot::upsetplot(edo())
-
-    })
-
 
 
 
     #Output overlapping distributions
-    output$enr_ridgeplot <- renderPlot(height = 600, width = 800,{
+    output$enr_ridgeplot <- renderPlot(height = 800, width =1200,{
 
 
         ridgeplot(edo2())
     })
 
-    #Running score and preranked list of GSEA result
-    running_reactive <- reactive({
 
+    # Disease Association
 
-        # clusterProfiler::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
-        clusterProfiler::gseaplot(edo2(), geneSetID = 1)
+    output$upset <- renderPlot(height = 800, width = 1200,{
 
-        return(p1)
+        enrichplot::upsetplot(edo())
 
     })
-
-
-    #Gsea plot 2
-
-
 
 
 
@@ -804,10 +789,17 @@ function(input, output) {
         return(edox)
     })
 
+    # Circus PLot
+
+    output$enr_circusplot <- renderPlot(height = 1000,{
+
+        cnetplot(edox(),  circular = TRUE, colorEdge = TRUE)
+
+    })
 
     #Gene Network
 
-    output$enr_networkplot <- renderPlot(height = 900, {
+    output$enr_networkplot <- renderPlot(height = 900, width = 800, {
 
         cnetplot(edox(), node_label = "all")
     })
@@ -816,20 +808,12 @@ function(input, output) {
     #Enrichment Map
 
 
-    output$enr_mapplot <- renderPlot(height = 1000, {
+    output$enr_mapplot <- renderPlot(height = 1000, width = 900, {
 
         enrichplot::emapplot(pairwise_termsim(edo())#, node_scale=input$enrich_nodes
                              ,layout="kk")
     })
 
-
-    # Circus PLot
-
-    output$enr_circusplot <- renderPlot(height = 1000,{
-
-        cnetplot(edox(),  circular = TRUE, colorEdge = TRUE)
-
-    })
 
 
 
@@ -849,7 +833,7 @@ function(input, output) {
         return(kk)
     })
 
-    output$enr_kegg1 <- renderPlot({
+    output$enr_kegg1 <- renderPlot(height = 900,{
 
 
         print(kegg_react1())
@@ -858,17 +842,11 @@ function(input, output) {
 
 
 
-
-
-    pathways_des <- reactive({
-        pathways_vec <- kegg_react1()$Description
-        return(pathways_vec)
-    })
-
     pathways_id <- reactive({
+
         patwaisID_vec <- kegg_react1()$ID
 
-        names(patwaisID_vec) <- pathways_des()
+        names(patwaisID_vec) <- kegg_react1()$Description
 
         return(patwaisID_vec)
 
@@ -891,19 +869,10 @@ function(input, output) {
 
 
 
+    # If pressed the button, it will open a new tab.
     observeEvent(input$GoToPathway, {
 
         clusterProfiler::browseKEGG(kegg_react1(),input$pathselec)
-
-        # if(is.null(input$GoToPathway)){
-        #     return(NULL)
-        # }else{
-        #     output$enr_kegg2 <- renderPlot(height = 1, width = 1,{
-        #
-        #         }
-        #         )
-        # }
-
 
     })
 
