@@ -608,13 +608,7 @@ function(input, output) {
     })
 
 
-    edo <- reactive({
 
-        edo <- DOSE::enrichDGN(diffExpress())
-
-        # edo <- DOSE::enrichDGN(diffExpress)
-
-    })
 
 
     # GO terms plots
@@ -694,15 +688,50 @@ function(input, output) {
 
     # DISEASE TAB
 
+    output$comparisons_diseases  <- renderUI({
+        selectInput(inputId = 'comparison_disease',
+                    label = h4('Select the comparison:'),
+                    choices = unlist(comparisons()),
+                    selected = comparisons()[1])
+    })
+
+
+
+    geneList_disease <- reactive({
+
+
+        geneList <- MQanalyser::create_geneList(data_results = data_results(),
+                                                comparison_samples = input$comparison_disease,
+                                                organism = input$disease_organism) # adapt it to more organisms.
+
+        # geneList <- MQanalyser::create_geneList(data_results = data_results,
+        #                             comparison_samples = 'Benign_vs_Malignant',
+        #                             organism = 'org.Hs.eg.db')
+
+
+        # apply log2fc cut off:
+
+        geneList <- geneList[abs(geneList) > log2(input$fc_disease)]
+
+    })
+
+
+    edo <- reactive({
+        diffExpress <- names(geneList_disease())
+
+
+
+
+        edo <- DOSE::enrichDGN(diffExpress)
+
+        # edo <- DOSE::enrichDGN(diffExpress)
+
+    })
+
+
 
     # Disease Enrichment
     output$enr_dotplot <- renderPlot(height = 1000,{
-
-        validate(
-            need(c(edo(), geneList(), diffExpress()), "Sorry, there is no data for you requested combination.
-                      Please change your input selections"
-            )
-        )
 
         enrichplot::dotplot(edo(),showCategory = 25)
 
@@ -712,8 +741,15 @@ function(input, output) {
     # Enrichment for gsea
     edo2 <- reactive({
         # edo2 <- DOSE::gseDO(geneList)
-        edo2 <- DOSE::gseDO(geneList())
+        edo2 <- DOSE::gseDO(geneList_disease ())
         return(edo2)
+    })
+
+    edox <- reactive({
+        edox <- clusterProfiler::setReadable(edo(), input$disease_organism, 'ENTREZID')
+
+
+        return(edox)
     })
 
     # Disease GSEA
@@ -777,35 +813,7 @@ function(input, output) {
 
 
 
-    edox <- reactive({
-        edox <- clusterProfiler::setReadable(edo(), input$organism_input, 'ENTREZID')
 
-         # edox <- clusterProfiler::setReadable(edo, org.Hs.eg.db, 'ENTREZID')
-         #
-         # edox <- clusterProfiler::setReadable(edo, org.Sc.sgd.db, 'ENTREZID')
-         #
-         # edox <- clusterProfiler::setReadable(edo, org.Rn.eg.db, 'ENTREZID')
-
-        # edox <- clusterProfiler::setReadable(edo, org.Mm.eg.db, 'ENTREZID')
-         #
-         # DOSE::setReadable(edo, org.Rn.eg.db, 'ENTREZID')
-
-
-        # TO DO: other species
-
-        # cellular component, biological function,
-        # ggo <- groupGO(gene     = names(geneList),
-        # OrgDb    = org.Mm.eg.db,
-        # ont      = "CC",
-        # level    = 3,
-        # readable = TRUE)
-        # #
-
-
-
-
-        return(edox)
-    })
 
     # Circus PLot
 

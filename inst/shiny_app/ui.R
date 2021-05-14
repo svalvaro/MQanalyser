@@ -221,7 +221,7 @@ navbarPage(h3("Proteomics results"),
                 )
             ),
 
-    #Multi Scatter PLot
+    # Correlation PLot
     tabPanel(h4('Correlation'),
             fluidRow(column(width = 12,
                             align = 'center',
@@ -288,6 +288,8 @@ navbarPage(h3("Proteomics results"),
                             enter = animations$fading_entrances$fadeInLeftBig,
                             exit = animations$fading_exits$fadeOutRightBig)
                         ),
+
+                    br(),
 
                     # Download button for the plot
                     downloadButton(outputId = 'downloadscatter',
@@ -604,13 +606,24 @@ navbarPage(h3("Proteomics results"),
   tabPanel(title = h4('Disease Analysis'),
            sidebarLayout(
              sidebarPanel(
+               uiOutput('comparisons_diseases'),
                selectInput(inputId = 'disease_organism',
                            label = 'Select the species',
                            choices = c('Human' = 'org.Hs.eg.db',
                                        'Mouse'= 'org.Mm.eg.db',
                                        'Rat'= 'org.Rn.eg.db'),
                                        #'Yeast' = 'org.Sc.sgd.db'),
-                           selected = 'org.Hs.eg.db')
+                           selected = 'org.Hs.eg.db'),
+
+               hr(),
+
+               sliderInput(inputId = 'fc_disease',
+                           h4('The Log2 Fold Change can be modified to run
+                                   the enrichment analysis with proteins more significant.'),
+                           min = 1,
+                           max = 20,
+                           value = 1.5,
+                           step = 0.5),
              ),
 
              mainPanel(
@@ -622,8 +635,6 @@ navbarPage(h3("Proteomics results"),
                                         hr(),
                                         # print('Dot plot is similar to bar
                                         #        plot with the capability to encode another score as dot size.'),
-                                        hr(),
-
                                         shinycssloaders::withSpinner(plotOutput('enr_dotplot'))
                                ),
 
