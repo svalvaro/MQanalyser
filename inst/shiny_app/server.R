@@ -686,8 +686,9 @@ function(input, output) {
     })
 
 
-    # DISEASE TAB
+    #### DISEASE TAB
 
+    ## DISEASE DATA
     output$comparisons_diseases  <- renderUI({
         selectInput(inputId = 'comparison_disease',
                     label = h4('Select the comparison:'),
@@ -703,13 +704,6 @@ function(input, output) {
         geneList <- MQanalyser::create_geneList(data_results = data_results(),
                                                 comparison_samples = input$comparison_disease,
                                                 organism = input$disease_organism) # adapt it to more organisms.
-
-        # geneList <- MQanalyser::create_geneList(data_results = data_results,
-        #                             comparison_samples = 'Benign_vs_Malignant',
-        #                             organism = 'org.Hs.eg.db')
-
-
-        # apply log2fc cut off:
 
         geneList <- geneList[abs(geneList) > log2(input$fc_disease)]
 
@@ -746,11 +740,13 @@ function(input, output) {
     })
 
     edox <- reactive({
-        edox <- clusterProfiler::setReadable(edo(), input$disease_organism, 'ENTREZID')
-
-
+        edox <- clusterProfiler::setReadable(edo(),
+                                             input$disease_organism,
+                                             'ENTREZID')
         return(edox)
     })
+
+    ## DISEASE PLOTS
 
     # Disease GSEA
 
@@ -770,7 +766,7 @@ function(input, output) {
 
     output$heatmapnrich <- renderPlotly({
 
-        ggplotly(heatplot(edox() ,foldChange=geneList())) %>%
+        ggplotly(heatplot(edox() ,foldChange=geneList_disease())) %>%
 
             layout(height = 800, width = 1400)
     })
