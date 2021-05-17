@@ -794,13 +794,60 @@ function(input, output) {
 
     #### GENE NETWORK
 
+    ## Data
+
+    ## DISEASE DATA
+    output$comparisons_network  <- renderUI({
+        selectInput(inputId = 'comparison_network',
+                    label = h4('Select the comparison:'),
+                    choices = unlist(comparisons()),
+                    selected = comparisons()[1])
+    })
+
+
+
+    geneList_network <- reactive({
+
+        geneList <- MQanalyser::create_geneList(data_results = data_results(),
+                                                comparison_samples = input$comparison_network,
+                                                organism = input$network_organism) # adapt it to more organisms.
+
+
+
+        geneList <- geneList[abs(geneList) > log2(input$fc_network)]
+    })
+
+
+    diffExpress_network <- reactive({
+
+        de <- names(geneList_network())
+    })
+
+    edo_network <- reactive({
+
+        edo <- DOSE::enrichDGN(diffExpress_network())
+    })
+
+
+    edox_network <- reactive({
+        edox <- clusterProfiler::setReadable(edo_network(),
+                                             input$network_organism,
+                                             'ENTREZID')
+        return(edox)
+    })
+
+    ## Plots gene network
 
     # Biological Comparison
 
     output$bio_comparison <- renderPlot(height = 900, {
         #bp2 <- pairwise_termsim(simplify(bp, cutoff=0.7, by="p.adjust", select_fun=min))
 
-        bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress(),
+        # bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress_network(),
+        #                                             ont="BP",
+        #                                             OrgDb = 'org.Hs.eg.db'))
+
+        bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress_network(),
                                                     ont="BP",
                                                     OrgDb = 'org.Hs.eg.db'))
         enrichplot::emapplot(bp)
@@ -815,7 +862,7 @@ function(input, output) {
 
     output$enr_circusplot <- renderPlot(height = 1000,{
 
-        cnetplot(edox(),  circular = TRUE, colorEdge = TRUE)
+        cnetplot(edox_network(),  circular = TRUE, colorEdge = TRUE)
 
     })
 
@@ -823,7 +870,7 @@ function(input, output) {
 
     output$enr_networkplot <- renderPlot(height = 900, width = 800, {
 
-        cnetplot(edox(), node_label = "all")
+        cnetplot(edox_network(), node_label = "all")
     })
 
 
@@ -832,7 +879,7 @@ function(input, output) {
 
     output$enr_mapplot <- renderPlot(height = 1000, width = 900, {
 
-        enrichplot::emapplot(pairwise_termsim(edo())#, node_scale=input$enrich_nodes
+        enrichplot::emapplot(pairwise_termsim(edo_network())#, node_scale=input$enrich_nodes
                              ,layout="kk")
     })
 

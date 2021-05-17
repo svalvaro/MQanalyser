@@ -526,7 +526,7 @@ navbarPage(h3("Proteomics results"),
                     uiOutput('comparisons_enrichment'),
 
                     selectInput(inputId = 'enrich_organism',
-                                label = 'Select the species',
+                                label = 'Select the species:',
                                 choices = c('Human' = 'org.Hs.eg.db',
                                             'Mouse'= 'org.Mm.eg.db',
                                             'Rat'= 'org.Rn.eg.db'),
@@ -608,7 +608,7 @@ navbarPage(h3("Proteomics results"),
              sidebarPanel(
                uiOutput('comparisons_diseases'),
                selectInput(inputId = 'disease_organism',
-                           label = 'Select the species',
+                           label = 'Select the species:',
                            choices = c('Human' = 'org.Hs.eg.db',
                                        'Mouse'= 'org.Mm.eg.db',
                                        'Rat'= 'org.Rn.eg.db'),
@@ -683,13 +683,25 @@ navbarPage(h3("Proteomics results"),
            sidebarLayout(
                sidebarPanel(
 
-                 selectInput(inputId = 'organism_input',
-                             label = 'Select the species',
+                 uiOutput('comparisons_network'),
+
+                 selectInput(inputId = 'network_organism',
+                             label = 'Select the species:',
                              choices = c('Human' = 'org.Hs.eg.db',
                                          'Mouse'= 'org.Mm.eg.db',
                                          'Rat'= 'org.Rn.eg.db'),
-                                         #'Yeast' = 'org.Sc.sgd.db'),
-                             selected = 'org.Hs.eg.db')
+                             #'Yeast' = 'org.Sc.sgd.db'),
+                             selected = 'org.Hs.eg.db'),
+
+                 hr(),
+
+                 sliderInput(inputId = 'fc_network',
+                             h4('The Log2 Fold Change can be modified to run
+                                   the enrichment analysis with proteins more significant.'),
+                             min = 1,
+                             max = 20,
+                             value = 1.5,
+                             step = 0.5)
                  ),
 
                mainPanel(
