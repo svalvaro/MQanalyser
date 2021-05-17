@@ -608,9 +608,6 @@ function(input, output) {
     })
 
 
-
-
-
     # GO terms plots
 
     output$go_classification_plot <- renderPlotly({
@@ -673,9 +670,6 @@ function(input, output) {
 
 
 
-
-
-
     output$enr_gseaplot <- renderPlot(height = 800, {
 
         if(input$runscore == 'all'){
@@ -722,16 +716,6 @@ function(input, output) {
 
     })
 
-
-
-    # Disease Enrichment
-    output$enr_dotplot <- renderPlot(height = 1000,{
-
-        enrichplot::dotplot(edo(),showCategory = 25)
-
-    })
-
-
     # Enrichment for gsea
     edo2 <- reactive({
         # edo2 <- DOSE::gseDO(geneList)
@@ -746,7 +730,29 @@ function(input, output) {
         return(edox)
     })
 
+
+
+    output$diff_disease_number <- renderText({
+
+        a <- length(names(geneList_disease()))
+
+        print(paste0('There are: ', a, ' proteins that will
+                      be used for the disease analysis.'))
+
+    })
+
+
+
     ## DISEASE PLOTS
+
+    # Disease Enrichment
+    output$enr_dotplot <- renderPlot(height = 1000,{
+
+        enrichplot::dotplot(edo(),showCategory = 25)
+
+    })
+
+
 
     # Disease GSEA
 
@@ -796,7 +802,6 @@ function(input, output) {
 
     ## Data
 
-    ## DISEASE DATA
     output$comparisons_network  <- renderUI({
         selectInput(inputId = 'comparison_network',
                     label = h4('Select the comparison:'),
@@ -835,6 +840,19 @@ function(input, output) {
                                              'ENTREZID')
         return(edox)
     })
+
+
+    output$diff_network_number <- renderText({
+
+        a <- length(diffExpress_network())
+
+        print(paste0('There are: ', a, ' proteins that will
+                      be used for gene network.'))
+
+    })
+
+
+
 
     ## Plots gene network
 

@@ -624,6 +624,7 @@ navbarPage(h3("Proteomics results"),
                            max = 20,
                            value = 1.5,
                            step = 0.5),
+               verbatimTextOutput('diff_disease_number'),
              ),
 
              mainPanel(
@@ -701,7 +702,9 @@ navbarPage(h3("Proteomics results"),
                              min = 1,
                              max = 20,
                              value = 1.5,
-                             step = 0.5)
+                             step = 0.5),
+
+                 verbatimTextOutput('diff_network_number')
                  ),
 
                mainPanel(
