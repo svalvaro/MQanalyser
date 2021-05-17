@@ -57,7 +57,7 @@ function(input, output) {
 
             df <- data.frame(label = experiment_names(),
                              condition = ' ',
-                             replicate = ' ')
+                             replicate = as.numeric(' '))
         } else{
             df <- read.delim(inFile$datapath)
         }
