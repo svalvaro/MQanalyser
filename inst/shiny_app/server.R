@@ -165,10 +165,16 @@ function(input, output) {
 
         inFile <- input$user_genes
 
-        if (is.null(inFile))
+        if (is.null(inFile) & demo$start == FALSE){
             return(NULL)
+        } else if (demo$start == TRUE){
+            df <- read.csv('www/user_genes_examples.txt', col.names = 'Gene')
+        } else{
+            df <- read.csv(inFile$datapath, col.names = 'Gene')
+        }
 
-        df <- read.csv(inFile$datapath, col.names = 'Gene')
+
+
 
         # user_genes <- read.csv("inst/shiny_app/www/user_genes_examples.txt", col.names = 'Gene')
 
