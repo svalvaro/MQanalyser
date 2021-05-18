@@ -2,6 +2,15 @@ function(input, output) {
 
     options(shiny.maxRequestSize=100*1024^2)## Set maximum upload size to 100MB
 
+    demo <- reactiveValues(start = FALSE)
+
+    observeEvent(input$Demo, {
+        req(input$Demo)
+        demo$start <-  TRUE
+
+    })
+
+
 
     # FILE INPUTS
 
@@ -9,10 +18,19 @@ function(input, output) {
 
         inFile <- input$proteinGroups
 
-        if (is.null(inFile))
+        if (is.null(inFile) & demo$start == FALSE){
             return(NULL)
+        }else if(!is.null(inFile)){
+            df <- read.delim(inFile$datapath)
+        } else if(demo$start == TRUE){
+            df <- read.delim('www/proteinGroups_example.txt')
 
-        df <- read.delim(inFile$datapath)
+        }
+
+
+
+
+        #df <- read.delim(inFile$datapath)
 
         # df <- read.delim('/home/alvaro/Downloads/proteinGroups_example(2).txt')
 
@@ -49,16 +67,18 @@ function(input, output) {
 
     experiment_design <- reactive({
 
-        # experiment_design <- read.delim('/home/alvaro/Downloads/experimental_design_example(2).txt')
+
 
         inFile <- input$optional_exp_design
 
-        if (is.null(inFile)){
+        if (is.null(inFile) & demo$start == FALSE){
 
             df <- data.frame(label = experiment_names(),
                              condition = ' ',
                              replicate = as.numeric(' '))
-        } else{
+        } else if(demo$start == TRUE){
+            df <- read.delim('www/experiment_design_example.txt')
+        }else{
             df <- read.delim(inFile$datapath)
         }
 
@@ -79,7 +99,7 @@ function(input, output) {
 
     observeEvent(input$start_input, {
 
-        if (is.null(input$proteinGroups) && is.null(input$optional_exp_design) ) {
+        if (is.null(input$proteinGroups) && is.null(input$optional_exp_design) && demo$start == FALSE) {
             return(NULL)
         } else{
 
@@ -91,7 +111,7 @@ function(input, output) {
 
     observeEvent(input$start_input, {
 
-        if(is.null(input$proteinGroups)){
+        if(is.null(input$proteinGroups) & demo$start == FALSE){
             shinyalert::shinyalert("Analysis not started", "proteinGroups.txt not uploaded",
                                    type="error",
                                    closeOnClickOutside = TRUE,
@@ -121,17 +141,19 @@ function(input, output) {
 
     output$IntensityFound <- renderText({
 
-        columns = grep(paste0(input$IntensityType,'.'), colnames(proteinGroups()))
+        # columns = grep(paste0(input$IntensityType,'.'), colnames(proteinGroups()))
+        #
+        # # columns = grep('LFQ.', colnames(proteinGroups))
+        #
+        # if (length(columns) == 0) {
+        #
+        #     print(paste0(input$IntensityType, ' was not found. \nSelect another type of intensity.'))
+        #
+        # } else{
+        #     print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
+        # }
 
-        # columns = grep('LFQ.', colnames(proteinGroups))
-
-        if (length(columns) == 0) {
-
-            print(paste0(input$IntensityType, ' was not found. \nSelect another type of intensity.'))
-
-        } else{
-            print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
-        }
+        print(ed_final$data)
 
         })
 
@@ -962,6 +984,10 @@ function(input, output) {
         clusterProfiler::browseKEGG(kegg_react1(),input$pathselec)
 
     })
+
+
+
+
 
 
 

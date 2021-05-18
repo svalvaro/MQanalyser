@@ -75,6 +75,18 @@ navbarPage(h3("Proteomics results"),
                     hr(),
                     br(),
 
+
+
+                  actionBttn(inputId = 'Demo',
+                             label = 'Start Demo',
+                             icon = NULL,
+                             style = "unite",
+                             color = "default",
+                             size = "md",
+                             block = FALSE,
+                             no_outline = TRUE
+                  ),
+
                     #Download a file example
                     h4('Exapmles of the file(s) to be uploaded:'),
                     fluidRow(

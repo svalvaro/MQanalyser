@@ -9,7 +9,6 @@ Description: it takes as input the proteinGroups.txt table and applies statistic
     avaible together with a shinyApp.
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
 Imports: 
     dplyr,
     limma,
