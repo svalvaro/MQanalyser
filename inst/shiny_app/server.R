@@ -40,7 +40,7 @@ function(input, output) {
 
         #df <- read.delim(inFile$datapath)
 
-        # df <- read.delim('/home/alvaro/Downloads/proteinGroups_example(2).txt')
+        #df <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/proteinGroups_example.txt')
 
         #Remove reverse and reverse and contaminants and only identified by site
 
@@ -75,7 +75,7 @@ function(input, output) {
 
     experiment_design <- reactive({
 
-
+        #experiment_design <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/experiment_design_example.txt')
 
         inFile <- input$optional_exp_design
 
@@ -149,19 +149,18 @@ function(input, output) {
 
     output$IntensityFound <- renderText({
 
-        # columns = grep(paste0(input$IntensityType,'.'), colnames(proteinGroups()))
-        #
-        # # columns = grep('LFQ.', colnames(proteinGroups))
-        #
-        # if (length(columns) == 0) {
-        #
-        #     print(paste0(input$IntensityType, ' was not found. \nSelect another type of intensity.'))
-        #
-        # } else{
-        #     print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
-        # }
+        columns = grep(paste0(input$IntensityType,'.'), colnames(proteinGroups()))
 
-        print(ed_final$data)
+        # columns = grep('LFQ.', colnames(proteinGroups))
+
+        if (length(columns) == 0) {
+
+            print(paste0(input$IntensityType, ' was not found. \nSelect another type of intensity.'))
+
+        } else{
+            print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
+        }
+
 
         })
 
@@ -281,11 +280,11 @@ function(input, output) {
 
         # data_diff_all_contrasts <- MQanalyser::test_limma(data_imp, type = "all")
 
-         data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(),
+        data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(),
                                                            type = "all")
 
 
-         #data_diff_all_contrasts <- DEP::test_diff(data_imp(), type = "all")
+         #data_diff_all_contrasts <- DEP::test_diff(data_imp(), type = "all", design_formula = formula(~ 0 + condition))
 
         # dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
 
