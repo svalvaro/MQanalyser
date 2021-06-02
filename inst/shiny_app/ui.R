@@ -543,7 +543,7 @@ navbarPage(h3("Proteomics results"),
 
                  ),
 
-               mainPanel(box(height = 800, width = 1300,
+               mainPanel(box(height = 900, width = 1300,
 
                              shinycssloaders::withSpinner(
                                plotOutput('pca_plot'))
@@ -551,13 +551,6 @@ navbarPage(h3("Proteomics results"),
                          )
                )
              ),
-
-
-
-
-
-
-
 
 
 
