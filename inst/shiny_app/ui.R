@@ -532,93 +532,93 @@ navbarPage(h3("Proteomics results"),
 
   # Tab for PCA plot
 
-  tabPanel(h4('PCA'),
-          sidebarLayout(
-            sidebarPanel(
-              h3("Select the adjustments"),
-
-              br(),
-              dropdown(
-                tags$h3("Advanced Parameters"),
-
-
-                colourpicker::colourInput(inputId = "input_col_prof",
-                                          label = h4("Select colour:"),
-                                          value = "#56B4E9",
-                                          palette = "square",
-                                          returnName = TRUE,
-                                          showColour = c("background")
-                ),
-
-                colourpicker::colourInput(inputId = "input_col_sel",
-                                          label = h4("Select colour \nSelected proteins:"),
-                                          value = "red",
-                                          palette = "square",
-                                          returnName = TRUE,
-                                          showColour = c("background")
-                ),
-
-
-                colourpicker::colourInput(inputId = "input_col_prof_de",
-                                          label = h4("Select colour your proteins of interest:"),
-                                          value = "#800080",
-                                          palette = "square",
-                                          returnName = TRUE,
-                                          showColour = c("background")
-                ),
-
-                sliderInput(inputId = 'input_angle_samples',
-                            label = 'Select the angle of the lables',
-                            value = 45,
-                            min = 0, max = 90),
-
-                checkboxInput(inputId = 'prof_centered',
-                              label = h4('Show centered intensities (remove mean):',
-                                         value=FALSE)
-                ),
-
-                options = list(`style` = "btn-info"),
-                style = "unite", icon = icon("gear"),
-                status = "success", width = "300px",
-                animate = animateOptions(
-                  enter = animations$fading_entrances$fadeInLeftBig,
-                  exit = animations$fading_exits$fadeOutRightBig)
-              ),
-
-              br(),
-
-              checkboxInput(inputId = 'prof_genes_de',
-                            label = h4('Show the genes that you have uploaded:',
-                                       value=FALSE)
-              )
-
-            ),
-
-            mainPanel(box(height = 800, width = 1300,
-
-                          shinycssloaders::withSpinner(
-                            plotlyOutput('plot_profile')
-                          )
-            ),
-
-            br(),
-            # Not sure if this checbox is that useful because at the end
-            # the user has to remove the selection of the rows manually.
-            # Ideally, I can find a way that after using the checkbox,
-            # the selected rows are removed. That's would be a good solution.
-
-            checkboxInput(inputId = 'clear_selection',
-                          label =h4('Remove the selected genes from the table. (Press twice)'),
-                          value = FALSE),
-            br(),
-            hr(),
-
-            box(height = 400, width =300,
-                DT::dataTableOutput('plot_profile_table')
-            )
-            )
-          )
-  ),
+  # tabPanel(h4('PCA'),
+  #         sidebarLayout(
+  #           sidebarPanel(
+  #             h3("Select the adjustments"),
+  #
+  #             br(),
+  #             dropdown(
+  #               tags$h3("Advanced Parameters"),
+  #
+  #
+  #               colourpicker::colourInput(inputId = "input_col_prof",
+  #                                         label = h4("Select colour:"),
+  #                                         value = "#56B4E9",
+  #                                         palette = "square",
+  #                                         returnName = TRUE,
+  #                                         showColour = c("background")
+  #               ),
+  #
+  #               colourpicker::colourInput(inputId = "input_col_sel",
+  #                                         label = h4("Select colour \nSelected proteins:"),
+  #                                         value = "red",
+  #                                         palette = "square",
+  #                                         returnName = TRUE,
+  #                                         showColour = c("background")
+  #               ),
+  #
+  #
+  #               colourpicker::colourInput(inputId = "input_col_prof_de",
+  #                                         label = h4("Select colour your proteins of interest:"),
+  #                                         value = "#800080",
+  #                                         palette = "square",
+  #                                         returnName = TRUE,
+  #                                         showColour = c("background")
+  #               ),
+  #
+  #               sliderInput(inputId = 'input_angle_samples',
+  #                           label = 'Select the angle of the lables',
+  #                           value = 45,
+  #                           min = 0, max = 90),
+  #
+  #               checkboxInput(inputId = 'prof_centered',
+  #                             label = h4('Show centered intensities (remove mean):',
+  #                                        value=FALSE)
+  #               ),
+  #
+  #               options = list(`style` = "btn-info"),
+  #               style = "unite", icon = icon("gear"),
+  #               status = "success", width = "300px",
+  #               animate = animateOptions(
+  #                 enter = animations$fading_entrances$fadeInLeftBig,
+  #                 exit = animations$fading_exits$fadeOutRightBig)
+  #             ),
+  #
+  #             br(),
+  #
+  #             checkboxInput(inputId = 'prof_genes_de',
+  #                           label = h4('Show the genes that you have uploaded:',
+  #                                      value=FALSE)
+  #             )
+  #
+  #           ),
+  #
+  #           mainPanel(box(height = 800, width = 1300,
+  #
+  #                         shinycssloaders::withSpinner(
+  #                           plotlyOutput('plot_profile')
+  #                         )
+  #           ),
+  #
+  #           br(),
+  #           # Not sure if this checbox is that useful because at the end
+  #           # the user has to remove the selection of the rows manually.
+  #           # Ideally, I can find a way that after using the checkbox,
+  #           # the selected rows are removed. That's would be a good solution.
+  #
+  #           checkboxInput(inputId = 'clear_selection',
+  #                         label =h4('Remove the selected genes from the table. (Press twice)'),
+  #                         value = FALSE),
+  #           br(),
+  #           hr(),
+  #
+  #           box(height = 400, width =300,
+  #               DT::dataTableOutput('plot_profile_table')
+  #           )
+  #           )
+  #         )
+  # ),
 
 
 
