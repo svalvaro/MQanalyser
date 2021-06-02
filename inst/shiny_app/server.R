@@ -475,11 +475,20 @@ function(input, output) {
 
 
     output$pca_number_proteins  <- renderUI({
+
+        var <- apply(assay(dep()), 1, sd)
+
+        if (length(var)>500) {
+            value = 500
+        }else{
+            value = length(var)
+        }
+
         sliderInput(inputId = 'pca_proteins',
                     label = h4('Select the number of proteins:'),
                     min = 1,
-                    max = 5000,
-                    value = 500,
+                    max = length(var),
+                    value = value,
                     step = 1)
         })
 
