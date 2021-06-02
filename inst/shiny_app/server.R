@@ -377,10 +377,6 @@ function(input, output) {
 
 
 
-
-
-
-
     output$proteomics_results <- DT::renderDataTable({
 
         DT::datatable(data_results())
@@ -475,11 +471,24 @@ function(input, output) {
                 layout(height = 1000, width = 1000)
 
         }
+        )
 
 
+    output$pca_number_proteins  <- renderUI({
+        sliderInput(inputId = 'pca_proteins',
+                    label = h4('Select the number of proteins:'),
+                    min = 1,
+                    max = 5000,
+                    value = 500,
+                    step = 1)
+        })
 
 
-    )
+    output$pca_plot <- renderPlot({
+        MQanalyser::plot_pca_improved(dep = dep(),
+                                      label_name = input$pca_label,
+                                      n = input$pca_proteins)
+    })
 
     # profile
 

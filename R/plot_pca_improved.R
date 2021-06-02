@@ -4,6 +4,8 @@
 #' @param label_name
 #' @param n
 #'
+#'
+#' @importFrom SummarizedExperiment assay
 #' @return
 #' @export
 #'
@@ -15,6 +17,7 @@ plot_pca_improved <- function(dep,
     # Get the variance per protein and take the top n variable proteins
     var <- apply(assay(dep), 1, sd)
     df <- assay(dep)[order(var, decreasing = TRUE)[seq_len(n)],]
+
 
 
 
@@ -51,5 +54,8 @@ plot_pca_improved <- function(dep,
         geom_point(aes(fill = condition), shape = 21, color = 'black', size = 4)+
         geom_text_repel(aes_string(label = label_name))+
         theme(legend.title = element_blank())
+
+
+    return(p)
 
 }
