@@ -35,15 +35,9 @@ function(input, output) {
 
         }
 
-
-
-
-        #df <- read.delim(inFile$datapath)
-
         #df <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/proteinGroups_example.txt')
 
         #Remove reverse and reverse and contaminants and only identified by site
-
 
 
         df <- df[(df$Potential.contaminant == '') & (df$Reverse == '')  & (df$Only.identified.by.site==''),]
@@ -52,11 +46,7 @@ function(input, output) {
 
         # proteinGroups <- df
         # df <- NULL
-
-        #df_separated <- df %>%  separate_rows(c(`Protein IDs`), sep = ';')
-
         return(df)
-
     })
 
     experiment_names <- reactive({
@@ -179,9 +169,6 @@ function(input, output) {
         } else{
             df <- read.csv(inFile$datapath, col.names = 'Gene')
         }
-
-
-
 
         # user_genes <- read.csv("inst/shiny_app/www/user_genes_examples.txt", col.names = 'Gene')
 

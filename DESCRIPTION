@@ -12,7 +12,6 @@ Encoding: UTF-8
 Imports: 
     dplyr,
     limma,
-    MQanalyser,
     plotly,
     purrr,
     rhandsontable,

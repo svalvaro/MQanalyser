@@ -35,7 +35,7 @@ plot_pca_improved <- function(dep,
 
 
     # Make factors of indicate features
-    for(feat in indicate) {
+    for(feat in label_name) {
         pca_df[[feat]] <- as.factor(pca_df[[feat]])
     }
 

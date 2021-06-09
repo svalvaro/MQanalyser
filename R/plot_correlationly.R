@@ -23,9 +23,6 @@ plot_correlationly <- function(dep){
                          key.title = 'Pearson Corr.',
                          label_names = c('row', 'column', 'correlation')
                          )
-
-
-
     return(p)
 
 }
