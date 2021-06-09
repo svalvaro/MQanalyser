@@ -482,6 +482,8 @@ function(input, output) {
 
     output$pca_plot <- renderPlot(height = 800, width = 1200,{
         MQanalyser::plot_pca_improved(dep = dep(),
+                                      PC_x = 1,
+                                      PC_y = 2,
                                       label_name = input$pca_label,
                                       n = input$pca_proteins)
     })

@@ -11,6 +11,8 @@
 #'
 #' @examples
 plot_pca_improved <- function(dep,
+                              PC_x = 1,
+                              PC_y = 2,
                        label_name = NULL, # 'name', 'replicate', 'label'
                        n = 500){
 
@@ -43,8 +45,8 @@ plot_pca_improved <- function(dep,
     # Plot the PCA plot
     p <- ggplot(pca_df, aes(PC1, PC2)) +
         labs(title = paste0("PCA plot - top ", n, " variable proteins"),
-             x = paste0("PC", x, ": ", percent[x], "%"),
-             y = paste0("PC", y, ": ", percent[y], "%")) +
+             x = paste0("PC", PC_x, ": ", percent[PC_x], "%"),
+             y = paste0("PC", PC_y, ": ", percent[PC_y], "%")) +
         #coord_fixed()+
         theme_bw()+
         theme(#panel.border = element_blank(),
