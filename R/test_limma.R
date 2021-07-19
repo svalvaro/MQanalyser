@@ -8,7 +8,7 @@
 #' @param paired
 #'
 #' @import dplyr
-#' @import purr
+#' @import purrr
 #' @import tidyr
 #' @import limma
 #' @import rhandsontable

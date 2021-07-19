@@ -19,3 +19,4 @@ Imports:
     shinycssloaders,
     SummarizedExperiment,
     tidyr
+RoxygenNote: 7.1.1

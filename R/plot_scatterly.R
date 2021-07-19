@@ -1,3 +1,20 @@
+#' Scatter plot
+#'
+#' @param dep
+#' @param x_sample
+#' @param y_sample
+#' @param intensity_type
+#' @param alpha
+#' @param show_lm
+#' @param color
+#' @param show_genes_user
+#' @param user_genes_de
+#' @param color_genes_de
+#'
+#' @return
+#' @export
+#'
+#' @examples
 plot_scatterly <- function(dep = NULL,
                            x_sample = NULL,
                            y_sample = NULL,
