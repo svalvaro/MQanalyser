@@ -26,21 +26,45 @@ function(input, output) {
 
         inFile <- input$proteinGroups
 
+        # If no file is loaded and no pressed demo
         if (is.null(inFile) & demo$start == FALSE){
             return(NULL)
+
+        # If a file is loaded (MaxQuant or spectronaut)
+
         }else if(!is.null(inFile)){
-            df <- read.delim(inFile$datapath)
+
+            if (endsWith(as.character(inFile$datapath),suffix = '.txt')) {
+                #message(paste0(inFile, 'ends with .txt'))
+
+                df <- read.delim(inFile$datapath)
+
+                #Remove reverse and reverse and contaminants and only identified by site
+
+
+                df <- df[(df$Potential.contaminant == '') & (df$Reverse == '')  & (df$Only.identified.by.site==''),]
+
+            } else if (endsWith(as.character(inFile$datapath), suffix = '.csv')){
+
+                #message(paste0(inFile, 'ends with .csv'))
+
+                df <- read_csv(inFile$datapath)
+            }
+
+        # If they press DEMO
         } else if(demo$start == TRUE){
             df <- read.delim('www/proteinGroups_example.txt')
+
+            #Remove reverse and reverse and contaminants and only identified by site
+
+
+            df <- df[(df$Potential.contaminant == '') & (df$Reverse == '')  & (df$Only.identified.by.site==''),]
 
         }
 
         #df <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/proteinGroups_example.txt')
 
-        #Remove reverse and reverse and contaminants and only identified by site
 
-
-        df <- df[(df$Potential.contaminant == '') & (df$Reverse == '')  & (df$Only.identified.by.site==''),]
 
         #Separate the Protein IDs into different rows separated by ;
 
@@ -48,6 +72,30 @@ function(input, output) {
         # df <- NULL
         return(df)
     })
+
+    # Check if data is coming from MaxQuant or
+
+    data_type <- reactive({
+
+        data_type <- MQanalyser::check_software_input(proteinGroups())
+
+    })
+
+
+
+
+    output$data_type_txt <- renderText({
+        if (is.null(proteinGroups())) {
+            print("")
+        }else{
+            print(paste0('Software used: ', data_type()))
+        }
+
+    })
+
+
+
+
 
     experiment_names <- reactive({
 
@@ -895,7 +943,6 @@ function(input, output) {
 
 
 
-
     ## Plots gene network
 
     # Biological Comparison
@@ -913,8 +960,6 @@ function(input, output) {
         enrichplot::emapplot(bp)
 
     })
-
-
 
 
 
@@ -944,10 +989,7 @@ function(input, output) {
     })
 
 
-
-
     #### PATHWAY ANALYSIS
-
 
     #KEGG analysis1
 
@@ -969,8 +1011,6 @@ function(input, output) {
         dotplot(kegg_react1(),showCategory =20)
     })
 
-
-
     pathways_id <- reactive({
 
         patwaisID_vec <- kegg_react1()$ID
@@ -988,7 +1028,6 @@ function(input, output) {
 
     })
 
-
     output$network_selector <- renderUI({
 
         selectInput(inputId = 'netselec',label = h4('Select the pathway to check:'),
@@ -996,24 +1035,10 @@ function(input, output) {
 
     })
 
-
-
     # If pressed the button, it will open a new tab.
     observeEvent(input$GoToPathway, {
 
         clusterProfiler::browseKEGG(kegg_react1(),input$pathselec)
 
     })
-
-
-
-
-
-
-
-
-
-
-
-
 }

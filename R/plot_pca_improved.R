@@ -1,11 +1,11 @@
-#' Title
+#' pca PLOT
 #'
 #' @param dep
+#' @param PC_x
+#' @param PC_y
 #' @param label_name
 #' @param n
 #'
-#'
-#' @importFrom SummarizedExperiment assay
 #' @return
 #' @export
 #'

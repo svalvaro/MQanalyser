@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_pca_improved.R
 \name{plot_pca_improved}
 \alias{plot_pca_improved}
-\title{Title}
+\title{pca PLOT}
 \usage{
 plot_pca_improved(dep, PC_x = 1, PC_y = 2, label_name = NULL, n = 500)
 }
@@ -13,5 +13,5 @@ plot_pca_improved(dep, PC_x = 1, PC_y = 2, label_name = NULL, n = 500)
 
 }
 \description{
-Title
+pca PLOT
 }

@@ -12,6 +12,8 @@ navbarPage(h3("Proteomics results"),
                               multiple = FALSE,
                               accept = 'text'),
 
+                    verbatimTextOutput('data_type_txt'),
+
                     radioButtons(inputId = "IntensityType",
                                   h4("Intensity type to analyze:"),
                                   choices = c("Intensity" = 'Intensity',
@@ -111,6 +113,7 @@ navbarPage(h3("Proteomics results"),
                                    h5('Please Edit the next table by adding the Condition and Replicate.'),
                                    h5('Alternatively an experiment design can be uploaded. Be sure that the Sample names are correct.'),
                                    hr(),
+
                                    #DTOutput('experiment_design')
                                    #DT::dataTableOutput('ed_out'),
                                    rHandsontableOutput('ed_out')
