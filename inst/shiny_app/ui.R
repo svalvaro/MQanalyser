@@ -7,19 +7,23 @@ navbarPage(h3("Proteomics results"),
                 sidebarPanel(
                   shinyalert::useShinyalert(),
 
-                    fileInput(inputId = 'proteinGroups',
-                              label = h4('Upload the proteinGroups.txt file'),
+                    fileInput(inputId = 'proteinInput',
+                              label = h4('Upload the proteinGroups.txt or proteoQuant.csv'),
                               multiple = FALSE,
                               accept = 'text'),
 
                     verbatimTextOutput('data_type_txt'),
 
-                    radioButtons(inputId = "IntensityType",
-                                  h4("Intensity type to analyze:"),
-                                  choices = c("Intensity" = 'Intensity',
-                                              "LFQ" = 'LFQ',
-                                              "iBAQ" = 'iBAQ'),
-                                  selected = 'LFQ'),
+                    # radioButtons(inputId = "IntensityType",
+                    #               h4("Intensity type to analyze:"),
+                    #               choices = c("Raw Intensity" = 'Intensity',
+                    #                           "LFQ" = 'LFQ',
+                    #                           "iBAQ" = 'iBAQ'),
+                    #               selected = 'LFQ'),
+
+                    uiOutput('intensity_selector'),
+
+
 
                     verbatimTextOutput('IntensityFound'),
                     hr(),

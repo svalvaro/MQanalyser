@@ -23,9 +23,9 @@ function(input, output) {
 
     # FILE INPUTS
 
-    proteoInput <- reactive({
+    proteinGroups <- reactive({
 
-        inFile <- input$proteinInput
+        inFile <- input$proteinGroups
 
         # If no file is loaded and no pressed demo
         if (is.null(inFile) & demo$start == FALSE){
@@ -65,7 +65,7 @@ function(input, output) {
 
         }
 
-        # proteinGroups <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/proteinGroups_example.txt')
+        #df <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/proteinGroups_example.txt')
 
 
 
@@ -80,7 +80,7 @@ function(input, output) {
 
     software_used <- reactive({
 
-        software_used <- MQanalyser::check_software_input(proteoInput())
+        software_used <- MQanalyser::check_software_input(proteinGroups())
 
         message(paste0('Software used:', software_used))
 
@@ -88,8 +88,11 @@ function(input, output) {
 
     })
 
+
+
+
     output$data_type_txt <- renderText({
-        if (is.null(proteoInput())) {
+        if (is.null(proteinGroups())) {
             print("")
         }else{
             print(paste0('Software used: ', software_used()))
@@ -97,11 +100,15 @@ function(input, output) {
 
     })
 
+
+
+
+
     experiment_names <- reactive({
 
         if (software_used() == 'MaxQuant') {
 
-            experiment_names <- proteoInput() %>%
+            experiment_names <- proteinGroups() %>%
                 select(contains('Intensity.')) %>%
                 select(-contains('LFQ'))
 
@@ -111,7 +118,7 @@ function(input, output) {
         } else if (software_used() == 'Spectronaut'){
 
             # proteinGroups <- prot_quant
-            experiment_names <- proteoInput() %>%
+            experiment_names <- proteinGroups() %>%
                 select(contains('PG.Quantity'))
             experiment_names <- base::colnames(experiment_names)
 
@@ -161,7 +168,7 @@ function(input, output) {
 
     observeEvent(input$start_input, {
 
-        if (is.null(input$proteinInput) && is.null(input$optional_exp_design) && demo$start == FALSE) {
+        if (is.null(input$proteinGroups) && is.null(input$optional_exp_design) && demo$start == FALSE) {
             return(NULL)
         } else{
 
@@ -173,7 +180,7 @@ function(input, output) {
 
     observeEvent(input$start_input, {
 
-        if(is.null(input$proteinInput) & demo$start == FALSE){
+        if(is.null(input$proteinGroups) & demo$start == FALSE){
             shinyalert::shinyalert("Analysis not started", "proteinGroups.txt not uploaded",
                                    type="error",
                                    closeOnClickOutside = TRUE,
@@ -201,45 +208,9 @@ function(input, output) {
 
 
 
-    # Select the type of intensity depending on the software:
-
-
-    output$intensity_selector  <- renderUI({
-
-
-        if (software_used() == 'MaxQuant') {
-
-            radioButtons(inputId = "IntensityType",
-                         h4("Intensity type to analyze:"),
-                         choices = c("Raw Intensity" = 'Intensity',
-                                     "LFQ" = 'LFQ',
-                                     "iBAQ" = 'iBAQ'),
-                         selected = 'LFQ')
-
-        } else if ( software_used() == 'Spectronaut'){
-
-
-            radioButtons(inputId = "IntensityType",
-                         h4("Intensity type to analyze:"),
-                         choices = c("LFQ" = 'LFQ',
-                                     "iBAQ" = 'iBAQ'),
-                         selected = 'LFQ')
-
-        }
-
-    })
-
-
-
-
-
     output$IntensityFound <- renderText({
 
-        if (is.null(software_used())) {
-            return(NULL)
-        }
-
-        columns = grep(paste0(input$IntensityType,'.'), colnames(proteoInput()))
+        columns = grep(paste0(input$IntensityType,'.'), colnames(proteinGroups()))
 
         # columns = grep('LFQ.', colnames(proteinGroups))
 
@@ -250,6 +221,7 @@ function(input, output) {
         } else{
             print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
         }
+
 
         })
 
@@ -280,31 +252,17 @@ function(input, output) {
 
     data_se <- reactive({
 
-        if (software_used == 'MaxQuant') {
+        columns = grep(paste0(input$IntensityType,'.'), colnames(proteinGroups()))
 
-            columns = grep(paste0(input$IntensityType,'.'), colnames(proteoInput()))
+        # Adds two columns at the end with an unique gene and protein name.
+        data_unique <- DEP::make_unique(proteinGroups(), 'Gene.names', 'Protein.IDs', delim = ';')
 
-            # Adds two columns at the end with an unique gene and protein name.
-            data_unique <- DEP::make_unique(proteoInput(), 'Gene.names', 'Protein.IDs', delim = ';')
+        # data_unique <- DEP::make_unique(proteinGroups, 'Gene.names', 'Protein.IDs', delim = ';')
 
-            # data_unique <- DEP::make_unique(proteinGroups, 'Gene.names', 'Protein.IDs', delim = ';')
-
-            # Creates a SummarizedExperiment,
-            data_se <- DEP::make_se(data_unique, columns = columns, ed_final$data)
-            # data_se <- DEP::make_se(data_unique, columns = columns, experiment_design)
-            #View(as.data.frame(data_se@elementMetadata))
-        } else if (software_used == 'Spectronaut'){
-            # Find the columns with the LFQ or iBAQ intensity
-
-            columns = grep('PG.Quantity', colnames(proteoInput()))
-
-
-            data_unique <- DEP::make_unique(prot_quant, )
-
-
-        }
-
-
+        # Creates a SummarizedExperiment,
+        data_se <- DEP::make_se(data_unique, columns = columns, ed_final$data)
+        # data_se <- DEP::make_se(data_unique, columns = columns, experiment_design)
+        #View(as.data.frame(data_se@elementMetadata))
 
     })
 
