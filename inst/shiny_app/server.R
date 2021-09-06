@@ -49,9 +49,9 @@ function(input, output) {
 
                 #message(paste0(inFile, 'ends with .csv'))
 
-                df <- read_csv(inFile$datapath)
+                df <- read_csv(inFile$datapath, na = 'NaN')
 
-                # prot_quant <- read_csv('./inst/shiny_app/www/PLK__A-SN__Pivot_ProteinQuant_ExampleReport.csv')
+                # proteoInput <- read_csv('./inst/shiny_app/www/Pivot_ProteinQuant_example.csv',na = 'NaN')
             }
 
         # If they press DEMO
@@ -116,6 +116,10 @@ function(input, output) {
             experiment_names <- base::colnames(experiment_names)
 
             experiment_names <- gsub('.raw.PG.Quantity', '', experiment_names)
+
+            experiment_names <- gsub('\\[.*\\] ', '', experiment_names)
+
+            gsub('\\[.*\\] ','',exp_design[,'label'])
         }
 
         message(paste0('The experiment names are:', experiment_names))
@@ -148,7 +152,7 @@ function(input, output) {
     })
 
 
-    ed_final <- reactiveValues()
+
 
     output$ed_out <- renderRHandsontable({
 
@@ -158,6 +162,7 @@ function(input, output) {
 
     })
 
+    ed_final <- reactiveValues()
 
     observeEvent(input$start_input, {
 
@@ -174,7 +179,7 @@ function(input, output) {
     observeEvent(input$start_input, {
 
         if(is.null(input$proteinInput) & demo$start == FALSE){
-            shinyalert::shinyalert("Analysis not started", "proteinGroups.txt not uploaded",
+            shinyalert::shinyalert("Analysis not started", "protein table not uploaded",
                                    type="error",
                                    closeOnClickOutside = TRUE,
                                    closeOnEsc = TRUE,
@@ -280,33 +285,74 @@ function(input, output) {
 
     data_se <- reactive({
 
-        if (software_used == 'MaxQuant') {
 
-            columns = grep(paste0(input$IntensityType,'.'), colnames(proteoInput()))
+
+        df <- proteoInput()
+
+        exp_design <- ed_final$data
+
+        if (software_used() == 'MaxQuant') {
+
+            columns = grep(paste0(input$IntensityType,'.'), colnames(df))
 
             # Adds two columns at the end with an unique gene and protein name.
-            data_unique <- DEP::make_unique(proteoInput(), 'Gene.names', 'Protein.IDs', delim = ';')
+            data_unique <- DEP::make_unique(df, 'Gene.names', 'Protein.IDs', delim = ';')
 
             # data_unique <- DEP::make_unique(proteinGroups, 'Gene.names', 'Protein.IDs', delim = ';')
 
-            # Creates a SummarizedExperiment,
-            data_se <- DEP::make_se(data_unique, columns = columns, ed_final$data)
-            # data_se <- DEP::make_se(data_unique, columns = columns, experiment_design)
-            #View(as.data.frame(data_se@elementMetadata))
-        } else if (software_used == 'Spectronaut'){
+
+
+        } else if (software_used() == 'Spectronaut'){
             # Find the columns with the LFQ or iBAQ intensity
 
-            columns = grep('PG.Quantity', colnames(proteoInput()))
+            columns <-  grep('PG.Quantity', colnames(df))
 
 
-            data_unique <- DEP::make_unique(prot_quant, )
 
+            # Remove [1], [2], [3] from the column names
+
+
+
+
+            # colnames(proteoInput)[columns] <-  gsub(pattern = '\\[.*\\] ','',base::colnames(proteoInput[columns]) )
+
+            colnames(df)[columns] <-  gsub(pattern = '\\[.*\\] ','',base::colnames(df)[columns])
+
+
+
+            # Remove the .raw.PG.Quantity
+
+            # colnames(proteoInput)[columns] <-  gsub(pattern = '.raw.PG.Quantity','',base::colnames(proteoInput[columns]) )
+            colnames(df)[columns] <-  gsub(pattern = '.raw.PG.Quantity','',base::colnames(df)[columns])
+
+
+
+
+            # Make unique
+            data_unique <- DEP::make_unique(df,'PG.Genes', 'PG.ProteinGroups', delim = ';')
+
+
+
+
+            # Remove the brackets [1], [2], from the experiment design if there.
+
+            #exp_design[,'label'] <- gsub('\\[.*\\] ','',exp_design[,'label'])
 
         }
 
 
 
-    })
+
+        # Creates a SummarizedExperiment,
+        data_se <- DEP::make_se(data_unique, columns = columns, expdesign = exp_design)
+
+
+
+        # data_se <- DEP::make_se(data_unique, columns = columns, experiment_design)
+        #View(as.data.frame(data_se@elementMetadata))
+
+
+        })
 
     data_filt <- reactive({
 
@@ -324,7 +370,7 @@ function(input, output) {
             threshold<-trunc(max(ed_final$data$replicate)/2) #If there are 6 or more. NA accepted is half of the max.
         }
 
-        data_filt <- DEP::filter_missval(data_se(),thr = threshold)
+        data_filt <- DEP::filter_missval(data_se(), thr = threshold)
 
         # data_filt <- DEP::filter_missval(data_se,thr = threshold)
 
@@ -402,7 +448,6 @@ function(input, output) {
     })
 
 
-
     # Info box with the number of diff expressed proteins
 
     output$significant_proteins <- renderInfoBox({
@@ -419,10 +464,7 @@ function(input, output) {
     })
 
 
-
     # User genes diff expressed
-
-
 
     user_genes_de <- reactive({
 
