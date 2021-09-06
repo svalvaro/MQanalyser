@@ -12,7 +12,7 @@ navbarPage(h3("Proteomics results"),
                               multiple = FALSE,
                               accept = 'text'),
 
-                    verbatimTextOutput('data_type_txt'),
+                    verbatimTextOutput('sw_used'),
 
                     # radioButtons(inputId = "IntensityType",
                     #               h4("Intensity type to analyze:"),

@@ -1,5 +1,6 @@
 function(input, output) {
 
+    #### Options and DEMO ####
 
     options(shiny.maxRequestSize=100*1024^2)## Set maximum upload size to 100MB
 
@@ -20,8 +21,7 @@ function(input, output) {
     })
 
 
-
-    # FILE INPUTS
+    #### protein Input MaxQuant or Spectronaut ####
 
     proteoInput <- reactive({
 
@@ -40,10 +40,14 @@ function(input, output) {
 
                 df <- read.delim(inFile$datapath)
 
+                # df <- read.delim('./inst/shiny_app/www/proteinGroups_example.txt')
+
                 #Remove reverse and reverse and contaminants and only identified by site
 
 
                 df <- df[(df$Potential.contaminant == '') & (df$Reverse == '')  & (df$Only.identified.by.site==''),]
+
+                # proteoInput <- df
 
             } else if (endsWith(as.character(inFile$datapath), suffix = '.csv')){
 
@@ -76,7 +80,7 @@ function(input, output) {
         return(df)
     })
 
-    # Check if data is coming from MaxQuant or
+    #### Software used ####
 
     software_used <- reactive({
 
@@ -88,7 +92,7 @@ function(input, output) {
 
     })
 
-    output$data_type_txt <- renderText({
+    output$sw_used <- renderText({
         if (is.null(proteoInput())) {
             print("")
         }else{
@@ -97,6 +101,7 @@ function(input, output) {
 
     })
 
+    #### Experiment Design ####
     experiment_names <- reactive({
 
         if (software_used() == 'MaxQuant') {
@@ -119,7 +124,7 @@ function(input, output) {
 
             experiment_names <- gsub('\\[.*\\] ', '', experiment_names)
 
-            gsub('\\[.*\\] ','',exp_design[,'label'])
+            # gsub('\\[.*\\] ','',exp_design[,'label'])
         }
 
         message(paste0('The experiment names are:', experiment_names))
@@ -176,6 +181,9 @@ function(input, output) {
     })
 
 
+    #### Pop-up message when pressed start analysis ####
+
+
     observeEvent(input$start_input, {
 
         if(is.null(input$proteinInput) & demo$start == FALSE){
@@ -206,8 +214,10 @@ function(input, output) {
 
 
 
-    # Select the type of intensity depending on the software:
+    #### Intensity type depending on the proteoInput ####
 
+
+    # Radio buttons will appear in the UI depending on the software used.
 
     output$intensity_selector  <- renderUI({
 
@@ -223,44 +233,69 @@ function(input, output) {
 
         } else if ( software_used() == 'Spectronaut'){
 
-
             radioButtons(inputId = "IntensityType",
                          h4("Intensity type to analyze:"),
-                         choices = c("LFQ" = 'LFQ',
-                                     "iBAQ" = 'iBAQ'),
-                         selected = 'LFQ')
-
+                         choices = c("LFQ" = 'PG.Quantity',
+                                     "iBAQ" = 'PG.IBAQ'),
+                         selected = 'PG.Quantity')
         }
-
     })
 
-
-
-
+    # Check if the type of intensity is found in the proteoInput
 
     output$IntensityFound <- renderText({
 
+
+        intensityToUse <- input$IntensityType
+
         if (is.null(software_used())) {
             return(NULL)
-        }
 
-        columns = grep(paste0(input$IntensityType,'.'), colnames(proteoInput()))
+        # If the software used was MaxQuant
 
-        # columns = grep('LFQ.', colnames(proteinGroups))
+        } else if (software_used() == 'MaxQuant') {
 
-        if (length(columns) == 0) {
+            columns = grep(paste0(input$IntensityType,'.'), colnames(proteoInput()))
 
-            print(paste0(input$IntensityType, ' was not found. \nSelect another type of intensity.'))
+            if (length(columns) == 0) {
 
-        } else{
-            print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
+                print(paste0(input$IntensityType, ' was not found. \nSelect another type of intensity.'))
+
+            } else{
+                print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
+            }
+
+        # For Spectronaut Software
+
+        } else if (software_used() == 'Spectronaut'){
+
+            columns <-  grep(input$IntensityType, colnames(proteoInput()))
+
+            # If selected intensity is found
+            if (length(columns) > 0) {
+                if (input$IntensityType == 'PG.Quantity') {
+
+                    print('LFQ Intensity was  found. \nSelect another type of intensity.')
+                } else{
+                    print('iBAQ Intensity was  found. \nSelect another type of intensity.')
+                }
+
+            # If selected intensity is not found
+            } else{
+                if (input$IntensityType == 'PG.Quantity') {
+                    print('LFQ Intensity was not found. \nSelect another type of intensity.')
+                } else{
+                    print('iBAQ Intensity was not found. \nSelect another type of intensity.')
+                }
+            }
+
         }
 
         })
 
 
 
-    ## User Genes
+    #### User Genes ####
 
     user_genes <- reactive({
 
@@ -281,11 +316,9 @@ function(input, output) {
     })
 
 
-    # DEP ANALYSIS
+    #### DEP ANALYSIS ####
 
     data_se <- reactive({
-
-
 
         df <- proteoInput()
 
@@ -448,6 +481,10 @@ function(input, output) {
     })
 
 
+
+
+    #### RESULTS TABULAR ####
+
     # Info box with the number of diff expressed proteins
 
     output$significant_proteins <- renderInfoBox({
@@ -534,9 +571,7 @@ function(input, output) {
     )
 
 
-    # PLOTS
-
-    # heatmap
+    #### Heatmap plot ####
 
     output$heatmaply <- renderPlotly(MQanalyser::plot_heatmaply(dep(),
                                        intensity_type = input$IntensityType,
@@ -548,7 +583,7 @@ function(input, output) {
         )
 
 
-    # correlation
+    #### Correlation plot ####
     output$plot_correlation <- renderPlotly(
 
         MQanalyser::plot_correlationly(dep()) %>%
@@ -556,7 +591,29 @@ function(input, output) {
 
     )
 
-    # scatterplot
+    #### Scatter plot ####
+
+    # Select the sample to plot in the scatter plot
+
+    output$x_sample_selector <- renderUI({
+
+        selectInput(inputId = 'x_sample_input',
+                    label = h4('Select the sample to plot in the x_axis:'),
+
+                    choices = unlist(dep()$ID),selected = unlist(dep()$ID)[1])
+    })
+
+
+    output$y_sample_selector <- renderUI({
+
+        selectInput(inputId = 'y_sample_input',
+                    label = h4('Select the sample to plot in the y_axis:'),
+
+                    choices = unlist(dep()$ID),selected = unlist(dep()$ID)[2])
+    })
+
+
+
     output$scatterplot <- renderPlotly(
         MQanalyser::plot_scatterly(dep = dep(),
                                    x_sample = input$x_sample_input,
@@ -573,7 +630,28 @@ function(input, output) {
 
 
 
-    # volcano
+    #### Volcano plot ####
+
+    # Comparison to check in the volcano plot
+
+    comparisons <- reactive({
+
+        comparisons <- data_results() %>%
+            select(contains('vs') & contains('significant'))
+
+        comparisons <- gsub(pattern = '_significant',
+                            replacement = '',
+                            colnames(comparisons))
+    })
+
+    output$comparisons_out  <- renderUI({
+        selectInput(inputId = 'comparison_input',
+                    label = h4('Select the comparison:'),
+                    choices = unlist(comparisons()),
+                    selected = comparisons()[1])
+    })
+
+
     output$volcano_plot <- renderPlotly(
 
         if(input$modify_axis == TRUE){
@@ -616,6 +694,8 @@ function(input, output) {
         )
 
 
+    #### PCA pot ####
+
     output$pca_number_proteins  <- renderUI({
 
         var <- apply(assay(dep()), 1, sd)
@@ -643,7 +723,7 @@ function(input, output) {
                                       n = input$pca_proteins)
     })
 
-    # profile
+    #### Profile Plot ####
 
     output$plot_profile <- renderPlotly(
 
@@ -662,51 +742,6 @@ function(input, output) {
 
             layout(height = 800, width = 1200)
     )
-
-    # Comparison to check.
-
-    comparisons <- reactive({
-
-        comparisons <- data_results() %>%
-            select(contains('vs') & contains('significant'))
-
-        comparisons <- gsub(pattern = '_significant',
-                            replacement = '',
-                            colnames(comparisons))
-
-
-    })
-
-
-    output$comparisons_out  <- renderUI({
-        selectInput(inputId = 'comparison_input',
-                    label = h4('Select the comparison:'),
-                    choices = unlist(comparisons()),
-                    selected = comparisons()[1])
-    })
-
-
-    # Select the sample to plot in the scatter plot
-
-    output$x_sample_selector <- renderUI({
-
-        selectInput(inputId = 'x_sample_input',
-                    label = h4('Select the sample to plot in the x_axis:'),
-
-                    choices = unlist(dep()$ID),selected = unlist(dep()$ID)[1])
-    })
-
-
-    output$y_sample_selector <- renderUI({
-
-        selectInput(inputId = 'y_sample_input',
-                    label = h4('Select the sample to plot in the y_axis:'),
-
-                    choices = unlist(dep()$ID),selected = unlist(dep()$ID)[2])
-    })
-
-
-
 
 
     output$plot_profile_table <- DT::renderDataTable({
@@ -740,11 +775,10 @@ function(input, output) {
             )
         }
 
-
     })
 
 
-    #### ENRICHMENT PLOTS
+    #### Enrichment Analysis ####
 
 
     output$comparisons_enrichment  <- renderUI({
@@ -877,7 +911,7 @@ function(input, output) {
     })
 
 
-    #### DISEASE TAB
+    #### Disease Analysis ####
 
     ## DISEASE DATA
     output$comparisons_diseases  <- renderUI({
@@ -995,7 +1029,7 @@ function(input, output) {
 
 
 
-    #### GENE NETWORK
+    #### GENE NETWORK ####
 
     ## Data
 
@@ -1096,7 +1130,7 @@ function(input, output) {
     })
 
 
-    #### PATHWAY ANALYSIS
+    #### PATHWAY ANALYSIS ####
 
     #KEGG analysis1
 
