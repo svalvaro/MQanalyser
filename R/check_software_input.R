@@ -23,8 +23,8 @@ check_software_input <- function(file){
 
         software_used <- 'MaxQuant'
 
-    } else if('R.Condition' %in% base::colnames(file)&&
-              'PG.Quantity' %in% base::colnames(file)) {
+    } else if('PG.ProteinGroups' %in% base::colnames(file)&&
+              'PG.ProteinDescriptions' %in% base::colnames(file)) {
 
         software_used <- 'Spectronaut'
     }

@@ -1,5 +1,6 @@
 function(input, output) {
 
+
     options(shiny.maxRequestSize=100*1024^2)## Set maximum upload size to 100MB
 
     demo <- reactiveValues(start = FALSE)
@@ -49,6 +50,8 @@ function(input, output) {
                 #message(paste0(inFile, 'ends with .csv'))
 
                 df <- read_csv(inFile$datapath)
+
+                # prot_quant <- read_csv('./inst/shiny_app/www/PLK__A-SN__Pivot_ProteinQuant_ExampleReport.csv')
             }
 
         # If they press DEMO
@@ -75,9 +78,13 @@ function(input, output) {
 
     # Check if data is coming from MaxQuant or
 
-    data_type <- reactive({
+    software_used <- reactive({
 
-        data_type <- MQanalyser::check_software_input(proteinGroups())
+        software_used <- MQanalyser::check_software_input(proteinGroups())
+
+        message(paste0('Software used:', software_used))
+
+        return(software_used)
 
     })
 
@@ -88,7 +95,7 @@ function(input, output) {
         if (is.null(proteinGroups())) {
             print("")
         }else{
-            print(paste0('Software used: ', data_type()))
+            print(paste0('Software used: ', software_used()))
         }
 
     })
@@ -99,13 +106,27 @@ function(input, output) {
 
     experiment_names <- reactive({
 
-        experiment_names <- proteinGroups() %>%
-                            select(contains('Intensity.')) %>%
-                            select(-contains('LFQ'))
+        if (software_used() == 'MaxQuant') {
 
-        experiment_names <- colnames(experiment_names)
+            experiment_names <- proteinGroups() %>%
+                select(contains('Intensity.')) %>%
+                select(-contains('LFQ'))
 
-        experiment_names <- gsub('Intensity.', '', experiment_names)
+            experiment_names <- base::colnames(experiment_names)
+            experiment_names <- gsub('Intensity.', '', experiment_names)
+
+        } else if (software_used() == 'Spectronaut'){
+
+            # proteinGroups <- prot_quant
+            experiment_names <- proteinGroups() %>%
+                select(contains('PG.Quantity'))
+            experiment_names <- base::colnames(experiment_names)
+
+            experiment_names <- gsub('.raw.PG.Quantity', '', experiment_names)
+        }
+
+        message(paste0('The experiment names are:', experiment_names))
+
 
         return(experiment_names)
 
