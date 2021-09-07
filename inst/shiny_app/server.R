@@ -291,9 +291,9 @@ function(input, output) {
             if (length(columns) > 0) {
                 if (input$IntensityType == 'PG.Quantity') {
 
-                    print('LFQ Intensity was  found. \nSelect another type of intensity.')
+                    print('LFQ Intensity was  found.  \nContinue with the analysis.')
                 } else{
-                    print('iBAQ Intensity was  found. \nSelect another type of intensity.')
+                    print('iBAQ Intensity was  found.  \nContinue with the analysis.')
                 }
 
             # If selected intensity is not found
