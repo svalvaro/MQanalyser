@@ -63,6 +63,10 @@ navbarPage(h3("Proteomics results"),
                                                 'No imputation' = 'none'),
                                    selected = 'Perseus'),
 
+                        checkboxInput(inputId = 'contaminantsInput',
+                                      label = 'Remove the contaminants',
+                                      value = TRUE),
+
                         options = list(`style` = "btn-info"),
                         style = "unite", icon = icon("gear"),
                         status = "success", width = "300px",
