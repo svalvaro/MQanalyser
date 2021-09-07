@@ -45,7 +45,13 @@ function(input, output) {
                 #Remove reverse and reverse and contaminants and only identified by site
 
 
-                df <- df[(df$Potential.contaminant == '') & (df$Reverse == '')  & (df$Only.identified.by.site==''),]
+                df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
+
+                # Remove the contaminants if checkbox is pressed
+                if (input$contaminantsInput) {
+
+                    df <- df[(df$Potential.contaminant == ''),]
+                }
 
                 # proteoInput <- df
 
@@ -55,7 +61,17 @@ function(input, output) {
 
                 df <- read_csv(inFile$datapath, na = 'NaN')
 
-                # proteoInput <- read_csv('./inst/shiny_app/www/Pivot_ProteinQuant_example.csv',na = 'NaN')
+                # df <- read_csv('./inst/shiny_app/www/Pivot_ProteinQuant_example.csv',na = 'NaN')
+
+                # Remove the contamintants is only if checkbox is pressed.
+
+                # if(input$contaminantsInput){
+                #
+                #     df %>% filter(str_detect(PG.ProteinGroups, "^A0"))
+                #
+                #     View(df[which(grepl('CON_', df$PG.ProteinGroups)),])
+                #
+                # }
             }
 
         # If they press DEMO

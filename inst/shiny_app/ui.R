@@ -1,6 +1,7 @@
 navbarPage(h3("Proteomics results"),
     theme = shinytheme(theme ='flatly'),
 
+#### DATA INPUT ####
 
     tabPanel(h4('Data \nInput'),
             sidebarLayout(
@@ -14,15 +15,7 @@ navbarPage(h3("Proteomics results"),
 
                     verbatimTextOutput('sw_used'),
 
-                    # radioButtons(inputId = "IntensityType",
-                    #               h4("Intensity type to analyze:"),
-                    #               choices = c("Raw Intensity" = 'Intensity',
-                    #                           "LFQ" = 'LFQ',
-                    #                           "iBAQ" = 'iBAQ'),
-                    #               selected = 'LFQ'),
-
                     uiOutput('intensity_selector'),
-
 
 
                     verbatimTextOutput('IntensityFound'),
@@ -64,7 +57,7 @@ navbarPage(h3("Proteomics results"),
                                    selected = 'Perseus'),
 
                         checkboxInput(inputId = 'contaminantsInput',
-                                      label = 'Remove the contaminants',
+                                      label = 'Filter out the contaminants',
                                       value = TRUE),
 
                         options = list(`style` = "btn-info"),
@@ -84,8 +77,6 @@ navbarPage(h3("Proteomics results"),
                               accept= 'text'),
                     hr(),
                     br(),
-
-
 
                   actionBttn(inputId = 'Demo',
                              label = 'Start Demo',
@@ -149,7 +140,8 @@ navbarPage(h3("Proteomics results"),
                 )
             ),
 
-    #First Panel is the heatmap
+
+#### Results Panel ####
     tabPanel(h4("Results"),
       includeCSS("www/info_box.css"),
 
@@ -184,7 +176,8 @@ navbarPage(h3("Proteomics results"),
       ),
 
 
-    #First Panel is the heatmap
+
+#### HeatMap ####
     tabPanel(h4("Heatmap"),
              sidebarLayout(
                sidebarPanel(
@@ -244,7 +237,8 @@ navbarPage(h3("Proteomics results"),
                 )
             ),
 
-    # Correlation PLot
+
+#### Correlation PLot ####
     tabPanel(h4('Correlation'),
             fluidRow(column(width = 12,
                             align = 'center',
@@ -258,7 +252,8 @@ navbarPage(h3("Proteomics results"),
                      )
             ),
 
-    #Second Panel is the ScatterPLot
+
+####  Scatter Plot ####
     tabPanel(h4("Scatter Plot"),
             sidebarLayout(
                 sidebarPanel(
@@ -331,7 +326,8 @@ navbarPage(h3("Proteomics results"),
                 )
             ),
 
-    #Panel for the Volcano Plot
+
+#### Volcano Plot ####
     tabPanel(h4('Volcano Plot'),
             sidebarLayout(
                 sidebarPanel(
@@ -363,14 +359,11 @@ navbarPage(h3("Proteomics results"),
                                       min = 0,
                                       max = 50,
                                       step = 0.5,
-                                      value = c(0,5))
-
+                                      value = c(0,5)
+                                      )
                         ),
-
                         br(),
                         hr(),
-
-
                         sliderInput(inputId = 'volc_alpha',
                                     label = 'Adjust the alpha parameter:',
                                     value = 0.8,
@@ -447,19 +440,15 @@ navbarPage(h3("Proteomics results"),
                 )
             ),
 
-    #Profile
-    #Tab for Profile Plot
 
+#### Profile Plot ####
     tabPanel(h4('Profile Plot'),
             sidebarLayout(
                 sidebarPanel(
                     h3("Select the adjustments"),
-
                     br(),
                     dropdown(
                         tags$h3("Advanced Parameters"),
-
-
                         colourpicker::colourInput(inputId = "input_col_prof",
                                                   label = h4("Select colour:"),
                                                   value = "#56B4E9",
@@ -518,7 +507,6 @@ navbarPage(h3("Proteomics results"),
                                 plotlyOutput('plot_profile')
                                 )
                               ),
-
                           br(),
                           # Not sure if this checbox is that useful because at the end
                           # the user has to remove the selection of the rows manually.
@@ -530,13 +518,15 @@ navbarPage(h3("Proteomics results"),
                                         value = FALSE),
                           br(),
                           hr(),
-
                           box(height = 400, width =300,
                               DT::dataTableOutput('plot_profile_table')
                               )
                           )
                 )
             ),
+
+
+#### PCA Plot ####
 
     tabPanel(h4('PCA'),
              sidebarLayout(
@@ -563,9 +553,7 @@ navbarPage(h3("Proteomics results"),
                )
              ),
 
-
-
-    # Tab for Enrichment analysis
+#### Enrichment analysis ####
 
     tabPanel(h4('Enrichment Analysis'),
             sidebarLayout(
@@ -581,9 +569,6 @@ navbarPage(h3("Proteomics results"),
                                             'Rat'= 'org.Rn.eg.db'),
                                             #'Yeast' = 'org.Sc.sgd.db'),
                                 selected = 'org.Hs.eg.db'),
-
-
-
 
                     sliderInput(inputId = 'go_level',
                                 h4('Degree of specificity, or GO level. The higher the more specific:'),
@@ -602,12 +587,10 @@ navbarPage(h3("Proteomics results"),
                                 value = 1.5,
                                 step = 0.5),
 
-
                     verbatimTextOutput('diffExpress_number'),
-
                     hr(),
+                    ),
 
-                ),
                 mainPanel(
                     box(height = 2500, width = 2000,
                         tabsetPanel(type = 'tabs',
@@ -623,7 +606,6 @@ navbarPage(h3("Proteomics results"),
                                              hr(),
                                              shinycssloaders::withSpinner(plotlyOutput('go_classification_plot'))
                                     ),
-
 
                                     # tabPanel('GSEA Enrichment',
                                     #          hr(),
@@ -652,6 +634,7 @@ navbarPage(h3("Proteomics results"),
             ),
 
 
+#### Disease Analysis Tab ####
   tabPanel(title = h4('Disease Analysis'),
            sidebarLayout(
              sidebarPanel(
@@ -680,7 +663,6 @@ navbarPage(h3("Proteomics results"),
                box(height = 2500, width = 2000,
                    tabsetPanel(type = 'tabs',
 
-
                                tabPanel('Disease Enrichment',
                                         hr(),
                                         # print('Dot plot is similar to bar
@@ -693,8 +675,6 @@ navbarPage(h3("Proteomics results"),
                                         shinycssloaders::withSpinner(plotOutput('enr_gseadotplot'))
                                ),
 
-
-
                                tabPanel('Disease Heatmap',
                                         hr(),
                                         print('The heatmap can simplify the results making it easier to
@@ -702,7 +682,6 @@ navbarPage(h3("Proteomics results"),
                                         hr(),
                                         shinycssloaders::withSpinner(plotlyOutput('heatmapnrich'))
                                ),
-
 
                                tabPanel('Disease density',
                                         hr(),
@@ -722,13 +701,13 @@ navbarPage(h3("Proteomics results"),
                                                                      )
                                         )
                                )
-
                    )
                )
              )
            ),
 
 
+#### Gene Network ####
   tabPanel(title = h4('Gene Network'),
            sidebarLayout(
                sidebarPanel(
@@ -792,6 +771,7 @@ navbarPage(h3("Proteomics results"),
            ),
 
 
+#### Pathway Analysis ####
   tabPanel(title = h4('Pathway Analysis'),
            sidebarLayout(
                sidebarPanel(
@@ -823,8 +803,10 @@ navbarPage(h3("Proteomics results"),
   ),
 
 
+#### style css
 
     tags$style(type="text/css",
               ".shiny-output-error { visibility: hidden; }",
               ".shiny-output-error:before { visibility: hidden; }")
+####
 )
