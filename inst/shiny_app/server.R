@@ -357,32 +357,18 @@ function(input, output) {
 
             columns <-  grep('PG.Quantity', colnames(df))
 
-
-
             # Remove [1], [2], [3] from the column names
-
-
-
-
             # colnames(proteoInput)[columns] <-  gsub(pattern = '\\[.*\\] ','',base::colnames(proteoInput[columns]) )
 
             colnames(df)[columns] <-  gsub(pattern = '\\[.*\\] ','',base::colnames(df)[columns])
-
-
 
             # Remove the .raw.PG.Quantity
 
             # colnames(proteoInput)[columns] <-  gsub(pattern = '.raw.PG.Quantity','',base::colnames(proteoInput[columns]) )
             colnames(df)[columns] <-  gsub(pattern = '.raw.PG.Quantity','',base::colnames(df)[columns])
 
-
-
-
             # Make unique
             data_unique <- DEP::make_unique(df,'PG.Genes', 'PG.ProteinGroups', delim = ';')
-
-
-
 
             # Remove the brackets [1], [2], from the experiment design if there.
 
@@ -390,19 +376,47 @@ function(input, output) {
 
         }
 
-
-
-
         # Creates a SummarizedExperiment,
         data_se <- DEP::make_se(data_unique, columns = columns, expdesign = exp_design)
 
-
-
         # data_se <- DEP::make_se(data_unique, columns = columns, experiment_design)
         #View(as.data.frame(data_se@elementMetadata))
-
-
         })
+
+
+
+    # Selec the NAs allowd
+
+    output$na_threshold  <- renderUI({
+
+
+        # Check number of replicates
+
+        n_replicates <- max(ed_final$data$replicate)
+
+        message(paste0('The number of replicates is: ', n_replicates))
+
+         if(n_replicates < 3){
+             threshold <-0 #If there are two replicates, NA accepted is 0.
+         } else  if(n_replicates == 3){
+             threshold <-1 #If there are three replicates,  NA accepted is 1.
+         } else if(n_replicates < 6 ){
+             threshold <-2 #If there are 4 or 5 replicates,  NA accepted is 2.
+         } else if (n_replicates >= 6){
+             threshold<-trunc(n_replicates / 2) #If there are 6 or more. NA accepted is half of the max.
+         }
+
+        sliderInput(inputId = 'nas_threshold',
+                    label = h4('Select the number of NAs allowed in each group'),
+                    min = 0,
+                    max = n_replicates,
+                    value = threshold,
+                    step = 1)
+    })
+
+
+
+
 
     data_filt <- reactive({
 
@@ -413,18 +427,8 @@ function(input, output) {
         # all samples in one of the groups must have non NAs. In the other group,
         # for that given protein NAs are allowed.
 
-        # Check number of replicates
-        if(max(ed_final$data$replicate)<3){
-            threshold <-0 #If there are two replicates, NA accepted is 0.
-        } else  if(max(ed_final$data$replicate)==3){
-            threshold <-1 #If there are three replicates,  NA accepted is 1.
-        } else if(max(ed_final$data$replicate)<6 ){
-            threshold <-2 #If there are 4 or 5 replicates,  NA accepted is 2.
-        } else if (max(ed_final$data$replicate)>=6){
-            threshold<-trunc(max(ed_final$data$replicate)/2) #If there are 6 or more. NA accepted is half of the max.
-        }
 
-        data_filt <- DEP::filter_missval(data_se(), thr = threshold)
+        data_filt <- DEP::filter_missval(data_se(), thr = input$nas_threshold)
 
         # data_filt <- DEP::filter_missval(data_se,thr = 0)
 
@@ -478,6 +482,8 @@ function(input, output) {
                                     fun = input$input_imputation)
         }
 
+
+         #data_imp <- DEP::impute(data_norm , fun = 'zero')
         # data_imp <-DEP::impute(data_norm, fun = "man", shift = 1.8, scale = 0.3)
 
         #plot_imputation(data_norm, data_imp)
@@ -491,23 +497,61 @@ function(input, output) {
 
     data_to_be_imputed <- reactive({
 
-        # df <- as.data.frame(data_imp@assays@data)
-        df <- as.data.frame(data_imp()@assays@data)
+
 
         # filtered <- as.data.frame(data_filt@assays@data)
 
 
+
+        # Obtain the data before being imputed
         filtered <- as.data.frame(data_filt()@assays@data)
 
-        imputed <-  which(rowSums(is.na(
-            filtered %>% select(-contains(c('Group', 'Group_name')))
-        ))>0)
+        filtered$Protein.ID <- rownames(filtered)
 
-        df$Imputed <- FALSE
+        filtered <- filtered %>% select(-contains('group'))
 
-        df$Imputed[imputed] <- TRUE
+        filtered_melt <- melt(filtered, id.vars = 'Protein.ID')
 
-        return(df)
+        # Create a new column calledd imputed
+        filtered_melt$Imputed <- FALSE
+
+        # If the value is NA, it will be imputed in the next step
+        filtered_melt$Imputed[is.na(filtered_melt$value)] <- TRUE
+
+        # imputed <-  which(rowSums(is.na(
+        #     filtered %>% select(-contains(c('Group', 'Group_name')))
+        # ))>0)
+        #
+        # df$Imputed <- FALSE
+        #
+        # df$Imputed[imputed] <- TRUE
+
+
+        # Now obtain the already imputed values:
+
+        # imputed <- as.data.frame(data_imp@assays@data)
+        imputed <- as.data.frame(data_imp()@assays@data)
+
+        imputed <- imputed %>% select(-contains('group'))
+
+        imputed$Protein.ID <- rownames(imputed)
+
+        imputed_melt <- melt(imputed, id.vars = 'Protein.ID')
+
+
+        # The column imputed_melt contained the data of the imputed table
+        # and added a column specifying whether a protein in a specific group
+        # has been imputed or not. This is done by matching it to the
+        # filtered table.
+        # In the filtered table it is possible to know which one will be imputed
+        # since it is in the form of NAs.
+
+        imputed_melt$Imputed <- filtered_melt$Imputed[
+            imputed_melt$Protein.ID == filtered_melt$Protein.ID &&
+            imputed_melt$variable == filtered_melt$variable]
+
+
+        return(imputed_melt)
     })
 
 

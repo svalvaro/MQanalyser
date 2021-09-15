@@ -150,6 +150,9 @@ tabPanel(h4("QC"),
                                      'Replace by 0' = 'zero',
                                      'No imputation' = 'none'),
                          selected = 'Perseus'),
+
+
+             uiOutput('na_threshold')
            ),
            mainPanel(
              box(
