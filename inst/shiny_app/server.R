@@ -459,13 +459,51 @@ function(input, output) {
     })
 
 
+    # Selec the NAs allowd
+
+    output$manual_imputation_scale  <- renderUI({
+
+
+        if (input$input_imputation == 'Manual') {
+
+            sliderInput(inputId = 'input_scale',
+                        label = h5('Sets the width of the distribution relative
+                                   to the standard deviation of the original distribution.'),
+                        min = 0,
+                        max = 1,
+                        value = 0.3,
+                        step = 0.1)
+        }else{
+            return(NULL)
+        }
+    })
+
+
+    output$manual_imputation_shift  <- renderUI({
+
+
+        if (input$input_imputation == 'Manual') {
+
+            sliderInput(inputId = 'input_shift',
+                        label = h5(' Sets the left-shift of the distribution
+                                   (in standard deviations) from the median of
+                                   the original distribution.'),
+                        min = 0,
+                        max = 10,
+                        value = 1.8,
+                        step = 0.1)
+        }else{
+            return(NULL)
+        }
+    })
+
 
     data_imp <- reactive({
-        if(input$input_imputation == 'Perseus'){
+        if(input$input_imputation == 'Manual'){
             data_imp <-DEP::impute(data_norm(),
                                    fun = "man",
-                                   shift = 1.8,
-                                   scale = 0.3)
+                                   shift = input$input_shift,
+                                   scale = input$input_scale)
         }else if(input$input_imputation == 'MinProb'){
             data_imp <- DEP::impute(data_norm(),
                                     fun = "MinProb", q = 0.05)

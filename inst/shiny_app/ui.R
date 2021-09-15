@@ -139,7 +139,7 @@ tabPanel(h4("QC"),
 
              selectInput(inputId = 'input_imputation',
                          label = 'Imputation type',
-                         choices = c('From normal distribution' = 'Perseus',
+                         choices = c('Manual Imputation' = 'Manual',
                                      'Bayesian' = 'bpca',
                                      'Quantile Regression'= 'QRILC',
                                      'MinProb'= 'MinProb',
@@ -151,6 +151,9 @@ tabPanel(h4("QC"),
                                      'No imputation' = 'none'),
                          selected = 'MLE'),
 
+              uiOutput('manual_imputation_scale'),
+
+             uiOutput('manual_imputation_shift'),
 
              uiOutput('na_threshold')
            ),
