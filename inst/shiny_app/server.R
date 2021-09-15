@@ -408,6 +408,10 @@ function(input, output) {
 
         #Imputation should not be done for proteins with too many NAs
         #We set a threshold for the allowed number of missing values per condition
+        # Threshold is per group.
+        # So if threshold is 0 it means that for a given protein, at least
+        # all samples in one of the groups must have non NAs. In the other group,
+        # for that given protein NAs are allowed.
 
         # Check number of replicates
         if(max(ed_final$data$replicate)<3){
@@ -422,7 +426,7 @@ function(input, output) {
 
         data_filt <- DEP::filter_missval(data_se(), thr = threshold)
 
-        # data_filt <- DEP::filter_missval(data_se,thr = threshold)
+        # data_filt <- DEP::filter_missval(data_se,thr = 0)
 
         #plot_missval(filter_missval(data_se,thr = 1))
 
@@ -487,8 +491,9 @@ function(input, output) {
 
     data_to_be_imputed <- reactive({
 
-
+        # df <- as.data.frame(data_imp@assays@data)
         df <- as.data.frame(data_imp()@assays@data)
+
         # filtered <- as.data.frame(data_filt@assays@data)
 
 
@@ -537,9 +542,14 @@ function(input, output) {
 
     #### Imputation ####
 
-    output$imputation <- renderPlot({
-        MQanalyser::plot_histogram_imputed(data_to_be_imputed())
-    })
+    output$imputation <- renderPlotly(
+
+        MQanalyser::plot_histogram_imputed(
+
+            data_to_be_imputed = data_to_be_imputed(),
+            combined = input$combined_imputation) %>%
+            layout(height = 1000, width = 1000)
+    )
 
 
 
@@ -633,11 +643,12 @@ function(input, output) {
 
     #### Heatmap plot ####
 
-    output$heatmaply <- renderPlotly(MQanalyser::plot_heatmaply(dep(),
-                                       intensity_type = input$IntensityType,
-                                       dendogram = input$dendogram_input,
-                                       k_row = input$k_row_input,
-                                       k_col = input$k_col_input) %>%
+    output$heatmaply <- renderPlotly(
+        MQanalyser::plot_heatmaply(dep(),
+                   intensity_type = input$IntensityType,
+                   dendogram = input$dendogram_input,
+                   k_row = input$k_row_input,
+                   k_col = input$k_col_input) %>%
                 layout(height = 1000, width = 1000)
 
         )

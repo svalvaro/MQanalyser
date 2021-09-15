@@ -42,20 +42,6 @@ navbarPage(h3("Proteomics results"),
                                     value = 1.5,
                                     min = 0, max = 100),
 
-                        selectInput(inputId = 'input_imputation',
-                                    label = 'Imputation',
-                                    choices = c('From normal distribution' = 'Perseus',
-                                                'Bayesian' = 'bpca',
-                                                'Quantile Regression'= 'QRILC',
-                                                'MinProb'= 'MinProb',
-                                                'Nearest neighbour averaging' = 'knn',
-                                                'MinProb' = 'MinProb',
-                                                'Maximum likelihood-based ' = 'MLE',
-                                                'Minimum Value' = 'min',
-                                                'Replace by 0' = 'zero',
-                                                'No imputation' = 'none'),
-                                   selected = 'Perseus'),
-
                         checkboxInput(inputId = 'contaminantsInput',
                                       label = 'Filter out the contaminants',
                                       value = TRUE),
@@ -146,55 +132,32 @@ tabPanel(h4("QC"),
          sidebarLayout(
            sidebarPanel(
              #Drop down with Parameters for heatmap
-             dropdown(
-               tags$h3("Advanced Parameters"),
 
-               sliderInput(inputId = 'k_row_input',
-                           label = 'Select clusters, genes:',
-                           value = 0,
-                           min = 0, max = 50),
+             checkboxInput(inputId = 'combined_imputation',
+                        label = 'Combine the samples',
+                        value = FALSE),
 
-               sliderInput(inputId = 'k_col_input',
-                           label = 'Select clusters, samples',
-                           value = 0,
-                           min = 0, max = 50),
-               #
-               #                         #Select the Colour for UPregulated
-               #                         colourpicker::colourInput("heat_upregulated",
-               #                                                   h4("Select colour upregulated:"),
-               #                                                   'brown2',
-               #                                                   palette = "square",
-               #                                                   returnName = TRUE,
-               #                                                   showColour = c("background")),
-               #
-               #                         #Select the color for Down regulated
-               #                         colourpicker::colourInput("heat_downregulated",
-               #                                                   h4("Select colour downregulated:"),
-               #                                                   'cyan3',
-               #                                                   palette = "square",
-               #                                                   returnName = TRUE,
-               #                                                   showColour = c("background")),
-
-               selectInput(inputId = 'dendogram_input',
-                           label = 'Dendogram',
-                           choices = c('Both dendograms.' = 'both',
-                                       'Only for the genes.'= 'row',
-                                       'Only for the samples.'= 'column',
-                                       'Without dendogramns' = 'none'),
-                           selected = 'both'),
-
-               options = list(`style` = "btn-info"),
-               style = "unite", icon = icon("gear"),
-               status = "success", width = "300px",
-               animate = animateOptions(
-                 enter = animations$fading_entrances$fadeInLeftBig,
-                 exit = animations$fading_exits$fadeOutRightBig)
-             )
+             selectInput(inputId = 'input_imputation',
+                         label = 'Imputation',
+                         choices = c('From normal distribution' = 'Perseus',
+                                     'Bayesian' = 'bpca',
+                                     'Quantile Regression'= 'QRILC',
+                                     'MinProb'= 'MinProb',
+                                     'Nearest neighbour averaging' = 'knn',
+                                     'MinProb' = 'MinProb',
+                                     'Maximum likelihood-based ' = 'MLE',
+                                     'Minimum Value' = 'min',
+                                     'Replace by 0' = 'zero',
+                                     'No imputation' = 'none'),
+                         selected = 'Perseus'),
            ),
            mainPanel(
-
-             plotOutput('imputation')
+             box(
+               shinycssloaders::withSpinner(
+                 plotlyOutput('imputation')
+               )
              )
+           )
            )
          ),
 
