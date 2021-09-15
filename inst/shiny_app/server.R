@@ -342,12 +342,13 @@ function(input, output) {
 
         if (software_used() == 'MaxQuant') {
 
+            # columns = grep('LFQ', colnames(df))
             columns = grep(paste0(input$IntensityType,'.'), colnames(df))
 
             # Adds two columns at the end with an unique gene and protein name.
             data_unique <- DEP::make_unique(df, 'Gene.names', 'Protein.IDs', delim = ';')
 
-            # data_unique <- DEP::make_unique(proteinGroups, 'Gene.names', 'Protein.IDs', delim = ';')
+            # data_unique <- DEP::make_unique(df, 'Gene.names', 'Protein.IDs', delim = ';')
 
 
 
@@ -423,11 +424,20 @@ function(input, output) {
 
         # data_filt <- DEP::filter_missval(data_se,thr = threshold)
 
-        #plot_missval(filter_missval(data_se,thr = 5))
+        #plot_missval(filter_missval(data_se,thr = 1))
 
         #plot_detect(data_filt)
         #plot_coverage(data_filt)
+
+
     })
+
+
+    # Find out which values are going to be imputed.
+
+
+
+
 
     data_norm <- reactive({
 
@@ -439,6 +449,8 @@ function(input, output) {
         #data_norm <- normalize_vsn(data_filt)
         #plot_normalization(data_filt, data_norm)
     })
+
+
 
     data_imp <- reactive({
         if(input$input_imputation == 'Perseus'){
@@ -471,6 +483,31 @@ function(input, output) {
 
     })
 
+
+
+    data_to_be_imputed <- reactive({
+
+
+        df <- as.data.frame(data_imp()@assays@data)
+        # filtered <- as.data.frame(data_filt@assays@data)
+
+
+        filtered <- as.data.frame(data_filt()@assays@data)
+
+        imputed <-  which(rowSums(is.na(
+            filtered %>% select(-contains(c('Group', 'Group_name')))
+        ))>0)
+
+        df$Imputed <- FALSE
+
+        df$Imputed[imputed] <- TRUE
+
+        return(df)
+    })
+
+
+
+
     dep <- reactive({
 
         # data_diff_all_contrasts <- MQanalyser::test_limma(data_imp, type = "all")
@@ -494,8 +531,15 @@ function(input, output) {
 
         # Generate a results table
         data_results <- DEP::get_results(dep())
+
+        # data_results <- get_results(dep)
     })
 
+    #### Imputation ####
+
+    output$imputation <- renderPlot({
+        MQanalyser::plot_histogram_imputed(data_to_be_imputed())
+    })
 
 
 

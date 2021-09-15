@@ -141,6 +141,64 @@ navbarPage(h3("Proteomics results"),
             ),
 
 
+#### Imputation Distribution ####
+tabPanel(h4("QC"),
+         sidebarLayout(
+           sidebarPanel(
+             #Drop down with Parameters for heatmap
+             dropdown(
+               tags$h3("Advanced Parameters"),
+
+               sliderInput(inputId = 'k_row_input',
+                           label = 'Select clusters, genes:',
+                           value = 0,
+                           min = 0, max = 50),
+
+               sliderInput(inputId = 'k_col_input',
+                           label = 'Select clusters, samples',
+                           value = 0,
+                           min = 0, max = 50),
+               #
+               #                         #Select the Colour for UPregulated
+               #                         colourpicker::colourInput("heat_upregulated",
+               #                                                   h4("Select colour upregulated:"),
+               #                                                   'brown2',
+               #                                                   palette = "square",
+               #                                                   returnName = TRUE,
+               #                                                   showColour = c("background")),
+               #
+               #                         #Select the color for Down regulated
+               #                         colourpicker::colourInput("heat_downregulated",
+               #                                                   h4("Select colour downregulated:"),
+               #                                                   'cyan3',
+               #                                                   palette = "square",
+               #                                                   returnName = TRUE,
+               #                                                   showColour = c("background")),
+
+               selectInput(inputId = 'dendogram_input',
+                           label = 'Dendogram',
+                           choices = c('Both dendograms.' = 'both',
+                                       'Only for the genes.'= 'row',
+                                       'Only for the samples.'= 'column',
+                                       'Without dendogramns' = 'none'),
+                           selected = 'both'),
+
+               options = list(`style` = "btn-info"),
+               style = "unite", icon = icon("gear"),
+               status = "success", width = "300px",
+               animate = animateOptions(
+                 enter = animations$fading_entrances$fadeInLeftBig,
+                 exit = animations$fading_exits$fadeOutRightBig)
+             )
+           ),
+           mainPanel(
+
+             plotOutput('imputation')
+             )
+           )
+         ),
+
+
 #### Results Panel ####
     tabPanel(h4("Results"),
       includeCSS("www/info_box.css"),
@@ -155,7 +213,6 @@ navbarPage(h3("Proteomics results"),
           shinydashboard::infoBoxOutput('significant_user_genes',
                                         width = NULL)
           ),
-
 
       box(width = 4,
           uiOutput('table_user_genes')
