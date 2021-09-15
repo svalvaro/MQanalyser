@@ -592,7 +592,7 @@ function(input, output) {
 
             data_to_be_imputed = data_to_be_imputed(),
             combined = input$combined_imputation) %>%
-            layout(height = 1000, width = 1000)
+            layout(height = 900, width = 1400)
     )
 
 

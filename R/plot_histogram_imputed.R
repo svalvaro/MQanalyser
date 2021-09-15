@@ -9,7 +9,13 @@
 plot_histogram_imputed <- function(data_to_be_imputed,
                                    combined = FALSE){
 
-    p <-     ggplot(data_to_be_imputed, aes( x = value, fill = Imputed))+
+    colnames(data_to_be_imputed) <- c('Protein.ID',
+                                      'Label',
+                                      'Log2 Intensity',
+                                      'Imputed')
+
+    p <-     ggplot(data_to_be_imputed, aes( x = `Log2 Intensity`,
+                                             fill = Imputed))+
                     geom_histogram(alpha = 0.4,
                                    bins = 30,
                                    position = 'identity')+
@@ -21,10 +27,11 @@ plot_histogram_imputed <- function(data_to_be_imputed,
 
     if (combined == FALSE) {
 
-        p <- p + facet_wrap(.~ variable)
+        p <- p + facet_wrap(.~ Label)
 
     }
 
-    return(ggplotly(p))
+    fig <- ggplotly(p)
+    return(fig)
 
 }

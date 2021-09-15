@@ -130,7 +130,7 @@ navbarPage(h3("Proteomics results"),
 #### Imputation Distribution ####
 tabPanel(h4("QC"),
          sidebarLayout(
-           sidebarPanel(
+           sidebarPanel(width = 2,
              #Drop down with Parameters for heatmap
 
              checkboxInput(inputId = 'combined_imputation',
@@ -138,7 +138,7 @@ tabPanel(h4("QC"),
                         value = FALSE),
 
              selectInput(inputId = 'input_imputation',
-                         label = 'Imputation',
+                         label = 'Imputation type',
                          choices = c('From normal distribution' = 'Perseus',
                                      'Bayesian' = 'bpca',
                                      'Quantile Regression'= 'QRILC',
