@@ -407,7 +407,7 @@ function(input, output) {
          }
 
         sliderInput(inputId = 'nas_threshold',
-                    label = h4('Select the number of NAs allowed in each group'),
+                    label = h4('Select the number of missing values allowed in each group'),
                     min = 0,
                     max = n_replicates,
                     value = threshold,
