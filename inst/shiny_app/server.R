@@ -61,7 +61,7 @@ function(input, output) {
 
                 df <- read_csv(inFile$datapath, na = 'NaN')
 
-                # df <- read_csv('./inst/shiny_app/www/Pivot_ProteinQuant_example.csv',na = 'NaN')
+                 #df <- read_csv('www/Pivot_ProteinQuant_example.csv',na = 'NaN')
 
                 # Remove the contamintants is only if checkbox is pressed.
 
@@ -154,7 +154,7 @@ function(input, output) {
 
         #experiment_design <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/experiment_design_example.txt')
 
-        # experiment_design <- read.delim('inst/shiny_app/www/experiment_design_example_spectronaut.txt')
+        # experiment_design <- read.delim('www/experiment_design_example_spectronaut.txt')
 
         inFile <- input$optional_exp_design
 

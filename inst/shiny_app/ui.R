@@ -149,7 +149,7 @@ tabPanel(h4("QC"),
                                      'Minimum Value' = 'min',
                                      'Replace by 0' = 'zero',
                                      'No imputation' = 'none'),
-                         selected = 'Perseus'),
+                         selected = 'MLE'),
 
 
              uiOutput('na_threshold')

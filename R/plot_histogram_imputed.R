@@ -11,12 +11,13 @@ plot_histogram_imputed <- function(data_to_be_imputed,
 
     p <-     ggplot(data_to_be_imputed, aes( x = value, fill = Imputed))+
                     geom_histogram(alpha = 0.4,
-                                   bins = 30)+
+                                   bins = 30,
+                                   position = 'identity')+
                     theme_bw()+
                     ylab('Frequency')+
                     xlab('Log 2  Intensity')+
                     theme(legend.position = 'bottom')+
-                    scale_fill_manual(values = c('#00539CFF','#EEA47FFF'))
+                    scale_fill_manual(values = c('#00539CFF','red'))
 
     if (combined == FALSE) {
 
