@@ -23,7 +23,7 @@ navbarPage(#title = "Proteomics Analyser",
                     uiOutput('intensity_selector'),
 
 
-                    verbatimTextOutput('IntensityFound'),
+                    verbatimTextOutput('IntensityFound_message'),
                     hr(),
                     br(),
 

@@ -35,6 +35,8 @@ function(input, output) {
 
         }else if(!is.null(inFile)){
 
+            # If the file ends in txt is from MaxQuant, read accordingly
+
             if (endsWith(as.character(inFile$datapath),suffix = '.txt')) {
                 #message(paste0(inFile, 'ends with .txt'))
 
@@ -53,7 +55,7 @@ function(input, output) {
                     df <- df[(df$Potential.contaminant == ''),]
                 }
 
-                # proteoInput <- df
+                # If the file ends in csv is from Spectronaut, read accordingly
 
             } else if (endsWith(as.character(inFile$datapath), suffix = '.csv')){
 
@@ -64,35 +66,21 @@ function(input, output) {
                  #df <- read_csv('www/Pivot_ProteinQuant_example.csv',na = 'NaN')
 
                 # Remove the contamintants is only if checkbox is pressed.
+                # Need to find a file with contaminants first.
 
-                # if(input$contaminantsInput){
-                #
-                #     df %>% filter(str_detect(PG.ProteinGroups, "^A0"))
-                #
-                #     View(df[which(grepl('CON_', df$PG.ProteinGroups)),])
-                #
-                # }
             }
 
         # If they press DEMO
         } else if(demo$start == TRUE){
+
             df <- read.delim('www/proteinGroups_example.txt')
 
             #Remove reverse and reverse and contaminants and only identified by site
-
 
             df <- df[(df$Potential.contaminant == '') & (df$Reverse == '')  & (df$Only.identified.by.site==''),]
 
         }
 
-        # proteinGroups <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/proteinGroups_example.txt')
-
-
-
-        #Separate the Protein IDs into different rows separated by ;
-
-        # proteinGroups <- df
-        # df <- NULL
         return(df)
     })
 
@@ -215,7 +203,7 @@ function(input, output) {
 
     observeEvent(input$start_input, {
 
-        if(is.null(input$proteinInput) & demo$start == FALSE){
+        if(is.null(input$proteinInput) & demo$start == FALSE & IntensityFound() == TRUE){
             shinyalert::shinyalert("Analysis not started", "protein table not uploaded",
                                    type="error",
                                    closeOnClickOutside = TRUE,
@@ -230,6 +218,14 @@ function(input, output) {
                                    closeOnEsc = TRUE,
                                    timer = 6000)
 
+        }else if(IntensityFound() == FALSE){
+
+            shinyalert::shinyalert("Analysis not started",
+                                   "Intensity selected was not found. \nSelect another type of Intensity.",
+                                   type="error",
+                                   closeOnClickOutside = TRUE,
+                                   closeOnEsc = TRUE,
+                                   timer = 6000)
         }else{
 
             shinyalert::shinyalert("Analysis Started!",
@@ -264,63 +260,61 @@ function(input, output) {
 
             radioButtons(inputId = "IntensityType",
                          h4("Intensity type to analyze:"),
-                         choices = c("LFQ" = 'PG.Quantity',
-                                     "iBAQ" = 'PG.IBAQ'),
-                         selected = 'PG.Quantity')
+                         choices = c("LFQ" = 'LFQ',
+                                     "iBAQ" = 'iBAQ'),
+                         selected = 'LFQ')
         }
     })
 
     # Check if the type of intensity is found in the proteoInput
 
-    output$IntensityFound <- renderText({
 
+    IntensityFound <- reactive({
 
         intensityToUse <- input$IntensityType
 
         if (is.null(software_used())) {
             return(NULL)
 
-        # If the software used was MaxQuant
+            # If the software used was MaxQuant
 
         } else if (software_used() == 'MaxQuant') {
 
             columns = grep(paste0(input$IntensityType,'.'), colnames(proteoInput()))
 
-            if (length(columns) == 0) {
-
-                print(paste0(input$IntensityType, ' was not found. \nSelect another type of intensity.'))
-
-            } else{
-                print(paste0(input$IntensityType, ' was found. \nContinue with the analysis.'))
-            }
-
         # For Spectronaut Software
 
         } else if (software_used() == 'Spectronaut'){
 
-            columns <-  grep(input$IntensityType, colnames(proteoInput()))
+            # If the intensity selected is LFQ, the column name is PG.Quantity
+            if (input$IntensityType == 'LFQ') {
+                columns <-  grep('PG.Quantity', colnames(proteoInput()))
 
-            # If selected intensity is found
-            if (length(columns) > 0) {
-                if (input$IntensityType == 'PG.Quantity') {
-
-                    print('LFQ Intensity was  found.  \nContinue with the analysis.')
-                } else{
-                    print('iBAQ Intensity was  found.  \nContinue with the analysis.')
-                }
-
-            # If selected intensity is not found
-            } else{
-                if (input$IntensityType == 'PG.Quantity') {
-                    print('LFQ Intensity was not found. \nSelect another type of intensity.')
-                } else{
-                    print('iBAQ Intensity was not found. \nSelect another type of intensity.')
-                }
+            # If IBAQ Intensity is selected
+            }else{
+                columns <-  grep('PG.IBAQ', colnames(proteoInput()))
             }
-
         }
 
-        })
+        if (length(columns) == 0) {
+
+            IntensityFound <- FALSE
+        } else{
+
+            IntensityFound <- TRUE
+        }
+
+        return(IntensityFound)
+    })
+
+
+    output$IntensityFound_message <- renderText({
+        if (IntensityFound() == TRUE) {
+            print(paste0(input$IntensityType, '  was found. \nYou can continue with the analysis.'))
+        }else{
+            print(paste0(input$IntensityType, ' was not found. \nPlease select another intensity.'))
+        }
+    })
 
 
 
