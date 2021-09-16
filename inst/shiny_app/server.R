@@ -177,14 +177,12 @@ function(input, output) {
 
     output$ed_out <- renderRHandsontable({
 
-        rhandsontable(experiment_design(), height =  700) %>%
+        rhandsontable(experiment_design(), height =  500) %>%
             hot_col('replicate', format = '0a')
-
-
-
-
-
     })
+
+
+
 
     ed_final <- reactiveValues()
 
@@ -198,6 +196,18 @@ function(input, output) {
         }
 
     })
+
+    # Button to download the experiment design once the user has finished it.
+
+
+    output$download_experiment_design <- downloadHandler(
+
+        filename = function(){'experiment_design.txt'},
+        content = function(fname){
+            write_delim(ed_final$data, fname,delim = '\t')
+        }
+    )
+
 
 
     #### Pop-up message when pressed start analysis ####
@@ -686,14 +696,10 @@ function(input, output) {
             return(NULL)
         }
 
-
         selectInput(inputId = 'selected_df_user_prots',
                     label = h4('These are the differentially expressed \nproteins that you provided:'),
                     choices = unlist(user_genes_de()),
                     selected = user_genes_de()[1])
-
-
-
     })
 
 

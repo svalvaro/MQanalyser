@@ -106,7 +106,10 @@ navbarPage(#title = "Proteomics Analyser",
 
                                    #DTOutput('experiment_design')
                                    #DT::dataTableOutput('ed_out'),
-                                   rHandsontableOutput('ed_out')
+                                   rHandsontableOutput('ed_out'),
+                                   br(),
+                                   downloadButton(outputId = 'download_experiment_design',
+                                                  label = 'Download (Press Start Analysis First)'),
                                    )
                                ),
 
