@@ -5,7 +5,7 @@ navbarPage(h3("Proteomics results"),
 
     tabPanel(h4('Data \nInput'),
             sidebarLayout(
-                sidebarPanel(
+                sidebarPanel(width = 3,
                   shinyalert::useShinyalert(),
 
                     fileInput(inputId = 'proteinInput',
@@ -206,7 +206,7 @@ tabPanel(h4("QC"),
 #### HeatMap ####
     tabPanel(h4("Heatmap"),
              sidebarLayout(
-               sidebarPanel(
+               sidebarPanel(width = 2,
                     #Drop down with Parameters for heatmap
                     dropdown(
                         tags$h3("Advanced Parameters"),
@@ -238,11 +238,11 @@ tabPanel(h4("QC"),
 #                                                   showColour = c("background")),
 
                         selectInput(inputId = 'dendogram_input',
-                                    label = 'Dendogram',
-                                    choices = c('Both dendograms.' = 'both',
+                                    label = 'Type of Clustering',
+                                    choices = c('Proteins and the samples' = 'both',
                                                 'Only for the genes.'= 'row',
                                                 'Only for the samples.'= 'column',
-                                                'Without dendogramns' = 'none'),
+                                                'No Clustering' = 'none'),
                                     selected = 'both'),
 
                         options = list(`style` = "btn-info"),
@@ -282,7 +282,7 @@ tabPanel(h4("QC"),
 ####  Scatter Plot ####
     tabPanel(h4("Scatter Plot"),
             sidebarLayout(
-                sidebarPanel(
+                sidebarPanel( width = 2,
                     h3("Select the adjustments"),
 
                     #Sample for X axis
@@ -356,7 +356,7 @@ tabPanel(h4("QC"),
 #### Volcano Plot ####
     tabPanel(h4('Volcano Plot'),
             sidebarLayout(
-                sidebarPanel(
+                sidebarPanel(width = 2,
                     h3("Select the adjustments"),
 
                     uiOutput("comparisons_out"),
@@ -391,7 +391,8 @@ tabPanel(h4("QC"),
                         br(),
                         hr(),
                         sliderInput(inputId = 'volc_alpha',
-                                    label = 'Adjust the alpha parameter:',
+                                    label = 'Adjust the transparency of the poings
+                                    parameter:',
                                     value = 0.8,
                                     min = 0, max = 1),
 
@@ -470,7 +471,7 @@ tabPanel(h4("QC"),
 #### Profile Plot ####
     tabPanel(h4('Profile Plot'),
             sidebarLayout(
-                sidebarPanel(
+                sidebarPanel(width = 2,
                     h3("Select the adjustments"),
                     br(),
                     dropdown(
@@ -556,7 +557,7 @@ tabPanel(h4("QC"),
 
     tabPanel(h4('PCA'),
              sidebarLayout(
-               sidebarPanel(
+               sidebarPanel(width = 2,
                  h3("Select the adjustments"),
 
                  selectInput(inputId = 'pca_label',
@@ -583,7 +584,7 @@ tabPanel(h4("QC"),
 
     tabPanel(h4('Enrichment Analysis'),
             sidebarLayout(
-                sidebarPanel(
+                sidebarPanel(width = 2,
                     h3("Select the adjustments"),
 
                     uiOutput('comparisons_enrichment'),
@@ -663,7 +664,7 @@ tabPanel(h4("QC"),
 #### Disease Analysis Tab ####
   tabPanel(title = h4('Disease Analysis'),
            sidebarLayout(
-             sidebarPanel(
+             sidebarPanel(width = 2,
                uiOutput('comparisons_diseases'),
                selectInput(inputId = 'disease_organism',
                            label = 'Select the species:',
@@ -736,7 +737,7 @@ tabPanel(h4("QC"),
 #### Gene Network ####
   tabPanel(title = h4('Gene Network'),
            sidebarLayout(
-               sidebarPanel(
+               sidebarPanel(width = 2,
 
                  uiOutput('comparisons_network'),
 
@@ -800,7 +801,7 @@ tabPanel(h4("QC"),
 #### Pathway Analysis ####
   tabPanel(title = h4('Pathway Analysis'),
            sidebarLayout(
-               sidebarPanel(
+               sidebarPanel(width = 2,
                   uiOutput("pathway_selector"),
 
                  actionBttn(inputId = 'GoToPathway',

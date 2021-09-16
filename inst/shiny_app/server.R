@@ -740,7 +740,7 @@ function(input, output) {
     output$plot_correlation <- renderPlotly(
 
         MQanalyser::plot_correlationly(dep()) %>%
-            layout(height = 1000, width = 1000)
+            layout(height = 800, width = 800)
 
     )
 
