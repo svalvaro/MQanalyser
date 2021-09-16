@@ -137,44 +137,95 @@ navbarPage(#title = "Proteomics Analyser",
 
 #### Imputation ####
 tabPanel(h4("Preprocessing"),
-         sidebarLayout(
-           sidebarPanel(width = 2,
-             #Drop down with Parameters for heatmap
+
+             #box(
+               tabsetPanel(type = 'tabs',
+
+                           tabPanel('Filter out missing values',
+
+                                    sidebarLayout(
+                                      sidebarPanel(width = 2,
+                                                  uiOutput('na_threshold')
+                                                   ),
+
+                                      mainPanel(
+
+                                        print(h4('Filter out those proteins containing too many missing values.')),
+                                        br(),
+                                        shinycssloaders::withSpinner(
+                                                    plotOutput('heatmap_nas')
+                                                  ))
+                                      )
+                           ),
+
+                           tabPanel('Normalization',
+
+                                    sidebarLayout(
+                                      sidebarPanel(width = 2,
+                                                   checkboxInput(inputId = 'normalize_input',
+                                                                 label = 'Normalization of the intensities by variance stabilizing transformation'),
+                                                   value = TRUE),
+
+
+                                      mainPanel(
+
+                                        print(h4('Normalization of the intensities')),
+                                        br()
+                                        # shinycssloaders::withSpinner(
+                                        #   plotOutput('heatmap_nas')
+                                        # ))
+                                    )
+                                    )
 
 
 
-             selectInput(inputId = 'input_imputation',
-                         label = 'Imputation type',
-                         choices = c('Manual Imputation' = 'Manual',
-                                     'Bayesian' = 'bpca',
-                                     'Quantile Regression'= 'QRILC',
-                                     'MinProb'= 'MinProb',
-                                     'Nearest neighbour averaging' = 'knn',
-                                     'MinProb' = 'MinProb',
-                                     'Maximum likelihood-based ' = 'MLE',
-                                     'Minimum Value' = 'min',
-                                     'Replace by 0' = 'zero',
-                                     'No imputation' = 'none'),
-                         selected = 'MLE'),
+                                    #
 
-              uiOutput('manual_imputation_scale'),
 
-             uiOutput('manual_imputation_shift'),
+                                    # hr(),
+                                    # shinycssloaders::withSpinner(
+                                    #   plotlyOutput('imputation')
+                                    # )
+                           ),
 
-             uiOutput('na_threshold'),
 
-             checkboxInput(inputId = 'combined_imputation',
-                           label = 'Combine the samples into one plot',
-                           value = FALSE)
-           ),
-           mainPanel(
-             box(
-               shinycssloaders::withSpinner(
-                 plotlyOutput('imputation')
-               )
-             )
-           )
-           )
+                           tabPanel('Imputation of the missing values',
+
+                                    sidebarLayout(
+                                      sidebarPanel(
+                                        width = 2,
+
+                                        selectInput(inputId = 'input_imputation',
+                                                    label = 'Imputation type',
+                                                    choices = c('Manual Imputation' = 'Manual',
+                                                                'Bayesian' = 'bpca',
+                                                                'Quantile Regression'= 'QRILC',
+                                                                'MinProb'= 'MinProb',
+                                                                'Nearest neighbour averaging' = 'knn',
+                                                                'MinProb' = 'MinProb',
+                                                                'Maximum likelihood-based ' = 'MLE',
+                                                                'Minimum Value' = 'min',
+                                                                'Replace by 0' = 'zero',
+                                                                'No imputation' = 'none'),
+                                                    selected = 'MLE'),
+
+                                        uiOutput('manual_imputation_scale'),
+
+                                        uiOutput('manual_imputation_shift'),
+
+                                        checkboxInput(inputId = 'combined_imputation',
+                                                      label = 'Combine the samples into one plot',
+                                                      value = FALSE)
+                                                   ),
+
+                                      mainPanel(
+                                        shinycssloaders::withSpinner(
+                                        plotlyOutput('imputation')
+                                        )
+                                      )
+                                    )
+                                    )# close tab panel imputation
+                           )
          ),
 
 

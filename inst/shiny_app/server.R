@@ -402,6 +402,8 @@ function(input, output) {
 
 
 
+    #### Filtering of NAs ####
+
     # Selec the NAs allowd
 
     output$na_threshold  <- renderUI({
@@ -449,6 +451,18 @@ function(input, output) {
         # plot_coverage(data_filt)
     })
 
+
+    output$heatmap_nas <- renderPlot(height = 800,{
+
+
+        # Make it into plotly and iteractive!
+        DEP::plot_missval(data_filt())
+    })
+
+
+
+    ####  DATA normalization ####
+
     data_norm <- reactive({
 
         data_norm <- DEP::normalize_vsn(data_filt())
@@ -460,6 +474,9 @@ function(input, output) {
         # ggplotly( plot_normalization( data_norm))
     })
 
+
+
+    #### Imputation ####
     #  Chose the parameter scale if imputation selected == Manual
 
     output$manual_imputation_scale  <- renderUI({
@@ -496,6 +513,8 @@ function(input, output) {
             return(NULL)
         }
     })
+
+
 
 
     data_imp <- reactive({
@@ -646,7 +665,7 @@ function(input, output) {
         return(results)
     })
 
-    #### Imputation ####
+
 
     output$imputation <- renderPlotly(
 
