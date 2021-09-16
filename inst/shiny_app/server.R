@@ -350,6 +350,8 @@ function(input, output) {
         if (software_used() == 'MaxQuant') {
 
             # columns = grep('LFQ', colnames(df))
+
+            # iBAQ failing here, check why.
             columns = grep(paste0(input$IntensityType,'.'), colnames(df))
 
             # Adds two columns at the end with an unique gene and protein name.
@@ -362,17 +364,25 @@ function(input, output) {
         } else if (software_used() == 'Spectronaut'){
             # Find the columns with the LFQ or iBAQ intensity
 
-            columns <-  grep('PG.Quantity', colnames(df))
+            if (input$IntensityType == 'LFQ') {
+                columns <-  grep('PG.Quantity', colnames(df))
+                # remove the ending of the names
+                colnames(df)[columns] <-  gsub(pattern = '.raw.PG.Quantity','',base::colnames(df)[columns])
+            }else{
+                columns <-  grep('PG.IBAQ', colnames(df))
+                # remove the ending of the names
+                colnames(df)[columns] <-  gsub(pattern = '.raw.PG.IBAQ','',base::colnames(df)[columns])
+
+
+                # the IBAQ values in Spectronaut contains multiple values separated by a semicolon
+                # For now I will just take the first value.
+
+                # df[columns] <- gsub(';*', '', df[columns])
+            }
 
             # Remove [1], [2], [3] from the column names
-            # colnames(proteoInput)[columns] <-  gsub(pattern = '\\[.*\\] ','',base::colnames(proteoInput[columns]) )
 
             colnames(df)[columns] <-  gsub(pattern = '\\[.*\\] ','',base::colnames(df)[columns])
-
-            # Remove the .raw.PG.Quantity
-
-            # colnames(proteoInput)[columns] <-  gsub(pattern = '.raw.PG.Quantity','',base::colnames(proteoInput[columns]) )
-            colnames(df)[columns] <-  gsub(pattern = '.raw.PG.Quantity','',base::colnames(df)[columns])
 
             # Make unique
             data_unique <- DEP::make_unique(df,'PG.Genes', 'PG.ProteinGroups', delim = ';')
@@ -395,7 +405,6 @@ function(input, output) {
     # Selec the NAs allowd
 
     output$na_threshold  <- renderUI({
-
 
         # Check number of replicates
 
@@ -430,20 +439,15 @@ function(input, output) {
         # all samples in one of the groups must have non NAs. In the other group,
         # for that given protein NAs are allowed.
 
-
         data_filt <- DEP::filter_missval(data_se(), thr = input$nas_threshold)
 
         # data_filt <- DEP::filter_missval(data_se,thr = 0)
 
-        #plot_missval(filter_missval(data_se,thr = 1))
+        # heatmaply(plot_missval(filter_missval(data_se,thr = 0)))
 
-        #plot_detect(data_filt)
-        #plot_coverage(data_filt)
-
-
+        # plot_detect(data_filt)
+        # plot_coverage(data_filt)
     })
-
-
 
     data_norm <- reactive({
 
@@ -453,9 +457,8 @@ function(input, output) {
 
         #meanSdPlot(data_norm)
         #data_norm <- normalize_vsn(data_filt)
-        #plot_normalization(data_filt, data_norm)
+        # ggplotly( plot_normalization( data_norm))
     })
-
 
     #  Chose the parameter scale if imputation selected == Manual
 
@@ -614,6 +617,33 @@ function(input, output) {
         data_results <- DEP::get_results(dep())
 
         # data_results <- get_results(dep)
+
+
+        # Remove centered columns
+
+        data_results <- data_results %>% select(-contains('centered'))
+
+
+        # Imputed proteins
+
+        imputed_proteins <- data_to_be_imputed() %>%
+                                group_by(Protein.ID) %>%
+                                summarise(Imputed = sum(Imputed == TRUE))
+
+        imputed_proteins$Imputed <- ifelse(imputed_proteins$Imputed > 0, FALSE, TRUE)
+
+        colnames(imputed_proteins) <- c('name', 'Imputed')
+
+        #data_results$Imputed <- FALSE
+
+        # Add column with wether the
+
+        # Join the data_results with the imputed proteins
+
+
+        results <- dplyr::full_join(data_results, imputed_proteins, by = "name")
+
+        return(results)
     })
 
     #### Imputation ####

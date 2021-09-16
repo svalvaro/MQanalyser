@@ -135,8 +135,8 @@ navbarPage(#title = "Proteomics Analyser",
             ),
 
 
-#### Imputation Distribution ####
-tabPanel(h4("Imputation"),
+#### Imputation ####
+tabPanel(h4("Preprocessing"),
          sidebarLayout(
            sidebarPanel(width = 2,
              #Drop down with Parameters for heatmap
