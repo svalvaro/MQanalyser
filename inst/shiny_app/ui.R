@@ -133,14 +133,12 @@ navbarPage(#title = "Proteomics Analyser",
 
 
 #### Imputation Distribution ####
-tabPanel(h4("QC"),
+tabPanel(h4("Imputation"),
          sidebarLayout(
            sidebarPanel(width = 2,
              #Drop down with Parameters for heatmap
 
-             checkboxInput(inputId = 'combined_imputation',
-                        label = 'Combine the samples',
-                        value = FALSE),
+
 
              selectInput(inputId = 'input_imputation',
                          label = 'Imputation type',
@@ -160,7 +158,11 @@ tabPanel(h4("QC"),
 
              uiOutput('manual_imputation_shift'),
 
-             uiOutput('na_threshold')
+             uiOutput('na_threshold'),
+
+             checkboxInput(inputId = 'combined_imputation',
+                           label = 'Combine the samples into one plot',
+                           value = FALSE)
            ),
            mainPanel(
              box(
@@ -216,13 +218,22 @@ tabPanel(h4("QC"),
                     dropdown(
                         tags$h3("Advanced Parameters"),
 
+
+                        selectInput(inputId = 'dendogram_input',
+                                    label = 'Type of Clustering',
+                                    choices = c('Proteins and the samples' = 'both',
+                                                'Only for the genes.'= 'row',
+                                                'Only for the samples.'= 'column',
+                                                'No Clustering' = 'none'),
+                                    selected = 'both'),
+
                         sliderInput(inputId = 'k_row_input',
-                                    label = 'Select clusters, genes:',
+                                    label = 'Colour clusters, genes:',
                                     value = 0,
                                     min = 0, max = 50),
 
                         sliderInput(inputId = 'k_col_input',
-                                     label = 'Select clusters, samples',
+                                     label = 'Colour clusters, samples',
                                      value = 0,
                                      min = 0, max = 50),
 #
@@ -242,13 +253,6 @@ tabPanel(h4("QC"),
 #                                                   returnName = TRUE,
 #                                                   showColour = c("background")),
 
-                        selectInput(inputId = 'dendogram_input',
-                                    label = 'Type of Clustering',
-                                    choices = c('Proteins and the samples' = 'both',
-                                                'Only for the genes.'= 'row',
-                                                'Only for the samples.'= 'column',
-                                                'No Clustering' = 'none'),
-                                    selected = 'both'),
 
                         options = list(`style` = "btn-info"),
                         style = "unite", icon = icon("gear"),
@@ -299,7 +303,7 @@ tabPanel(h4("QC"),
                     #check if they want to see their genes
 
                     checkboxInput(inputId = 'showgenes',
-                                  label = h4('Show the differentially expressed proteins of the list that you have uploaded:'),
+                                  label = h4('Show the differentially expressed proteins of the list that you have uploaded'),
                                   value=FALSE),
 
                     dropdown(
@@ -403,12 +407,12 @@ tabPanel(h4("QC"),
 
                         #check box for protein IDs
                         checkboxInput(inputId = 'p_adj_input',
-                                      label =h4('Use adjusted P values:'),
+                                      label =h4('Use adjusted P values'),
                                       value = TRUE),
 
                           #Select the Colour for UPregulated
                           colourpicker::colourInput("col_upregulated",
-                                                    h4("Select colour upregulated:"),
+                                                    h4("Colour upregulated:"),
                                                     'brown2',
                                                     palette = "square",
                                                     returnName = TRUE,
@@ -416,7 +420,7 @@ tabPanel(h4("QC"),
 
                           #Select the color for Down regulated
                           colourpicker::colourInput("col_downregulated",
-                                                    h4("Select colour downregulated:"),
+                                                    h4("Colour downregulated:"),
                                                     'cyan3',
                                                     palette = "square",
                                                     returnName = TRUE,
@@ -425,7 +429,7 @@ tabPanel(h4("QC"),
 
                         #Select the color for selected genes
                         colourpicker::colourInput("col_selected",
-                                                  h4("Select colour your proteins of interest:"),
+                                                  h4("Colour your proteins of interest:"),
                                                   '#800080',
                                                   palette = "square",
                                                   returnName = TRUE,

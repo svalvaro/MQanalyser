@@ -177,9 +177,12 @@ function(input, output) {
 
     output$ed_out <- renderRHandsontable({
 
-        rhandsontable(experiment_design()) %>%
-            hot_col('label', readOnly = TRUE) %>%
+        rhandsontable(experiment_design(), height =  700) %>%
             hot_col('replicate', format = '0a')
+
+
+
+
 
     })
 
@@ -414,10 +417,6 @@ function(input, output) {
                     step = 1)
     })
 
-
-
-
-
     data_filt <- reactive({
 
         #Imputation should not be done for proteins with too many NAs
@@ -441,11 +440,6 @@ function(input, output) {
     })
 
 
-    # Find out which values are going to be imputed.
-
-
-
-
 
     data_norm <- reactive({
 
@@ -459,28 +453,27 @@ function(input, output) {
     })
 
 
-    # Selec the NAs allowd
+    #  Chose the parameter scale if imputation selected == Manual
 
     output$manual_imputation_scale  <- renderUI({
-
 
         if (input$input_imputation == 'Manual') {
 
             sliderInput(inputId = 'input_scale',
                         label = h5('Sets the width of the distribution relative
                                    to the standard deviation of the original distribution.'),
-                        min = 0,
-                        max = 1,
+                        min = 0.05,
+                        max = 0.95,
                         value = 0.3,
-                        step = 0.1)
+                        step = 0.05)
         }else{
             return(NULL)
         }
     })
 
+    # Chose the parameter shift if imputation selected == Manual
 
     output$manual_imputation_shift  <- renderUI({
-
 
         if (input$input_imputation == 'Manual') {
 
@@ -532,10 +525,7 @@ function(input, output) {
     })
 
 
-
     data_to_be_imputed <- reactive({
-
-
 
         # filtered <- as.data.frame(data_filt@assays@data)
 
