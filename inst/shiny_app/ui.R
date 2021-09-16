@@ -1,4 +1,9 @@
-navbarPage(h3("Proteomics results"),
+navbarPage(#title = "Proteomics Analyser",
+
+          titlePanel('',
+                     tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png"),
+                               tags$title("Proteomics Analyser")) ),
+
     theme = shinytheme(theme ='flatly'),
 
 #### DATA INPUT ####
