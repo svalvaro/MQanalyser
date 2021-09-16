@@ -13,6 +13,7 @@ plot_profilely <- function(dep,
                            angle_labels = 45,
                            selected_genes = NULL,
                            color_selected = 'red',
+                           alpha = 0.9,
                            plot = TRUE,
                            clear_selection = FALSE,
                            prof_genes_de = FALSE,
@@ -69,7 +70,7 @@ plot_profilely <- function(dep,
                                           paste0('\nLog 2 ', intensity_type,': '), format(round(Intensity,1),nsmall =1)
                                           )))+
             theme_bw()+
-            geom_line(aes(group=Gene), color= color)+
+            geom_line(aes(group=Gene), color= color, alpha = alpha)+
             ylab(paste0('Log2  ', intensity_type))+
             theme(axis.text.x = element_text(angle = angle_labels))
 

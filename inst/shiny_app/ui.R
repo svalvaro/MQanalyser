@@ -512,6 +512,10 @@ tabPanel(h4("Imputation"),
                                                   returnName = TRUE,
                                                   showColour = c("background")
                         ),
+                        sliderInput(inputId = 'profile_alpha',
+                                    label = 'Transparency of the plot',
+                                    value = 0.9,
+                                    min = 0.01, max = 1),
 
                         sliderInput(inputId = 'input_angle_samples',
                                     label = 'Select the angle of the lables',

@@ -152,7 +152,7 @@ function(input, output) {
 
     experiment_design <- reactive({
 
-        #experiment_design <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/experiment_design_example.txt')
+        # experiment_design <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/experiment_design_example.txt')
 
         # experiment_design <- read.delim('www/experiment_design_example_spectronaut.txt')
 
@@ -706,7 +706,11 @@ function(input, output) {
 
     output$proteomics_results <- DT::renderDataTable({
 
-        DT::datatable(data_results())
+        DT::datatable(data_results(),
+                      extensions = 'Scroller',
+
+                      options = list(scrollY=500,
+                                     scrollX=30),width = 400)
     })
 
     # Download the proteomics_results
@@ -883,6 +887,7 @@ function(input, output) {
                                    angle_labels = input$input_angle_samples,
                                    selected_genes = input$plot_profile_table_rows_selected,
                                    color_selected = input$input_col_sel,
+                                   alpha = input$profile_alpha,
                                    plot = TRUE,
                                    clear_selection = input$clear_selection,
                                    prof_genes_de = input$prof_genes_de,
