@@ -477,7 +477,7 @@ tabPanel(h4("QC"),
                     dropdown(
                         tags$h3("Advanced Parameters"),
                         colourpicker::colourInput(inputId = "input_col_prof",
-                                                  label = h4("Select colour:"),
+                                                  label = h4("Colour all proteins:"),
                                                   value = "#56B4E9",
                                                   palette = "square",
                                                   returnName = TRUE,
@@ -485,7 +485,7 @@ tabPanel(h4("QC"),
                                                   ),
 
                         colourpicker::colourInput(inputId = "input_col_sel",
-                                                  label = h4("Select colour \nSelected proteins:"),
+                                                  label = h4("Colour for\nproteins selected in the table:"),
                                                   value = "red",
                                                   palette = "square",
                                                   returnName = TRUE,
@@ -494,7 +494,7 @@ tabPanel(h4("QC"),
 
 
                         colourpicker::colourInput(inputId = "input_col_prof_de",
-                                                  label = h4("Select colour your proteins of interest:"),
+                                                  label = h4("Colour your proteins of interest:"),
                                                   value = "#800080",
                                                   palette = "square",
                                                   returnName = TRUE,
@@ -507,7 +507,7 @@ tabPanel(h4("QC"),
                                     min = 0, max = 90),
 
                         checkboxInput(inputId = 'prof_centered',
-                                      label = h4('Show centered intensities (remove mean):',
+                                      label = h4('Show centered intensities (remove mean)',
                                                  value=FALSE)
                         ),
 
