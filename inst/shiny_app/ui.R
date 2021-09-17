@@ -135,7 +135,7 @@ navbarPage(#title = "Proteomics Analyser",
             ),
 
 
-#### Imputation ####
+#### Preprocessing ####
 tabPanel(h4("Preprocessing"),
 
              #box(
@@ -143,51 +143,45 @@ tabPanel(h4("Preprocessing"),
 
                            tabPanel('Filter out missing values',
 
-                                    sidebarLayout(
-                                      sidebarPanel(width = 2,
-                                                  uiOutput('na_threshold')
-                                                   ),
+                             sidebarLayout(
 
-                                      mainPanel(
+                               sidebarPanel(
+                                 width = 2,
+                                 uiOutput('na_threshold')),
+                               mainPanel(
+                                 print(
+                                 h4('Filter out those proteins containing too many missing values.')
+                               ),
+                               br(),
+                               shinycssloaders::withSpinner(plotOutput('heatmap_nas')))
 
-                                        print(h4('Filter out those proteins containing too many missing values.')),
-                                        br(),
-                                        shinycssloaders::withSpinner(
-                                                    plotOutput('heatmap_nas')
-                                                  ))
-                                      )
+                             )
                            ),
 
                            tabPanel('Normalization',
 
                                     sidebarLayout(
-                                      sidebarPanel(width = 2,
-                                                   checkboxInput(inputId = 'normalize_input',
-                                                                 label = 'Normalization of the intensities by variance stabilizing transformation'),
-                                                   value = TRUE),
 
+                                      sidebarPanel(
+                                        width = 2,
+                                        checkboxInput(inputId = 'normalize_input',
+                                                      label = 'Normalization of the intensities by variance stabilizing transformation'),
+                                        value = TRUE
+                                      ),
 
                                       mainPanel(
 
                                         print(h4('Normalization of the intensities')),
-                                        br()
-                                        # shinycssloaders::withSpinner(
-                                        #   plotOutput('heatmap_nas')
-                                        # ))
+                                        br(),
+                                        shinycssloaders::withSpinner(
+                                          plotlyOutput('plot_before_normalization')
+                                          ),
+                                        shinycssloaders::withSpinner(
+                                          plotlyOutput('plot_after_normalization')
+                                        )
+                                        )
                                     )
-                                    )
-
-
-
-                                    #
-
-
-                                    # hr(),
-                                    # shinycssloaders::withSpinner(
-                                    #   plotlyOutput('imputation')
-                                    # )
-                           ),
-
+                                    ),
 
                            tabPanel('Imputation of the missing values',
 

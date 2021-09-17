@@ -421,8 +421,10 @@ function(input, output) {
          } else if(n_replicates < 6 ){
              threshold <-2 #If there are 4 or 5 replicates,  NA accepted is 2.
          } else if (n_replicates >= 6){
-             threshold<-trunc(n_replicates / 2) #If there are 6 or more. NA accepted is half of the max.
+             threshold<- trunc(n_replicates / 2) #If there are 6 or more. NA accepted is half of the max.
          }
+
+
 
         sliderInput(inputId = 'nas_threshold',
                     label = h4('Select the number of missing values allowed in each group'),
@@ -430,6 +432,8 @@ function(input, output) {
                     max = n_replicates,
                     value = threshold,
                     step = 1)
+
+
     })
 
     data_filt <- reactive({
@@ -441,7 +445,8 @@ function(input, output) {
         # all samples in one of the groups must have non NAs. In the other group,
         # for that given protein NAs are allowed.
 
-        data_filt <- DEP::filter_missval(data_se(), thr = input$nas_threshold)
+        data_filt <- DEP::filter_missval(data_se(),
+                                         thr = as.integer(input$nas_threshold))
 
         # data_filt <- DEP::filter_missval(data_se,thr = 0)
 
@@ -449,6 +454,7 @@ function(input, output) {
 
         # plot_detect(data_filt)
         # plot_coverage(data_filt)
+        return(data_filt)
     })
 
 
@@ -459,22 +465,43 @@ function(input, output) {
         DEP::plot_missval(data_filt())
     })
 
-
-
     ####  DATA normalization ####
+
+    output$plot_before_normalization <- renderPlotly({
+        `Before normalization` = data_filt()
+        ggplotly(DEP::plot_normalization(`Before normalization`))
+    })
+
+    output$plot_after_normalization <- renderPlotly({
+        `After normalization` = data_norm()
+
+        if (input$normalize_input == TRUE) {
+            ggplotly(
+                DEP::plot_normalization(`After normalization`)
+
+            )
+        }else{
+            return(NULL)
+        }
+
+    })
 
     data_norm <- reactive({
 
-        data_norm <- DEP::normalize_vsn(data_filt())
+        # If the user wants to normalize
 
-        # data_norm <- DEP::normalize_vsn(data_filt)
+        if (input$normalize_input == TRUE) {
+
+            data_norm <- DEP::normalize_vsn(data_filt())
+        } else{
+            data_norm <- data_filt()
+        }
+         #data_norm <- DEP::normalize_vsn(data_filt)
 
         #meanSdPlot(data_norm)
         #data_norm <- normalize_vsn(data_filt)
         # ggplotly( plot_normalization( data_norm))
     })
-
-
 
     #### Imputation ####
     #  Chose the parameter scale if imputation selected == Manual
