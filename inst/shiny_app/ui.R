@@ -165,7 +165,7 @@ tabPanel(h4("Preprocessing"),
                                       sidebarPanel(
                                         width = 2,
                                         checkboxInput(inputId = 'normalize_input',
-                                                      label = 'Normalization of the intensities by variance stabilizing transformation'),
+                                                      label = 'Normalization of the intensities by variance stabilizing transformation (VSN)'),
                                         value = TRUE
                                       ),
 

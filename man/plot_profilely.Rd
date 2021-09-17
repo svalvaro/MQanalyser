@@ -12,6 +12,7 @@ plot_profilely(
   angle_labels = 45,
   selected_genes = NULL,
   color_selected = "red",
+  alpha = 0.9,
   plot = TRUE,
   clear_selection = FALSE,
   prof_genes_de = FALSE,

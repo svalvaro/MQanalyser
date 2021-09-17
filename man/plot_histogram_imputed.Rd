@@ -4,7 +4,7 @@
 \alias{plot_histogram_imputed}
 \title{Plot_histogram}
 \usage{
-plot_histogram_imputed(data_to_be_imputed)
+plot_histogram_imputed(data_to_be_imputed, combined = FALSE)
 }
 \arguments{
 \item{data_to_be_imputed}{}

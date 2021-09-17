@@ -469,17 +469,21 @@ function(input, output) {
 
     output$plot_before_normalization <- renderPlotly({
         `Before normalization` = data_filt()
-        ggplotly(DEP::plot_normalization(`Before normalization`))
+        #ggplotly(DEP::plot_normalization(`Before normalization`))
+
+        MQanalyser::plot_normalization_interactive(`Before normalization`)
     })
 
     output$plot_after_normalization <- renderPlotly({
         `After normalization` = data_norm()
 
         if (input$normalize_input == TRUE) {
-            ggplotly(
-                DEP::plot_normalization(`After normalization`)
+            # ggplotly(
+            #     (`After normalization`)
+            #
+            # )
+            MQanalyser::plot_normalization_interactive(`After normalization`)
 
-            )
         }else{
             return(NULL)
         }
