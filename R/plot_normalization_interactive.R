@@ -47,7 +47,8 @@ plot_normalization_interactive <- function(se, ...) {
         coord_flip() +
         facet_wrap(~var, ncol = 1) +
         labs(x = "", y = 'Log 2 Intensity')+
-        theme_bw()
+        theme_bw()+
+        scale_fill_brewer(palette = 'Set3')
 
 
     ggplotly(p)
