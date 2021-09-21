@@ -424,8 +424,6 @@ function(input, output) {
              threshold<- trunc(n_replicates / 2) #If there are 6 or more. NA accepted is half of the max.
          }
 
-
-
         sliderInput(inputId = 'nas_threshold',
                     label = h4('Select the number of missing values allowed in each group'),
                     min = 0,
@@ -458,6 +456,12 @@ function(input, output) {
     })
 
 
+    output$barplot_missvals <- renderPlotly(
+        MQanalyser::plot_protsidentified(data_filt())%>%
+            layout(height = 800, width = 800)
+    )
+
+
     output$heatmap_nas <- renderPlot(height = 800,{
 
 
@@ -478,19 +482,15 @@ function(input, output) {
         `After normalization` = data_norm()
 
         if (input$normalize_input == TRUE) {
-            # ggplotly(
-            #     (`After normalization`)
-            #
-            # )
+
             MQanalyser::plot_normalization_interactive(`After normalization`)
 
         }else{
             return(NULL)
         }
-
     })
 
-    data_norm <- reactive({
+        data_norm <- reactive({
 
         # If the user wants to normalize
 
@@ -641,6 +641,18 @@ function(input, output) {
 
 
 
+    output$imputation <- renderPlotly(
+
+        MQanalyser::plot_histogram_imputed(
+
+            data_to_be_imputed = data_to_be_imputed(),
+            combined = input$combined_imputation) %>%
+            layout(height = 900, width = 1400)
+    )
+
+
+    #### DEP ####
+
 
     dep <- reactive({
 
@@ -698,14 +710,7 @@ function(input, output) {
 
 
 
-    output$imputation <- renderPlotly(
 
-        MQanalyser::plot_histogram_imputed(
-
-            data_to_be_imputed = data_to_be_imputed(),
-            combined = input$combined_imputation) %>%
-            layout(height = 900, width = 1400)
-    )
 
 
 

@@ -153,6 +153,7 @@ tabPanel(h4("Preprocessing"),
                                  h4('Filter out those proteins containing too many missing values.')
                                ),
                                br(),
+                               shinycssloaders::withSpinner(plotlyOutput('barplot_missvals')),
                                shinycssloaders::withSpinner(plotOutput('heatmap_nas')))
 
                              )
