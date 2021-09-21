@@ -82,3 +82,10 @@ margin: 0;
               top: calc(50% - 50px);;
               left: calc(50% - 400px);;
             }
+
+#img-id{
+  position: fixed;
+  right: 10px;
+  top: 5px;
+}
+
