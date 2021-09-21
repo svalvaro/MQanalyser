@@ -1,3 +1,4 @@
+#fluidPage(
 navbarPage(#title = "Proteomics Analyser",
 
           titlePanel('',
@@ -153,15 +154,26 @@ tabPanel(h4("Preprocessing"),
                                  h4('Filter out those proteins containing too many missing values.')
                                ),
                                br(),
-                               shinycssloaders::withSpinner(plotlyOutput('barplot_missvals')),
-                               shinycssloaders::withSpinner(plotOutput('heatmap_nas')))
+                               box(width = 4,
+                                   shinycssloaders::withSpinner(plotlyOutput('barplot_missvals'))
+                                   ),
+                               box(width = 3),
+
+                               box(width = 4,
+                                   shinycssloaders::withSpinner(plotOutput('heatmap_nas')))
+                                   )
+
 
                              )
                            ),
 
                            tabPanel('Normalization',
 
+
+
+
                                     sidebarLayout(
+
 
                                       sidebarPanel(
                                         width = 2,
@@ -173,15 +185,21 @@ tabPanel(h4("Preprocessing"),
 
                                       mainPanel(
 
+
                                         print(h4('Normalization of the intensities')),
                                         br(),
-                                        shinycssloaders::withSpinner(
-                                          plotlyOutput('plot_before_normalization')
-                                          ),
-                                        shinycssloaders::withSpinner(
-                                          plotlyOutput('plot_after_normalization')
+
+                                          shinycssloaders::withSpinner(
+                                            plotlyOutput('plot_before_normalization')
+                                            ),
+
+                                          shinycssloaders::withSpinner(
+                                            plotlyOutput('plot_after_normalization')
+                                          )
+
                                         )
-                                        )
+
+
                                     )
                                     ),
 
@@ -223,7 +241,6 @@ tabPanel(h4("Preprocessing"),
                                     )# close tab panel imputation
                            )
          ),
-
 
 #### Results Panel ####
     tabPanel(h4("Results"),
@@ -900,3 +917,5 @@ tabPanel(h4("Preprocessing"),
               ".shiny-output-error:before { visibility: hidden; }")
 ####
 )
+
+
