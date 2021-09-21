@@ -1,4 +1,4 @@
-#fluidPage(
+#### navbar ####
 navbarPage(#title = "Proteomics Analyser",
 
           titlePanel('',
@@ -6,6 +6,13 @@ navbarPage(#title = "Proteomics Analyser",
                                tags$title("Proteomics Analyser")) ),
 
     theme = shinytheme(theme ='flatly'),
+
+
+
+
+
+
+
 
 #### DATA INPUT ####
 
@@ -22,7 +29,6 @@ navbarPage(#title = "Proteomics Analyser",
                     verbatimTextOutput('sw_used'),
 
                     uiOutput('intensity_selector'),
-
 
                     verbatimTextOutput('IntensityFound_message'),
                     hr(),
@@ -114,7 +120,6 @@ navbarPage(#title = "Proteomics Analyser",
                                    )
                                ),
 
-
                         column(3,box(img(src="Proteomika_logo_hires.png",
                                          height = '100%',
                                          width = '100%',
@@ -135,11 +140,9 @@ navbarPage(#title = "Proteomics Analyser",
                 )
             ),
 
-
 #### Preprocessing ####
 tabPanel(h4("Preprocessing"),
 
-             #box(
                tabsetPanel(type = 'tabs',
 
                            tabPanel('Filter out missing values',
@@ -162,18 +165,12 @@ tabPanel(h4("Preprocessing"),
                                box(width = 4,
                                    shinycssloaders::withSpinner(plotOutput('heatmap_nas')))
                                    )
-
-
                              )
                            ),
 
                            tabPanel('Normalization',
 
-
-
-
                                     sidebarLayout(
-
 
                                       sidebarPanel(
                                         width = 2,
@@ -185,7 +182,6 @@ tabPanel(h4("Preprocessing"),
 
                                       mainPanel(
 
-
                                         print(h4('Normalization of the intensities')),
                                         br(),
 
@@ -196,10 +192,7 @@ tabPanel(h4("Preprocessing"),
                                           shinycssloaders::withSpinner(
                                             plotlyOutput('plot_after_normalization')
                                           )
-
                                         )
-
-
                                     )
                                     ),
 
@@ -244,9 +237,8 @@ tabPanel(h4("Preprocessing"),
 
 #### Results Panel ####
     tabPanel(h4("Results"),
+
       includeCSS("www/info_box.css"),
-
-
       box(width = 4,
           shinydashboard::infoBoxOutput('significant_proteins',
                                         width = NULL)
@@ -263,7 +255,6 @@ tabPanel(h4("Preprocessing"),
 
       br(),
       br(),
-
       hr(),
 
       shinycssloaders::withSpinner(
@@ -275,8 +266,6 @@ tabPanel(h4("Preprocessing"),
                       label = 'Download'),
       ),
 
-
-
 #### HeatMap ####
     tabPanel(h4("Heatmap"),
              sidebarLayout(
@@ -284,7 +273,6 @@ tabPanel(h4("Preprocessing"),
                     #Drop down with Parameters for heatmap
                     dropdown(
                         tags$h3("Advanced Parameters"),
-
 
                         selectInput(inputId = 'dendogram_input',
                                     label = 'Type of Clustering',
@@ -910,11 +898,22 @@ tabPanel(h4("Preprocessing"),
   ),
 
 
+# tabPanel(title =  div(img(src="Proteomika_logo_hires.png",
+#                           width = '15%'), ' '),
+#
+#          print('hello')
+# ),
+
 #### style css
 
     tags$style(type="text/css",
               ".shiny-output-error { visibility: hidden; }",
-              ".shiny-output-error:before { visibility: hidden; }")
+              ".shiny-output-error:before { visibility: hidden; }"),
+
+tags$script(HTML("var header = $('.navbar > .container-fluid');
+  header.append('<div style=\"float:right\"><ahref=\"URL\"><img src=\"Proteomika_logo_hires.png\" alt=\"alt\" style=\"float:right;width:220px;padding-top:10px;\"> </a>`</div>');
+    console.log(header)")
+)
 ####
 )
 
