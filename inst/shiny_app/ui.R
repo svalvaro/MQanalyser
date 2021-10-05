@@ -1,28 +1,14 @@
-
 #### navbar ####
-navbarPage( #title =  tags$img(src='Proteomika_logo_hires.png',width='200px'),
-              #tags$a(style='position:fixed;right:10px;top:15px;',tags$img(src='Proteomika_logo_hires.png')),
+navbarPage(#title = "Proteomics Analyser",
 
   # This is to show the logo in the browser tab
           titlePanel('',
-                      tags$head(
-                        tags$link(
-                          rel = "icon", type = "image/png", href = "logo.png"
-                          ),
-                        tags$title("Proteomics Analyser")#,
-
-                        #tag$link(rel = 'icons', href = "Proteomika_logo_hires.png")
-
-
-                        )
-                     ),
-
-
-          #tags$script(type="text/javascript", src = "code.js"),
+                     tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png"),
+                               tags$title("Proteomics Analyser")) ),
 
     theme = shinytheme(theme ='flatly'),
 
-    # Create Right Side Logo/Image with Link
+
 
 #### DATA INPUT ####
 
@@ -143,10 +129,7 @@ navbarPage( #title =  tags$img(src='Proteomika_logo_hires.png',width='200px'),
                                br(),
                                br(),
                                br(),
-                               box(
-                                 #actionButton(inputId = "start_input",label = "Start Analysis", icon = icon("play"))
-                                 actionBttn(label = ' Start Analysis', inputId = 'start_input', icon = icon('play'),)
-
+                               box(actionButton(inputId = "start_input",label = "Start Analysis", icon = icon("play"))
                                    )
                                )
                         )
@@ -156,8 +139,6 @@ navbarPage( #title =  tags$img(src='Proteomika_logo_hires.png',width='200px'),
 
 #### Preprocessing ####
 tabPanel(h4("Preprocessing"),
-
-
 
                tabsetPanel(type = 'tabs',
 
@@ -173,9 +154,8 @@ tabPanel(h4("Preprocessing"),
                                  h4('Filter out those proteins containing too many missing values.')
                                ),
                                br(),
-                               box(width = 4,which = 'plot',
-                                   shinycssloaders::withSpinner(plotlyOutput('barplot_missvals')),
-
+                               box(width = 4,
+                                   shinycssloaders::withSpinner(plotlyOutput('barplot_missvals'))
                                    ),
                                box(width = 3),
 
@@ -255,14 +235,7 @@ tabPanel(h4("Preprocessing"),
 #### Results Panel ####
     tabPanel(h4("Results"),
 
-     # style css
-
-     tags$style(type="text/css",
-                ".shiny-output-error { visibility: hidden; }",
-                ".shiny-output-error:before { visibility: hidden; }"),
-
       includeCSS("www/info_box.css"),
-
       box(width = 4,
           shinydashboard::infoBoxOutput('significant_proteins',
                                         width = NULL)
@@ -919,26 +892,25 @@ tabPanel(h4("Preprocessing"),
                        )
                    )
            )
-  )#,
+  ),
 
 
 # tabPanel(title =  div(img(src="Proteomika_logo_hires.png",
-#                           width = '15%')),
+#                           width = '15%'), ' '),
 #
 #          print('hello')
 # ),
 
+#### style css
 
+    tags$style(type="text/css",
+              ".shiny-output-error { visibility: hidden; }",
+              ".shiny-output-error:before { visibility: hidden; }"),
 
-
-
-
-
-
-# tags$script(HTML("var header = $('.navbar > .container-fluid');
-#   header.append('<div style=\"float:right\"><ahref=\"URL\"><img src=\"Proteomika_logo_hires.png\" alt=\"alt\" style=\"float:right;width:200px;padding-top:10px;\"> </a>`</div>');
-#     console.log(header)")
-# )
+tags$script(HTML("var header = $('.navbar > .container-fluid');
+  header.append('<div style=\"float:right\"><ahref=\"URL\"><img src=\"Proteomika_logo_hires.png\" alt=\"alt\" style=\"float:right;width:200px;padding-top:10px;\"> </a>`</div>');
+    console.log(header)")
+)
 ####
 )
 
