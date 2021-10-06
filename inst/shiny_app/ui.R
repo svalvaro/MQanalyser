@@ -1,11 +1,21 @@
+tagList(
+
 #### navbar ####
-navbarPage(#title = "Proteomics Analyser",
+navbarPage(
 
-  # This is to show the logo in the browser tab
-          titlePanel('',
-                     tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png"),
-                               tags$title("Proteomics Analyser")) ),
+    # This is to show the logo in the browser tab
+    titlePanel(
+      title =   tags$header(tags$img(
+        src='logo.png',
+        width = 240,
+        style ="position:fixed;
+        right: 0px;
+        top: 0px")),
 
+      windowTitle = tags$head(tags$link(rel = "icon", type = "image/png",
+                                        href = "logo_small.png"),
+                              tags$title("Proteomics Analyser"))
+    ),
     theme = shinytheme(theme ='flatly'),
 
 
@@ -18,7 +28,8 @@ navbarPage(#title = "Proteomics Analyser",
                   shinyalert::useShinyalert(),
 
                     fileInput(inputId = 'proteinInput',
-                              label = h4('Upload the proteinGroups.txt or proteoQuant.csv'),
+                              label = h4('Upload the proteinGroups.txt or
+                                         proteoQuant.csv'),
                               multiple = FALSE,
                               accept = 'text'),
 
@@ -66,7 +77,8 @@ navbarPage(#title = "Proteomics Analyser",
                     br(),
 
                     fileInput(inputId = 'user_genes',
-                              label='Provide a list of desired genes to check in the analysis: (Optional)',
+                              label='Provide a list of desired genes to check
+                              in the analysis: (Optional)',
                               multiple= FALSE,
                               accept= 'text'),
                     hr(),
@@ -86,12 +98,21 @@ navbarPage(#title = "Proteomics Analyser",
                     h4('Exapmles of the file(s) to be uploaded:'),
                     fluidRow(
 
-                        column(5,a(href='proteinGroup_example.txt','proteinGroups.txt', download=NA, target='_blank') ),
+                        column(5,a(href='proteinGroup_example.txt',
+                                   'proteinGroups.txt',
+                                   download=NA,
+                                   target='_blank') ),
 
-                        column(5,a(href='experiment_design_example.txt','experiment_design.txt', download=NA, target='_blank') ),
+                        column(5,a(href='experiment_design_example.txt',
+                                   'experiment_design.txt',
+                                   download=NA,
+                                   target='_blank') ),
 
 
-                        column(5,a(href='user_genes_examples.txt','Genes example', download=NA, target='_blank')
+                        column(5,a(href='user_genes_examples.txt',
+                                   'Genes example',
+                                   download=NA,
+                                   target='_blank')
                                ),
                         )
                   ),
@@ -101,40 +122,67 @@ navbarPage(#title = "Proteomics Analyser",
                         column(8,
                                box(title = h3('Experiment Design'),
                                    width = 10,
-                                   h4('Welcome to analysis of the results of LC-MS/MS'),
-                                   h5('Start by uploading the proteinGroups.txt table provided.'),
-                                   h5('Please Edit the next table by adding the Condition and Replicate.'),
-                                   h5('Alternatively an experiment design can be uploaded. Be sure that the Sample names are correct.'),
+                                   h4('Welcome to analysis of the results
+                                      of LC-MS/MS'),
+                                   h5('Start by uploading the proteinGroups.txt
+                                      table provided.'),
+                                   h5('Please Edit the next table by adding the
+                                      Condition and Replicate.'),
+                                   h5('Alternatively an experiment design can
+                                      be uploaded. Be sure that the Sample
+                                      names are correct.'),
                                    hr(),
 
                                    #DTOutput('experiment_design')
                                    #DT::dataTableOutput('ed_out'),
                                    rHandsontableOutput('ed_out'),
                                    br(),
-                                   downloadButton(outputId = 'download_experiment_design',
-                                                  label = 'Download (Press Start Analysis First)'),
+                                   downloadButton(
+                                    outputId = 'download_experiment_design',
+                                    label = 'Download (Press Start
+                                    Analysis First)'),
                                    )
                                ),
 
                         column(3,
-                               # box(img(src="Proteomika_logo_hires.png",
-                               #           height = '100%',
-                               #           width = '100%',
-                               #           align = 'right')
-                               #       ),
-
                                br(),
                                br(),
                                br(),
                                br(),
                                br(),
                                br(),
-                               box(actionButton(inputId = "start_input",label = "Start Analysis", icon = icon("play"))
+                               box(actionButton(inputId = "start_input",
+                                                label = "Start Analysis",
+                                                icon = icon("play"))
                                    )
                                )
                         )
                     )
-                )
+                ),
+
+            # Footer -------------------------------
+            br(),
+            hr(style = "border-color: #cbcbcb;"),
+
+            fluidRow(
+              column(9,
+
+                     p("App created by ",
+                       tags$a(href = "https://www.linkedin.com/in/svalvaro/",
+                              'Alvaro Sanchez-Villalba',
+                              target = '_blank'),
+                       HTML("&bull;"),
+                       style = "font-size: 85%"),
+
+                     p("Have a question? Spot an error? Send an email ",
+                       tags$a(href = "mailto:alvaro.sanchez@fgu.cas.cz",
+                              tags$i(class = 'fa fa-envelope',
+                                     style = 'color:#990000'),
+                              target = '_blank'),
+                       style = "font-size: 85%"),
+                     p(tags$em("Last updated: October 2021"),
+                       style = 'font-size:75%'))
+            )
             ),
 
 #### Preprocessing ####
@@ -895,23 +943,20 @@ tabPanel(h4("Preprocessing"),
   ),
 
 
-# tabPanel(title =  div(img(src="Proteomika_logo_hires.png",
-#                           width = '15%'), ' '),
-#
-#          print('hello')
-# ),
+
+####  Footer & Ghost ####
+
+
 
 #### style css
 
     tags$style(type="text/css",
               ".shiny-output-error { visibility: hidden; }",
-              ".shiny-output-error:before { visibility: hidden; }"),
-
-tags$script(HTML("var header = $('.navbar > .container-fluid');
-  header.append('<div style=\"float:right\"><ahref=\"URL\"><img src=\"Proteomika_logo_hires.png\" alt=\"alt\" style=\"float:right;width:200px;padding-top:10px;\"> </a>`</div>');
-    console.log(header)")
-)
+              ".shiny-output-error:before { visibility: hidden; }")
 ####
 )
+
+)
+
 
 
