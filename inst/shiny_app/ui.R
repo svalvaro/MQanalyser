@@ -229,14 +229,24 @@ tabPanel(h4("Preprocessing"),
 
                                         print(h4('Normalization of the intensities')),
                                         br(),
+                                        box(
+                                          shinycustomloader::withLoader(
+                                            plotlyOutput('plot_before_normalization'),
+                                            type = 'image',
+                                            loader = 'logoTransparent.gif',
+                                            proxy.height = '50%'
+                                          ),
 
                                           shinycustomloader::withLoader(
-                                            plotlyOutput('plot_before_normalization'),type = 'image', loader = 'logoTransparent.gif'
-                                            ),
-
-                                          shinycustomloader::withLoader(
-                                            plotlyOutput('plot_after_normalization'),type = 'image', loader = 'logoTransparent.gif'
+                                            plotlyOutput('plot_after_normalization'),
+                                            type = 'image',
+                                            loader = 'logoTransparent.gif',
+                                            proxy.height = '10px'
                                           )
+
+                                        )
+
+
                                         )
                                     )
                                     ),
@@ -271,9 +281,16 @@ tabPanel(h4("Preprocessing"),
                                                    ),
 
                                       mainPanel(
-                                        shinycustomloader::withLoader(
-                                        plotlyOutput('imputation'),type = 'image', loader = 'logoTransparent.gif'
+                                        box(
+                                          shinycustomloader::withLoader(
+                                            plotlyOutput('imputation'),
+                                            type = 'image',
+                                            loader = 'logoTransparent.gif',
+                                            proxy.height = '100px'
+
+                                          )
                                         )
+
                                       )
                                     )
                                     )# close tab panel imputation
