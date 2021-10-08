@@ -203,13 +203,18 @@ tabPanel(h4("Preprocessing"),
                                ),
                                br(),
                                box(width = 4,
-                                   shinycustomloader::withLoader(plotlyOutput('barplot_missvals'),type = 'image', loader = 'logoTransparent.gif')
+                                   shinycssloaders::withSpinner(
+                                     plotlyOutput('barplot_missvals'),
+                                     image = 'logoTransparentSmall.gif')
                                    ),
                                box(width = 3),
 
                                box(width = 4,
-                                   shinycustomloader::withLoader(plotOutput('heatmap_nas'),type = 'image', loader = 'logoTransparent.gif'))
+                                   shinycssloaders::withSpinner(
+                                     plotOutput('heatmap_nas'),
+                                     image = 'logoTransparentSmall.gif')
                                    )
+                               )
                              )
                            ),
 
@@ -230,25 +235,18 @@ tabPanel(h4("Preprocessing"),
                                         print(h4('Normalization of the intensities')),
                                         br(),
                                         box(
-                                          shinycustomloader::withLoader(
+                                          shinycssloaders::withSpinner(
                                             plotlyOutput('plot_before_normalization'),
-                                            type = 'image',
-                                            loader = 'logoTransparent.gif',
-                                            proxy.height = '50%'
+                                            image = 'logoTransparentSmall.gif'
                                           ),
 
-                                          shinycustomloader::withLoader(
+                                          shinycssloaders::withSpinner(
                                             plotlyOutput('plot_after_normalization'),
-                                            type = 'image',
-                                            loader = 'logoTransparent.gif',
-                                            proxy.height = '10px'
+                                            image = 'logoTransparentSmall.gif'
+                                            )
                                           )
-
                                         )
-
-
-                                        )
-                                    )
+                                      )
                                     ),
 
                            tabPanel('Imputation of the missing values',
@@ -282,12 +280,9 @@ tabPanel(h4("Preprocessing"),
 
                                       mainPanel(
                                         box(
-                                          shinycustomloader::withLoader(
+                                          shinycssloaders::withSpinner(
                                             plotlyOutput('imputation'),
-                                            type = 'image',
-                                            loader = 'logoTransparent.gif',
-                                            proxy.height = '100px'
-
+                                            image = 'logoTransparentSmall.gif'
                                           )
                                         )
 
@@ -319,8 +314,11 @@ tabPanel(h4("Preprocessing"),
       br(),
       hr(),
 
-      shinycustomloader::withLoader(
-        DT::dataTableOutput('proteomics_results'),type = 'image', loader = 'logoTransparent.gif'
+      box(
+        shinycssloaders::withSpinner(
+          DT::dataTableOutput('proteomics_results'),
+          image = 'logoTransparentSmall.gif'
+        )
       ),
 
       br(),
@@ -381,8 +379,9 @@ tabPanel(h4("Preprocessing"),
                     ),
                 mainPanel(
                     box(
-                        shinycustomloader::withLoader(
-                            plotlyOutput('heatmaply'),type = 'image', loader = 'logoTransparent.gif'
+                        shinycssloaders::withSpinner(
+                            plotlyOutput('heatmaply'),
+                            image = 'logoTransparentSmall.gif'
                             )
                         )
                     )
@@ -392,16 +391,29 @@ tabPanel(h4("Preprocessing"),
 
 #### Correlation PLot ####
     tabPanel(h4('Correlation'),
-            fluidRow(column(width = 12,
-                            align = 'center',
-                            print('If you would like to analyse each plot individually,
-                            go to the next tab "Scatter Plot"'),
-                            hr(),
-                            shinycustomloader::withLoader(
-                              plotlyOutput('plot_correlation'),type = 'image', loader = 'logoTransparent.gif'
-                              )
-                            )
-                     )
+            fluidRow(
+              column(
+                width = 12,
+                align = 'center',
+                print('If you would like to analyse each plot individually,
+                go to the next tab "Scatter Plot"'),
+                hr(),
+                box(width = 11,
+
+                  shinycssloaders::withSpinner(
+                    ui_element = plotlyOutput('plot_correlation'),
+                    image = 'logoTransparentSmall.gif'
+
+                  )
+                  # shinycssloaders::withSpinner(
+                  #   ui_element = plotlyOutput('plot_correlation'),
+                  #   type = 'image',
+                  #   loader = 'logoTransparentSmall.gif',
+                  #   proxy.height = "100px"
+                  #   )
+                  )
+                )
+              )
             ),
 
 
@@ -470,8 +482,9 @@ tabPanel(h4("Preprocessing"),
                 mainPanel(
                     #Plot the scatter plot  in the second tab
                     box(height = 1200,width = 1200,
-                        shinycustomloader::withLoader(
-                          plotlyOutput('scatterplot'),type = 'image', loader = 'logoTransparent.gif'
+                        shinycssloaders::withSpinner(
+                          plotlyOutput('scatterplot'),
+                          image = 'logoTransparentSmall.gif'
                           )
                         )
                     )
@@ -585,8 +598,9 @@ tabPanel(h4("Preprocessing"),
                 ),
 
                 mainPanel(
-                  box(shinycustomloader::withLoader(
-                    plotlyOutput('volcano_plot'),type = 'image', loader = 'logoTransparent.gif'
+                  box(shinycssloaders::withSpinner(
+                    plotlyOutput('volcano_plot'),
+                    image = 'logoTransparentSmall.gif'
                     )
                     )
                   )
@@ -660,8 +674,9 @@ tabPanel(h4("Preprocessing"),
 
                 mainPanel(box(height = 800, width = 1300,
 
-                              shinycustomloader::withLoader(
-                                plotlyOutput('plot_profile'),type = 'image', loader = 'logoTransparent.gif'
+                              shinycssloaders::withSpinner(
+                                plotlyOutput('plot_profile'),
+                                image = 'logoTransparentSmall.gif'
                                 )
                               ),
                           br(),
@@ -701,12 +716,16 @@ tabPanel(h4("Preprocessing"),
 
                  ),
 
-               mainPanel(box(height = 900, width = 1300,
-
-                             shinycustomloader::withLoader(
-                               plotOutput('pca_plot'),type = 'image', loader = 'logoTransparent.gif')
-                             )
-                         )
+               mainPanel(
+                 box(
+                   height = 900,
+                   width = 1300,
+                   shinycssloaders::withSpinner(
+                     plotOutput('pca_plot'),
+                     image = 'logoTransparentSmall.gif'
+                     )
+                   )
+                 )
                )
              ),
 
@@ -761,12 +780,15 @@ tabPanel(h4("Preprocessing"),
                                                             'Molecular Function'= 'MF'),
                                                 selected = 'CC'),
                                              hr(),
-                                             shinycustomloader::withLoader(plotlyOutput('go_classification_plot'),type = 'image', loader = 'logoTransparent.gif')
+                                             shinycssloaders::withSpinner(
+                                               plotlyOutput('go_classification_plot'),
+                                               image = 'logoTransparentSmall.gif'
+                                               )
                                     ),
 
                                     # tabPanel('GSEA Enrichment',
                                     #          hr(),
-                                    #          shinycustomloader::withLoader(plotOutput('enr_gsea2'))
+                                    #          shinycssloaders::withSpinner(plotOutput('enr_gsea2'))
                                     # ),
 
 
@@ -782,7 +804,10 @@ tabPanel(h4("Preprocessing"),
                                                          selected = 'all'),
                                              br(),
 
-                                             shinycustomloader::withLoader(plotOutput('enr_gseaplot'),type = 'image', loader = 'logoTransparent.gif')
+                                             shinycssloaders::withSpinner(
+                                               plotOutput('enr_gseaplot'),
+                                               image = 'logoTransparentSmall.gif'
+                                               )
                                              )
                                     )
                         )
@@ -824,12 +849,17 @@ tabPanel(h4("Preprocessing"),
                                         hr(),
                                         # print('Dot plot is similar to bar
                                         #        plot with the capability to encode another score as dot size.'),
-                                        shinycustomloader::withLoader(plotOutput('enr_dotplot'),type = 'image', loader = 'logoTransparent.gif')
+                                        shinycssloaders::withSpinner(
+                                          plotOutput('enr_dotplot'),
+                                          image = 'logoTransparentSmall.gif')
                                ),
 
                                tabPanel('Disease GSEA',
                                         hr(),
-                                        shinycustomloader::withLoader(plotOutput('enr_gseadotplot'),type = 'image', loader = 'logoTransparent.gif')
+                                        shinycssloaders::withSpinner(
+                                          plotOutput('enr_gseadotplot'),
+                                          image = 'logoTransparentSmall.gif'
+                                          )
                                ),
 
                                tabPanel('Disease Heatmap',
@@ -837,7 +867,9 @@ tabPanel(h4("Preprocessing"),
                                         print('The heatmap can simplify the results making it easier to
                                                    identify expression patterns.'),
                                         hr(),
-                                        shinycustomloader::withLoader(plotlyOutput('heatmapnrich'),type = 'image', loader = 'logoTransparent.gif')
+                                        shinycssloaders::withSpinner(
+                                          plotlyOutput('heatmapnrich'),
+                                          image = 'logoTransparentSmall.gif')
                                ),
 
                                tabPanel('Disease density',
@@ -846,7 +878,9 @@ tabPanel(h4("Preprocessing"),
                                                     of core enriched genes for GSEA enriched categories.
                                                     It helps users to interpret up/down-regulated pathways.'),
                                         hr(),
-                                        shinycustomloader::withLoader(plotOutput('enr_ridgeplot'),type = 'image', loader = 'logoTransparent.gif')
+                                        shinycssloaders::withSpinner(
+                                          plotOutput('enr_ridgeplot'),
+                                          image = 'logoTransparentSmall.gif')
                                ),
 
                                tabPanel('Disease association',
@@ -854,8 +888,10 @@ tabPanel(h4("Preprocessing"),
                                         print('visualizing the complex association between genes and gene sets.
                                                    It emphasizes the gene overlapping among different gene sets.'),
                                         hr(),
-                                        shinycustomloader::withLoader(plotOutput('upset'),type = 'image', loader = 'logoTransparent.gif'
-                                                                     )
+                                        shinycssloaders::withSpinner(
+                                          plotOutput('upset'),
+                                          image = 'logoTransparentSmall.gif'
+                                          )
                                         )
                                )
                    )
@@ -898,17 +934,26 @@ tabPanel(h4("Preprocessing"),
 
                                    tabPanel('Biological Function',
                                             hr(),
-                                            shinycustomloader::withLoader(plotOutput('bio_comparison'),type = 'image', loader = 'logoTransparent.gif')
+                                            shinycssloaders::withSpinner(
+                                              plotOutput('bio_comparison'),
+                                              image = 'logoTransparentSmall.gif'
+                                              )
                                    ),
 
                                    tabPanel('Circus',
                                             hr(),
-                                            shinycustomloader::withLoader(plotOutput('enr_circusplot'),type = 'image', loader = 'logoTransparent.gif')
+                                            shinycssloaders::withSpinner(
+                                              plotOutput('enr_circusplot'),
+                                              image = 'logoTransparentSmall.gif'
+                                              )
                                             ),
 
                                    tabPanel('Gene Network',
                                             hr(),
-                                            shinycustomloader::withLoader(plotOutput('enr_networkplot'),type = 'image', loader = 'logoTransparent.gif')
+                                            shinycssloaders::withSpinner(
+                                              plotOutput('enr_networkplot'),
+                                              image = 'logoTransparentSmall.gif'
+                                              )
                                             ),
 
                                    tabPanel('Enrichment Map',
@@ -918,8 +963,10 @@ tabPanel(h4("Preprocessing"),
                                                    mutually overlapping gene sets are tend to cluster together,
                                                    making it easy to identify functional module.'),
                                             hr(),
-                                            shinycustomloader::withLoader(plotOutput('enr_mapplot'),type = 'image', loader = 'logoTransparent.gif'
-                                                                         )
+                                            shinycssloaders::withSpinner(
+                                              plotOutput('enr_mapplot'),
+                                              image = 'logoTransparentSmall.gif'
+                                              )
                                             )
                                    )
                        )
@@ -953,7 +1000,10 @@ tabPanel(h4("Preprocessing"),
                    box(height = 2500, width = 2000,
                         h4('KEGG Pathway'),
                         hr(),
-                        shinycustomloader::withLoader(plotOutput('enr_kegg1'),type = 'image', loader = 'logoTransparent.gif')
+                        shinycssloaders::withSpinner(
+                          plotOutput('enr_kegg1'),
+                          image = 'logoTransparentSmall.gif'
+                          )
                        )
                    )
            )
@@ -974,6 +1024,3 @@ tabPanel(h4("Preprocessing"),
 )
 
 )
-
-
-
