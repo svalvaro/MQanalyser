@@ -205,14 +205,17 @@ tabPanel(h4("Preprocessing"),
                                box(width = 4,
                                    shinycssloaders::withSpinner(
                                      plotlyOutput('barplot_missvals'),
-                                     image = 'logoTransparentSmall.gif')
+                                     image = 'logoTransparentSmall.gif',
+                                     image.width = '200px')
+
                                    ),
                                box(width = 3),
 
                                box(width = 4,
                                    shinycssloaders::withSpinner(
                                      plotOutput('heatmap_nas'),
-                                     image = 'logoTransparentSmall.gif')
+                                     image = 'logoTransparentSmall.gif',
+                                     image.width = '200px')
                                    )
                                )
                              )
@@ -237,12 +240,14 @@ tabPanel(h4("Preprocessing"),
                                         box(
                                           shinycssloaders::withSpinner(
                                             plotlyOutput('plot_before_normalization'),
-                                            image = 'logoTransparentSmall.gif'
+                                            image = 'logoTransparentSmall.gif',
+                                            image.width = '200px'
                                           ),
 
                                           shinycssloaders::withSpinner(
                                             plotlyOutput('plot_after_normalization'),
-                                            image = 'logoTransparentSmall.gif'
+                                            image = 'logoTransparentSmall.gif',
+                                            image.width = '200px'
                                             )
                                           )
                                         )
@@ -282,7 +287,8 @@ tabPanel(h4("Preprocessing"),
                                         box(
                                           shinycssloaders::withSpinner(
                                             plotlyOutput('imputation'),
-                                            image = 'logoTransparentSmall.gif'
+                                            image = 'logoTransparentSmall.gif',
+                                            image.width = '200px'
                                           )
                                         )
 
@@ -314,12 +320,13 @@ tabPanel(h4("Preprocessing"),
       br(),
       hr(),
 
-      box(
+      #box(
         shinycssloaders::withSpinner(
           DT::dataTableOutput('proteomics_results'),
-          image = 'logoTransparentSmall.gif'
-        )
-      ),
+          image = 'logoTransparentSmall.gif',
+          image.width = '200px'
+        ),
+      #),
 
       br(),
       downloadButton(outputId = 'download_proteomics',
@@ -351,23 +358,6 @@ tabPanel(h4("Preprocessing"),
                                      label = 'Colour clusters, samples',
                                      value = 0,
                                      min = 0, max = 50),
-#
-#                         #Select the Colour for UPregulated
-#                         colourpicker::colourInput("heat_upregulated",
-#                                                   h4("Select colour upregulated:"),
-#                                                   'brown2',
-#                                                   palette = "square",
-#                                                   returnName = TRUE,
-#                                                   showColour = c("background")),
-#
-#                         #Select the color for Down regulated
-#                         colourpicker::colourInput("heat_downregulated",
-#                                                   h4("Select colour downregulated:"),
-#                                                   'cyan3',
-#                                                   palette = "square",
-#                                                   returnName = TRUE,
-#                                                   showColour = c("background")),
-
 
                         options = list(`style` = "btn-info"),
                         style = "unite", icon = icon("gear"),
@@ -381,7 +371,8 @@ tabPanel(h4("Preprocessing"),
                     box(
                         shinycssloaders::withSpinner(
                             plotlyOutput('heatmaply'),
-                            image = 'logoTransparentSmall.gif'
+                            image = 'logoTransparentSmall.gif',
+                            image.width = '200px'
                             )
                         )
                     )
@@ -402,15 +393,9 @@ tabPanel(h4("Preprocessing"),
 
                   shinycssloaders::withSpinner(
                     ui_element = plotlyOutput('plot_correlation'),
-                    image = 'logoTransparentSmall.gif'
-
-                  )
-                  # shinycssloaders::withSpinner(
-                  #   ui_element = plotlyOutput('plot_correlation'),
-                  #   type = 'image',
-                  #   loader = 'logoTransparentSmall.gif',
-                  #   proxy.height = "100px"
-                  #   )
+                    image = 'logoTransparentSmall.gif',
+                    image.width = '200px'
+                    )
                   )
                 )
               )
@@ -434,7 +419,6 @@ tabPanel(h4("Preprocessing"),
                     checkboxInput(inputId = 'showgenes',
                                   label = h4('Show the differentially expressed proteins of the list that you have uploaded'),
                                   value=FALSE),
-
                     dropdown(
                         tags$h3("Advanced Parameters"),
 
@@ -484,7 +468,8 @@ tabPanel(h4("Preprocessing"),
                     box(height = 1200,width = 1200,
                         shinycssloaders::withSpinner(
                           plotlyOutput('scatterplot'),
-                          image = 'logoTransparentSmall.gif'
+                          image = 'logoTransparentSmall.gif',
+                          image.width = '200px'
                           )
                         )
                     )
@@ -526,7 +511,7 @@ tabPanel(h4("Preprocessing"),
                                       step = 0.5,
                                       value = c(0,5)
                                       )
-                        ),
+                          ),
                         br(),
                         hr(),
                         sliderInput(inputId = 'volc_alpha',
@@ -577,16 +562,6 @@ tabPanel(h4("Preprocessing"),
 
                     hr(),
 
-                    # #Checkbox for Gene names
-                    # checkboxInput(inputId = 'check_names',
-                    #               label =h4('Show gene  names:'),
-                    #               value = FALSE),
-                    #
-                    # #check box for protein IDs
-                    # checkboxInput(inputId = 'protein_id',
-                    #               label =h4('Show protein IDs:'),
-                    #               value = FALSE),
-
                     #Check box for fav genes
                     checkboxInput(inputId = 'showgenes_volcano',
                                   label=h4('Show your selected genes'),
@@ -600,7 +575,8 @@ tabPanel(h4("Preprocessing"),
                 mainPanel(
                   box(shinycssloaders::withSpinner(
                     plotlyOutput('volcano_plot'),
-                    image = 'logoTransparentSmall.gif'
+                    image = 'logoTransparentSmall.gif',
+                    image.width = '200px'
                     )
                     )
                   )
@@ -676,7 +652,8 @@ tabPanel(h4("Preprocessing"),
 
                               shinycssloaders::withSpinner(
                                 plotlyOutput('plot_profile'),
-                                image = 'logoTransparentSmall.gif'
+                                image = 'logoTransparentSmall.gif',
+                                image.width = '200px'
                                 )
                               ),
                           br(),
@@ -722,7 +699,8 @@ tabPanel(h4("Preprocessing"),
                    width = 1300,
                    shinycssloaders::withSpinner(
                      plotOutput('pca_plot'),
-                     image = 'logoTransparentSmall.gif'
+                     image = 'logoTransparentSmall.gif',
+                     image.width = '200px'
                      )
                    )
                  )
@@ -782,7 +760,8 @@ tabPanel(h4("Preprocessing"),
                                              hr(),
                                              shinycssloaders::withSpinner(
                                                plotlyOutput('go_classification_plot'),
-                                               image = 'logoTransparentSmall.gif'
+                                               image = 'logoTransparentSmall.gif',
+                                               image.width = '200px'
                                                )
                                     ),
 
@@ -806,7 +785,8 @@ tabPanel(h4("Preprocessing"),
 
                                              shinycssloaders::withSpinner(
                                                plotOutput('enr_gseaplot'),
-                                               image = 'logoTransparentSmall.gif'
+                                               image = 'logoTransparentSmall.gif',
+                                               image.width = '200px'
                                                )
                                              )
                                     )
@@ -851,14 +831,16 @@ tabPanel(h4("Preprocessing"),
                                         #        plot with the capability to encode another score as dot size.'),
                                         shinycssloaders::withSpinner(
                                           plotOutput('enr_dotplot'),
-                                          image = 'logoTransparentSmall.gif')
+                                          image = 'logoTransparentSmall.gif',
+                                          image.width = '200px')
                                ),
 
                                tabPanel('Disease GSEA',
                                         hr(),
                                         shinycssloaders::withSpinner(
                                           plotOutput('enr_gseadotplot'),
-                                          image = 'logoTransparentSmall.gif'
+                                          image = 'logoTransparentSmall.gif',
+                                          image.width = '200px'
                                           )
                                ),
 
@@ -869,7 +851,8 @@ tabPanel(h4("Preprocessing"),
                                         hr(),
                                         shinycssloaders::withSpinner(
                                           plotlyOutput('heatmapnrich'),
-                                          image = 'logoTransparentSmall.gif')
+                                          image = 'logoTransparentSmall.gif',
+                                          image.width = '200px')
                                ),
 
                                tabPanel('Disease density',
@@ -880,7 +863,8 @@ tabPanel(h4("Preprocessing"),
                                         hr(),
                                         shinycssloaders::withSpinner(
                                           plotOutput('enr_ridgeplot'),
-                                          image = 'logoTransparentSmall.gif')
+                                          image = 'logoTransparentSmall.gif',
+                                          image.width = '200px')
                                ),
 
                                tabPanel('Disease association',
@@ -890,7 +874,8 @@ tabPanel(h4("Preprocessing"),
                                         hr(),
                                         shinycssloaders::withSpinner(
                                           plotOutput('upset'),
-                                          image = 'logoTransparentSmall.gif'
+                                          image = 'logoTransparentSmall.gif',
+                                          image.width = '200px'
                                           )
                                         )
                                )
@@ -936,7 +921,8 @@ tabPanel(h4("Preprocessing"),
                                             hr(),
                                             shinycssloaders::withSpinner(
                                               plotOutput('bio_comparison'),
-                                              image = 'logoTransparentSmall.gif'
+                                              image = 'logoTransparentSmall.gif',
+                                              image.width = '200px'
                                               )
                                    ),
 
@@ -944,7 +930,8 @@ tabPanel(h4("Preprocessing"),
                                             hr(),
                                             shinycssloaders::withSpinner(
                                               plotOutput('enr_circusplot'),
-                                              image = 'logoTransparentSmall.gif'
+                                              image = 'logoTransparentSmall.gif',
+                                              image.width = '200px'
                                               )
                                             ),
 
@@ -952,7 +939,8 @@ tabPanel(h4("Preprocessing"),
                                             hr(),
                                             shinycssloaders::withSpinner(
                                               plotOutput('enr_networkplot'),
-                                              image = 'logoTransparentSmall.gif'
+                                              image = 'logoTransparentSmall.gif',
+                                              image.width = '200px'
                                               )
                                             ),
 
@@ -965,7 +953,8 @@ tabPanel(h4("Preprocessing"),
                                             hr(),
                                             shinycssloaders::withSpinner(
                                               plotOutput('enr_mapplot'),
-                                              image = 'logoTransparentSmall.gif'
+                                              image = 'logoTransparentSmall.gif',
+                                              image.width = '200px'
                                               )
                                             )
                                    )
@@ -1002,7 +991,8 @@ tabPanel(h4("Preprocessing"),
                         hr(),
                         shinycssloaders::withSpinner(
                           plotOutput('enr_kegg1'),
-                          image = 'logoTransparentSmall.gif'
+                          image = 'logoTransparentSmall.gif',
+                          image.width = '200px'
                           )
                        )
                    )
