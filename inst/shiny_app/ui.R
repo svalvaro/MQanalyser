@@ -562,6 +562,13 @@ tabPanel(h4("Preprocessing"),
 
                     hr(),
 
+                    # IMplement selective labeling
+
+
+                    # checkboxInput(inputId = 'volcano_gene_names',
+                    #               label = h4('Show gene names'),
+                    #               value = FALSE),
+
                     #Check box for fav genes
                     checkboxInput(inputId = 'showgenes_volcano',
                                   label=h4('Show your selected genes'),

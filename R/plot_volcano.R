@@ -24,7 +24,8 @@ plot_volcano <- function(proteomics_results = NULL,
                          user_genes_de = NULL,
                          color_genes_de = '#800080',
                          coord_x = NULL,
-                         coord_y = NULL
+                         coord_y = NULL,
+                         show_genes_names = FALSE
                          ){
 
     # data_results <- read_delim('/home/alvaro/Downloads/h3Proteomics resultsh3.csv', '\t')
@@ -153,11 +154,21 @@ plot_volcano <- function(proteomics_results = NULL,
       p <- p+coord_cartesian(xlim = coord_x, ylim = coord_y)
     }
 
+  if (show_genes_names == TRUE) {
+
+    p <- p +   geom_text(aes(label = Gene))
+
+  }
+
+
+
+    plotly::ggplotly(p = p ,
+                       tooltip = c("fold_change", "log10_pvalues", 'Gene'))
 
 
 
 
-  plotly::ggplotly(p = p ,
-                   tooltip = c("fold_change", "log10_pvalues", 'Gene'))
+
+
 
   }

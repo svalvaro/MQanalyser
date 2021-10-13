@@ -900,7 +900,8 @@ function(input, output) {
                                      color_genes_de = input$col_selected,
                                      alpha = input$volc_alpha,
                                      coord_x = input$range_fc,
-                                     coord_y = input$range_pvalue) %>%
+                                     coord_y = input$range_pvalue,
+                                     show_genes_names = FALSE) %>%
 
                 layout(height = 1000, width = 1000)
 
@@ -918,7 +919,8 @@ function(input, output) {
                                      color_genes_de = input$col_selected,
                                      alpha = input$volc_alpha,
                                      coord_x = NULL,
-                                     coord_y = NULL)%>%
+                                     coord_y = NULL,
+                                     show_genes_names = FALSE)%>%
 
                 layout(height = 1000, width = 1000)
 
