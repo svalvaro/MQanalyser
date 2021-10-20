@@ -25,7 +25,8 @@ plot_volcano <- function(proteomics_results = NULL,
                          color_genes_de = '#800080',
                          coord_x = NULL,
                          coord_y = NULL,
-                         show_genes_names = FALSE
+                         show_genes_names = FALSE,
+                         brushed_Points = NULL
                          ){
 
     # data_results <- read_delim('/home/alvaro/Downloads/h3Proteomics resultsh3.csv', '\t')
@@ -127,39 +128,48 @@ plot_volcano <- function(proteomics_results = NULL,
                          size = 5,
                          fontface = 'bold')
 
-    if(!is.null(user_genes_de) & show_genes_user ==TRUE){
+    # If the user wants to see their genes:
+
+    if(!is.null(user_genes_de) && show_genes_user ==TRUE){
       p <- p+geom_point(data = results[which(results$Gene %in% user_genes_de),],
                         color = color_genes_de,
                         alpha = alpha)
     }
 
-
-
-    # coord_x = c(-15,6)
-    if(!is.null(coord_x)){
-      p <- p+coord_cartesian(xlim = coord_x)
-
-      }
-
-    # coord_y = c(0,5)
-    if(!is.null(coord_y)){
-      p <- p+coord_cartesian(ylim = coord_y)
-    }
-
-    if(!is.null(coord_x) &!is.null(coord_y)){
+    if(!is.null(coord_x) && !is.null(coord_y)){
 
       p <- p+coord_cartesian(xlim = coord_x, ylim = coord_y)
     }
 
-  if (show_genes_names == TRUE) {
 
-    p <- p +   geom_text(aes(label = Gene))
+    # Return the static figure no plotly
 
+    if (show_genes_names == TRUE) {
+      message('No plotly required for volcan')
+
+      if (!is.null(brushed_Points)) {
+
+        brushed <- shiny::brushedPoints(results, brushed_Points)
+
+        p <- p +ggrepel::geom_text_repel(data = brushed,
+                                         mapping = aes(
+                                           x = fold_change,
+                                           y = log10_pvalues,
+                                           label = Gene))
+      }
+
+      return(p)
+
+    }
+
+  # Return plotly version.
+
+  if (show_genes_names == FALSE) {
+
+    volcan_Plotly <-  plotly::ggplotly(
+      p = p ,
+      tooltip = c("fold_change", "log10_pvalues", 'Gene'))
+
+    return(volcan_Plotly)
   }
-
-
-
-    plotly::ggplotly(p = p ,
-                       tooltip = c("fold_change", "log10_pvalues", 'Gene'))
-
-  }
+}

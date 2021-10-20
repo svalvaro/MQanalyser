@@ -567,17 +567,13 @@ tabPanel(h4("Preprocessing"),
                         label = "Gene Names",
                         labelWidth = "80px",
                         onStatus = 'success',
+                        value = FALSE,
                         offStatus = 'danger')
                       ),
 
                     hr(),
 
-                    # IMplement selective labeling
 
-
-                    # checkboxInput(inputId = 'volcano_gene_names',
-                    #               label = h4('Show gene names'),
-                    #               value = FALSE),
 
                     #Check box for fav genes
                     checkboxInput(inputId = 'showgenes_volcano',
@@ -590,11 +586,13 @@ tabPanel(h4("Preprocessing"),
                 ),
 
                 mainPanel(
-                  box(shinycssloaders::withSpinner(
-                    plotlyOutput('volcano_plot'),
-                    image = 'logoTransparentSmall.gif',
-                    image.width = '200px'
-                    )
+                  box(
+                    shinycssloaders::withSpinner(
+                      uiOutput('volcano_final'),
+                      #plotlyOutput('volcano_plot'),
+                      image = 'logoTransparentSmall.gif',
+                      image.width = '200px'
+                      )
                     )
                   )
                 )

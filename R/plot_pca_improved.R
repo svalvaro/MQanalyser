@@ -24,7 +24,7 @@ plot_pca_improved <- function(dep,
 
 
     # Calculate PCA
-    pca <- prcomp(t(df), scale = FALSE)
+    pca <- stats::prcomp(t(df), scale = FALSE)
     pca_df <- pca$x %>%
         data.frame() %>%
         rownames_to_column() %>%
@@ -57,10 +57,5 @@ plot_pca_improved <- function(dep,
         geom_text_repel(aes_string(label = label_name))+
         theme(legend.title = element_blank())
 
-
-
     return(p)
-
-
-
 }
