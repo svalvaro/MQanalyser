@@ -884,6 +884,21 @@ function(input, output) {
     })
 
 
+    output$font_gene_labels <- renderUI({
+        if (input$showGeneNames == FALSE) {
+            return(NULL)
+        }
+
+        shiny::sliderInput(
+            inputId = 'font_gene_names',
+            label = 'Adjust the font size of the labels:',
+            min = 1,
+            max = 10,
+            value = 5
+        )
+    })
+
+
     output$volcano_plot_plotly <- renderPlotly({
 
         # if (input$showGeneNames == TRUE) {
@@ -954,9 +969,8 @@ function(input, output) {
                                  coord_x = coord_x,
                                  coord_y = coord_y,
                                  show_genes_names = TRUE,
-                                 brushed_Points = input$brush_volcano)
-
-
+                                 brushed_Points = input$brush_volcano,
+                                 font_gene_names = input$font_gene_names)
     })
 
 

@@ -571,6 +571,10 @@ tabPanel(h4("Preprocessing"),
                         offStatus = 'danger')
                       ),
 
+                    # Font size depending on the showGeneNames:
+
+                    uiOutput('font_gene_labels'),
+
                     hr(),
 
 

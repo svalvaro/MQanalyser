@@ -26,7 +26,8 @@ plot_volcano <- function(proteomics_results = NULL,
                          coord_x = NULL,
                          coord_y = NULL,
                          show_genes_names = FALSE,
-                         brushed_Points = NULL
+                         brushed_Points = NULL,
+                         font_gene_names = NULL
                          ){
 
     # data_results <- read_delim('/home/alvaro/Downloads/h3Proteomics resultsh3.csv', '\t')
@@ -151,11 +152,20 @@ plot_volcano <- function(proteomics_results = NULL,
 
         brushed <- shiny::brushedPoints(results, brushed_Points)
 
+        # Add a text repel label of the selected genes with the brush
         p <- p +ggrepel::geom_text_repel(data = brushed,
                                          mapping = aes(
                                            x = fold_change,
                                            y = log10_pvalues,
-                                           label = Gene))
+                                           label = Gene),
+                                        size = font_gene_names )+
+
+          # Increase the size a bit of the selected points
+          geom_point(data = brushed,
+                      mapping = aes(x = fold_change,
+                                    y = log10_pvalues,
+                                    color = color),
+                     alpha = alpha, size = 2)
       }
 
       return(p)
