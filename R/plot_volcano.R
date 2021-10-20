@@ -158,14 +158,15 @@ plot_volcano <- function(proteomics_results = NULL,
                                            x = fold_change,
                                            y = log10_pvalues,
                                            label = Gene),
-                                        size = font_gene_names )+
+                                        size = font_gene_names,
+                                        max.overlaps = 100)+
 
           # Increase the size a bit of the selected points
           geom_point(data = brushed,
                       mapping = aes(x = fold_change,
                                     y = log10_pvalues,
                                     color = color),
-                     alpha = alpha, size = 2)
+                     alpha = alpha, size = 2.5)
       }
 
       return(p)
