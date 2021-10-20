@@ -339,9 +339,6 @@ tabPanel(h4("Preprocessing"),
              sidebarLayout(
                sidebarPanel(id = 'sidebar',
                             width = 2,
-                    #Drop down with Parameters for heatmap
-                    # dropdown(
-                    #     tags$h3("Advanced Parameters"),
 
                         selectInput(inputId = 'dendogram_input',
                                     label = 'Type of Clustering',
@@ -359,16 +356,8 @@ tabPanel(h4("Preprocessing"),
                         sliderInput(inputId = 'k_col_input',
                                      label = 'Colour clusters, samples',
                                      value = 0,
-                                     min = 0, max = 50)#,
-
-                        # options = list(`style` = "btn-info"),
-                        # style = "unite", icon = icon("gear"),
-                        # status = "success", width = "300px",
-                        # animate = animateOptions(
-                        #     enter = animations$fading_entrances$fadeInLeftBig,
-                        #     exit = animations$fading_exits$fadeOutRightBig)
-                        # )
-                    ),
+                                     min = 0, max = 50)
+                        ),
                 mainPanel(
                     box(
                         shinycssloaders::withSpinner(
@@ -419,7 +408,9 @@ tabPanel(h4("Preprocessing"),
                     #check if they want to see their genes
 
                     checkboxInput(inputId = 'showgenes',
-                                  label = h4('Show the differentially expressed proteins of the list that you have uploaded'),
+                                  label = h4(
+                                  'Show the differentially expressed
+                                  proteins of the list that you have uploaded'),
                                   value=FALSE),
                     dropdown(
                         tags$h3("Advanced Parameters"),
@@ -442,12 +433,15 @@ tabPanel(h4("Preprocessing"),
                                                   showColour = c("background")),
 
 
-                        colourpicker::colourInput(inputId = "color_de_scatter",
-                                                  h4("Select colour for your proteins of interest:"),
-                                                  '#dc143c',
-                                                  palette = "square",
-                                                  returnName = TRUE,
-                                                  showColour = c("background")),
+                        colourpicker::colourInput(
+                          inputId = "color_de_scatter",
+                          h4(
+                            "Select colour for your proteins of interest:"),
+                          '#dc143c',
+                          palette = "square",
+                          returnName = TRUE,
+                          showColour = c("background")
+                          ),
 
                         options = list(`style` = "btn-info"),
                         style = "unite", icon = icon("gear"),
@@ -462,8 +456,7 @@ tabPanel(h4("Preprocessing"),
                     # Download button for the plot
                     downloadButton(outputId = 'downloadscatter',
                                    label = 'Download the Scatter Plot')
-
-                ),
+                    ),
 
                 mainPanel(
                     #Plot the scatter plot  in the second tab
@@ -492,9 +485,12 @@ tabPanel(h4("Preprocessing"),
 
 
                         #check box for protein IDs
-                        checkboxInput(inputId = 'modify_axis',
-                                      label =h4('Would you prefer to modify the axis values: \n(Uncheck to restore values)'),
-                                      value = FALSE),
+                        checkboxInput(
+                          inputId = 'modify_axis',
+                          label =h4(
+                          'Would you prefer to modify the
+                          axis values: \n(Uncheck to restore values)'),
+                          value = FALSE),
 
                         conditionalPanel(
                           "input.modify_axis == 1",
@@ -517,8 +513,8 @@ tabPanel(h4("Preprocessing"),
                         br(),
                         hr(),
                         sliderInput(inputId = 'volc_alpha',
-                                    label = 'Adjust the transparency of the poings
-                                    parameter:',
+                                    label = 'Adjust the transparency of
+                                    the points:',
                                     value = 0.8,
                                     min = 0, max = 1),
 
@@ -561,6 +557,18 @@ tabPanel(h4("Preprocessing"),
                             exit = animations$fading_exits$fadeOutRightBig
                         )
                     ),
+                    hr(),
+
+                    tags$div(
+                    title = "Press ON if you would like to see the gene names. Draw a box around the genes that you are interested in",
+
+                      shinyWidgets::switchInput(
+                        inputId = "showGeneNames",
+                        label = "Gene Names",
+                        labelWidth = "80px",
+                        onStatus = 'success',
+                        offStatus = 'danger')
+                      ),
 
                     hr(),
 

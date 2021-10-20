@@ -60,7 +60,6 @@ plot_volcano <- function(proteomics_results = NULL,
     #Color for the right side significant
     results$color[results$fold_change > log2(foldchange_cutoff) & results$log10_pvalues > -log10(p_value_cutoff)] <- color_up
 
-
     #Color for the left side significant
 
     results$color[results$fold_change < -log2(foldchange_cutoff) & results$log10_pvalues > -log10(p_value_cutoff)] <- color_down
@@ -128,8 +127,6 @@ plot_volcano <- function(proteomics_results = NULL,
                          size = 5,
                          fontface = 'bold')
 
-
-
     if(!is.null(user_genes_de) & show_genes_user ==TRUE){
       p <- p+geom_point(data = results[which(results$Gene %in% user_genes_de),],
                         color = color_genes_de,
@@ -164,11 +161,5 @@ plot_volcano <- function(proteomics_results = NULL,
 
     plotly::ggplotly(p = p ,
                        tooltip = c("fold_change", "log10_pvalues", 'Gene'))
-
-
-
-
-
-
 
   }
