@@ -24,7 +24,8 @@ navbarPage(
 
     tabPanel(h4('Data \nInput'),
             sidebarLayout(
-                sidebarPanel(width = 3,
+                sidebarPanel(id = 'sidebar',
+                             width = 3,
                   shinyalert::useShinyalert(),
 
                     fileInput(inputId = 'proteinInput',
@@ -194,7 +195,7 @@ tabPanel(h4("Preprocessing"),
 
                              sidebarLayout(
 
-                               sidebarPanel(
+                               sidebarPanel(id = 'sidebar',
                                  width = 2,
                                  uiOutput('na_threshold')),
                                mainPanel(
@@ -225,7 +226,7 @@ tabPanel(h4("Preprocessing"),
 
                                     sidebarLayout(
 
-                                      sidebarPanel(
+                                      sidebarPanel(id = 'sidebar',
                                         width = 2,
                                         checkboxInput(inputId = 'normalize_input',
                                                       label = 'Use normalized intensities by variance stabilizing transformation (VSN)',
@@ -257,7 +258,7 @@ tabPanel(h4("Preprocessing"),
                            tabPanel('Imputation of the missing values',
 
                                     sidebarLayout(
-                                      sidebarPanel(
+                                      sidebarPanel(id = 'sidebar',
                                         width = 2,
 
                                         selectInput(inputId = 'input_imputation',
@@ -336,10 +337,11 @@ tabPanel(h4("Preprocessing"),
 #### HeatMap ####
     tabPanel(h4("Heatmap"),
              sidebarLayout(
-               sidebarPanel(width = 2,
+               sidebarPanel(id = 'sidebar',
+                            width = 2,
                     #Drop down with Parameters for heatmap
-                    dropdown(
-                        tags$h3("Advanced Parameters"),
+                    # dropdown(
+                    #     tags$h3("Advanced Parameters"),
 
                         selectInput(inputId = 'dendogram_input',
                                     label = 'Type of Clustering',
@@ -357,15 +359,15 @@ tabPanel(h4("Preprocessing"),
                         sliderInput(inputId = 'k_col_input',
                                      label = 'Colour clusters, samples',
                                      value = 0,
-                                     min = 0, max = 50),
+                                     min = 0, max = 50)#,
 
-                        options = list(`style` = "btn-info"),
-                        style = "unite", icon = icon("gear"),
-                        status = "success", width = "300px",
-                        animate = animateOptions(
-                            enter = animations$fading_entrances$fadeInLeftBig,
-                            exit = animations$fading_exits$fadeOutRightBig)
-                        )
+                        # options = list(`style` = "btn-info"),
+                        # style = "unite", icon = icon("gear"),
+                        # status = "success", width = "300px",
+                        # animate = animateOptions(
+                        #     enter = animations$fading_entrances$fadeInLeftBig,
+                        #     exit = animations$fading_exits$fadeOutRightBig)
+                        # )
                     ),
                 mainPanel(
                     box(
@@ -405,7 +407,7 @@ tabPanel(h4("Preprocessing"),
 ####  Scatter Plot ####
     tabPanel(h4("Scatter Plot"),
             sidebarLayout(
-                sidebarPanel( width = 2,
+                sidebarPanel(id = 'sidebar', width = 2,
                     h3("Select the adjustments"),
 
                     #Sample for X axis
@@ -480,7 +482,7 @@ tabPanel(h4("Preprocessing"),
 #### Volcano Plot ####
     tabPanel(h4('Volcano Plot'),
             sidebarLayout(
-                sidebarPanel(width = 2,
+                sidebarPanel(id = 'sidebar',width = 2,
                     h3("Select the adjustments"),
 
                     uiOutput("comparisons_out"),
@@ -594,7 +596,7 @@ tabPanel(h4("Preprocessing"),
 #### Profile Plot ####
     tabPanel(h4('Profile Plot'),
             sidebarLayout(
-                sidebarPanel(width = 2,
+                sidebarPanel(id = 'sidebar',width = 2,
                     h3("Select the adjustments"),
                     br(),
                     dropdown(
@@ -686,7 +688,7 @@ tabPanel(h4("Preprocessing"),
 
     tabPanel(h4('PCA'),
              sidebarLayout(
-               sidebarPanel(width = 2,
+               sidebarPanel(id = 'sidebar',width = 2,
                  h3("Select the adjustments"),
 
                  selectInput(inputId = 'pca_label',
@@ -718,7 +720,7 @@ tabPanel(h4("Preprocessing"),
 
     tabPanel(h4('Enrichment Analysis'),
             sidebarLayout(
-                sidebarPanel(width = 2,
+                sidebarPanel(id = 'sidebar',width = 2,
                     h3("Select the adjustments"),
 
                     uiOutput('comparisons_enrichment'),
@@ -806,7 +808,7 @@ tabPanel(h4("Preprocessing"),
 #### Disease Analysis Tab ####
   tabPanel(title = h4('Disease Analysis'),
            sidebarLayout(
-             sidebarPanel(width = 2,
+             sidebarPanel(id = 'sidebar',width = 2,
                uiOutput('comparisons_diseases'),
                selectInput(inputId = 'disease_organism',
                            label = 'Select the species:',
@@ -895,7 +897,7 @@ tabPanel(h4("Preprocessing"),
 #### Gene Network ####
   tabPanel(title = h4('Gene Network'),
            sidebarLayout(
-               sidebarPanel(width = 2,
+               sidebarPanel(id = 'sidebar',width = 2,
 
                  uiOutput('comparisons_network'),
 
@@ -974,7 +976,7 @@ tabPanel(h4("Preprocessing"),
 #### Pathway Analysis ####
   tabPanel(title = h4('Pathway Analysis'),
            sidebarLayout(
-               sidebarPanel(width = 2,
+               sidebarPanel(id = 'sidebar',width = 2,
                   uiOutput("pathway_selector"),
 
                  actionBttn(inputId = 'GoToPathway',
