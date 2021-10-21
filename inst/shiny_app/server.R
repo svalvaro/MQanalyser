@@ -469,7 +469,7 @@ function(input, output) {
         DEP::plot_missval(data_filt())
     })
 
-    ####  DATA normalization ####
+    #### DATA normalization ####
 
     output$plot_before_normalization <- renderPlotly({
         `Before normalization` = data_filt()
@@ -1045,13 +1045,33 @@ function(input, output) {
         })
 
 
-    output$pca_plot <- renderPlot(height = 800, width = 1200,{
-        MQanalyser::plot_pca_improved(dep = dep(),
+    pca_reactive <- reactive({
+        pca_reactive <- MQanalyser::plot_pca_improved(dep = dep(),
                                       PC_x = 1,
                                       PC_y = 2,
                                       label_name = input$pca_label,
                                       n = input$pca_proteins)
+
+        return(pca_reactive)
+
     })
+
+
+    output$pca_plot <- renderPlot(height = 800, width = 1200,{
+        pca_reactive()
+    })
+
+
+    output$downloadPCA <- downloadHandler(
+
+            filename = function(){
+                'pca_plot.png'
+            },
+
+            content = function(file){
+                ggplot2::ggsave(file, pca_reactive())
+            }
+        )
 
     #### Profile Plot ####
 

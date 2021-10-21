@@ -435,14 +435,8 @@ tabPanel(h4("Sample Comparisons"),
                                                animate = animateOptions(
                                                  enter = animations$fading_entrances$fadeInLeftBig,
                                                  exit = animations$fading_exits$fadeOutRightBig)
+                                             )
                                              ),
-
-                                             br(),
-
-                                             # Download button for the plot
-                                             downloadButton(outputId = 'downloadscatter',
-                                                            label = 'Download the Scatter Plot')
-                                ),
 
                                 mainPanel(
                                   #Plot the scatter plot  in the second tab
@@ -489,7 +483,10 @@ tabPanel(h4("Sample Comparisons"),
                                                                       'replicate' = 'replicate'),
                                                          selected = 'rowname'
                                              ),
-                                             uiOutput('pca_number_proteins')
+                                             uiOutput('pca_number_proteins'),
+                                             # Download button for the plot
+                                             downloadButton(outputId = 'downloadPCA',
+                                                            label = 'Download the PCA plot')
                                              ),
                                 mainPanel(
                                   box(
