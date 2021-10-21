@@ -43,16 +43,6 @@ plot_heatmaply <- function(dep,
               k_row = k_row,
               k_col = k_col,
               dendrogram = dendogram,
-              plot_method = 'plotly')#+
-
-       # annotate('rect',
-       #          xmin = 0,
-       #          xmax = 20,
-       #          ymin = 200,
-       #          ymax = 250,
-       #          alpha=0.3)
-
-    p
-
-
+              plot_method = 'plotly')
+    return(p)
 }

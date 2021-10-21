@@ -16,7 +16,6 @@ plot_protsidentified <- function(data_filt){
         `Valid Values` = colSums(!is.na(df))
                      )
 
-
     df2 <- melt(df2, id.vars = 'Label')
 
     p <- ggplot(df2, aes(x = Label, y = value, fill = variable))+
@@ -26,7 +25,6 @@ plot_protsidentified <- function(data_filt){
         theme(legend.title = element_blank(),
               legend.position = 'bottom')+
         scale_fill_manual(values = c('#A4DDED', '#FFDFD3'))
-
 
     return(ggplotly(p))
 

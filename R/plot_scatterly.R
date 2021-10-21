@@ -35,10 +35,6 @@ plot_scatterly <- function(dep = NULL,
 
     colnames(df) = c('Gene', 'X_sample', 'Y_sample')
 
-
-    # x_sample = 'Benign_1'
-    # y_sample = 'Malignant_1'
-
      p <- ggplot(df, aes(x = X_sample,
                          y = Y_sample))+
          theme_bw()+
@@ -58,23 +54,9 @@ plot_scatterly <- function(dep = NULL,
          xlab(label = x_sample)+
          ylab(label = y_sample)
 
-
-
-
-    #  s <- ggpubr::ggscatter(df, x = 'X_sample',y = 'Y_sample')
-    #
-    #
-    # plotly::ggplotly(s)
-
-
-
-
-
     if(show_lm == TRUE){
         p <- p+geom_smooth(method = 'lm' )
-        # p <- p+geom_smooth(method = "lm", se = 0, color ='black')
     }
-
 
     if(!is.null(user_genes_de) & show_genes_user ==TRUE){
         p <- p+geom_point(data = df[which(df$Gene %in% user_genes_de),],
@@ -88,10 +70,7 @@ plot_scatterly <- function(dep = NULL,
                           size = 2,
                           color = color_genes_de)
     }
-
-
-
-    plotly::ggplotly(p = p, tooltip = c('text'))
-
-
+    return(
+        plotly::ggplotly(p = p, tooltip = c('text'))
+    )
 }

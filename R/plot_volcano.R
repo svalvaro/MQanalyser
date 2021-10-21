@@ -30,21 +30,15 @@ plot_volcano <- function(proteomics_results = NULL,
                          font_gene_names = NULL
                          ){
 
-    # data_results <- read_delim('/home/alvaro/Downloads/h3Proteomics resultsh3.csv', '\t')
-
-    # proteomics_results <-  DEP::get_results(dep)
-    # proteomics_results <- data_results
-    # sample_comparison <- 'Benign_vs_Malignant'
-
-    results <- proteomics_results %>% select(contains(c('name','ID', sample_comparison, 'p.adj', 'ratio')))
+    results <- proteomics_results %>% select(
+      contains(c('name','ID', sample_comparison, 'p.adj', 'ratio'))
+      )
 
     pvalue_adj <- paste0(sample_comparison, '_p.adj')
 
     pval <- paste0(sample_comparison, '_p.val')
 
     foldchange <- paste0(sample_comparison, '_ratio')
-
-
 
     #Applying the -log10 to the pvalue_adj
     results$fold_change <- results[,which(names(results)==foldchange)]
@@ -56,8 +50,6 @@ plot_volcano <- function(proteomics_results = NULL,
       results$log10_pvalues <- -log10(results[,which(names(results)==pval)])
       ylab = '-Log10 (P-Value)'
     }
-
-
 
     #Color for the right side significant
     results$color[results$fold_change > log2(foldchange_cutoff) & results$log10_pvalues > -log10(p_value_cutoff)] <- color_up
@@ -73,12 +65,10 @@ plot_volcano <- function(proteomics_results = NULL,
 
     colnames(results)[colnames(results) == "name"] <- "Gene"
 
-
     # comparison names
 
     name1 <- gsub("_vs_.*", "", sample_comparison)
     name2 <- gsub(".*_vs_", "", sample_comparison)
-
 
     #Plot
     p <- ggplot(results,  aes(x = fold_change, y = log10_pvalues,  key = Gene))+
@@ -142,7 +132,6 @@ plot_volcano <- function(proteomics_results = NULL,
       p <- p+coord_cartesian(xlim = coord_x, ylim = coord_y)
     }
 
-
     # Return the static figure no plotly
 
     if (show_genes_names == TRUE) {
@@ -160,7 +149,6 @@ plot_volcano <- function(proteomics_results = NULL,
                                            label = Gene),
                                         size = font_gene_names,
                                         max.overlaps = 100)+
-
           # Increase the size a bit of the selected points
           geom_point(data = brushed,
                       mapping = aes(x = fold_change,
@@ -170,7 +158,6 @@ plot_volcano <- function(proteomics_results = NULL,
       }
 
       return(p)
-
     }
 
   # Return plotly version.

@@ -12,12 +12,7 @@ create_geneList <- function(data_results = data_results,
                             comparison_samples = NULL,
                             organism = "org.Hs.eg.db"){
 
-
-
-    # First Selected The comparison_samples and
-
-    # comparison_samples = 'Benign_vs_Malignant'
-
+    # First Selected The comparison_samples a
 
     df <- data_results %>% select(contains(c(comparison_samples, 'name'))) %>%
           select(-contains(c('_p.val','_p.adj')))
@@ -27,13 +22,7 @@ create_geneList <- function(data_results = data_results,
     # Remove the column significant (since all of them are at this step.)
     df[,paste0(comparison_samples,'_significant')] <- NULL
 
-
-
     # make a newcolumn with the entrezid
-
-
-
-
 
     ENTREZID <-  clusterProfiler::bitr(geneID = df$name,
                                           fromType = 'SYMBOL',
@@ -46,7 +35,6 @@ create_geneList <- function(data_results = data_results,
 
     df <- merge(x=df,y=ENTREZID,by="SYMBOL")
 
-
     # reorder in descending order
 
     df <- df[order(df$ratio,decreasing = TRUE),]
@@ -57,9 +45,5 @@ create_geneList <- function(data_results = data_results,
 
     names(geneList) <- df$ENTREZID
 
-
     return(geneList)
-
-
 }
-
