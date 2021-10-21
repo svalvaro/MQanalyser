@@ -576,17 +576,14 @@ tabPanel(h4("Preprocessing"),
                     uiOutput('font_gene_labels'),
 
                     hr(),
-
-
-
                     #Check box for fav genes
                     checkboxInput(inputId = 'showgenes_volcano',
                                   label=h4('Show your selected genes'),
                                   value=FALSE),
 
                     #Download button for the volcano plot
-                    downloadButton(outputId = 'downloadvolcano',
-                                   label = 'Download the Volcano Plot')
+                    #downloadButton('downloadvolcano','Download the Volcano Plot')
+                    uiOutput('downloaderVolcano')
                 ),
 
                 mainPanel(

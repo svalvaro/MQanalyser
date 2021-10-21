@@ -898,52 +898,12 @@ function(input, output) {
         )
     })
 
+    # Create the volcano, it has two options: To be reactive with plotly,
+    # Or to allow selection of points with the brush.
+    # Each option has to be rendered in a diferent way with :
+    # renderPlot or renderPlotly
 
-    output$volcano_plot_plotly <- renderPlotly({
-
-        # if (input$showGeneNames == TRUE) {
-        #     return(NULL)
-        #     }
-
-
-
-            if(input$modify_axis == TRUE){
-                coord_x  <- input$range_fc
-                coord_y <- input$range_pvalue
-            }else{
-                coord_x  <- NULL
-                coord_y <- NULL
-
-            }
-
-            return(
-
-                MQanalyser::plot_volcano(proteomics_results = data_results(),
-                                         sample_comparison = input$comparison_input,
-                                         foldchange_cutoff = input$input_fc,
-                                         p_value_cutoff = input$input_pvalue,
-                                         color_up = input$col_upregulated,
-                                         color_down = input$col_downregulated,
-                                         p_adj = input$p_adj_input,
-                                         show_genes_user = input$showgenes_volcano,
-                                         user_genes_de = user_genes_de(),
-                                         color_genes_de = input$col_selected,
-                                         alpha = input$volc_alpha,
-                                         coord_x = coord_x,
-                                         coord_y = coord_y,
-                                         show_genes_names = FALSE) %>%
-
-                    layout(height = 1000, width = 1000)
-
-            )
-
-    })
-
-    output$volcano_plot_genes <- renderPlot(height = 1000, width = 1000,{
-
-        # if (input$showGeneNames == FALSE) {
-        #     return(NULL)
-        # }
+    volcano_Plot <- reactive({
 
         if(input$modify_axis == TRUE){
             coord_x  <- input$range_fc
@@ -951,39 +911,87 @@ function(input, output) {
         }else{
             coord_x  <- NULL
             coord_y <- NULL
-
         }
 
+        if (input$showGeneNames == FALSE) {
 
-        MQanalyser::plot_volcano(proteomics_results = data_results(),
-                                 sample_comparison = input$comparison_input,
-                                 foldchange_cutoff = input$input_fc,
-                                 p_value_cutoff = input$input_pvalue,
-                                 color_up = input$col_upregulated,
-                                 color_down = input$col_downregulated,
-                                 p_adj = input$p_adj_input,
-                                 show_genes_user = input$showgenes_volcano,
-                                 user_genes_de = user_genes_de(),
-                                 color_genes_de = input$col_selected,
-                                 alpha = input$volc_alpha,
-                                 coord_x = coord_x,
-                                 coord_y = coord_y,
-                                 show_genes_names = TRUE,
-                                 brushed_Points = input$brush_volcano,
-                                 font_gene_names = input$font_gene_names)
+            volcano_Plot <- MQanalyser::plot_volcano(
+                proteomics_results = data_results(),
+                sample_comparison = input$comparison_input,
+                foldchange_cutoff = input$input_fc,
+                p_value_cutoff = input$input_pvalue,
+                color_up = input$col_upregulated,
+                color_down = input$col_downregulated,
+                p_adj = input$p_adj_input,
+                show_genes_user = input$showgenes_volcano,
+                user_genes_de = user_genes_de(),
+                color_genes_de = input$col_selected,
+                alpha = input$volc_alpha,
+                coord_x = coord_x,
+                coord_y = coord_y,
+                show_genes_names = FALSE
+                )
+        }else{
+
+            volcano_Plot <- MQanalyser::plot_volcano(
+                proteomics_results = data_results(),
+                sample_comparison = input$comparison_input,
+                foldchange_cutoff = input$input_fc,
+                p_value_cutoff = input$input_pvalue,
+                color_up = input$col_upregulated,
+                color_down = input$col_downregulated,
+                p_adj = input$p_adj_input,
+                show_genes_user = input$showgenes_volcano,
+                user_genes_de = user_genes_de(),
+                color_genes_de = input$col_selected,
+                alpha = input$volc_alpha,
+                coord_x = coord_x,
+                coord_y = coord_y,
+                show_genes_names = TRUE,
+                brushed_Points = input$brush_volcano,
+                font_gene_names = input$font_gene_names)
+        }
+
+        return(volcano_Plot)
     })
 
+    output$volcano_plot_plotly <- renderPlotly({
 
+            if(input$modify_axis == TRUE){
+                coord_x  <- input$range_fc
+                coord_y <- input$range_pvalue
+            }else{
+                coord_x  <- NULL
+                coord_y <- NULL
+            }
+
+            return(
+                volcano_Plot() %>%
+                    layout(height = 1000, width = 1000)
+                )
+    })
+
+    output$volcano_plot_genes <- renderPlot(height = 1000, width = 1000,{
+
+        if(input$modify_axis == TRUE){
+            coord_x  <- input$range_fc
+            coord_y <- input$range_pvalue
+        }else{
+            coord_x  <- NULL
+            coord_y <- NULL
+        }
+        return(
+            volcano_Plot()
+
+        )
+    })
 
     output$volcano_final <- renderUI({
 
         if (input$showGeneNames == TRUE) {
             return(
-
                 plotOutput('volcano_plot_genes',
                            brush = 'brush_volcano')
-
-
             )
         }
 
@@ -993,17 +1001,28 @@ function(input, output) {
                 plotlyOutput('volcano_plot_plotly')
             )
         }
-
-
-
-
     })
 
 
+    # Download the volcano plot when not using plotly
 
+    output$downloaderVolcano <- renderUI({
+        if (input$showGeneNames == TRUE) {
+            shiny::downloadButton('downloadvolcano',
+                                  'Download the Volcano Plot')
+        }
+    })
 
+    output$downloadvolcano <- downloadHandler(
 
+            filename = function(){
+                'volcano.png'
+            },
 
+            content = function(file){
+                ggplot2::ggsave(file, volcano_Plot())
+            }
+    )
 
     #### PCA pot ####
 
