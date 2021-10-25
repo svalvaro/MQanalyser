@@ -10,16 +10,12 @@ function(input, output) {
         req(input$Demo)
         demo$start <-  TRUE
 
-
         shinyalert::shinyalert("Demo Data Loaded", "Press Start Analysis when you are ready!",
                                type="success",
                                closeOnClickOutside = TRUE,
                                closeOnEsc = TRUE,
                                timer = 6000)
-
-
     })
-
 
     #### protein Input MaxQuant or Spectronaut ####
 
@@ -46,7 +42,6 @@ function(input, output) {
 
                 #Remove reverse and reverse and contaminants and only identified by site
 
-
                 df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
 
                 # Remove the contaminants if checkbox is pressed
@@ -67,7 +62,6 @@ function(input, output) {
 
                 # Remove the contamintants is only if checkbox is pressed.
                 # Need to find a file with contaminants first.
-
             }
 
         # If they press DEMO
@@ -127,15 +121,11 @@ function(input, output) {
             experiment_names <- gsub('.raw.PG.Quantity', '', experiment_names)
 
             experiment_names <- gsub('\\[.*\\] ', '', experiment_names)
-
-            # gsub('\\[.*\\] ','',exp_design[,'label'])
         }
 
         message(paste0('The experiment names are:', experiment_names))
 
-
         return(experiment_names)
-
     })
 
     experiment_design <- reactive({
@@ -160,17 +150,11 @@ function(input, output) {
         return(df)
     })
 
-
-
-
     output$ed_out <- renderRHandsontable({
 
         rhandsontable(experiment_design(), height =  500) %>%
             hot_col('replicate', format = '0a')
     })
-
-
-
 
     ed_final <- reactiveValues()
 
@@ -187,7 +171,6 @@ function(input, output) {
 
     # Button to download the experiment design once the user has finished it.
 
-
     output$download_experiment_design <- downloadHandler(
 
         filename = function(){'experiment_design.txt'},
@@ -196,10 +179,7 @@ function(input, output) {
         }
     )
 
-
-
     #### Pop-up message when pressed start analysis ####
-
 
     observeEvent(input$start_input, {
 
@@ -237,15 +217,11 @@ function(input, output) {
         }
     })
 
-
-
     #### Intensity type depending on the proteoInput ####
-
 
     # Radio buttons will appear in the UI depending on the software used.
 
     output$intensity_selector  <- renderUI({
-
 
         if (software_used() == 'MaxQuant') {
 
@@ -316,8 +292,6 @@ function(input, output) {
         }
     })
 
-
-
     #### User Genes ####
 
     user_genes <- reactive({
@@ -335,9 +309,7 @@ function(input, output) {
         # user_genes <- read.csv("inst/shiny_app/www/user_genes_examples.txt", col.names = 'Gene')
 
         return(df)
-
     })
-
 
     #### DEP ANALYSIS ####
 
@@ -358,8 +330,6 @@ function(input, output) {
             data_unique <- DEP::make_unique(df, 'Gene.names', 'Protein.IDs', delim = ';')
 
             # data_unique <- DEP::make_unique(df, 'Gene.names', 'Protein.IDs', delim = ';')
-
-
 
         } else if (software_used() == 'Spectronaut'){
             # Find the columns with the LFQ or iBAQ intensity
@@ -390,7 +360,6 @@ function(input, output) {
             # Remove the brackets [1], [2], from the experiment design if there.
 
             #exp_design[,'label'] <- gsub('\\[.*\\] ','',exp_design[,'label'])
-
         }
 
         # Creates a SummarizedExperiment,
@@ -399,8 +368,6 @@ function(input, output) {
         # data_se <- DEP::make_se(data_unique, columns = columns, experiment_design)
         #View(as.data.frame(data_se@elementMetadata))
         })
-
-
 
     #### Filtering of NAs ####
 
@@ -430,8 +397,6 @@ function(input, output) {
                     max = n_replicates,
                     value = threshold,
                     step = 1)
-
-
     })
 
     data_filt <- reactive({
@@ -455,7 +420,6 @@ function(input, output) {
         return(data_filt)
     })
 
-
     output$barplot_missvals <- renderPlotly(
         MQanalyser::plot_protsidentified(data_filt())%>%
             layout(height = 800, width = 800)
@@ -463,7 +427,6 @@ function(input, output) {
 
 
     output$heatmap_nas <- renderPlot(height = 800,{
-
 
         # Make it into plotly and iteractive!
         DEP::plot_missval(data_filt())
@@ -545,9 +508,6 @@ function(input, output) {
         }
     })
 
-
-
-
     data_imp <- reactive({
         if(input$input_imputation == 'Manual'){
             data_imp <-DEP::impute(data_norm(),
@@ -570,7 +530,6 @@ function(input, output) {
                                     fun = input$input_imputation)
         }
 
-
          #data_imp <- DEP::impute(data_norm , fun = 'zero')
         # data_imp <-DEP::impute(data_norm, fun = "man", shift = 1.8, scale = 0.3)
 
@@ -581,12 +540,9 @@ function(input, output) {
 
     })
 
-
     data_to_be_imputed <- reactive({
 
         # filtered <- as.data.frame(data_filt@assays@data)
-
-
 
         # Obtain the data before being imputed
         filtered <- as.data.frame(data_filt()@assays@data)
@@ -602,15 +558,6 @@ function(input, output) {
 
         # If the value is NA, it will be imputed in the next step
         filtered_melt$Imputed[is.na(filtered_melt$value)] <- TRUE
-
-        # imputed <-  which(rowSums(is.na(
-        #     filtered %>% select(-contains(c('Group', 'Group_name')))
-        # ))>0)
-        #
-        # df$Imputed <- FALSE
-        #
-        # df$Imputed[imputed] <- TRUE
-
 
         # Now obtain the already imputed values:
 
@@ -639,8 +586,6 @@ function(input, output) {
         return(imputed_melt)
     })
 
-
-
     output$imputation <- renderPlotly(
 
         MQanalyser::plot_histogram_imputed(
@@ -650,9 +595,7 @@ function(input, output) {
             layout(height = 900, width = 1400)
     )
 
-
-    #### DEP ####
-
+    #### Differential Enrichment analysis of Proteomics (DEP) ####
 
     dep <- reactive({
 
@@ -661,7 +604,6 @@ function(input, output) {
         data_diff_all_contrasts <- MQanalyser::test_limma(data_imp(),
                                                            type = "all")
 
-
          #data_diff_all_contrasts <- DEP::test_diff(data_imp(), type = "all", design_formula = formula(~ 0 + condition))
 
         # dep <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
@@ -669,8 +611,6 @@ function(input, output) {
         dep <- DEP::add_rejections(data_diff_all_contrasts,
                                    alpha = input$input_pvalue,
                                    lfc = log2(input$input_fc))
-
-
     })
 
     data_results <- reactive({
@@ -680,11 +620,9 @@ function(input, output) {
 
         # data_results <- get_results(dep)
 
-
         # Remove centered columns
 
         data_results <- data_results %>% select(-contains('centered'))
-
 
         # Imputed proteins
 
@@ -698,21 +636,12 @@ function(input, output) {
 
         #data_results$Imputed <- FALSE
 
-        # Add column with wether the
-
-        # Join the data_results with the imputed proteins
-
+        # Add column with wether the join the data_results with the imputed proteins
 
         results <- dplyr::full_join(data_results, imputed_proteins, by = "name")
 
         return(results)
     })
-
-
-
-
-
-
 
     #### RESULTS TABULAR ####
 
@@ -728,9 +657,7 @@ function(input, output) {
                         paste0(significant_proteins, ' out of ', total_proteins, ' proteins.'),
                          icon = icon("stats", lib = "glyphicon"))
         return(info)
-
     })
-
 
     # User genes diff expressed
 
@@ -748,10 +675,7 @@ function(input, output) {
 
         # user_genes_de <- user_genes[which(user_genes$Gene %in% significant_proteins$name),]
         return(user_genes_de)
-
-
     })
-
 
     # info box with the number of diff expressed proteins
     output$significant_user_genes <- renderInfoBox({
@@ -765,7 +689,6 @@ function(input, output) {
             paste0(length(user_genes_de()), ' out of ', nrow(user_genes()), ' proteins.'),
             icon = icon("stats", lib = "glyphicon"))
         return(info)
-
     })
 
     # table with the significant user genes
@@ -781,7 +704,7 @@ function(input, output) {
                     selected = user_genes_de()[1])
     })
 
-
+    # Render the table with the results
 
     output$proteomics_results <- DT::renderDataTable({
 
@@ -792,7 +715,7 @@ function(input, output) {
                                      scrollX=30),width = 400)
     })
 
-    # Download the proteomics_results
+    # Download the button proteomics_results
 
     output$download_proteomics <- downloadHandler(
         filename = function(){'proteomics_results.csv'},
@@ -800,7 +723,6 @@ function(input, output) {
             write.csv(data_results(), fname)
         }
     )
-
 
     #### Heatmap plot ####
 
@@ -844,8 +766,6 @@ function(input, output) {
                     choices = unlist(dep()$ID),selected = unlist(dep()$ID)[2])
     })
 
-
-
     output$scatterplot <- renderPlotly(
         MQanalyser::plot_scatterly(dep = dep(),
                                    x_sample = input$x_sample_input,
@@ -859,8 +779,6 @@ function(input, output) {
                                    show_lm = input$input_lm) %>%
                         layout(height = 1000, width = 1000 )
     )
-
-
 
     #### Volcano plot ####
 
@@ -1026,6 +944,7 @@ function(input, output) {
 
     #### PCA pot ####
 
+    # Number of proteins that are selected to calculate the PCA
     output$pca_number_proteins  <- renderUI({
 
         var <- apply(assay(dep()), 1, sd)
@@ -1044,6 +963,7 @@ function(input, output) {
                     step = 1)
         })
 
+    # PCA plot
 
     pca_reactive <- reactive({
         pca_reactive <- MQanalyser::plot_pca_improved(dep = dep(),
@@ -1051,17 +971,15 @@ function(input, output) {
                                       PC_y = 2,
                                       label_name = input$pca_label,
                                       n = input$pca_proteins)
-
         return(pca_reactive)
 
     })
-
 
     output$pca_plot <- renderPlot(height = 800, width = 1200,{
         pca_reactive()
     })
 
-
+    # Download button for the PCA Plot
     output$downloadPCA <- downloadHandler(
 
             filename = function(){
@@ -1098,39 +1016,39 @@ function(input, output) {
     output$plot_profile_table <- DT::renderDataTable({
 
         if(input$clear_selection == TRUE){
-            DT::datatable(MQanalyser::plot_profilely(dep = dep(),
-                                                     intensity_type = input$IntensityType,
-                                                     color = NULL,
-                                                     angle_labels = NULL,
-                                                     selected_genes = NULL,
-                                                     color_selected = NULL,
-                                                     plot = FALSE),
-                          selection = 0,
-                          extensions = 'Scroller',
+            DT::datatable(
+                MQanalyser::plot_profilely(
+                    dep = dep(),
+                    intensity_type = input$IntensityType,
+                    color = NULL,
+                    angle_labels = NULL,
+                    selected_genes = NULL,
+                    color_selected = NULL,
+                    plot = FALSE),
 
-                          options = list(scrollY=500,
-                                         scrollX=100)
-            )
+                selection = 0,
+                extensions = 'Scroller',
+
+                  options = list(scrollY=500, scrollX=100)
+                )
         }else{
-            DT::datatable(MQanalyser::plot_profilely(dep = dep(),
-                                                     intensity_type = input$IntensityType,
-                                                     color = NULL,
-                                                     angle_labels = NULL,
-                                                     selected_genes = NULL,
-                                                     color_selected = NULL,
-                                                     plot = FALSE),
-                          extensions = 'Scroller',
+            DT::datatable(
+                MQanalyser::plot_profilely(
+                    dep = dep(),
+                    intensity_type = input$IntensityType,
+                    color = NULL,
+                    angle_labels = NULL,
+                    selected_genes = NULL,
+                    color_selected = NULL,
+                    plot = FALSE),
+                extensions = 'Scroller',
 
-                          options = list(scrollY=500,
-                                         scrollX=100)
-            )
-        }
-
+                options = list(scrollY=500, scrollX=100)
+                )
+            }
     })
 
-
     #### Enrichment Analysis ####
-
 
     output$comparisons_enrichment  <- renderUI({
         selectInput(inputId = 'comparison_enrch',
