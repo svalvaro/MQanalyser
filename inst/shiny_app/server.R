@@ -217,6 +217,25 @@ function(input, output) {
         }
     })
 
+    #### Start Analyisis Button ####
+
+    output$start_analysis <- renderUI({
+
+        if (is.null(proteoInput())) {
+            return(NULL)
+        }
+        shinyWidgets::actionBttn(
+            inputId = "start_input",
+            label = "Start Analysis",
+            style = "unite",
+            color = "primary",
+            size = 'lg',
+            icon = icon("play")
+        )
+    })
+
+
+
     #### Intensity type depending on the proteoInput ####
 
     # Radio buttons will appear in the UI depending on the software used.
@@ -1448,7 +1467,16 @@ function(input, output) {
     # If pressed the button, it will open a new tab.
     observeEvent(input$GoToPathway, {
 
-        clusterProfiler::browseKEGG(kegg_react1(),input$pathselec)
+        # Debugging the button
+#
+#         browser_to_use <- getOption('browser')
+#         message(paste0('The browser is: ', browser_to_use))
+
+        clusterProfiler::browseKEGG(kegg_react1(), input$pathselec)
+
+
+
+
 
     })
 }

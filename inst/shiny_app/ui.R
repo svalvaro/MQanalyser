@@ -152,9 +152,12 @@ navbarPage(
                                br(),
                                br(),
                                br(),
-                               box(actionButton(inputId = "start_input",
-                                                label = "Start Analysis",
-                                                icon = icon("play"))
+                               box(
+                                 # actionButton(inputId = "start_input",
+                                 #                label = "Start Analysis",
+                                 #                icon = icon("play"))
+
+                                 uiOutput('start_analysis')
                                    )
                                )
                         )
