@@ -8,7 +8,9 @@ navbarPage(
 
     # Logo in the navbar
     titlePanel(
-      title = NULL,
+      title = tags$style(type="text/css",
+                         ".shiny-output-error { visibility: hidden; }",
+                         ".shiny-output-error:before { visibility: hidden; }"),
 
 
       # Show the logo in the browser tab
@@ -1043,18 +1045,14 @@ tabPanel(title =   tags$img(
     )
 
 
-),
-
-
-####  Footer & Ghost ####
-
-
+)#,
 
 # #### style css
 #
-    tags$style(type="text/css",
-              ".shiny-output-error { visibility: hidden; }",
-              ".shiny-output-error:before { visibility: hidden; }")
+
+    # tags$style(type="text/css",
+    #           ".shiny-output-error { visibility: hidden; }",
+    #           ".shiny-output-error:before { visibility: hidden; }")
 ####
 )
 
