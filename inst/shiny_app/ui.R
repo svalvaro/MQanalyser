@@ -1,12 +1,11 @@
 tagList(
-  #### style css
-
-
-
 #### navbar ####
 navbarPage(
+  # tags$style(HTML("
+  #   .tabbable > .nav > li > a                  {background-color: aqua;  color:black}
+  #   tabbable > .nav > li > a[data-value='Data Input'] {background-color: red;   color:white}")),
 
-    # Logo in the navbar
+    ##### style css ####
     titlePanel(
       title = tags$style(type="text/css",
                          ".shiny-output-error { visibility: hidden; }",
@@ -1020,40 +1019,32 @@ tabPanel(h4("Sample Comparisons"),
   ),
 
 #### Logo panel ####
-tabPanel(title =   tags$img(
-    src='logo.png',
-    width = 150),
-
-    fluidRow(
-      column(9,
-
-             p("App created by ",
-               tags$a(href = "https://www.linkedin.com/in/svalvaro/",
-                      'Alvaro Sanchez-Villalba',
-                      target = '_blank'),
-               HTML("&bull;"),
-               style = "font-size: 85%"),
-
-             p("Have a question? Spot an error? Send an email ",
-               tags$a(href = "mailto:alvaro.sanchez@fgu.cas.cz",
-                      tags$i(class = 'fa fa-envelope',
-                             style = 'color:#990000'),
-                      target = '_blank'),
-               style = "font-size: 85%"),
-             p(tags$em("Last updated: October 2021"),
-               style = 'font-size:75%'))
-    )
+  tabPanel(id = 'logo_tab',
+           position = 'right',
+           title =   tags$img(
+      src='logo.png',
+      width = 150),
 
 
-)#,
+      fluidRow(
+        column(9,
 
-# #### style css
-#
+               p("App created by ",
+                 tags$a(href = "https://www.linkedin.com/in/svalvaro/",
+                        'Alvaro Sanchez-Villalba',
+                        target = '_blank'),
+                 HTML("&bull;"),
+                 style = "font-size: 85%"),
 
-    # tags$style(type="text/css",
-    #           ".shiny-output-error { visibility: hidden; }",
-    #           ".shiny-output-error:before { visibility: hidden; }")
-####
-)
-
+               p("Have a question? Spot an error? Send an email ",
+                 tags$a(href = "mailto:alvaro.sanchez@fgu.cas.cz",
+                        tags$i(class = 'fa fa-envelope',
+                               style = 'color:#990000'),
+                        target = '_blank'),
+                 style = "font-size: 85%"),
+               p(tags$em("Last updated: October 2021"),
+                 style = 'font-size:75%'))
+      )
+      )
+  )
 )
