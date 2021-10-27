@@ -3,15 +3,13 @@
 #' @param proteoInput
 #' @param intensityType
 #'
-#' @importFrom  gghalves geom_half_violin
 #'
 #' @return
 #' @export
 #'
 #' @examples
 plot_contaminants <- function(proteoInput,
-                              intensityType = 'LFQ'#,
-                              #what_to_plot = 'intensity'
+                              intensityType = 'LFQ'
                               ){
 
     # what_to_plot <- c('frequency', 'intensity')
@@ -37,7 +35,14 @@ plot_contaminants <- function(proteoInput,
 
     colnames(df2)[colnames(df2)=='value'] <- 'Log2.Intensity'
 
-    #if (what_to_plot == 'intensity') {
+    # Colors for the plot
+
+    if (length(unique(df2$Potential.contaminant)) == 2) {
+        colors <- c('#A4DDED', '#FFDFD3')
+    }else{
+        colors <- '#FFDFD3'
+    }
+
 
     p <- ggplot(df2, aes( y = Log2.Intensity,  key = Gene.names))+
             #gghalves::geom_half_point()+
@@ -54,15 +59,9 @@ plot_contaminants <- function(proteoInput,
                 legend.title = element_blank()
 
                 )+
-            scale_colour_manual(values = c('#A4DDED', '#FFDFD3'))
-    #}
-    # p
-    #
-    # ggplotly(p#,
-    #          #tooltip = c('Log2.Intensity','Gene.names')
-    #          )
+            scale_colour_manual(values = colors)
 
     return(
-        ggplotly(p)
+        ggplotly(p, tooltip = c('y', 'key', 'colour'))
     )
 }

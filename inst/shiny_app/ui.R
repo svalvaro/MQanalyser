@@ -2,9 +2,7 @@ tagList(
 
 #### navbar ####
 navbarPage(
-  # tags$style(HTML("
-  #   .tabbable > .nav > li > a                  {background-color: aqua;  color:black}
-  #   tabbable > .nav > li > a[data-value='Data Input'] {background-color: red;   color:white}")),
+
 
     ##### style css ####
     titlePanel(
@@ -18,10 +16,7 @@ navbarPage(
                                         href = "logo_small.png"),
                               tags$title("Proteomics Analyser"))
     ),
-
-
     theme = shinytheme(theme ='flatly'),
-
 
 
 #### DATA INPUT ####
@@ -50,9 +45,7 @@ navbarPage(
                               label='Provide the experiment design (Optional)',
                               multiple= FALSE,
                               accept= 'text'),
-
                     br(),
-
                     dropdown(
                         tags$h3("Advanced Parameters"),
 
@@ -66,12 +59,8 @@ navbarPage(
                                     value = 1.5,
                                     min = 0, max = 100),
 
-                        checkboxInput(inputId = 'contaminantsInput',
-                                      label = 'Filter out the contaminants',
-                                      value = TRUE),
-
                         options = list(`style` = "btn-info"),
-                        style = "unite", icon = icon("gear"),
+                        style = "unite", icon = icon("paint-brush"),
                         status = "success", width = "300px",
                         animate = animateOptions(
                             enter = animations$fading_entrances$fadeInLeftBig,
@@ -156,13 +145,13 @@ navbarPage(
                                br(),
                                br(),
                                br(),
-                               box(
+                               #box(
                                  # actionButton(inputId = "start_input",
                                  #                label = "Start Analysis",
                                  #                icon = icon("play"))
 
                                  uiOutput('start_analysis')
-                                   )
+                                   #)
                                )
                         )
                     )
@@ -200,11 +189,15 @@ tabPanel(
     type = 'tabs',
     # Contaminants -------------------------------
 
-    tabPanel('Contaminants',
+    tabPanel(title = 'Contaminants',
+
+             # Use this to be able to use the shinydashboard stuff
+             shinyWidgets::useShinydashboard(),
+
              sidebarLayout(
                sidebarPanel(
                  id = 'sidebar',
-                 width = 2,
+                 width = 3,
 
                  checkboxInput(inputId = 'removeContaminantsInput',
                                label = h4('Remove Contaminants'),
@@ -213,21 +206,26 @@ tabPanel(
                  #automatically
                ),
                mainPanel(
-                   print(
-                     h4('Filter out the contaminant proteins.')
-                   ),
-                   br(),
-                   box(width = 4,
-                       shinycssloaders::withSpinner(
-                         plotlyOutput('contaminantsPlot'),
-                         image = 'logoTransparentSmall.gif',
-                         image.width = '200px')
-                   )
+                 column(width = 10,
 
+                        h4('Filter out the contaminant proteins.'),
+                        br(),
+                        shinydashboard::infoBoxOutput('contaminants_box',
+                                                      width = 8),
 
+                        br(),
+                        br(),
+                        hr(),
+                        box(width = 10,height = 850,
+                            shinycssloaders::withSpinner(
+                              plotlyOutput('contaminantsPlot'),
+                              image = 'logoTransparentSmall.gif',
+                              image.width = '200px')
+                            )
+                        )
+                 )
                )
-             )
-    ),
+             ),
 
     # Missing Values -------------------------------
     tabPanel('Filter out missing values',
@@ -235,27 +233,66 @@ tabPanel(
                sidebarPanel(id = 'sidebar',
                             width = 2,
                             uiOutput('na_threshold')),
-               mainPanel(
-                 print(
-                   h4('Filter out those proteins containing too many missing values.')
-                   ),
-                 br(),
-                 box(width = 4,
+               mainPanel(fluid = FALSE,
+                 #fluidRow(
+                   column(
+                     width = 6,
+                     height = 800,
                      shinycssloaders::withSpinner(
-                       plotlyOutput('barplot_missvals'),
-                       image = 'logoTransparentSmall.gif',
-                       image.width = '200px')
+                     plotlyOutput('barplot_missvals'),
+                     image = 'logoTransparentSmall.gif',
+                     image.width = '200px')
                      ),
-                 box(width = 3),
+                 column(width = 1),
 
-                 box(width = 4,
+                   column(
+                     width = 4,
                      shinycssloaders::withSpinner(
                        plotOutput('heatmap_nas'),
                        image = 'logoTransparentSmall.gif',
                        image.width = '200px')
-                     )
+                          )
+
+
+                   # shiny::splitLayout(
+                   #   cellWidths = c("50%", "50%"),
+                   #   cellHeights = c('100%', '100%'),
+                   #   #box(width = 4,
+                   #       shinycssloaders::withSpinner(
+                   #         plotlyOutput('barplot_missvals'),
+                   #         image = 'logoTransparentSmall.gif',
+                   #         image.width = '200px'),
+                   #  # ),
+                   #
+                   #  # box(width = 4,
+                   #       shinycssloaders::withSpinner(
+                   #         plotOutput('heatmap_nas'),
+                   #         image = 'logoTransparentSmall.gif',
+                   #         image.width = '200px')
+                   #   #)
+
+                   #)
                  )
-               )
+                 # print(
+                 #   h4('Filter out those proteins containing too many missing values.')
+                 #   ),
+                 # br(),
+                 # box(width = 4,
+                 #     shinycssloaders::withSpinner(
+                 #       plotlyOutput('barplot_missvals'),
+                 #       image = 'logoTransparentSmall.gif',
+                 #       image.width = '200px')
+                 #     ),
+                 # box(width = 3),
+                 #
+                 # box(width = 4,
+                 #     shinycssloaders::withSpinner(
+                 #       plotOutput('heatmap_nas'),
+                 #       image = 'logoTransparentSmall.gif',
+                 #       image.width = '200px')
+                 #     )
+                 )
+
              ),
 
 
@@ -267,7 +304,7 @@ tabPanel(
                                     sidebarLayout(
 
                                       sidebarPanel(id = 'sidebar',
-                                        width = 2,
+                                        width = 4,
                                         checkboxInput(inputId = 'normalize_input',
                                                       label = h4('Use normalized intensities by variance stabilizing transformation (VSN)'),
                                                       value = TRUE),
@@ -299,7 +336,7 @@ tabPanel(
 
                                     sidebarLayout(
                                       sidebarPanel(id = 'sidebar',
-                                        width = 2,
+                                        width = 4,
 
                                         selectInput(inputId = 'input_imputation',
                                                     label = h4('Imputation type'),
@@ -342,8 +379,8 @@ tabPanel(
 #### Results Panel ####
     tabPanel(h4("Results"),
 
-      includeCSS("www/info_box.css"),
-      box(width = 4,
+      includeCSS("www/styles.css"),
+      box(width = 4, solidHeader = FALSE,
           shinydashboard::infoBoxOutput('significant_proteins',
                                         width = NULL)
           ),
@@ -378,7 +415,7 @@ tabPanel(
     tabPanel(h4("Heatmap"),
              sidebarLayout(
                sidebarPanel(id = 'sidebar',
-                            width = 2,
+                            width = 4,
 
                         selectInput(inputId = 'dendogram_input',
                                     label = 'Type of Clustering',
@@ -420,7 +457,7 @@ tabPanel(h4("Sample Comparisons"),
                      tabPanel(title = h4('Scatter Plot'),
 
                               sidebarLayout(
-                                sidebarPanel(id = 'sidebar', width = 2,
+                                sidebarPanel(id = 'sidebar', width = 3,
                                              h3("Select the adjustments"),
 
                                              #Sample for X axis
@@ -468,7 +505,7 @@ tabPanel(h4("Sample Comparisons"),
                                                ),
 
                                                options = list(`style` = "btn-info"),
-                                               style = "unite", icon = icon("gear"),
+                                               style = "unite", icon = icon("paint-brush"),
                                                status = "success", width = "300px",
                                                animate = animateOptions(
                                                  enter = animations$fading_entrances$fadeInLeftBig,
@@ -511,7 +548,7 @@ tabPanel(h4("Sample Comparisons"),
     # PCA Plot -------------------------------
                      tabPanel(h4('PCA'),
                               sidebarLayout(
-                                sidebarPanel(id = 'sidebar',width = 2,
+                                sidebarPanel(id = 'sidebar', width = 3,
                                              h3("Select the adjustments"),
 
                                              selectInput(inputId = 'pca_label',
@@ -544,7 +581,7 @@ tabPanel(h4("Sample Comparisons"),
 #### Volcano Plot ####
     tabPanel(h4('Volcano Plot'),
             sidebarLayout(
-                sidebarPanel(id = 'sidebar',width = 2,
+                sidebarPanel(id = 'sidebar', width = 3,
                     h3("Select the adjustments"),
 
                     uiOutput("comparisons_out"),
@@ -619,7 +656,7 @@ tabPanel(h4("Sample Comparisons"),
                         ),
 
                         options = list(`style` = "btn-info"),
-                        style = "unite", icon = icon("gear"),
+                        style = "unite", icon = icon("paint-brush"),
                         status = "success", width = "300px",
                         animate = animateOptions(
                             enter = animations$fading_entrances$fadeInLeftBig,
@@ -672,7 +709,7 @@ tabPanel(h4("Sample Comparisons"),
 #### Profile Plot ####
     tabPanel(h4('Profile Plot'),
             sidebarLayout(
-                sidebarPanel(id = 'sidebar',width = 2,
+                sidebarPanel(id = 'sidebar', width = 3,
                     h3("Select the adjustments"),
                     br(),
                     dropdown(
@@ -717,7 +754,7 @@ tabPanel(h4("Sample Comparisons"),
                         ),
 
                         options = list(`style` = "btn-info"),
-                        style = "unite", icon = icon("gear"),
+                        style = "unite", icon = icon("paint-brush"),
                         status = "success", width = "300px",
                         animate = animateOptions(
                             enter = animations$fading_entrances$fadeInLeftBig,
@@ -762,7 +799,7 @@ tabPanel(h4("Sample Comparisons"),
 
     tabPanel(h4('Enrichment Analysis'),
             sidebarLayout(
-                sidebarPanel(id = 'sidebar',width = 2,
+                sidebarPanel(id = 'sidebar', width = 3,
                     h3("Select the adjustments"),
 
                     uiOutput('comparisons_enrichment'),
@@ -797,7 +834,7 @@ tabPanel(h4("Sample Comparisons"),
                     ),
 
                 mainPanel(
-                    box(height = 2500, width = 2000,
+                    box(height = 2500, width = 4000,
                         tabsetPanel(type = 'tabs',
 
                                     tabPanel('Gene Ontology',
@@ -850,7 +887,7 @@ tabPanel(h4("Sample Comparisons"),
 #### Disease Analysis Tab ####
   tabPanel(title = h4('Disease Analysis'),
            sidebarLayout(
-             sidebarPanel(id = 'sidebar',width = 2,
+             sidebarPanel(id = 'sidebar', width = 3,
                uiOutput('comparisons_diseases'),
                selectInput(inputId = 'disease_organism',
                            label = 'Select the species:',
@@ -939,7 +976,7 @@ tabPanel(h4("Sample Comparisons"),
 #### Gene Network ####
   tabPanel(title = h4('Gene Network'),
            sidebarLayout(
-               sidebarPanel(id = 'sidebar',width = 2,
+               sidebarPanel(id = 'sidebar', width = 3,
 
                  uiOutput('comparisons_network'),
 
@@ -1018,7 +1055,7 @@ tabPanel(h4("Sample Comparisons"),
 #### Pathway Analysis ####
   tabPanel(title = h4('Pathway Analysis'),
            sidebarLayout(
-               sidebarPanel(id = 'sidebar',width = 2,
+               sidebarPanel(id = 'sidebar', width = 3,
                   uiOutput("pathway_selector"),
 
                  actionBttn(inputId = 'GoToPathway',

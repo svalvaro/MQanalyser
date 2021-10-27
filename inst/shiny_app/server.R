@@ -73,8 +73,13 @@ function(input, output) {
 
             #Remove reverse and reverse and contaminants and only identified by site
 
-            df <- df[(df$Potential.contaminant == '') & (df$Reverse == '')  & (df$Only.identified.by.site==''),]
+            df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
 
+            # Remove the contaminants if checkbox is pressed
+            if (input$removeContaminantsInput) {
+
+                df <- df[(df$Potential.contaminant == ''),]
+            }
         }
 
         return(df)
@@ -334,13 +339,37 @@ function(input, output) {
 
     #### Filter out contaminants ####
 
+    output$contaminants_box <- renderInfoBox({
+        # Number of contaminants proteins
+        contaminants <- proteoInput() %>%
+            select('Potential.contaminant')
+
+        contaminants <- contaminants[contaminants$Potential.contaminant == '+',]
+        total_contaminants <- length(contaminants)
+
+        if(total_contaminants == 0){
+            icon <- "check-square"
+            color <- 'green'
+        }else{
+            icon <- "exclamation-circle"
+            color <- 'red'
+        }
+
+        info <- infoBox(
+            'Contaminant Proteins',
+            paste0(total_contaminants, ' contaminants proteins found.'),
+            #icon = icon("stats", lib = "glyphicon"))
+            icon = icon(icon),color = color)
+        return(info)
+    })
+
+
     output$contaminantsPlot <- renderPlotly(
 
         MQanalyser::plot_contaminants(proteoInput = proteoInput(),
                                       intensityType = input$intensityType)%>%
         layout(height = 800, width = 800)
     )
-
 
     #### Make summarised experiment ####
 
@@ -406,6 +435,7 @@ function(input, output) {
 
     output$na_threshold  <- renderUI({
 
+
         # Check number of replicates
 
         n_replicates <- max(ed_final$data$replicate)
@@ -432,6 +462,9 @@ function(input, output) {
 
     data_filt <- reactive({
 
+        # Avoid warning message while rendering
+        shiny::req(input$nas_threshold)
+
         #Imputation should not be done for proteins with too many NAs
         #We set a threshold for the allowed number of missing values per condition
         # Threshold is per group.
@@ -453,11 +486,11 @@ function(input, output) {
 
     output$barplot_missvals <- renderPlotly(
         MQanalyser::plot_protsidentified(data_filt())%>%
-            layout(height = 800, width = 800)
+            layout(height = 800, width = 700)
     )
 
 
-    output$heatmap_nas <- renderPlot(height = 800,{
+    output$heatmap_nas <- renderPlot(height = 800,width = 600,{
 
         # Make it into plotly and iteractive!
         DEP::plot_missval(data_filt())

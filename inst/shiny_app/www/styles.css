@@ -1,3 +1,4 @@
+<!--
 .info-box {
 display: block;
 min-height: 90px;
@@ -74,6 +75,8 @@ margin: 0;
   background-color: #f39c12 !important;
 }
 
+-->
+
 
 .shiny-notification {
               height: 100px;
@@ -86,11 +89,14 @@ margin: 0;
 #sidebar {
         background-color: #AFD8E6;
     }
-#tab-6076-8 {
-    float: right;
-    background-color: #fff;
+
+.box {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 
 }
+
 
 
 
