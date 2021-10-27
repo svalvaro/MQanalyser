@@ -2,6 +2,7 @@
 
 export(check_software_input)
 export(create_geneList)
+export(plot_contaminants)
 export(plot_correlationly)
 export(plot_heatmaply)
 export(plot_histogram_imputed)
@@ -19,3 +20,4 @@ import(plotly)
 import(purrr)
 import(rhandsontable)
 import(tidyr)
+importFrom(gghalves,geom_half_violin)

@@ -17,7 +17,10 @@ plot_volcano(
   user_genes_de = NULL,
   color_genes_de = "#800080",
   coord_x = NULL,
-  coord_y = NULL
+  coord_y = NULL,
+  show_genes_names = FALSE,
+  brushed_Points = NULL,
+  font_gene_names = NULL
 )
 }
 \arguments{

@@ -29,7 +29,9 @@ function(input, output) {
 
         # If a file is loaded (MaxQuant or spectronaut)
 
-        }else if(!is.null(inFile)){
+        }
+
+        if(!is.null(inFile)){
 
             # If the file ends in txt is from MaxQuant, read accordingly
 
@@ -38,14 +40,14 @@ function(input, output) {
 
                 df <- read.delim(inFile$datapath)
 
-                # df <- read.delim('./inst/shiny_app/www/proteinGroups_example.txt')
+                # proteoInput <- read.delim('./inst/shiny_app/www/proteinGroups_example.txt')
 
                 #Remove reverse and reverse and contaminants and only identified by site
 
                 df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
 
                 # Remove the contaminants if checkbox is pressed
-                if (input$contaminantsInput) {
+                if (input$removeContaminantsInput) {
 
                     df <- df[(df$Potential.contaminant == ''),]
                 }
@@ -330,7 +332,17 @@ function(input, output) {
         return(df)
     })
 
-    #### DEP ANALYSIS ####
+    #### Filter out contaminants ####
+
+    output$contaminantsPlot <- renderPlotly(
+
+        MQanalyser::plot_contaminants(proteoInput = proteoInput(),
+                                      intensityType = input$intensityType)%>%
+        layout(height = 800, width = 800)
+    )
+
+
+    #### Make summarised experiment ####
 
     data_se <- reactive({
 

@@ -194,42 +194,73 @@ navbarPage(
             ),
 
 #### Preprocessing ####
-tabPanel(h4("Preprocessing"),
+tabPanel(
+  h4("Preprocessing"),
+  tabsetPanel(
+    type = 'tabs',
+    # Contaminants -------------------------------
 
-    #  Filter missing values  -------------------------------
+    tabPanel('Contaminants',
+             sidebarLayout(
+               sidebarPanel(
+                 id = 'sidebar',
+                 width = 2,
 
-               tabsetPanel(type = 'tabs',
+                 checkboxInput(inputId = 'removeContaminantsInput',
+                               label = h4('Remove Contaminants'),
+                               value = TRUE)
+                 # Reverse and Identified by one hit will be removed
+                 #automatically
+               ),
+               mainPanel(
+                   print(
+                     h4('Filter out the contaminant proteins.')
+                   ),
+                   br(),
+                   box(width = 4,
+                       shinycssloaders::withSpinner(
+                         plotlyOutput('contaminantsPlot'),
+                         image = 'logoTransparentSmall.gif',
+                         image.width = '200px')
+                   )
 
-                           tabPanel('Filter out missing values',
 
-                             sidebarLayout(
+               )
+             )
+    ),
 
-                               sidebarPanel(id = 'sidebar',
-                                 width = 2,
-                                 uiOutput('na_threshold')),
-                               mainPanel(
-                                 print(
-                                 h4('Filter out those proteins containing too many missing values.')
-                               ),
-                               br(),
-                               box(width = 4,
-                                   shinycssloaders::withSpinner(
-                                     plotlyOutput('barplot_missvals'),
-                                     image = 'logoTransparentSmall.gif',
-                                     image.width = '200px')
+    # Missing Values -------------------------------
+    tabPanel('Filter out missing values',
+             sidebarLayout(
+               sidebarPanel(id = 'sidebar',
+                            width = 2,
+                            uiOutput('na_threshold')),
+               mainPanel(
+                 print(
+                   h4('Filter out those proteins containing too many missing values.')
+                   ),
+                 br(),
+                 box(width = 4,
+                     shinycssloaders::withSpinner(
+                       plotlyOutput('barplot_missvals'),
+                       image = 'logoTransparentSmall.gif',
+                       image.width = '200px')
+                     ),
+                 box(width = 3),
 
-                                   ),
-                               box(width = 3),
+                 box(width = 4,
+                     shinycssloaders::withSpinner(
+                       plotOutput('heatmap_nas'),
+                       image = 'logoTransparentSmall.gif',
+                       image.width = '200px')
+                     )
+                 )
+               )
+             ),
 
-                               box(width = 4,
-                                   shinycssloaders::withSpinner(
-                                     plotOutput('heatmap_nas'),
-                                     image = 'logoTransparentSmall.gif',
-                                     image.width = '200px')
-                                   )
-                               )
-                             )
-                           ),
+
+
+
     # Normalization -------------------------------
                            tabPanel('Normalization',
 
@@ -238,7 +269,7 @@ tabPanel(h4("Preprocessing"),
                                       sidebarPanel(id = 'sidebar',
                                         width = 2,
                                         checkboxInput(inputId = 'normalize_input',
-                                                      label = 'Use normalized intensities by variance stabilizing transformation (VSN)',
+                                                      label = h4('Use normalized intensities by variance stabilizing transformation (VSN)'),
                                                       value = TRUE),
                                         value = TRUE
                                       ),
@@ -271,7 +302,7 @@ tabPanel(h4("Preprocessing"),
                                         width = 2,
 
                                         selectInput(inputId = 'input_imputation',
-                                                    label = 'Imputation type',
+                                                    label = h4('Imputation type'),
                                                     choices = c('Manual Imputation' = 'Manual',
                                                                 'Bayesian' = 'bpca',
                                                                 'Quantile Regression'= 'QRILC',
@@ -289,7 +320,7 @@ tabPanel(h4("Preprocessing"),
                                         uiOutput('manual_imputation_shift'),
 
                                         checkboxInput(inputId = 'combined_imputation',
-                                                      label = 'Combine the samples into one plot',
+                                                      label = h4('Combine the samples into one plot'),
                                                       value = FALSE)
                                                    ),
 
