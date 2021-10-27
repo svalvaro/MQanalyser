@@ -359,7 +359,8 @@ function(input, output) {
             'Contaminant Proteins',
             paste0(total_contaminants, ' contaminants proteins found.'),
             #icon = icon("stats", lib = "glyphicon"))
-            icon = icon(icon),color = color)
+            icon = icon(icon),
+            color = color)
         return(info)
     })
 
@@ -490,7 +491,7 @@ function(input, output) {
     )
 
 
-    output$heatmap_nas <- renderPlot(height = 800,width = 600,{
+    output$heatmap_nas <- renderPlot(height = 800,width = 800,{
 
         # Make it into plotly and iteractive!
         DEP::plot_missval(data_filt())
@@ -719,7 +720,7 @@ function(input, output) {
         info <- infoBox(
                         'Differentially expressed proteins',
                         paste0(significant_proteins, ' out of ', total_proteins, ' proteins.'),
-                         icon = icon("stats", lib = "glyphicon"))
+                         icon = icon("info"))
         return(info)
     })
 
@@ -751,7 +752,8 @@ function(input, output) {
         info <- infoBox(
             'From your selected proteins, there are:',
             paste0(length(user_genes_de()), ' out of ', nrow(user_genes()), ' proteins.'),
-            icon = icon("stats", lib = "glyphicon"))
+            icon = icon("bullseye"),
+            color = 'green')
         return(info)
     })
 

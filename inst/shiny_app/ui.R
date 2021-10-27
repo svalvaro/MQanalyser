@@ -227,7 +227,7 @@ tabPanel(
                )
              ),
 
-    # Missing Values -------------------------------
+    # Filter Missing Values -------------------------------
     tabPanel('Filter out missing values',
              sidebarLayout(
                sidebarPanel(id = 'sidebar',
@@ -236,14 +236,14 @@ tabPanel(
                mainPanel(fluid = FALSE,
                  #fluidRow(
                    column(
-                     width = 6,
+                     width = 8,
                      height = 800,
                      shinycssloaders::withSpinner(
                      plotlyOutput('barplot_missvals'),
                      image = 'logoTransparentSmall.gif',
                      image.width = '200px')
                      ),
-                 column(width = 1),
+                 #column(width = 1),
 
                    column(
                      width = 4,
@@ -252,51 +252,9 @@ tabPanel(
                        image = 'logoTransparentSmall.gif',
                        image.width = '200px')
                           )
-
-
-                   # shiny::splitLayout(
-                   #   cellWidths = c("50%", "50%"),
-                   #   cellHeights = c('100%', '100%'),
-                   #   #box(width = 4,
-                   #       shinycssloaders::withSpinner(
-                   #         plotlyOutput('barplot_missvals'),
-                   #         image = 'logoTransparentSmall.gif',
-                   #         image.width = '200px'),
-                   #  # ),
-                   #
-                   #  # box(width = 4,
-                   #       shinycssloaders::withSpinner(
-                   #         plotOutput('heatmap_nas'),
-                   #         image = 'logoTransparentSmall.gif',
-                   #         image.width = '200px')
-                   #   #)
-
-                   #)
                  )
-                 # print(
-                 #   h4('Filter out those proteins containing too many missing values.')
-                 #   ),
-                 # br(),
-                 # box(width = 4,
-                 #     shinycssloaders::withSpinner(
-                 #       plotlyOutput('barplot_missvals'),
-                 #       image = 'logoTransparentSmall.gif',
-                 #       image.width = '200px')
-                 #     ),
-                 # box(width = 3),
-                 #
-                 # box(width = 4,
-                 #     shinycssloaders::withSpinner(
-                 #       plotOutput('heatmap_nas'),
-                 #       image = 'logoTransparentSmall.gif',
-                 #       image.width = '200px')
-                 #     )
-                 )
-
+               )
              ),
-
-
-
 
     # Normalization -------------------------------
                            tabPanel('Normalization',
