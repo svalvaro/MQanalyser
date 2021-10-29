@@ -369,7 +369,7 @@ function(input, output) {
 
         MQanalyser::plot_contaminants(proteoInput = proteoInput(),
                                       intensityType = input$intensityType)%>%
-        layout(height = 800, width = 800)
+        layout(height = 800)
     )
 
     #### Make summarised experiment ####
@@ -487,11 +487,11 @@ function(input, output) {
 
     output$barplot_missvals <- renderPlotly(
         MQanalyser::plot_protsidentified(data_filt())%>%
-            layout(height = 800, width = 700)
+            layout(height = 800, width = 850)
     )
 
 
-    output$heatmap_nas <- renderPlot(height = 800,width = 800,{
+    output$heatmap_nas <- renderPlot(height = 800,width = 700,{
 
         # Make it into plotly and iteractive!
         DEP::plot_missval(data_filt())
@@ -709,6 +709,7 @@ function(input, output) {
     })
 
     #### RESULTS TABULAR ####
+
 
     # Info box with the number of diff expressed proteins
 

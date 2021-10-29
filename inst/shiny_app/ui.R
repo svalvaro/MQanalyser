@@ -1,7 +1,7 @@
 tagList(
 
 #### navbar ####
-navbarPage(
+navbarPage(id = 'tabs',
 
 
     ##### style css ####
@@ -24,7 +24,7 @@ navbarPage(
     tabPanel(h4('Data \nInput'),
             sidebarLayout(
                 sidebarPanel(id = 'sidebar',
-                             width = 3,
+                             width = 2,
                   shinyalert::useShinyalert(),
 
                     fileInput(inputId = 'proteinInput',
@@ -197,7 +197,7 @@ tabPanel(
              sidebarLayout(
                sidebarPanel(
                  id = 'sidebar',
-                 width = 3,
+                 width = 2,
 
                  checkboxInput(inputId = 'removeContaminantsInput',
                                label = h4('Remove Contaminants'),
@@ -262,7 +262,7 @@ tabPanel(
                                     sidebarLayout(
 
                                       sidebarPanel(id = 'sidebar',
-                                        width = 4,
+                                        width = 2,
                                         checkboxInput(inputId = 'normalize_input',
                                                       label = h4('Use normalized intensities by variance stabilizing transformation (VSN)'),
                                                       value = TRUE),
@@ -294,7 +294,7 @@ tabPanel(
 
                                     sidebarLayout(
                                       sidebarPanel(id = 'sidebar',
-                                        width = 4,
+                                        width = 2,
 
                                         selectInput(inputId = 'input_imputation',
                                                     label = h4('Imputation type'),
@@ -373,7 +373,7 @@ tabPanel(
     tabPanel(h4("Heatmap"),
              sidebarLayout(
                sidebarPanel(id = 'sidebar',
-                            width = 4,
+                            width = 2,
 
                         selectInput(inputId = 'dendogram_input',
                                     label = 'Type of Clustering',
@@ -415,7 +415,8 @@ tabPanel(h4("Sample Comparisons"),
                      tabPanel(title = h4('Scatter Plot'),
 
                               sidebarLayout(
-                                sidebarPanel(id = 'sidebar', width = 3,
+                                sidebarPanel(id = 'sidebar',
+                                             width = 2,
                                              h3("Select the adjustments"),
 
                                              #Sample for X axis
@@ -506,7 +507,8 @@ tabPanel(h4("Sample Comparisons"),
     # PCA Plot -------------------------------
                      tabPanel(h4('PCA'),
                               sidebarLayout(
-                                sidebarPanel(id = 'sidebar', width = 3,
+                                sidebarPanel(id = 'sidebar',
+                                             width = 2,
                                              h3("Select the adjustments"),
 
                                              selectInput(inputId = 'pca_label',
@@ -539,7 +541,8 @@ tabPanel(h4("Sample Comparisons"),
 #### Volcano Plot ####
     tabPanel(h4('Volcano Plot'),
             sidebarLayout(
-                sidebarPanel(id = 'sidebar', width = 3,
+                sidebarPanel(id = 'sidebar',
+                             width = 2,
                     h3("Select the adjustments"),
 
                     uiOutput("comparisons_out"),
@@ -667,7 +670,8 @@ tabPanel(h4("Sample Comparisons"),
 #### Profile Plot ####
     tabPanel(h4('Profile Plot'),
             sidebarLayout(
-                sidebarPanel(id = 'sidebar', width = 3,
+                sidebarPanel(id = 'sidebar',
+                             width = 2,
                     h3("Select the adjustments"),
                     br(),
                     dropdown(
@@ -757,7 +761,8 @@ tabPanel(h4("Sample Comparisons"),
 
     tabPanel(h4('Enrichment Analysis'),
             sidebarLayout(
-                sidebarPanel(id = 'sidebar', width = 3,
+                sidebarPanel(id = 'sidebar',
+                             width = 2,
                     h3("Select the adjustments"),
 
                     uiOutput('comparisons_enrichment'),
@@ -845,7 +850,8 @@ tabPanel(h4("Sample Comparisons"),
 #### Disease Analysis Tab ####
   tabPanel(title = h4('Disease Analysis'),
            sidebarLayout(
-             sidebarPanel(id = 'sidebar', width = 3,
+             sidebarPanel(id = 'sidebar',
+                          width = 2,
                uiOutput('comparisons_diseases'),
                selectInput(inputId = 'disease_organism',
                            label = 'Select the species:',
@@ -934,7 +940,8 @@ tabPanel(h4("Sample Comparisons"),
 #### Gene Network ####
   tabPanel(title = h4('Gene Network'),
            sidebarLayout(
-               sidebarPanel(id = 'sidebar', width = 3,
+               sidebarPanel(id = 'sidebar',
+                            width = 2,
 
                  uiOutput('comparisons_network'),
 
@@ -1013,7 +1020,8 @@ tabPanel(h4("Sample Comparisons"),
 #### Pathway Analysis ####
   tabPanel(title = h4('Pathway Analysis'),
            sidebarLayout(
-               sidebarPanel(id = 'sidebar', width = 3,
+               sidebarPanel(id = 'sidebar',
+                            width = 2,
                   uiOutput("pathway_selector"),
 
                  actionBttn(inputId = 'GoToPathway',
