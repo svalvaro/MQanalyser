@@ -39,6 +39,9 @@ create_geneList <- function(data_results = data_results,
 
     df <- df[order(df$ratio,decreasing = TRUE),]
 
+    # It'll be good to return also the gene name so I can create a tabular
+    # form of the enrichemnt.
+
     #create a named vector (the geneList)
 
     geneList <- df$ratio

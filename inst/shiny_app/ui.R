@@ -1,7 +1,7 @@
 tagList(
 
 #### navbar ####
-navbarPage(id = 'tabs',
+navbarPage(fluid = TRUE,
 
 
     ##### style css ####
@@ -22,6 +22,7 @@ navbarPage(id = 'tabs',
 #### DATA INPUT ####
 
     tabPanel(h4('Data \nInput'),
+            # class = 'bg-light',
             sidebarLayout(
                 sidebarPanel(id = 'sidebar',
                              width = 2,
@@ -183,156 +184,166 @@ navbarPage(id = 'tabs',
             ),
 
 #### Preprocessing ####
-tabPanel(
-  h4("Preprocessing"),
-  tabsetPanel(
-    type = 'tabs',
-    # Contaminants -------------------------------
 
-    tabPanel(title = 'Contaminants',
+    # uiOutput('preprocessing-tab'),
 
-             # Use this to be able to use the shinydashboard stuff
-             shinyWidgets::useShinydashboard(),
 
-             sidebarLayout(
-               sidebarPanel(
-                 id = 'sidebar',
-                 width = 2,
 
-                 checkboxInput(inputId = 'removeContaminantsInput',
-                               label = h4('Remove Contaminants'),
-                               value = TRUE)
-                 # Reverse and Identified by one hit will be removed
-                 #automatically
-               ),
-               mainPanel(
-                 column(width = 10,
+    tabPanel(
+      title = h4("Preprocessing"),
+      value = 'preprocessing-tab',
+      # id = 'preprocessing-tab',
+      # value = 'preprocessing-tab',
+      #style = 'pointer-events: none;',
 
-                        h4('Filter out the contaminant proteins.'),
-                        br(),
-                        shinydashboard::infoBoxOutput('contaminants_box',
-                                                      width = 8),
+      tabsetPanel(
+        type = 'tabs',
+        # Contaminants -------------------------------
 
-                        br(),
-                        br(),
-                        hr(),
-                        box(width = 10,height = 850,
-                            shinycssloaders::withSpinner(
-                              plotlyOutput('contaminantsPlot'),
-                              image = 'logoTransparentSmall.gif',
-                              image.width = '200px')
+        tabPanel(title = 'Contaminants',
+
+                 # Use this to be able to use the shinydashboard stuff
+                 shinyWidgets::useShinydashboard(),
+
+                 sidebarLayout(
+                   sidebarPanel(
+                     id = 'sidebar',
+                     width = 2,
+
+                     checkboxInput(inputId = 'removeContaminantsInput',
+                                   label = h4('Remove Contaminants'),
+                                   value = TRUE)
+                     # Reverse and Identified by one hit will be removed
+                     #automatically
+                   ),
+                   mainPanel(
+                     column(width = 10,
+
+                            h4('Filter out the contaminant proteins.'),
+                            br(),
+                            shinydashboard::infoBoxOutput('contaminants_box',
+                                                          width = 8),
+
+                            br(),
+                            br(),
+                            hr(),
+                            box(width = 10,height = 850,
+                                shinycssloaders::withSpinner(
+                                  plotlyOutput('contaminantsPlot'),
+                                  image = 'logoTransparentSmall.gif',
+                                  image.width = '200px')
+                                )
                             )
-                        )
-                 )
-               )
-             ),
+                     )
+                   )
+                 ),
 
-    # Filter Missing Values -------------------------------
-    tabPanel('Filter out missing values',
-             sidebarLayout(
-               sidebarPanel(id = 'sidebar',
-                            width = 2,
-                            uiOutput('na_threshold')),
-               mainPanel(fluid = FALSE,
-                 #fluidRow(
-                   column(
-                     width = 8,
-                     height = 800,
-                     shinycssloaders::withSpinner(
-                     plotlyOutput('barplot_missvals'),
-                     image = 'logoTransparentSmall.gif',
-                     image.width = '200px')
-                     ),
-                 #column(width = 1),
+        # Filter Missing Values -------------------------------
+        tabPanel('Filter out missing values',
+                 sidebarLayout(
+                   sidebarPanel(id = 'sidebar',
+                                width = 2,
+                                uiOutput('na_threshold')),
+                   mainPanel(fluid = FALSE,
+                     #fluidRow(
+                       column(
+                         width = 8,
+                         height = 800,
+                         shinycssloaders::withSpinner(
+                         plotlyOutput('barplot_missvals'),
+                         image = 'logoTransparentSmall.gif',
+                         image.width = '200px')
+                         ),
+                     #column(width = 1),
 
-                   column(
-                     width = 4,
-                     shinycssloaders::withSpinner(
-                       plotOutput('heatmap_nas'),
-                       image = 'logoTransparentSmall.gif',
-                       image.width = '200px')
-                          )
-                 )
-               )
-             ),
+                       column(
+                         width = 4,
+                         shinycssloaders::withSpinner(
+                           plotOutput('heatmap_nas'),
+                           image = 'logoTransparentSmall.gif',
+                           image.width = '200px')
+                              )
+                     )
+                   )
+                 ),
 
-    # Normalization -------------------------------
-                           tabPanel('Normalization',
+        # Normalization -------------------------------
+                               tabPanel('Normalization',
 
-                                    sidebarLayout(
+                                        sidebarLayout(
 
-                                      sidebarPanel(id = 'sidebar',
-                                        width = 2,
-                                        checkboxInput(inputId = 'normalize_input',
-                                                      label = h4('Use normalized intensities by variance stabilizing transformation (VSN)'),
-                                                      value = TRUE),
-                                        value = TRUE
-                                      ),
-
-                                      mainPanel(
-
-                                        print(h4('Normalization of the intensities')),
-                                        br(),
-                                        box(
-                                          shinycssloaders::withSpinner(
-                                            plotlyOutput('plot_before_normalization'),
-                                            image = 'logoTransparentSmall.gif',
-                                            image.width = '200px'
+                                          sidebarPanel(id = 'sidebar',
+                                            width = 2,
+                                            checkboxInput(inputId = 'normalize_input',
+                                                          label = h4('Use normalized intensities by variance stabilizing transformation (VSN)'),
+                                                          value = TRUE),
+                                            value = TRUE
                                           ),
 
-                                          shinycssloaders::withSpinner(
-                                            plotlyOutput('plot_after_normalization'),
-                                            image = 'logoTransparentSmall.gif',
-                                            image.width = '200px'
+                                          mainPanel(
+
+                                            print(h4('Normalization of the intensities')),
+                                            br(),
+                                            box(
+                                              shinycssloaders::withSpinner(
+                                                plotlyOutput('plot_before_normalization'),
+                                                image = 'logoTransparentSmall.gif',
+                                                image.width = '200px'
+                                              ),
+
+                                              shinycssloaders::withSpinner(
+                                                plotlyOutput('plot_after_normalization'),
+                                                image = 'logoTransparentSmall.gif',
+                                                image.width = '200px'
+                                                )
+                                              )
                                             )
                                           )
-                                        )
-                                      )
-                                    ),
-    # Imputation missing values -------------------------------
-                           tabPanel('Imputation of the missing values',
+                                        ),
+        # Imputation missing values -------------------------------
+                               tabPanel('Imputation of the missing values',
 
-                                    sidebarLayout(
-                                      sidebarPanel(id = 'sidebar',
-                                        width = 2,
+                                        sidebarLayout(
+                                          sidebarPanel(id = 'sidebar',
+                                            width = 2,
 
-                                        selectInput(inputId = 'input_imputation',
-                                                    label = h4('Imputation type'),
-                                                    choices = c('Manual Imputation' = 'Manual',
-                                                                'Bayesian' = 'bpca',
-                                                                'Quantile Regression'= 'QRILC',
-                                                                'MinProb'= 'MinProb',
-                                                                'Nearest neighbour averaging' = 'knn',
-                                                                'MinProb' = 'MinProb',
-                                                                'Maximum likelihood-based ' = 'MLE',
-                                                                'Minimum Value' = 'min',
-                                                                'Replace by 0' = 'zero',
-                                                                'No imputation' = 'none'),
-                                                    selected = 'MLE'),
+                                            selectInput(inputId = 'input_imputation',
+                                                        label = h4('Imputation type'),
+                                                        choices = c('Manual Imputation' = 'Manual',
+                                                                    'Bayesian' = 'bpca',
+                                                                    'Quantile Regression'= 'QRILC',
+                                                                    'MinProb'= 'MinProb',
+                                                                    'Nearest neighbour averaging' = 'knn',
+                                                                    'MinProb' = 'MinProb',
+                                                                    'Maximum likelihood-based ' = 'MLE',
+                                                                    'Minimum Value' = 'min',
+                                                                    'Replace by 0' = 'zero',
+                                                                    'No imputation' = 'none'),
+                                                        selected = 'MLE'),
 
-                                        uiOutput('manual_imputation_scale'),
+                                            uiOutput('manual_imputation_scale'),
 
-                                        uiOutput('manual_imputation_shift'),
+                                            uiOutput('manual_imputation_shift'),
 
-                                        checkboxInput(inputId = 'combined_imputation',
-                                                      label = h4('Combine the samples into one plot'),
-                                                      value = FALSE)
-                                                   ),
+                                            checkboxInput(inputId = 'combined_imputation',
+                                                          label = h4('Combine the samples into one plot'),
+                                                          value = FALSE)
+                                                       ),
 
-                                      mainPanel(
-                                        box(
-                                          shinycssloaders::withSpinner(
-                                            plotlyOutput('imputation'),
-                                            image = 'logoTransparentSmall.gif',
-                                            image.width = '200px'
+                                          mainPanel(
+                                            box(
+                                              shinycssloaders::withSpinner(
+                                                plotlyOutput('imputation'),
+                                                image = 'logoTransparentSmall.gif',
+                                                image.width = '200px'
+                                              )
+                                            )
+
                                           )
                                         )
-
-                                      )
-                                    )
-                                    )
-                           )
-         ),
+                                        )
+                               )
+             ),
 
 #### Results Panel ####
     tabPanel(h4("Results"),
@@ -774,6 +785,15 @@ tabPanel(h4("Sample Comparisons"),
                                             'Rat'= 'org.Rn.eg.db'),
                                             #'Yeast' = 'org.Sc.sgd.db'),
                                 selected = 'org.Hs.eg.db'),
+                    br(),
+
+                    selectInput(inputId = 'enrichment_selection_genes',
+                                label = 'Proteins to do the enrichment analyisis:',
+                                choices = c('Upregulated' ,
+                                            'Downregulated',
+                                            'Both'),
+
+                                selected = 'Upregulated'),
 
                     sliderInput(inputId = 'go_level',
                                 h4('Degree of specificity, or GO level. The higher the more specific:'),

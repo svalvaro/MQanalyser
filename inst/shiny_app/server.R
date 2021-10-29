@@ -390,7 +390,7 @@ function(input, output) {
             # Adds two columns at the end with an unique gene and protein name.
             data_unique <- DEP::make_unique(df, 'Gene.names', 'Protein.IDs', delim = ';')
 
-            # data_unique <- DEP::make_unique(df, 'Gene.names', 'Protein.IDs', delim = ';')
+            # data_unique <- DEP::make_unique(proteoInput, 'Gene.names', 'Protein.IDs', delim = ';')
 
         } else if (software_used() == 'Spectronaut'){
             # Find the columns with the LFQ or iBAQ intensity
@@ -1126,40 +1126,43 @@ function(input, output) {
 
     geneList <- reactive({
 
-        # organisms <- org.Mm.eg.db - Mouse
-        #               org.Hs.eg.db - Human
-        #            org.Hs.eg.db - Rat
-        # yeast = org.Sc.sgd.db - not working
 
-        geneList <- MQanalyser::create_geneList(data_results = data_results(),
-                                                comparison_samples = input$comparison_enrch,
-                                                organism = input$enrich_organism) # adapt it to more organisms.
+        geneList <- MQanalyser::create_geneList(
+            data_results = data_results(),
+            comparison_samples = input$comparison_enrch,
+            organism = input$enrich_organism) # adapt it to more organisms.
 
         # geneList <- MQanalyser::create_geneList(data_results = data_results,
-        #                             comparison_samples = 'Benign_vs_Malignant',
+        #                             comparison_samples = 'Ctrl_vs_Tumor',
         #                             organism = 'org.Hs.eg.db')
 
 
         # apply log2fc cut off:
 
-        geneList <- geneList[abs(geneList) > log2(input$fc_enrichment)]
+        if (input$enrichment_selection_genes == 'Both') {
+
+            geneList <- geneList[abs(geneList) > log2(input$fc_enrichment)]
+
+
+        }else if(input$enrichment_selection_genes == 'Upregulated'){
+
+            geneList <- geneList[geneList > log2(input$fc_enrichment)]
+
+        }else if(input$enrichment_selection_genes == 'Downregulated'){
+            geneList <- geneList[geneList < log2(input$fc_enrichment)]
+
+        }
+
+
     })
 
 
     diffExpress <- reactive({
 
-
-        # de <-  names(geneList())[abs(geneList()) > 2]
-
-
-        # de <-  names(geneList())[abs(geneList()) > log2(input$fc_enrichment)]
-
-
-        # diffExpress <- geneList[abs(geneList) > log2(2.5)]
+        # diffExpress <- names(geneList)
 
         de <- names(geneList())
 
-        # diffExpress <- names(geneList)[abs(geneList) > log2(3.5)]
     })
 
 
@@ -1178,8 +1181,6 @@ function(input, output) {
     # GO terms plots
 
     output$go_classification_plot <- renderPlotly({
-
-
 
        df <-  clusterProfiler::groupGO(gene = diffExpress(),
                                  keyType = 'ENTREZID',
@@ -1527,4 +1528,8 @@ function(input, output) {
 
 
     })
+    #### UI reactive ####
+
+
+
 }
