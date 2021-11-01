@@ -346,38 +346,39 @@ navbarPage(fluid = TRUE,
              ),
 
 #### Results Panel ####
+
     tabPanel(h4("Results"),
 
+
       includeCSS("www/styles.css"),
-      box(width = 4, solidHeader = FALSE,
-          shinydashboard::infoBoxOutput('significant_proteins',
-                                        width = NULL)
-          ),
 
-      box(width = 4,
-          shinydashboard::infoBoxOutput('significant_user_genes',
-                                        width = NULL)
-          ),
-
-      box(width = 4,
-          uiOutput('table_user_genes')
-          ),
-
-      br(),
-      br(),
-      hr(),
-
-      #box(
-        shinycssloaders::withSpinner(
-          DT::dataTableOutput('proteomics_results'),
-          image = 'logoTransparentSmall.gif',
-          image.width = '200px'
+      fluidRow(
+        column(width = 4,
+               shinydashboard::infoBoxOutput('significant_proteins',
+                                             width = NULL)
+               ),
+        column(width = 4,
+               shinydashboard::infoBoxOutput('significant_user_genes',
+                                             width = NULL)
+               ),
+        column(width = 4,
+               uiOutput('table_user_genes')
+               )
         ),
-      #),
-
-      br(),
-      downloadButton(outputId = 'download_proteomics',
-                      label = 'Download'),
+      hr(),
+      fluidRow(align = 'center',
+        column(align = 'center',
+          width = 10,
+          shinycssloaders::withSpinner(
+            DT::dataTableOutput('proteomics_results'),
+            image = 'logoTransparentSmall.gif',
+            image.width = '200px'
+          ),
+          br(),
+          downloadButton(outputId = 'download_proteomics',
+                         label = 'Download')
+          )
+        )
       ),
 
 #### HeatMap ####
