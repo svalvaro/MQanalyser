@@ -792,17 +792,6 @@ tabPanel(h4("Sample Comparisons"),
                                 selected = 'org.Hs.eg.db'),
                     br(),
 
-                    # selectInput(inputId = 'enrichment_selection_genes',
-                    #             label = 'Proteins to do the enrichment analyisis:',
-                    #             choices = c('Upregulated' ,
-                    #                         'Downregulated',
-                    #                         'Both'),
-                    #
-                    #             selected = 'Upregulated'),
-
-
-
-
                     dropdown(
                       # Number of proteins selected:
 
@@ -833,8 +822,8 @@ tabPanel(h4("Sample Comparisons"),
 
                 mainPanel(
 
-                    box(height = 2500,
-                        width = 4000,
+                    box(height = 1000,
+                        width = 1000,
                         shinydashboard::infoBoxOutput('differentiallyExpressedProteins',
                                                       width = 5),
                         br(),
@@ -870,7 +859,8 @@ tabPanel(h4("Sample Comparisons"),
                                                          choices = c('Running Score + Ranked List' = 'all',
                                                                      'Only Running Enrhichment Score' ='runningScore',
                                                                      'Only Ranked List' = 'preranked'),
-                                                         selected = 'all'),
+                                                         selected = 'all',
+                                                         width = '300px'),
                                              br(),
 
                                              shinycssloaders::withSpinner(

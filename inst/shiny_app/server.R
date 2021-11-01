@@ -1116,7 +1116,6 @@ function(input, output) {
     })
 
     #### Enrichment Analysis ####
-
         # Comparisons -------------------------------
 
     output$comparisons_enrichment  <- renderUI({
@@ -1132,28 +1131,32 @@ function(input, output) {
 
         comparison <- input$comparison_enrch
 
-        option1 <- gsub(pattern = '_.*', '', comparison)
-        option2 <- gsub(pattern = '.*_', '', comparison)
+        Option1 <- gsub(pattern = '_.*', '', comparison)
+        Option2 <- gsub(pattern = '.*_', '', comparison)
+        Option3 <- paste0('Combine: ', Option1, ' and ' , Option2)
 
 
-        message(paste0('Option1: ' , option1))
-        message(paste0('Option2: ' , option2))
-
-
+        message(paste0('Option1: ' , Option1))
+        message(paste0('Option2: ' , Option2))
 
         return(
             selectInput(
                 inputId = 'upregulatedSelection',
                 label = h4('Upregulated:'),
-                choices = c(option1 = 'option1',
-                            option2 = 'option2'#,
-                            #paste0('Combine: ', option1, ' and ' , option2) = 'Both'
-                            ),
-                selected = option1)
+                choices = c(Option1,
+                            Option2,
+                            Option3
+                )#,
+                # choices = c(Option1 = 'option1',
+                #             Option2 = 'option2',
+                #             Option3 = 'Both'
+                #             ),
+
+                #selected = OP
+                )
         )
 
     })
-
 
         # Enrichment elements -------------------------------
 
@@ -1173,37 +1176,50 @@ function(input, output) {
 
         # apply log2fc cut off:
 
-        # if (input$enrichment_selection_genes == 'Both') {
-        #
-        #     geneList <- geneList[abs(geneList) > log2(input$fc_enrichment)]
-        #
-        #
-        # }else if(input$enrichment_selection_genes == 'Upregulated'){
-        #
-        #     geneList <- geneList[geneList > log2(input$fc_enrichment)]
-        #
-        # }else if(input$enrichment_selection_genes == 'Downregulated'){
-        #     geneList <- geneList[geneList < log2(input$fc_enrichment)]
-        #
-        # }
+        comparison <- input$comparison_enrch
 
-        if (input$upregulatedSelection == 'Both') {
+        Option1 <- gsub(pattern = '_.*', '', comparison)
+        Option2 <- gsub(pattern = '.*_', '', comparison)
+        Option3 <- paste0('Combine: ', Option1, ' and ' , Option2)
+
+        req(input$upregulatedSelection)
+
+
+        if (input$upregulatedSelection == Option3) {
 
             geneList <- geneList[abs(geneList) > log2(input$fc_enrichment)]
 
 
             # The positive values for option 1, which is Ctrl_vs_Tumor
             # Means the upregulated in Ctrl
-        }else if(input$upregulatedSelection == 'option1'){
+        }else if(input$upregulatedSelection == Option1){
 
             geneList <- geneList[geneList > log2(input$fc_enrichment)]
 
             #The negative values, which means the upregulated in Tumour or
             # option2
-        }else if(input$upregulatedSelection == 'option2'){
+        }else if(input$upregulatedSelection == Option2){
             geneList <- geneList[geneList < log2(input$fc_enrichment)]
 
         }
+
+        # if (input$upregulatedSelection == 'Both') {
+        #
+        #     geneList <- geneList[abs(geneList) > log2(input$fc_enrichment)]
+        #
+        #
+        #     # The positive values for option 1, which is Ctrl_vs_Tumor
+        #     # Means the upregulated in Ctrl
+        # }else if(input$upregulatedSelection == 'option1'){
+        #
+        #     geneList <- geneList[geneList > log2(input$fc_enrichment)]
+        #
+        #     #The negative values, which means the upregulated in Tumour or
+        #     # option2
+        # }else if(input$upregulatedSelection == 'option2'){
+        #     geneList <- geneList[geneList < log2(input$fc_enrichment)]
+        #
+        # }
     })
 
 
