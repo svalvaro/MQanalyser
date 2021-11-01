@@ -1237,7 +1237,6 @@ function(input, output) {
             scale_fill_manual(values = mycolors)
 
 
-
        ggplotly(p)%>%
 
             layout(height = 1000, width = 1200)
@@ -1245,47 +1244,12 @@ function(input, output) {
 
 
 
-    output$enr_gseaplot <- renderPlot(height = 800, {
 
-        if(input$runscore == 'all'){
-            enrichplot::gseaplot2(edo2(), geneSetID = 1)
-        } else{
-           enrichplot::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
-        }
-    })
-
-
-    #### Disease Analysis ####
-
-    ## DISEASE DATA
-    output$comparisons_diseases  <- renderUI({
-        selectInput(inputId = 'comparison_disease',
-                    label = h4('Select the comparison:'),
-                    choices = unlist(comparisons()),
-                    selected = comparisons()[1])
-    })
-
-
-
-    geneList_disease <- reactive({
-
-
-        geneList <- MQanalyser::create_geneList(data_results = data_results(),
-                                                comparison_samples = input$comparison_disease,
-                                                organism = input$disease_organism) # adapt it to more organisms.
-
-        geneList <- geneList[abs(geneList) > log2(input$fc_disease)]
-
-    })
-
+    # enrich results disease
 
     edo <- reactive({
-        diffExpress <- names(geneList_disease())
 
-
-
-
-        edo <- DOSE::enrichDGN(diffExpress)
+        edo <- DOSE::enrichDGN(diffExpress())
 
         # edo <- DOSE::enrichDGN(diffExpress)
 
@@ -1294,29 +1258,29 @@ function(input, output) {
     # Enrichment for gsea
     edo2 <- reactive({
         # edo2 <- DOSE::gseDO(geneList)
-        edo2 <- DOSE::gseDO(geneList_disease ())
+        edo2 <- DOSE::gseDO(geneList())
         return(edo2)
     })
 
+
     edox <- reactive({
         edox <- clusterProfiler::setReadable(edo(),
-                                             input$disease_organism,
+                                             input$enrich_organism,
                                              'ENTREZID')
         return(edox)
     })
 
+    output$enr_gseaplot <- renderPlot(height = 800, {
 
-
-    output$diff_disease_number <- renderText({
-
-        a <- length(names(geneList_disease()))
-
-        print(paste0('There are: ', a, ' proteins that will
-                      be used for the disease analysis.'))
-
+        if(input$runscore == 'all'){
+            enrichplot::gseaplot2(edo2(), geneSetID = 1)
+            # enrichplot::gseaplot2(edo2, geneSetID = 1)
+        } else{
+            enrichplot::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
+        }
     })
 
-
+    #### Disease Analysis ####
 
     ## DISEASE PLOTS
 
@@ -1338,16 +1302,13 @@ function(input, output) {
         }else{
             dotplot(edo2(), showCategory=20) + ggtitle("dotplot for GSEA")
         }
-
-
-
     })
 
     # Disease plot of enriched terms
 
     output$heatmapnrich <- renderPlotly({
 
-        ggplotly(heatplot(edox() ,foldChange=geneList_disease())) %>%
+        ggplotly(heatplot(edox() ,foldChange=geneList())) %>%
 
             layout(height = 800, width = 1400)
     })
@@ -1356,7 +1317,6 @@ function(input, output) {
 
     #Output overlapping distributions
     output$enr_ridgeplot <- renderPlot(height = 800, width =1200,{
-
 
         ridgeplot(edo2())
     })
@@ -1375,59 +1335,6 @@ function(input, output) {
 
     #### GENE NETWORK ####
 
-    ## Data
-
-    output$comparisons_network  <- renderUI({
-        selectInput(inputId = 'comparison_network',
-                    label = h4('Select the comparison:'),
-                    choices = unlist(comparisons()),
-                    selected = comparisons()[1])
-    })
-
-
-
-    geneList_network <- reactive({
-
-        geneList <- MQanalyser::create_geneList(data_results = data_results(),
-                                                comparison_samples = input$comparison_network,
-                                                organism = input$network_organism) # adapt it to more organisms.
-
-
-
-        geneList <- geneList[abs(geneList) > log2(input$fc_network)]
-    })
-
-
-    diffExpress_network <- reactive({
-
-        de <- names(geneList_network())
-    })
-
-    edo_network <- reactive({
-
-        edo <- DOSE::enrichDGN(diffExpress_network())
-    })
-
-
-    edox_network <- reactive({
-        edox <- clusterProfiler::setReadable(edo_network(),
-                                             input$network_organism,
-                                             'ENTREZID')
-        return(edox)
-    })
-
-
-    output$diff_network_number <- renderText({
-
-        a <- length(diffExpress_network())
-
-        print(paste0('There are: ', a, ' proteins that will
-                      be used for gene network.'))
-
-    })
-
-
-
     ## Plots gene network
 
     # Biological Comparison
@@ -1439,7 +1346,7 @@ function(input, output) {
         #                                             ont="BP",
         #                                             OrgDb = 'org.Hs.eg.db'))
 
-        bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress_network(),
+        bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress(),
                                                     ont="BP",
                                                     OrgDb = 'org.Hs.eg.db'))
         enrichplot::emapplot(bp)
@@ -1452,7 +1359,7 @@ function(input, output) {
 
     output$enr_circusplot <- renderPlot(height = 1000,{
 
-        cnetplot(edox_network(),  circular = TRUE, colorEdge = TRUE)
+        cnetplot(edox(),  circular = TRUE, colorEdge = TRUE)
 
     })
 
@@ -1460,7 +1367,7 @@ function(input, output) {
 
     output$enr_networkplot <- renderPlot(height = 900, width = 800, {
 
-        cnetplot(edox_network(), node_label = "all")
+        cnetplot(edox(), node_label = "all")
     })
 
 
@@ -1469,7 +1376,7 @@ function(input, output) {
 
     output$enr_mapplot <- renderPlot(height = 1000, width = 900, {
 
-        enrichplot::emapplot(pairwise_termsim(edo_network())#, node_scale=input$enrich_nodes
+        enrichplot::emapplot(pairwise_termsim(edo())#, node_scale=input$enrich_nodes
                              ,layout="kk")
     })
 
@@ -1531,12 +1438,5 @@ function(input, output) {
         clusterProfiler::browseKEGG(kegg_react1(), input$pathselec)
 
 
-
-
-
     })
-    #### UI reactive ####
-
-
-
 }

@@ -832,6 +832,7 @@ tabPanel(h4("Sample Comparisons"),
                         width = 4000,
                         shinydashboard::infoBoxOutput('differentiallyExpressedProteins',
                                                       width = 5),
+                        br(),
 
                         tabsetPanel(type = 'tabs',
 
@@ -840,12 +841,13 @@ tabPanel(h4("Sample Comparisons"),
 
 
                                              selectInput(inputId = 'go_ontology',
-                                                label = 'Select the GO term',
+                                                label = 'What are you interested in?',
                                                 choices = c('Cellular Component' = 'CC',
                                                             'Biological Function'= 'BP',
                                                             'Molecular Function'= 'MF'),
+                                                width = '300px',
                                                 selected = 'CC'),
-                                             hr(),
+
                                              shinycssloaders::withSpinner(
                                                plotlyOutput('go_classification_plot'),
                                                image = 'logoTransparentSmall.gif',
@@ -853,14 +855,9 @@ tabPanel(h4("Sample Comparisons"),
                                                )
                                     ),
 
-                                    # tabPanel('GSEA Enrichment',
-                                    #          hr(),
-                                    #          shinycssloaders::withSpinner(plotOutput('enr_gsea2'))
-                                    # ),
-
 
                                     tabPanel('GSEA Enrichment',
-                                             hr(),
+                                             br(),
                                              #Input for type of preranked score
 
                                              selectInput(inputId = 'runscore',
@@ -888,26 +885,26 @@ tabPanel(h4("Sample Comparisons"),
   tabPanel(title = h4('Disease Analysis'),
            sidebarLayout(
              sidebarPanel(id = 'sidebar',
-                          width = 2,
-               uiOutput('comparisons_diseases'),
-               selectInput(inputId = 'disease_organism',
-                           label = 'Select the species:',
-                           choices = c('Human' = 'org.Hs.eg.db',
-                                       'Mouse'= 'org.Mm.eg.db',
-                                       'Rat'= 'org.Rn.eg.db'),
-                                       #'Yeast' = 'org.Sc.sgd.db'),
-                           selected = 'org.Hs.eg.db'),
-
-               hr(),
-
-               sliderInput(inputId = 'fc_disease',
-                           h4('The Log2 Fold Change can be modified to run
-                                   the enrichment analysis with proteins more significant.'),
-                           min = 1,
-                           max = 20,
-                           value = 1.5,
-                           step = 0.5),
-               verbatimTextOutput('diff_disease_number'),
+                          width = 2#,
+               #' uiOutput('comparisons_diseases'),
+               #' selectInput(inputId = 'disease_organism',
+               #'             label = 'Select the species:',
+               #'             choices = c('Human' = 'org.Hs.eg.db',
+               #'                         'Mouse'= 'org.Mm.eg.db',
+               #'                         'Rat'= 'org.Rn.eg.db'),
+               #'                         #'Yeast' = 'org.Sc.sgd.db'),
+               #'             selected = 'org.Hs.eg.db'),
+               #'
+               #' hr(),
+               #'
+               #' sliderInput(inputId = 'fc_disease',
+               #'             h4('The Log2 Fold Change can be modified to run
+               #'                     the enrichment analysis with proteins more significant.'),
+               #'             min = 1,
+               #'             max = 20,
+               #'             value = 1.5,
+               #'             step = 0.5),
+               #' verbatimTextOutput('diff_disease_number'),
              ),
 
              mainPanel(
@@ -979,28 +976,28 @@ tabPanel(h4("Sample Comparisons"),
            sidebarLayout(
                sidebarPanel(id = 'sidebar',
                             width = 2,
-
-                 uiOutput('comparisons_network'),
-
-                 selectInput(inputId = 'network_organism',
-                             label = 'Select the species:',
-                             choices = c('Human' = 'org.Hs.eg.db',
-                                         'Mouse'= 'org.Mm.eg.db',
-                                         'Rat'= 'org.Rn.eg.db'),
-                             #'Yeast' = 'org.Sc.sgd.db'),
-                             selected = 'org.Hs.eg.db'),
-
-                 hr(),
-
-                 sliderInput(inputId = 'fc_network',
-                             h4('The Log2 Fold Change can be modified to run
-                                   the enrichment analysis with proteins more significant.'),
-                             min = 1,
-                             max = 20,
-                             value = 1.5,
-                             step = 0.5),
-
-                 verbatimTextOutput('diff_network_number')
+                 #'
+                 #' uiOutput('comparisons_network'),
+                 #'
+                 #' selectInput(inputId = 'network_organism',
+                 #'             label = 'Select the species:',
+                 #'             choices = c('Human' = 'org.Hs.eg.db',
+                 #'                         'Mouse'= 'org.Mm.eg.db',
+                 #'                         'Rat'= 'org.Rn.eg.db'),
+                 #'             #'Yeast' = 'org.Sc.sgd.db'),
+                 #'             selected = 'org.Hs.eg.db'),
+                 #'
+                 #' hr(),
+                 #'
+                 #' sliderInput(inputId = 'fc_network',
+                 #'             h4('The Log2 Fold Change can be modified to run
+                 #'                   the enrichment analysis with proteins more significant.'),
+                 #'             min = 1,
+                 #'             max = 20,
+                 #'             value = 1.5,
+                 #'             step = 0.5),
+                 #'
+                 #' verbatimTextOutput('diff_network_number')
                  ),
 
                mainPanel(
