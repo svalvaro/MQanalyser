@@ -1,5 +1,6 @@
 function(input, output) {
 
+
     #### Options and DEMO ####
 
     options(shiny.maxRequestSize=100*1024^2)## Set maximum upload size to 100MB
@@ -371,6 +372,8 @@ function(input, output) {
                                       intensityType = input$intensityType)%>%
         layout(height = 800)
     )
+
+    #shinyjs::onclick('filter_tab',)
 
     #### Make summarised experiment ####
 
@@ -1518,4 +1521,27 @@ function(input, output) {
 
 
     })
+
+    #### Block the tabs ####
+
+
+    # Observe which tab the user is in:
+
+    # Unblock the results tabs
+
+    observeEvent(input$preprocessing_tabset,{
+
+        if (input$preprocessing_tabset == 'filter_tab') {
+
+            message('Unblock the rest of the tabset')
+
+            shinyjs::runjs("$(tab).removeClass('disabled');")
+
+        }
+
+    })
+
+
+
+
 }
