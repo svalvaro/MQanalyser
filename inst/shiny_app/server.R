@@ -1167,15 +1167,22 @@ function(input, output) {
 
 
 
-    output$diffExpress_number <- renderText({
+    # Output box with the number of proteins
+
+
+    output$differentiallyExpressedProteins <- renderInfoBox({
 
         a <- length(diffExpress())
 
-        print(paste0('There are: ', a, ' proteins that will
-                      be used for the enrichment, gene
-                      network and pathway analysis.'))
-
+        info <- infoBox(
+            'Proteins Enriched',
+            paste0(a, ' proteins used for enrichment.'),
+            #icon = icon("stats", lib = "glyphicon"))
+            icon = icon("info"),
+            color = 'aqua')
+        return(info)
     })
+
 
 
     # GO terms plots

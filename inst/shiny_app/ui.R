@@ -777,6 +777,7 @@ tabPanel(h4("Sample Comparisons"),
                     h3("Select the adjustments"),
 
                     uiOutput('comparisons_enrichment'),
+                    br(),
 
                     selectInput(inputId = 'enrich_organism',
                                 label = 'Select the species:',
@@ -810,18 +811,22 @@ tabPanel(h4("Sample Comparisons"),
                                 min = 1,
                                 max = 20,
                                 value = 1.5,
-                                step = 0.5),
-
-                    verbatimTextOutput('diffExpress_number'),
-                    hr(),
+                                step = 0.5)
                     ),
 
                 mainPanel(
-                    box(height = 2500, width = 4000,
+
+                    box(height = 2500,
+                        width = 4000,
+                        shinydashboard::infoBoxOutput('differentiallyExpressedProteins',
+                                                      width = 5),
+
                         tabsetPanel(type = 'tabs',
 
                                     tabPanel('Gene Ontology',
                                              br(),
+
+
                                              selectInput(inputId = 'go_ontology',
                                                 label = 'Select the GO term',
                                                 choices = c('Cellular Component' = 'CC',
