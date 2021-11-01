@@ -349,26 +349,29 @@ navbarPage(fluid = TRUE,
 
     tabPanel(h4("Results"),
 
-
       includeCSS("www/styles.css"),
 
       fluidRow(
-        column(width = 4,
-               shinydashboard::infoBoxOutput('significant_proteins',
+        column(
+          width = 4,
+          shinydashboard::infoBoxOutput('significant_proteins',
                                              width = NULL)
-               ),
-        column(width = 4,
-               shinydashboard::infoBoxOutput('significant_user_genes',
+          ),
+        column(
+          width = 4,
+          shinydashboard::infoBoxOutput('significant_user_genes',
                                              width = NULL)
-               ),
-        column(width = 4,
-               uiOutput('table_user_genes')
-               )
+          ),
+        column(
+          width = 4,
+          uiOutput('table_user_genes')
+          )
         ),
       hr(),
-      fluidRow(align = 'center',
+      fluidRow(
         column(align = 'center',
           width = 10,
+          #offset = 2,
           shinycssloaders::withSpinner(
             DT::dataTableOutput('proteomics_results'),
             image = 'logoTransparentSmall.gif',
@@ -500,19 +503,21 @@ tabPanel(h4("Sample Comparisons"),
                      tabPanel(h4('Correlation'),
                               fluidRow(
                                 column(
-                                  width = 12,
+                                  width = 10,
                                   align = 'center',
-                                  print('If you would like to analyse each plot individually,
-                go to the next tab "Scatter Plot"'),
-                                  hr(),
-                                  box(width = 11,
+                                  offset = 2,
+
+                                  br(),
+
+
+                                 # box(width = 11,
 
                                       shinycssloaders::withSpinner(
                                         ui_element = plotlyOutput('plot_correlation'),
                                         image = 'logoTransparentSmall.gif',
                                         image.width = '200px'
                                       )
-                                  )
+                                  #)
                                 )
                               )
                      ),
