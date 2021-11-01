@@ -1117,12 +1117,46 @@ function(input, output) {
 
     #### Enrichment Analysis ####
 
+        # Comparisons -------------------------------
+
     output$comparisons_enrichment  <- renderUI({
         selectInput(inputId = 'comparison_enrch',
                     label = h4('Select the comparison:'),
                     choices = unlist(comparisons()),
                     selected = comparisons()[1])
     })
+
+    output$selectUpregulatedEnrich <- renderUI({
+
+        req(input$comparison_enrch)
+
+        comparison <- input$comparison_enrch
+
+        option1 <- gsub(pattern = '_.*', '', comparison)
+        option2 <- gsub(pattern = '.*_', '', comparison)
+
+
+        message(paste0('Option1: ' , option1))
+        message(paste0('Option2: ' , option2))
+
+
+
+        return(
+            selectInput(
+                inputId = 'upregulatedSelection',
+                label = h4('Upregulated:'),
+                choices = c(option1 = 'option1',
+                            option2 = 'option2'#,
+                            #paste0('Combine: ', option1, ' and ' , option2) = 'Both'
+                            ),
+                selected = option1)
+        )
+
+    })
+
+
+        # Enrichment elements -------------------------------
+
 
     geneList <- reactive({
 
@@ -1139,21 +1173,37 @@ function(input, output) {
 
         # apply log2fc cut off:
 
-        if (input$enrichment_selection_genes == 'Both') {
+        # if (input$enrichment_selection_genes == 'Both') {
+        #
+        #     geneList <- geneList[abs(geneList) > log2(input$fc_enrichment)]
+        #
+        #
+        # }else if(input$enrichment_selection_genes == 'Upregulated'){
+        #
+        #     geneList <- geneList[geneList > log2(input$fc_enrichment)]
+        #
+        # }else if(input$enrichment_selection_genes == 'Downregulated'){
+        #     geneList <- geneList[geneList < log2(input$fc_enrichment)]
+        #
+        # }
+
+        if (input$upregulatedSelection == 'Both') {
 
             geneList <- geneList[abs(geneList) > log2(input$fc_enrichment)]
 
 
-        }else if(input$enrichment_selection_genes == 'Upregulated'){
+            # The positive values for option 1, which is Ctrl_vs_Tumor
+            # Means the upregulated in Ctrl
+        }else if(input$upregulatedSelection == 'option1'){
 
             geneList <- geneList[geneList > log2(input$fc_enrichment)]
 
-        }else if(input$enrichment_selection_genes == 'Downregulated'){
+            #The negative values, which means the upregulated in Tumour or
+            # option2
+        }else if(input$upregulatedSelection == 'option2'){
             geneList <- geneList[geneList < log2(input$fc_enrichment)]
 
         }
-
-
     })
 
 
@@ -1164,86 +1214,6 @@ function(input, output) {
         de <- names(geneList())
 
     })
-
-
-
-    # Output box with the number of proteins
-
-
-    output$differentiallyExpressedProteins <- renderInfoBox({
-
-        a <- length(diffExpress())
-
-        info <- infoBox(
-            'Proteins Enriched',
-            paste0(a, ' proteins used for enrichment.'),
-            #icon = icon("stats", lib = "glyphicon"))
-            icon = icon("info"),
-            color = 'aqua')
-        return(info)
-    })
-
-
-
-    # GO terms plots
-
-    output$go_classification_plot <- renderPlotly({
-
-       df <-  clusterProfiler::groupGO(gene = diffExpress(),
-                                 keyType = 'ENTREZID',
-                                 OrgDb = input$enrich_organism,
-                                 ont = input$go_ontology,
-                                 level = input$go_level) %>%
-           as.data.frame() %>%
-           select(contains(c('Description', 'count')))
-
-
-       # df <-  clusterProfiler::groupGO(gene = diffExpress,
-       #                                 keyType = 'ENTREZID',
-       #                                 OrgDb = org.Hs.eg.db,
-       #                                 ont = 'CC',
-       #                                 level = 10) %>%
-       #     as.data.frame() %>%
-       #     select(contains(c('Description', 'count')))
-
-
-       if(input$go_ontology == 'CC'){
-           title = 'Cellular Component'
-       } else if (input$go_ontology == 'MF'){
-           title = 'Molecular Function'
-       } else{
-           title = 'Biological Function'
-       }
-
-
-       df[df == 0] <- NA
-
-       df <- drop_na(df)
-
-       df <- df[order(df$Count, decreasing = TRUE),]
-
-
-
-       mycolors <- grDevices::colorRampPalette(brewer.pal(8, "Set2"))(nrow(df))
-
-       p <- ggplot(df, aes(x = Count,
-                           y = reorder(Description, Count),
-                           fill = Description))+
-            geom_bar(stat = 'identity')+
-            theme_bw()+
-            ylab('Description')+
-            ggtitle(title)+
-            theme(legend.position = 'none')+
-            scale_fill_manual(values = mycolors)
-
-
-       ggplotly(p)%>%
-
-            layout(height = 1000, width = 1200)
-    })
-
-
-
 
     # enrich results disease
 
@@ -1270,6 +1240,81 @@ function(input, output) {
         return(edox)
     })
 
+
+    # Output box with the number of proteins
+
+    output$differentiallyExpressedProteins <- renderInfoBox({
+
+        a <- length(diffExpress())
+
+        info <- infoBox(
+            'Proteins Enriched',
+            paste0(a, ' proteins used for enrichment.'),
+            #icon = icon("stats", lib = "glyphicon"))
+            icon = icon("info"),
+            color = 'aqua')
+        return(info)
+    })
+
+
+    #### Enrichment Analysis Plots ####
+    # GO terms plots
+
+    output$go_classification_plot <- renderPlotly({
+
+        df <-  clusterProfiler::groupGO(gene = diffExpress(),
+                                        keyType = 'ENTREZID',
+                                        OrgDb = input$enrich_organism,
+                                        ont = input$go_ontology,
+                                        level = input$go_level) %>%
+            as.data.frame() %>%
+            select(contains(c('Description', 'count')))
+
+
+        # df <-  clusterProfiler::groupGO(gene = diffExpress,
+        #                                 keyType = 'ENTREZID',
+        #                                 OrgDb = org.Hs.eg.db,
+        #                                 ont = 'CC',
+        #                                 level = 10) %>%
+        #     as.data.frame() %>%
+        #     select(contains(c('Description', 'count')))
+
+
+        if(input$go_ontology == 'CC'){
+            title = 'Cellular Component'
+        } else if (input$go_ontology == 'MF'){
+            title = 'Molecular Function'
+        } else{
+            title = 'Biological Function'
+        }
+
+
+        df[df == 0] <- NA
+
+        df <- drop_na(df)
+
+        df <- df[order(df$Count, decreasing = TRUE),]
+
+
+
+        mycolors <- grDevices::colorRampPalette(brewer.pal(8, "Set2"))(nrow(df))
+
+        p <- ggplot(df, aes(x = Count,
+                            y = reorder(Description, Count),
+                            fill = Description))+
+            geom_bar(stat = 'identity')+
+            theme_bw()+
+            ylab('Description')+
+            ggtitle(title)+
+            theme(legend.position = 'none')+
+            scale_fill_manual(values = mycolors)
+
+
+        ggplotly(p)%>%
+
+            layout(height = 1000, width = 1200)
+    })
+
     output$enr_gseaplot <- renderPlot(height = 800, {
 
         if(input$runscore == 'all'){
@@ -1280,7 +1325,8 @@ function(input, output) {
         }
     })
 
-    #### Disease Analysis ####
+
+    #### Disease Analysis Plots ####
 
     ## DISEASE PLOTS
 
@@ -1333,7 +1379,7 @@ function(input, output) {
 
 
 
-    #### GENE NETWORK ####
+    #### GENE NETWORK Plots####
 
     ## Plots gene network
 

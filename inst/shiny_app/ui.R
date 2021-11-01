@@ -778,6 +778,8 @@ tabPanel(h4("Sample Comparisons"),
 
                     # Comparison to perform
                     uiOutput('comparisons_enrichment'),
+
+                    uiOutput('selectUpregulatedEnrich'),
                     br(),
 
                     # Organism used,
@@ -790,13 +792,16 @@ tabPanel(h4("Sample Comparisons"),
                                 selected = 'org.Hs.eg.db'),
                     br(),
 
-                    selectInput(inputId = 'enrichment_selection_genes',
-                                label = 'Proteins to do the enrichment analyisis:',
-                                choices = c('Upregulated' ,
-                                            'Downregulated',
-                                            'Both'),
+                    # selectInput(inputId = 'enrichment_selection_genes',
+                    #             label = 'Proteins to do the enrichment analyisis:',
+                    #             choices = c('Upregulated' ,
+                    #                         'Downregulated',
+                    #                         'Both'),
+                    #
+                    #             selected = 'Upregulated'),
 
-                                selected = 'Upregulated'),
+
+
 
                     dropdown(
                       # Number of proteins selected:
