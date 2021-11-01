@@ -61,7 +61,7 @@ navbarPage(fluid = TRUE,
                                     min = 0, max = 100),
 
                         options = list(`style` = "btn-info"),
-                        style = "unite", icon = icon("paint-brush"),
+                        style = "unite", icon = icon("cogs"),
                         status = "success", width = "300px",
                         animate = animateOptions(
                             enter = animations$fading_entrances$fadeInLeftBig,
@@ -776,9 +776,11 @@ tabPanel(h4("Sample Comparisons"),
                              width = 2,
                     h3("Select the adjustments"),
 
+                    # Comparison to perform
                     uiOutput('comparisons_enrichment'),
                     br(),
 
+                    # Organism used,
                     selectInput(inputId = 'enrich_organism',
                                 label = 'Select the species:',
                                 choices = c('Human' = 'org.Hs.eg.db',
@@ -796,22 +798,32 @@ tabPanel(h4("Sample Comparisons"),
 
                                 selected = 'Upregulated'),
 
-                    sliderInput(inputId = 'go_level',
-                                h4('Degree of specificity, or GO level. The higher the more specific:'),
-                                min = 1,
-                                max = 20,
-                                value = 3,
-                                step = 1),
+                    dropdown(
+                      # Number of proteins selected:
 
-                    # Number of proteins selected:
-
-                    sliderInput(inputId = 'fc_enrichment',
-                                h4('The Log2 Fold Change can be modified to run
+                      sliderInput(inputId = 'fc_enrichment',
+                                  h4('The Log2 Fold Change can be modified to run
                                    the enrichment analysis with proteins more significant.'),
-                                min = 1,
-                                max = 20,
-                                value = 1.5,
-                                step = 0.5)
+                                  min = 1,
+                                  max = 20,
+                                  value = 1.5,
+                                  step = 0.5),
+
+                      sliderInput(inputId = 'go_level',
+                                  h4('Degree of specificity, or GO level. The higher the more specific:'),
+                                  min = 1,
+                                  max = 20,
+                                  value = 3,
+                                  step = 1),
+
+                      options = list(`style` = "btn-info"),
+                      style = "unite", icon = icon("cogs"),
+                      status = "success", width = "300px",
+                      animate = animateOptions(
+                        enter = animations$fading_entrances$fadeInLeftBig,
+                        exit = animations$fading_exits$fadeOutRightBig
+                      )
+                    )
                     ),
 
                 mainPanel(
