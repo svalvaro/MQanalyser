@@ -194,9 +194,9 @@ navbarPage(fluid = TRUE,
 
     tabPanel(
       title = h4("Preprocessing"),
-      value = 'preprocessing-tab',
+
       # id = 'preprocessing-tab',
-      # value = 'preprocessing-tab',
+      value = 'preprocessing-tab',
       #style = 'pointer-events: none;',
 
       tabsetPanel(
@@ -207,6 +207,7 @@ navbarPage(fluid = TRUE,
         # Contaminants -------------------------------
 
         tabPanel(title = 'Contaminants',
+                 value = 'contaminants_tab',
 
                  # Use this to be able to use the shinydashboard stuff
                  shinyWidgets::useShinydashboard(),
@@ -362,7 +363,7 @@ navbarPage(fluid = TRUE,
 #### Results Panel ####
 
     tabPanel(h4("Results"),
-             value = "nav2",
+             value = "results-tab",
             # tags$style("class = disabled;"),
 
 
@@ -403,6 +404,7 @@ navbarPage(fluid = TRUE,
 
 #### HeatMap ####
     tabPanel(h4("Heatmap"),
+             value = 'heatmap-tab',
              sidebarLayout(
                sidebarPanel(id = 'sidebar',
                             width = 2,
@@ -441,6 +443,7 @@ navbarPage(fluid = TRUE,
 #### Sample Comparisons ####
 
     tabPanel(h4("Sample Comparisons"),
+             value = 'comparisons-tab',
 
              tabsetPanel(
                type = 'tabs',
@@ -570,6 +573,7 @@ navbarPage(fluid = TRUE,
     ),
 #### Volcano Plot ####
     tabPanel(h4('Volcano Plot'),
+             value = 'volcano-tab',
             sidebarLayout(
                 sidebarPanel(id = 'sidebar',
                              width = 2,
@@ -699,6 +703,7 @@ navbarPage(fluid = TRUE,
 
 #### Profile Plot ####
     tabPanel(h4('Profile Plot'),
+             value = 'profile-tab',
             sidebarLayout(
                 sidebarPanel(id = 'sidebar',
                              width = 2,
@@ -790,6 +795,8 @@ navbarPage(fluid = TRUE,
 #### Enrichment analysis ####
 
     tabPanel(h4('Enrichment Analysis'),
+             value = 'enrichment-tab',
+             id = 'enrichment-tab-id',
             sidebarLayout(
                 sidebarPanel(id = 'sidebar',
                              width = 2,
@@ -897,6 +904,7 @@ navbarPage(fluid = TRUE,
 
 #### Disease Analysis Tab ####
   tabPanel(title = h4('Disease Analysis'),
+           value = 'disease-tab',
            sidebarLayout(
              sidebarPanel(id = 'sidebar',
                           width = 2#,
@@ -987,6 +995,7 @@ navbarPage(fluid = TRUE,
 
 #### Gene Network ####
   tabPanel(title = h4('Gene Network'),
+           value = 'network-tab',
            sidebarLayout(
                sidebarPanel(id = 'sidebar',
                             width = 2,
@@ -1067,6 +1076,7 @@ navbarPage(fluid = TRUE,
 
 #### Pathway Analysis ####
   tabPanel(title = h4('Pathway Analysis'),
+           value = 'pathway-tab',
            sidebarLayout(
                sidebarPanel(id = 'sidebar',
                             width = 2,
@@ -1134,8 +1144,20 @@ navbarPage(fluid = TRUE,
 #### JS ####
 
    tags$script(
-    '
-      var tab = $(\'a[data-value="nav2"]\').parent().addClass("disabled");
+     # src = system.file('shiny_app/www/JavaScript/script.js',
+     #                   package = 'MQanalyser')
+     '
+      var tab = $(\'a[data-value="preprocessing-tab"]\').parent().addClass("disabled");
+      var tab = $(\'a[data-value="results-tab"]\').parent().addClass("disabled");
+      var tab = $(\'a[data-value="heatmap-tab"]\').parent().addClass("disabled");
+      var tab = $(\'a[data-value="comparisons-tab"]\').parent().addClass("disabled");
+      var tab = $(\'a[data-value="volcano-tab"]\').parent().addClass("disabled");
+      var tab = $(\'a[data-value="profile-tab"]\').parent().addClass("disabled");
+      var tab = $(\'a[data-value="enrichment-tab"]\').parent().addClass("disabled");
+      var tab = $(\'a[data-value="disease-tab"]\').parent().addClass("disabled");
+      var tab = $(\'a[data-value="network-tab"]\').parent().addClass("disabled");
+      var tab = $(\'a[data-value="pathway-tab"]\').parent().addClass("disabled");
+
       $(function(){
         $(tab.parent()).on("click","li.disabled", function(e) {
           e.preventDefault();
@@ -1143,5 +1165,7 @@ navbarPage(fluid = TRUE,
         });
       });
       '
-  )
+     )
+
+
 )

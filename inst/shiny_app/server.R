@@ -1159,6 +1159,20 @@ function(input, output) {
         message(paste0('Option1: ' , Option1))
         message(paste0('Option2: ' , Option2))
 
+
+        ## Unblock the other enrichment tabs
+        shinyjs::runjs(
+            '
+                var tab = $(\'a[data-value="disease-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="network-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="pathway-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                '
+        )
+
+
         return(
             selectInput(
                 inputId = 'upregulatedSelection',
@@ -1166,15 +1180,9 @@ function(input, output) {
                 choices = c(Option1,
                             Option2,
                             Option3
-                )#,
-                # choices = c(Option1 = 'option1',
-                #             Option2 = 'option2',
-                #             Option3 = 'Both'
-                #             ),
-
-                #selected = OP
+                            )
                 )
-        )
+            )
 
     })
 
@@ -1527,19 +1535,67 @@ function(input, output) {
 
     # Observe which tab the user is in:
 
-    # Unblock the results tabs
+    # Unblock the Preprocessing tab
+
+
+    observeEvent(input$start_input, {
+
+        message('Unblocking the preprocessing tab ')
+
+        #shinyjs::removeClass(id = 'preprocessing-tab', class = 'disabled')
+
+         shinyjs::runjs(
+         '
+         var tab = $(\'a[data-value="preprocessing-tab"]\').parent();
+         $(tab).removeClass("disabled");
+         '
+         )
+        # shinyjs::runjs("var tab = $(\'a[data-value='results-tab']\').parent().removeClass('disabled');")
+        # shinyjs::runjs("var tab = $(\'a[data-value='results-tab']\').parent().removeClass('disabled');")
+
+    })
+
+    # Unblock the results, heatmap, comparison, volcano, profile and enrichment
+    # tabs
 
     observeEvent(input$preprocessing_tabset,{
 
-        if (input$preprocessing_tabset == 'filter_tab') {
+        # If the user enters in one of the other three tabs creating the
+        # data_se() summarized experiment object, allow them to enter in the
+        # tabs
+        if (! input$preprocessing_tabset == 'contaminants_tab' ) {
 
-            message('Unblock the rest of the tabset')
+            message('Unblock the rest of the results and other tabs')
 
-            shinyjs::runjs("$(tab).removeClass('disabled');")
+            shinyjs::runjs(
+                '
+                var tab = $(\'a[data-value="results-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="heatmap-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="comparisons-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="volcano-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="profile-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="enrichment-tab"]\').parent();
+                $(tab).removeClass("disabled");
 
-        }
-
+                '
+            )
+            }
     })
+
+    # Allow the user to enter in the disease, gene network and pathway analysis
+    # tab after they visit the enrichment one.
+
+    # observeEvent(input$enrichment-tab-id,{
+    #
+    #     req(input$enrichment-tab-id)
+    #     print(input$enrichment-tab-id)
+    #
+    # })
 
 
 
