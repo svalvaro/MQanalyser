@@ -1223,6 +1223,7 @@ function(input, output) {
         }else if(input$upregulatedSelection == Option1){
 
             geneList <- geneList[geneList > log2(input$fc_enrichment)]
+            #geneList <- geneList[geneList > log2(1.5)]
 
             #The negative values, which means the upregulated in Tumour or
             # option2
@@ -1230,24 +1231,6 @@ function(input, output) {
             geneList <- geneList[geneList < log2(input$fc_enrichment)]
 
         }
-
-        # if (input$upregulatedSelection == 'Both') {
-        #
-        #     geneList <- geneList[abs(geneList) > log2(input$fc_enrichment)]
-        #
-        #
-        #     # The positive values for option 1, which is Ctrl_vs_Tumor
-        #     # Means the upregulated in Ctrl
-        # }else if(input$upregulatedSelection == 'option1'){
-        #
-        #     geneList <- geneList[geneList > log2(input$fc_enrichment)]
-        #
-        #     #The negative values, which means the upregulated in Tumour or
-        #     # option2
-        # }else if(input$upregulatedSelection == 'option2'){
-        #     geneList <- geneList[geneList < log2(input$fc_enrichment)]
-        #
-        # }
     })
 
 
@@ -1489,7 +1472,7 @@ function(input, output) {
     output$enr_kegg1 <- renderPlot(height = 900,{
 
 
-        print(kegg_react1())
+        #print(kegg_react1())
         dotplot(kegg_react1(),showCategory =20)
     })
 
@@ -1505,17 +1488,17 @@ function(input, output) {
 
     output$pathway_selector <- renderUI({
 
-        selectInput(inputId = 'pathselec',label = h4('Select the pathway to check:'),
-                    choices = as.list(pathways_id()),selected = as.list(pathways_id()[1]))
+        selectInput(inputId = 'pathselec',
+                    label = h4('Select the pathway to check:'),
+                    choices = as.list(pathways_id()),
+                    selected = as.list(pathways_id()[1])
+                    )
 
     })
 
-    output$network_selector <- renderUI({
 
-        selectInput(inputId = 'netselec',label = h4('Select the pathway to check:'),
-                    choices = as.list(pathways_id()),selected = as.list(pathways_id()[1]))
 
-    })
+
 
     # If pressed the button, it will open a new tab.
     observeEvent(input$GoToPathway, {
@@ -1525,10 +1508,70 @@ function(input, output) {
 #         browser_to_use <- getOption('browser')
 #         message(paste0('The browser is: ', browser_to_use))
 
+        message(paste0('Pathway selected is: ',input$pathselec))
+
         clusterProfiler::browseKEGG(kegg_react1(), input$pathselec)
 
 
     })
+
+
+    # Pathway plot
+
+
+    # output$pathwayPlot <- renderImage({
+    #
+    #     pathview::pathview(gene.data = geneList(),
+    #                        pathway.id = input$pathselec,
+    #                        species = 'hsa',
+    #                        limit = list(gene=max(abs(geneList())), cpd=1))
+    #
+    #
+    #     path_img <- paste0(getwd(),'/', input$pathselec,'.pathview.png')
+    #
+    #     message(paste0('the path of the image is\n:', path_img))
+    #
+    #     #path_img <- paste0(getwd(),'/', 'hsa04512','.pathview.png')
+    #
+    #     # path_img <- '/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/hsa05146.pathview.png'
+    #
+    #
+    #     # Read PNG
+    #
+    #     #img <- png::readPNG(path_img)
+    #
+    #
+    #     # return(
+    #     #     grid::grid.raster(img)
+    #     #
+    #     # )
+    #
+    #     list(src = path_img,
+    #          contentType = 'image/png',
+    #          width = 400,
+    #          height = 300,
+    #          alt = "This is alternate text")
+    # }, deleteFile = FALSE)
+    #
+    #
+    # onSessionEnded(function() {
+    #     cat("Session Ended\n")
+    #
+    #     cat(paste0('working dir', getwd()))
+    #
+    #     files_to_remove <- list.files(
+    #         path =  '/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/',
+    #         pattern = 'hsa*')
+    #
+    #     cat(files_to_remove)
+    #     base::file.remove(
+    #         paste0('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/',
+    #                files_to_remove))
+    # })
+
+
+
+
 
     #### Block the tabs ####
 
@@ -1542,17 +1585,12 @@ function(input, output) {
 
         message('Unblocking the preprocessing tab ')
 
-
-
          shinyjs::runjs(
          '
          var tab = $(\'a[data-value="preprocessing-tab"]\').parent();
          $(tab).removeClass("disabled");
          '
          )
-
-
-
 
     })
 
@@ -1588,15 +1626,7 @@ function(input, output) {
             }
     })
 
-    # Allow the user to enter in the disease, gene network and pathway analysis
-    # tab after they visit the enrichment one.
-
-    # observeEvent(input$enrichment-tab-id,{
-    #
-    #     req(input$enrichment-tab-id)
-    #     print(input$enrichment-tab-id)
-    #
-    # })
+    # The pathway tabs are unblock under the enrichment section.
 
 
 

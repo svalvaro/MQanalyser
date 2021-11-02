@@ -89,9 +89,6 @@ navbarPage(fluid = TRUE,
                              no_outline = TRUE
                   ),
 
-                  #shiny::actionButton('button', 'press the button', onclick = "$(tab).removeClass('disabled')"),
-
-
                   #Download a file example
                   h4('Exapmles of the file(s) to be uploaded:'),
                   fluidRow(
@@ -1090,11 +1087,7 @@ navbarPage(fluid = TRUE,
                             size = "md",
                             block = FALSE,
                             no_outline = TRUE
-                            ),
-
-
-
-                 plotOutput('enr_kegg2')
+                            )
                  ),
 
                mainPanel(
@@ -1105,7 +1098,9 @@ navbarPage(fluid = TRUE,
                           plotOutput('enr_kegg1'),
                           image = 'logoTransparentSmall.gif',
                           image.width = '200px'
-                          )
+                          )#,
+
+                       #imageOutput('pathwayPlot')
                        )
                    )
            )
@@ -1142,36 +1137,9 @@ navbarPage(fluid = TRUE,
   ),
 
 #### JS ####
-
-   # tags$script(
-   #   # src = system.file('shiny_app/www/JavaScript/script.js',
-   #   #                   package = 'MQanalyser')
-     # '
-     #  var tab = $(\'a[data-value="preprocessing-tab"]\').parent().addClass("disabled");
-     #  var tab = $(\'a[data-value="results-tab"]\').parent().addClass("disabled");
-     #  var tab = $(\'a[data-value="heatmap-tab"]\').parent().addClass("disabled");
-     #  var tab = $(\'a[data-value="comparisons-tab"]\').parent().addClass("disabled");
-     #  var tab = $(\'a[data-value="volcano-tab"]\').parent().addClass("disabled");
-     #  var tab = $(\'a[data-value="profile-tab"]\').parent().addClass("disabled");
-     #  var tab = $(\'a[data-value="enrichment-tab"]\').parent().addClass("disabled");
-     #  var tab = $(\'a[data-value="disease-tab"]\').parent().addClass("disabled");
-     #  var tab = $(\'a[data-value="network-tab"]\').parent().addClass("disabled");
-     #  var tab = $(\'a[data-value="pathway-tab"]\').parent().addClass("disabled");
-     #
-     #  $(function(){
-     #    $(tab.parent()).on("click","li.disabled", function(e) {
-     #      e.preventDefault();
-     #      return false;
-     #    });
-     #  });
-     #  '
-   #   )
-
   # Block all tabs at the start
 
   tags$script(
-    # src = system.file('shiny_app/www/JavaScript/block-all-tabs.js',
-    #                   package = 'MQanalyser')
 
     src = 'JavaScript/block-all-tabs.js'
 
