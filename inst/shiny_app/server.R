@@ -1542,7 +1542,7 @@ function(input, output) {
 
         message('Unblocking the preprocessing tab ')
 
-        #shinyjs::removeClass(id = 'preprocessing-tab', class = 'disabled')
+
 
          shinyjs::runjs(
          '
@@ -1550,8 +1550,9 @@ function(input, output) {
          $(tab).removeClass("disabled");
          '
          )
-        # shinyjs::runjs("var tab = $(\'a[data-value='results-tab']\').parent().removeClass('disabled');")
-        # shinyjs::runjs("var tab = $(\'a[data-value='results-tab']\').parent().removeClass('disabled');")
+
+
+
 
     })
 
