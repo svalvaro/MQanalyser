@@ -231,12 +231,12 @@ navbarPage(fluid = TRUE,
                             br(),
                             br(),
                             hr(),
-                            box(width = 10,height = 850,
-                                shinycssloaders::withSpinner(
-                                  plotlyOutput('contaminantsPlot'),
-                                  image = 'logoTransparentSmall.gif',
-                                  image.width = '200px')
-                                )
+                            # box(width = 10,height = 850,
+                            #     shinycssloaders::withSpinner(
+                            #       plotlyOutput('contaminantsPlot'),
+                            #       image = 'logoTransparentSmall.gif',
+                            #       image.width = '200px')
+                            #     )
                             )
                      )
                    )

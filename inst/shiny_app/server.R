@@ -366,12 +366,12 @@ function(input, output) {
     })
 
 
-    output$contaminantsPlot <- renderPlotly(
-
-        MQanalyser::plot_contaminants(proteoInput = proteoInput(),
-                                      intensityType = input$intensityType)%>%
-        layout(height = 800)
-    )
+    # output$contaminantsPlot <- renderPlotly(
+    #
+    #     MQanalyser::plot_contaminants(proteoInput = proteoInput(),
+    #                                   intensityType = input$intensityType)%>%
+    #     layout(height = 800)
+    # )
 
     #shinyjs::onclick('filter_tab',)
 
