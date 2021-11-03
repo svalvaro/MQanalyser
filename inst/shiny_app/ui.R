@@ -425,6 +425,9 @@ navbarPage(fluid = TRUE,
                                      min = 0, max = 50)
                         ),
                 mainPanel(
+                  tags$div(style = "position: absolute; top: -100px;",
+                           textOutput("clock")
+                  ),
                     box(
                         shinycssloaders::withSpinner(
                             plotlyOutput('heatmaply'),

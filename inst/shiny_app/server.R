@@ -813,6 +813,11 @@ function(input, output) {
 
     #### Heatmap plot ####
 
+    output$clock <- renderText({
+        invalidateLater(5000)
+        Sys.time()
+    })
+
     output$heatmaply <- renderPlotly(
         MQanalyser::plot_heatmaply(dep(),
                    intensity_type = input$IntensityType,
