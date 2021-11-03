@@ -1139,10 +1139,10 @@ navbarPage(fluid = TRUE,
 #### JS ####
   # Block all tabs at the start
 
-  tags$script(
-
-    src = 'JavaScript/block-all-tabs.js'
-
-  )
+  # tags$script(
+  #
+  #   src = 'JavaScript/block-all-tabs.js'
+  #
+  # )
 
 )
