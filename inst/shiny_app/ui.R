@@ -26,7 +26,7 @@ navbarPage(fluid = TRUE,
                 sidebarPanel(id = 'sidebar',
                              width = 2,
                   shinyalert::useShinyalert(),
-                  shinyjs::useShinyjs(),
+                  #shinyjs::useShinyjs(),
 
                     fileInput(inputId = 'proteinInput',
                               label = h4('Upload the proteinGroups.txt or
