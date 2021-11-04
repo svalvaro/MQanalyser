@@ -34,6 +34,8 @@ navbarPage(fluid = TRUE,
                               multiple = FALSE,
                               accept = 'text'),
 
+                  tags$a("Shiny Tutorial",href="https://shiny.rstudio.com/articles/basics.html"),
+
                     verbatimTextOutput('sw_used'),
 
                     uiOutput('intensity_selector'),
