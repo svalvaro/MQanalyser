@@ -231,12 +231,12 @@ navbarPage(fluid = TRUE,
                             br(),
                             br(),
                             hr(),
-                            # box(width = 10,height = 850,
-                            #     shinycssloaders::withSpinner(
-                            #       plotlyOutput('contaminantsPlot'),
-                            #       image = 'logoTransparentSmall.gif',
-                            #       image.width = '200px')
-                            #     )
+                            box(width = 10,height = 850,
+                                shinycssloaders::withSpinner(
+                                  plotlyOutput('contaminantsPlot'),
+                                  image = 'logoTransparentSmall.gif',
+                                  image.width = '200px')
+                                )
                             )
                      )
                    )
@@ -425,9 +425,6 @@ navbarPage(fluid = TRUE,
                                      min = 0, max = 50)
                         ),
                 mainPanel(
-                  tags$div(style = "position: absolute; top: -100px;",
-                           textOutput("clock")
-                  ),
                     box(
                         shinycssloaders::withSpinner(
                             plotlyOutput('heatmaply'),

@@ -366,12 +366,12 @@ function(input, output) {
     })
 
 
-    # output$contaminantsPlot <- renderPlotly(
-    #
-    #     MQanalyser::plot_contaminants(proteoInput = proteoInput(),
-    #                                   intensityType = input$intensityType)%>%
-    #     layout(height = 800)
-    # )
+    output$contaminantsPlot <- renderPlotly(
+
+        MQanalyser::plot_contaminants(proteoInput = proteoInput(),
+                                      intensityType = input$intensityType)%>%
+        layout(height = 800)
+    )
 
     #shinyjs::onclick('filter_tab',)
 
@@ -813,18 +813,16 @@ function(input, output) {
 
     #### Heatmap plot ####
 
-    output$clock <- renderText({
-        invalidateLater(5000)
-        Sys.time()
-    })
-
     output$heatmaply <- renderPlotly(
-        MQanalyser::plot_heatmaply(dep(),
-                   intensity_type = input$IntensityType,
-                   dendogram = input$dendogram_input,
-                   k_row = input$k_row_input,
-                   k_col = input$k_col_input) %>%
+
+
+            MQanalyser::plot_heatmaply(dep(),
+                                       intensity_type = input$IntensityType,
+                                       dendogram = input$dendogram_input,
+                                       k_row = input$k_row_input,
+                                       k_col = input$k_col_input) %>%
                 layout(height = 1000, width = 1000)
+
 
         )
 
