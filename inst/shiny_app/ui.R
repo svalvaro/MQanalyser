@@ -34,8 +34,6 @@ navbarPage(fluid = TRUE,
                               multiple = FALSE,
                               accept = 'text'),
 
-                  tags$a("Shiny Tutorial",href="https://shiny.rstudio.com/articles/basics.html"),
-
                     verbatimTextOutput('sw_used'),
 
                     uiOutput('intensity_selector'),
@@ -1081,15 +1079,17 @@ navbarPage(fluid = TRUE,
                             width = 2,
                   uiOutput("pathway_selector"),
 
-                 actionBttn(inputId = 'GoToPathway',
-                            label = 'Go to KEGG website',
-                            icon = NULL,
-                            style = "unite",
-                            color = "default",
-                            size = "md",
-                            block = FALSE,
-                            no_outline = TRUE
-                            )
+                 # actionBttn(inputId = 'GoToPathway',
+                 #            label = 'Go to KEGG website',
+                 #            icon = NULL,
+                 #            style = "unite",
+                 #            color = "default",
+                 #            size = "md",
+                 #            block = FALSE,
+                 #            no_outline = TRUE
+                 #            ),
+
+                 uiOutput('pathwayButton')
                  ),
 
                mainPanel(

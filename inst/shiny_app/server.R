@@ -1503,19 +1503,62 @@ function(input, output) {
 
 
 
-    # If pressed the button, it will open a new tab.
-    observeEvent(input$GoToPathway, {
-
-        # Debugging the button
+#     # If pressed the button, it will open a new tab.
+#     observeEvent(input$GoToPathway, {
 #
-#         browser_to_use <- getOption('browser')
-#         message(paste0('The browser is: ', browser_to_use))
+#         # Debugging the button
+# #
+# #         browser_to_use <- getOption('browser')
+# #         message(paste0('The browser is: ', browser_to_use))
+#
+#         url <- paste0("http://www.kegg.jp/kegg-bin/show_pathway?",
+#                       input$pathselec,
+#                       '/',
+#                       kegg_react1()[input$pathselec, "geneID"])
+#
+#
+#         message(paste0('Pathway selected is: ',input$pathselec))
+#
+#         message(paste0('The url is: ', url))
+#
+#         #clusterProfiler::browseKEGG(kegg_react1(), input$pathselec)
+#
+#
+#
+#     })
+
+
+    output$pathwayButton <- renderUI({
+
+        url <- paste0("http://www.kegg.jp/kegg-bin/show_pathway?",
+                      input$pathselec,
+                      '/',
+                      kegg_react1()[input$pathselec, "geneID"])
+
 
         message(paste0('Pathway selected is: ',input$pathselec))
 
-        clusterProfiler::browseKEGG(kegg_react1(), input$pathselec)
+        message(paste0('The url is: ', url))
 
+        # shiny::a(h4("Browse Selected Pathway",
+        #             class = "btn btn-default action-button" ,
+        #             style = "fontweight:600"),
+        #          target = "_blank",
+        #          href = url)
 
+        shiny::a(
+            actionBttn(
+                inputId = 'GoToPathway',
+                label = 'Browse Path',
+                icon = NULL,
+                style = "unite",
+                color = "default",
+                size = "md",
+                block = FALSE,
+                no_outline = TRUE
+                ),
+            target = "_blank",
+            href = url)
     })
 
 
@@ -1630,8 +1673,6 @@ function(input, output) {
     # })
 
     # The pathway tabs are unblock under the enrichment section.
-
-
 
 
 }
