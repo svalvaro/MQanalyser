@@ -48,6 +48,7 @@ plot_contaminants <- function(proteoInput,
             #gghalves::geom_half_point()+
             geom_jitter(aes(x = Potential.contaminant,
                             colour = Potential.contaminant))+
+            facet_wrap(.~variable)+
             ggtitle('Intensity distribution')+
             ylab('Log2 Intensity')+
             xlab('')+
@@ -59,7 +60,6 @@ plot_contaminants <- function(proteoInput,
 
                 )+
             scale_colour_manual(values = colors)
-
 
     return(
         ggplotly(p, tooltip = c('y', 'key', 'colour'))
