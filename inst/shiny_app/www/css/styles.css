@@ -11,19 +11,3 @@
         background-color: #AFD8E6;
     }
 
-#preprocessing-tab {
-  background-color: #cc3f3f;
-  pointer-events: none;
-}
-
-
-.navbar-default > li > a[data-value='preprocessing']  {
-  background-color: #006747;
-}
-
-
-
-#tab-8880-2 {
-  pointer-events: none;
-}
-

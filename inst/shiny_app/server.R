@@ -72,7 +72,7 @@ function(input, output) {
         # If they press DEMO
         } else if(demo$start == TRUE){
 
-            df <- read.delim('www/proteinGroups_example.txt')
+            df <- read.delim('www/data/proteinGroups_example.txt')
 
             #Remove reverse and reverse and contaminants and only identified by site
 
@@ -152,7 +152,7 @@ function(input, output) {
                              condition = ' ',
                              replicate = as.numeric(' '))
         } else if(demo$start == TRUE){
-            df <- read.delim('www/experiment_design_example.txt')
+            df <- read.delim('www/data/experiment_design_example.txt')
         }else{
             df <- read.delim(inFile$datapath)
         }
@@ -244,8 +244,6 @@ function(input, output) {
         )
     })
 
-
-
     #### Intensity type depending on the proteoInput ####
 
     # Radio buttons will appear in the UI depending on the software used.
@@ -272,7 +270,6 @@ function(input, output) {
     })
 
     # Check if the type of intensity is found in the proteoInput
-
 
     IntensityFound <- reactive({
 
@@ -330,7 +327,7 @@ function(input, output) {
         if (is.null(inFile) & demo$start == FALSE){
             return(NULL)
         } else if (demo$start == TRUE){
-            df <- read.csv('www/user_genes_examples.txt', col.names = 'Gene')
+            df <- read.csv('www/data/user_genes_examples.txt', col.names = 'Gene')
         } else{
             df <- read.csv(inFile$datapath, col.names = 'Gene')
         }
@@ -366,7 +363,6 @@ function(input, output) {
             color = color)
         return(info)
     })
-
 
     output$contaminantsPlot <- renderPlotly(
 
@@ -440,7 +436,6 @@ function(input, output) {
     # Selec the NAs allowd
 
     output$na_threshold  <- renderUI({
-
 
         # Check number of replicates
 
@@ -640,7 +635,6 @@ function(input, output) {
 
         imputed_melt <- melt(imputed, id.vars = 'Protein.ID')
 
-
         # The column imputed_melt contained the data of the imputed table
         # and added a column specifying whether a protein in a specific group
         # has been imputed or not. This is done by matching it to the
@@ -708,8 +702,6 @@ function(input, output) {
         # data_results[,ratio_to_format] <- format(round(data_results[,ratio_to_format], 2), nsmall = 2)
 
 
-
-
         # Imputed proteins
 
         imputed_proteins <- data_to_be_imputed() %>%
@@ -730,7 +722,6 @@ function(input, output) {
     })
 
     #### RESULTS TABULAR ####
-
 
     # Info box with the number of diff expressed proteins
 
@@ -824,10 +815,7 @@ function(input, output) {
                                        k_row = input$k_row_input,
                                        k_col = input$k_col_input) %>%
                 layout(height = 1000, width = 1000)
-
-
         )
-
 
     #### Correlation plot ####
     output$plot_correlation <- renderPlotly(
@@ -893,7 +881,6 @@ function(input, output) {
                     selected = comparisons()[1])
     })
 
-
     output$font_gene_labels <- renderUI({
         if (input$showGeneNames == FALSE) {
             return(NULL)
@@ -915,12 +902,12 @@ function(input, output) {
 
     volcano_Plot <- reactive({
 
+        coord_x  <- NULL
+        coord_y <- NULL
+
         if(input$modify_axis == TRUE){
             coord_x  <- input$range_fc
             coord_y <- input$range_pvalue
-        }else{
-            coord_x  <- NULL
-            coord_y <- NULL
         }
 
         if (input$showGeneNames == FALSE) {
@@ -967,29 +954,30 @@ function(input, output) {
 
     output$volcano_plot_plotly <- renderPlotly({
 
-            if(input$modify_axis == TRUE){
-                coord_x  <- input$range_fc
-                coord_y <- input$range_pvalue
-            }else{
-                coord_x  <- NULL
-                coord_y <- NULL
-            }
-
-            return(
-                volcano_Plot() %>%
-                    layout(height = 1000, width = 1000)
-                )
-    })
-
-    output$volcano_plot_genes <- renderPlot(height = 1000, width = 1000,{
+        coord_x  <- NULL
+        coord_y <- NULL
 
         if(input$modify_axis == TRUE){
             coord_x  <- input$range_fc
             coord_y <- input$range_pvalue
-        }else{
-            coord_x  <- NULL
-            coord_y <- NULL
         }
+
+        return(
+            volcano_Plot() %>%
+                layout(height = 1000, width = 1000)
+            )
+    })
+
+    output$volcano_plot_genes <- renderPlot(height = 1000, width = 1000,{
+
+        coord_x  <- NULL
+        coord_y <- NULL
+
+        if(input$modify_axis == TRUE){
+            coord_x  <- input$range_fc
+            coord_y <- input$range_pvalue
+        }
+
         return(
             volcano_Plot()
 
@@ -1204,7 +1192,6 @@ function(input, output) {
         #                             organism = 'org.Hs.eg.db')
     })
 
-
     geneList <- reactive({
 
         geneList <- geneListObject()$geneList$ratio
@@ -1214,7 +1201,6 @@ function(input, output) {
         # geneList <- geneListObject$geneList$ratio
         #
         # names(geneList) <- geneListObject$geneList$ENTREZID
-
 
         # apply log2fc cut off:
 
@@ -1246,7 +1232,6 @@ function(input, output) {
 
         }
     })
-
 
     diffExpress <- reactive({
 
@@ -1287,7 +1272,6 @@ function(input, output) {
         return(edox)
     })
 
-
     # Output box with the number of proteins
 
     output$differentiallyExpressedProteins <- renderInfoBox({
@@ -1303,7 +1287,6 @@ function(input, output) {
         return(info)
     })
 
-
     # Infobox with the genes tha failed to map
     output$failedToMapGenes <- renderInfoBox({
 
@@ -1317,10 +1300,8 @@ function(input, output) {
         return(info)
     })
 
-
     #### Enrichment Analysis Plots ####
     # GO terms plots
-
 
     geneOntologyTable <- reactive({
 
@@ -1408,9 +1389,6 @@ function(input, output) {
         }
     })
 
-
-
-
     # Biological Comparison
 
     output$bio_comparison <- renderPlot(height = 900, {
@@ -1427,10 +1405,7 @@ function(input, output) {
 
     })
 
-
     # Gene Ontology Table
-
-
 
     output$geneOntologyDataTable <- DT::renderDataTable({
 
@@ -1442,10 +1417,6 @@ function(input, output) {
                       width = '400px')
     })
 
-
-
-
-
     #### Disease Analysis Plots ####
 
     ## DISEASE PLOTS
@@ -1456,8 +1427,6 @@ function(input, output) {
         enrichplot::dotplot(edo(),showCategory = 25)
 
     })
-
-
 
     # Disease GSEA
 
@@ -1479,14 +1448,11 @@ function(input, output) {
             layout(height = 800, width = 1400)
     })
 
-
-
     #Output overlapping distributions
     output$enr_ridgeplot <- renderPlot(height = 800, width =1200,{
 
         ridgeplot(edo2())
     })
-
 
     # Disease Association
 
@@ -1495,8 +1461,6 @@ function(input, output) {
         enrichplot::upsetplot(edo())
 
     })
-
-
 
     # Circus PLot
 
@@ -1513,9 +1477,7 @@ function(input, output) {
         cnetplot(edox(), node_label = "all")
     })
 
-
     #Enrichment Map
-
 
     output$enr_mapplot <- renderPlot(height = 1000, width = 900, {
 
@@ -1523,9 +1485,7 @@ function(input, output) {
                              ,layout="kk")
     })
 
-
     # Disease Tabular format
-
 
     output$diseaseTable <- DT::renderDataTable({
 
@@ -1536,7 +1496,6 @@ function(input, output) {
                                      scrollX=30),
                       width = '400px')
     })
-
 
     #### PATHWAY ANALYSIS ####
 
@@ -1557,9 +1516,6 @@ function(input, output) {
         #                                   pvalueCutoff = 0.05,
         #                                   #verbose = FALSE
         # )
-
-
-
 
         return(kk)
     })
@@ -1588,7 +1544,6 @@ function(input, output) {
                     choices = as.list(pathways_id()),
                     selected = as.list(pathways_id()[1])
                     )
-
     })
 
 
@@ -1608,10 +1563,6 @@ function(input, output) {
                       width = '400px')
     })
 
-
-
-
-
 #     # If pressed the button, it will open a new tab.
 #     observeEvent(input$GoToPathway, {
 #
@@ -1628,7 +1579,6 @@ function(input, output) {
 
         message(paste0('The url is: ', url))
 
-
         shiny::a(
             actionBttn(
                 inputId = 'GoToPathway',
@@ -1644,9 +1594,7 @@ function(input, output) {
             href = url)
     })
 
-
-    # Pathway plot
-
+    # Pathway plot Visualization in the shiny
 
     # output$pathwayPlot <- renderImage({
     #
@@ -1698,16 +1646,9 @@ function(input, output) {
     #                files_to_remove))
     # })
 
-
-
-
-
     #### Block the tabs ####
 
-
-    # Observe which tab the user is in:
-
-    # Unblock the Preprocessing tab
+    # Observe which tab the user is in: Unblock the Preprocessing tab
 
 
     observeEvent(input$start_input, {
@@ -1720,7 +1661,6 @@ function(input, output) {
          $(tab).removeClass("disabled");
          '
          )
-
     })
 
     # Unblock the results, heatmap, comparison, volcano, profile and enrichment
@@ -1756,6 +1696,5 @@ function(input, output) {
     })
 
     # The pathway tabs are unblock under the enrichment section.
-
 
 }

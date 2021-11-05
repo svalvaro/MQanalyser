@@ -12,7 +12,8 @@ navbarPage(fluid = TRUE,
 
       # Show the logo in the browser tab
       windowTitle = tags$head(tags$link(rel = "icon", type = "image/png",
-                                        href = "logo_small.png"),
+                                        href = "images/logo_small.png"),
+                              #href = "logo_small.png"),
                               tags$title("Proteomics Analyser"))
     ),
     theme = shinytheme(theme ='flatly'),
@@ -234,7 +235,7 @@ navbarPage(fluid = TRUE,
                             box(width = 10,height = 850,
                                 shinycssloaders::withSpinner(
                                   plotlyOutput('contaminantsPlot'),
-                                  image = 'logoTransparentSmall.gif',
+                                  image = 'images/logoTransparentSmall.gif',
                                   image.width = '200px')
                                 )
                             )
@@ -261,7 +262,7 @@ navbarPage(fluid = TRUE,
                          height = 800,
                          shinycssloaders::withSpinner(
                          plotlyOutput('barplot_missvals'),
-                         image = 'logoTransparentSmall.gif',
+                         image = 'images/logoTransparentSmall.gif',
                          image.width = '200px')
                          ),
                      #column(width = 1),
@@ -272,7 +273,7 @@ navbarPage(fluid = TRUE,
                          #tags$script("$(tab).removeClass('disabled')"),
                          shinycssloaders::withSpinner(
                            plotOutput('heatmap_nas'),
-                           image = 'logoTransparentSmall.gif',
+                           image = 'images/logoTransparentSmall.gif',
                            image.width = '200px')
                               )
                      )
@@ -299,13 +300,13 @@ navbarPage(fluid = TRUE,
                                             box(
                                               shinycssloaders::withSpinner(
                                                 plotlyOutput('plot_before_normalization'),
-                                                image = 'logoTransparentSmall.gif',
+                                                image = 'images/logoTransparentSmall.gif',
                                                 image.width = '200px'
                                               ),
 
                                               shinycssloaders::withSpinner(
                                                 plotlyOutput('plot_after_normalization'),
-                                                image = 'logoTransparentSmall.gif',
+                                                image = 'images/logoTransparentSmall.gif',
                                                 image.width = '200px'
                                                 )
                                               )
@@ -346,7 +347,7 @@ navbarPage(fluid = TRUE,
                                             box(
                                               shinycssloaders::withSpinner(
                                                 plotlyOutput('imputation'),
-                                                image = 'logoTransparentSmall.gif',
+                                                image = 'images/logoTransparentSmall.gif',
                                                 image.width = '200px'
                                               )
                                             )
@@ -389,7 +390,7 @@ navbarPage(fluid = TRUE,
           #offset = 2,
           shinycssloaders::withSpinner(
             DT::dataTableOutput('proteomics_results'),
-            image = 'logoTransparentSmall.gif',
+            image = 'images/logoTransparentSmall.gif',
             image.width = '200px'
           ),
           br(),
@@ -428,7 +429,7 @@ navbarPage(fluid = TRUE,
                     box(
                         shinycssloaders::withSpinner(
                             plotlyOutput('heatmaply'),
-                            image = 'logoTransparentSmall.gif',
+                            image = 'images/logoTransparentSmall.gif',
                             image.width = '200px'
                             )
                         )
@@ -510,7 +511,7 @@ navbarPage(fluid = TRUE,
                       box(height = 1200,width = 1200,
                           shinycssloaders::withSpinner(
                             plotlyOutput('scatterplot'),
-                            image = 'logoTransparentSmall.gif',
+                            image = 'images/logoTransparentSmall.gif',
                             image.width = '200px'
                           )
                       )
@@ -528,7 +529,7 @@ navbarPage(fluid = TRUE,
                             br(),
                             shinycssloaders::withSpinner(
                               ui_element = plotlyOutput('plot_correlation'),
-                                image = 'logoTransparentSmall.gif',
+                                image = 'images/logoTransparentSmall.gif',
                                 image.width = '200px'
                               )
                             )
@@ -559,7 +560,7 @@ navbarPage(fluid = TRUE,
                               width = 1300,
                               shinycssloaders::withSpinner(
                                 plotOutput('pca_plot'),
-                                image = 'logoTransparentSmall.gif',
+                                image = 'images/logoTransparentSmall.gif',
                                 image.width = '200px'
                               )
                             )
@@ -689,7 +690,7 @@ navbarPage(fluid = TRUE,
                     shinycssloaders::withSpinner(
                       uiOutput('volcano_final'),
                       #plotlyOutput('volcano_plot'),
-                      image = 'logoTransparentSmall.gif',
+                      image = 'images/logoTransparentSmall.gif',
                       image.width = '200px'
                       )
                     )
@@ -768,7 +769,7 @@ navbarPage(fluid = TRUE,
 
                               shinycssloaders::withSpinner(
                                 plotlyOutput('plot_profile'),
-                                image = 'logoTransparentSmall.gif',
+                                image = 'images/logoTransparentSmall.gif',
                                 image.width = '200px'
                                 )
                               ),
@@ -874,7 +875,7 @@ navbarPage(fluid = TRUE,
 
                                            shinycssloaders::withSpinner(
                                              plotlyOutput('go_classification_plot'),
-                                             image = 'logoTransparentSmall.gif',
+                                             image = 'images/logoTransparentSmall.gif',
                                              image.width = '200px'
                                            )
                                   ),
@@ -895,7 +896,7 @@ navbarPage(fluid = TRUE,
 
                                            shinycssloaders::withSpinner(
                                              plotOutput('enr_gseaplot'),
-                                             image = 'logoTransparentSmall.gif',
+                                             image = 'images/logoTransparentSmall.gif',
                                              image.width = '200px'
                                              )
                                            ),
@@ -905,7 +906,7 @@ navbarPage(fluid = TRUE,
                                            hr(),
                                            shinycssloaders::withSpinner(
                                              plotOutput('bio_comparison'),
-                                             image = 'logoTransparentSmall.gif',
+                                             image = 'images/logoTransparentSmall.gif',
                                              image.width = '200px'
                                            )
                                   ),
@@ -915,7 +916,7 @@ navbarPage(fluid = TRUE,
                                            br(),
                                            shinycssloaders::withSpinner(
                                              DT::dataTableOutput('geneOntologyDataTable'),
-                                             image = 'logoTransparentSmall.gif',
+                                             image = 'images/logoTransparentSmall.gif',
                                              image.width = '200px'
                                            )
                                            )
@@ -945,7 +946,7 @@ navbarPage(fluid = TRUE,
                                         #        plot with the capability to encode another score as dot size.'),
                                         shinycssloaders::withSpinner(
                                           plotOutput('enr_dotplot'),
-                                          image = 'logoTransparentSmall.gif',
+                                          image = 'images/logoTransparentSmall.gif',
                                           image.width = '200px')
                                ),
 
@@ -953,7 +954,7 @@ navbarPage(fluid = TRUE,
                                         hr(),
                                         shinycssloaders::withSpinner(
                                           plotOutput('enr_gseadotplot'),
-                                          image = 'logoTransparentSmall.gif',
+                                          image = 'images/logoTransparentSmall.gif',
                                           image.width = '200px'
                                           )
                                ),
@@ -965,7 +966,7 @@ navbarPage(fluid = TRUE,
                                         hr(),
                                         shinycssloaders::withSpinner(
                                           plotlyOutput('heatmapnrich'),
-                                          image = 'logoTransparentSmall.gif',
+                                          image = 'images/logoTransparentSmall.gif',
                                           image.width = '200px')
                                ),
 
@@ -977,7 +978,7 @@ navbarPage(fluid = TRUE,
                                         hr(),
                                         shinycssloaders::withSpinner(
                                           plotOutput('enr_ridgeplot'),
-                                          image = 'logoTransparentSmall.gif',
+                                          image = 'images/logoTransparentSmall.gif',
                                           image.width = '200px')
                                ),
 
@@ -988,7 +989,7 @@ navbarPage(fluid = TRUE,
                                         hr(),
                                         shinycssloaders::withSpinner(
                                           plotOutput('upset'),
-                                          image = 'logoTransparentSmall.gif',
+                                          image = 'images/logoTransparentSmall.gif',
                                           image.width = '200px'
                                           )
                                         ),
@@ -998,7 +999,7 @@ navbarPage(fluid = TRUE,
                                         hr(),
                                         shinycssloaders::withSpinner(
                                           plotOutput('enr_circusplot'),
-                                          image = 'logoTransparentSmall.gif',
+                                          image = 'images/logoTransparentSmall.gif',
                                           image.width = '200px'
                                         )
                                ),
@@ -1008,7 +1009,7 @@ navbarPage(fluid = TRUE,
                                         hr(),
                                         shinycssloaders::withSpinner(
                                           plotOutput('enr_networkplot'),
-                                          image = 'logoTransparentSmall.gif',
+                                          image = 'images/logoTransparentSmall.gif',
                                           image.width = '200px'
                                         )
                                ),
@@ -1022,7 +1023,7 @@ navbarPage(fluid = TRUE,
                                         hr(),
                                         shinycssloaders::withSpinner(
                                           plotOutput('enr_mapplot'),
-                                          image = 'logoTransparentSmall.gif',
+                                          image = 'images/logoTransparentSmall.gif',
                                           image.width = '200px'
                                         )
                                ),
@@ -1032,7 +1033,7 @@ navbarPage(fluid = TRUE,
 
                                         shinycssloaders::withSpinner(
                                           DT::dataTableOutput('diseaseTable'),
-                                          image = 'logoTransparentSmall.gif',
+                                          image = 'images/logoTransparentSmall.gif',
                                           image.width = '200px'
                                         )
                                         )
@@ -1076,7 +1077,7 @@ navbarPage(fluid = TRUE,
 
                                       shinycssloaders::withSpinner(
                                         plotOutput('enr_kegg1'),
-                                        image = 'logoTransparentSmall.gif',
+                                        image = 'images/logoTransparentSmall.gif',
                                         image.width = '200px'
                                       )
                              ),
@@ -1095,7 +1096,7 @@ navbarPage(fluid = TRUE,
                    #      hr(),
                    #      shinycssloaders::withSpinner(
                    #        plotOutput('enr_kegg1'),
-                   #        image = 'logoTransparentSmall.gif',
+                   #        image = 'images/logoTransparentSmall.gif',
                    #        image.width = '200px'
                    #        )#,
                    #
@@ -1109,7 +1110,8 @@ navbarPage(fluid = TRUE,
   tabPanel(id = 'logo_tab',
            position = 'right',
            title =   tags$img(
-      src='logo.png',
+      #src='logo.png',
+      src='images/logo.png',
       width = 150),
 
 
