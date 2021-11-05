@@ -1207,16 +1207,6 @@ function(input, output) {
 
     geneList <- reactive({
 
-
-        # geneList <- MQanalyser::create_geneList(
-        #     data_results = data_results(),
-        #     comparison_samples = input$comparison_enrch,
-        #     organism = input$enrich_organism) # adapt it to more organisms.
-
-        # geneList <- MQanalyser::create_geneList(data_results = data_results,
-        #                             comparison_samples = 'Ctrl_vs_Tumor',
-        #                             organism = 'org.Hs.eg.db')
-
         geneList <- geneListObject()$geneList$ratio
 
         names(geneList) <- geneListObject()$geneList$ENTREZID
@@ -1308,14 +1298,14 @@ function(input, output) {
     })
 
 
+    # Infobox with the genes tha failed to map
     output$failedToMapGenes <- renderInfoBox({
 
         failedToMap <- geneListObject()$failedToMap
 
         info <- infoBox(
-            'Proteins Failed To map',
-            paste0(failedToMap, '% could not be map.'),
-            #icon = icon("stats", lib = "glyphicon"))
+            'Unmapped Proteins',
+            paste0(failedToMap, '% were not mapped.'),
             icon = icon("exclamation-triangle"),
             color = 'yellow')
         return(info)
@@ -1325,15 +1315,17 @@ function(input, output) {
     #### Enrichment Analysis Plots ####
     # GO terms plots
 
-    output$go_classification_plot <- renderPlotly({
+
+    geneOntologyTable <- reactive({
+
 
         df <-  clusterProfiler::groupGO(gene = diffExpress(),
                                         keyType = 'ENTREZID',
                                         OrgDb = input$enrich_organism,
                                         ont = input$go_ontology,
                                         level = input$go_level) %>%
-            as.data.frame() %>%
-            select(contains(c('Description', 'count')))
+            as.data.frame() #%>%
+            #select(contains(c('Description', 'count')))
 
 
         # df <-  clusterProfiler::groupGO(gene = diffExpress,
@@ -1341,9 +1333,34 @@ function(input, output) {
         #                                 OrgDb = org.Hs.eg.db,
         #                                 ont = 'CC',
         #                                 level = 10) %>%
-        #     as.data.frame() %>%
-        #     select(contains(c('Description', 'count')))
+        #     as.data.frame()# %>%
+        #     #select(contains(c('Description', 'count')))
 
+        rownames(df) <- NULL
+
+        df[df == 0] <- NA
+
+        df <- drop_na(df)
+
+        df <- df[order(df$Count, decreasing = TRUE),]
+
+
+        # Create a new column with the gene names not only the IDs
+        # For that I need to map the column geneId, which the genes are separated
+        # by / , to the geneListObject, that contains the gene names
+
+        df$geneNames <- stringi::stri_replace_all_fixed(
+            str = df$geneID,
+            pattern = geneListObject()$geneList$ENTREZID,
+            replacement = geneListObject()$geneList$SYMBOL,
+            vectorize_all = F
+        )
+
+        return(df)
+
+    })
+
+    output$go_classification_plot <- renderPlotly({
 
         if(input$go_ontology == 'CC'){
             title = 'Cellular Component'
@@ -1354,13 +1371,8 @@ function(input, output) {
         }
 
 
-        df[df == 0] <- NA
-
-        df <- drop_na(df)
-
-        df <- df[order(df$Count, decreasing = TRUE),]
-
-
+        df <- geneOntologyTable()%>%
+                 select(contains(c('Description', 'count')))
 
         mycolors <- grDevices::colorRampPalette(brewer.pal(8, "Set2"))(nrow(df))
 
@@ -1389,6 +1401,24 @@ function(input, output) {
             enrichplot::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
         }
     })
+
+
+    # Gene Ontology Table
+
+
+
+    output$geneOntologyDataTable <- DT::renderDataTable({
+
+        DT::datatable(geneOntologyTable(),
+                      extensions = 'Scroller',
+
+                      options = list(scrollY=500,
+                                     scrollX=30),
+                      width = '400px')
+    })
+
+
+
 
 
     #### Disease Analysis Plots ####
@@ -1504,6 +1534,16 @@ function(input, output) {
                                           pvalueCutoff = 0.05,
                                           #verbose = FALSE
         )
+
+        # kk <- clusterProfiler::enrichKEGG(gene=diffExpress,
+        #                                   organism = 'hsa',
+        #                                   #minGSSize = 120,
+        #                                   pvalueCutoff = 0.05,
+        #                                   #verbose = FALSE
+        # )
+
+
+
         return(kk)
     })
 

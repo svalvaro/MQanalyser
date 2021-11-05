@@ -30,4 +30,5 @@ library(colourpicker)
 library(shinycssloaders)
 library(stats)
 library(shinyjs)
+library(stringi)
 

@@ -897,68 +897,22 @@ navbarPage(fluid = TRUE,
                                              plotOutput('enr_gseaplot'),
                                              image = 'logoTransparentSmall.gif',
                                              image.width = '200px'
+                                             )
+                                           ),
+
+
+                                  tabPanel('Results Table',
+                                           br(),
+                                           shinycssloaders::withSpinner(
+                                             DT::dataTableOutput('geneOntologyDataTable'),
+                                             image = 'logoTransparentSmall.gif',
+                                             image.width = '200px'
+                                           )
                                            )
                                   )
                       )
-
                     )
                   )
-
-                    # box(height = 1000,
-                    #     width = 1000,
-                    #     shinydashboard::infoBoxOutput('differentiallyExpressedProteins',
-                    #                                   width = 5),
-                    #
-                    #     shinydashboard::infoBoxOutput('failedToMapGenes',
-                    #                                   width = 5),
-                    #
-                    #
-                    #     br(),
-                    #
-                    #     tabsetPanel(type = 'tabs',
-                    #
-                    #                 tabPanel('Gene Ontology',
-                    #                          br(),
-                    #
-                    #
-                    #                          selectInput(inputId = 'go_ontology',
-                    #                             label = 'What are you interested in?',
-                    #                             choices = c('Cellular Component' = 'CC',
-                    #                                         'Biological Function'= 'BP',
-                    #                                         'Molecular Function'= 'MF'),
-                    #                             width = '300px',
-                    #                             selected = 'CC'),
-                    #
-                    #                          shinycssloaders::withSpinner(
-                    #                            plotlyOutput('go_classification_plot'),
-                    #                            image = 'logoTransparentSmall.gif',
-                    #                            image.width = '200px'
-                    #                            )
-                    #                 ),
-                    #
-                    #
-                    #                 tabPanel('GSEA Enrichment',
-                    #                          br(),
-                    #                          #Input for type of preranked score
-                    #
-                    #                          selectInput(inputId = 'runscore',
-                    #                                      label=h4('For the Running Score, select the choice:'),
-                    #                                      choices = c('Running Score + Ranked List' = 'all',
-                    #                                                  'Only Running Enrhichment Score' ='runningScore',
-                    #                                                  'Only Ranked List' = 'preranked'),
-                    #                                      selected = 'all',
-                    #                                      width = '300px'),
-                    #                          br(),
-                    #
-                    #                          shinycssloaders::withSpinner(
-                    #                            plotOutput('enr_gseaplot'),
-                    #                            image = 'logoTransparentSmall.gif',
-                    #                            image.width = '200px'
-                    #                            )
-                    #                          )
-                    #                 )
-                    #    )
-                    )
                 )
             ),
 
