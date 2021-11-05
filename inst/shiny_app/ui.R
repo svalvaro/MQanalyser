@@ -901,6 +901,16 @@ navbarPage(fluid = TRUE,
                                            ),
 
 
+                                  tabPanel('Network',
+                                           hr(),
+                                           shinycssloaders::withSpinner(
+                                             plotOutput('bio_comparison'),
+                                             image = 'logoTransparentSmall.gif',
+                                             image.width = '200px'
+                                           )
+                                  ),
+
+
                                   tabPanel('Results Table',
                                            br(),
                                            shinycssloaders::withSpinner(
@@ -922,26 +932,7 @@ navbarPage(fluid = TRUE,
            value = 'disease-tab',
            sidebarLayout(
              sidebarPanel(id = 'sidebar',
-                          width = 2#,
-               #' uiOutput('comparisons_diseases'),
-               #' selectInput(inputId = 'disease_organism',
-               #'             label = 'Select the species:',
-               #'             choices = c('Human' = 'org.Hs.eg.db',
-               #'                         'Mouse'= 'org.Mm.eg.db',
-               #'                         'Rat'= 'org.Rn.eg.db'),
-               #'                         #'Yeast' = 'org.Sc.sgd.db'),
-               #'             selected = 'org.Hs.eg.db'),
-               #'
-               #' hr(),
-               #'
-               #' sliderInput(inputId = 'fc_disease',
-               #'             h4('The Log2 Fold Change can be modified to run
-               #'                     the enrichment analysis with proteins more significant.'),
-               #'             min = 1,
-               #'             max = 20,
-               #'             value = 1.5,
-               #'             step = 0.5),
-               #' verbatimTextOutput('diff_disease_number'),
+                          width = 2
              ),
 
              mainPanel(
@@ -1000,6 +991,50 @@ navbarPage(fluid = TRUE,
                                           image = 'logoTransparentSmall.gif',
                                           image.width = '200px'
                                           )
+                                        ),
+
+
+                               tabPanel('Circus Plot',
+                                        hr(),
+                                        shinycssloaders::withSpinner(
+                                          plotOutput('enr_circusplot'),
+                                          image = 'logoTransparentSmall.gif',
+                                          image.width = '200px'
+                                        )
+                               ),
+
+
+                               tabPanel('Disease Network',
+                                        hr(),
+                                        shinycssloaders::withSpinner(
+                                          plotOutput('enr_networkplot'),
+                                          image = 'logoTransparentSmall.gif',
+                                          image.width = '200px'
+                                        )
+                               ),
+
+                               tabPanel('Disease Map',
+                                        hr(),
+                                        print('Enrichment map organizes enriched terms into a network
+                                                   with edges connecting overlapping gene sets. In this way,
+                                                   mutually overlapping gene sets are tend to cluster together,
+                                                   making it easy to identify functional module.'),
+                                        hr(),
+                                        shinycssloaders::withSpinner(
+                                          plotOutput('enr_mapplot'),
+                                          image = 'logoTransparentSmall.gif',
+                                          image.width = '200px'
+                                        )
+                               ),
+
+                               tabPanel('Disease Results Table',
+                                        br(),
+
+                                        shinycssloaders::withSpinner(
+                                          DT::dataTableOutput('diseaseTable'),
+                                          image = 'logoTransparentSmall.gif',
+                                          image.width = '200px'
+                                        )
                                         )
                                )
                    )
@@ -1008,85 +1043,7 @@ navbarPage(fluid = TRUE,
            ),
 
 
-#### Gene Network ####
-  tabPanel(title = h4('Gene Network'),
-           value = 'network-tab',
-           sidebarLayout(
-               sidebarPanel(id = 'sidebar',
-                            width = 2,
-                 #'
-                 #' uiOutput('comparisons_network'),
-                 #'
-                 #' selectInput(inputId = 'network_organism',
-                 #'             label = 'Select the species:',
-                 #'             choices = c('Human' = 'org.Hs.eg.db',
-                 #'                         'Mouse'= 'org.Mm.eg.db',
-                 #'                         'Rat'= 'org.Rn.eg.db'),
-                 #'             #'Yeast' = 'org.Sc.sgd.db'),
-                 #'             selected = 'org.Hs.eg.db'),
-                 #'
-                 #' hr(),
-                 #'
-                 #' sliderInput(inputId = 'fc_network',
-                 #'             h4('The Log2 Fold Change can be modified to run
-                 #'                   the enrichment analysis with proteins more significant.'),
-                 #'             min = 1,
-                 #'             max = 20,
-                 #'             value = 1.5,
-                 #'             step = 0.5),
-                 #'
-                 #' verbatimTextOutput('diff_network_number')
-                 ),
 
-               mainPanel(
-                   box(height = 2500, width = 2000,
-                       tabsetPanel(type = 'tabs',
-
-                                   tabPanel('Biological Function',
-                                            hr(),
-                                            shinycssloaders::withSpinner(
-                                              plotOutput('bio_comparison'),
-                                              image = 'logoTransparentSmall.gif',
-                                              image.width = '200px'
-                                              )
-                                   ),
-
-                                   tabPanel('Circus',
-                                            hr(),
-                                            shinycssloaders::withSpinner(
-                                              plotOutput('enr_circusplot'),
-                                              image = 'logoTransparentSmall.gif',
-                                              image.width = '200px'
-                                              )
-                                            ),
-
-                                   tabPanel('Gene Network',
-                                            hr(),
-                                            shinycssloaders::withSpinner(
-                                              plotOutput('enr_networkplot'),
-                                              image = 'logoTransparentSmall.gif',
-                                              image.width = '200px'
-                                              )
-                                            ),
-
-                                   tabPanel('Enrichment Map',
-                                            hr(),
-                                            print('Enrichment map organizes enriched terms into a network
-                                                   with edges connecting overlapping gene sets. In this way,
-                                                   mutually overlapping gene sets are tend to cluster together,
-                                                   making it easy to identify functional module.'),
-                                            hr(),
-                                            shinycssloaders::withSpinner(
-                                              plotOutput('enr_mapplot'),
-                                              image = 'logoTransparentSmall.gif',
-                                              image.width = '200px'
-                                              )
-                                            )
-                                   )
-                       )
-                   )
-               )
-           ),
 
 
 #### Pathway Analysis ####
@@ -1111,17 +1068,39 @@ navbarPage(fluid = TRUE,
                  ),
 
                mainPanel(
-                   box(height = 2500, width = 2000,
-                        h4('KEGG Pathway'),
-                        hr(),
-                        shinycssloaders::withSpinner(
-                          plotOutput('enr_kegg1'),
-                          image = 'logoTransparentSmall.gif',
-                          image.width = '200px'
-                          )#,
 
-                       #imageOutput('pathwayPlot')
-                       )
+                 tabsetPanel(type = 'tabs',
+
+                             tabPanel('KEGG Pathway',
+                                      hr(),
+
+                                      shinycssloaders::withSpinner(
+                                        plotOutput('enr_kegg1'),
+                                        image = 'logoTransparentSmall.gif',
+                                        image.width = '200px'
+                                      )
+                             ),
+
+                             tabPanel('Pathway Table',
+                                      hr(),
+
+                                      shinycssloaders::withSpinner(
+                                        DT::dataTableOutput('pathwayTable')
+                                      )
+                             )
+
+
+                   # box(height = 2500, width = 2000,
+                   #      h4('KEGG Pathway'),
+                   #      hr(),
+                   #      shinycssloaders::withSpinner(
+                   #        plotOutput('enr_kegg1'),
+                   #        image = 'logoTransparentSmall.gif',
+                   #        image.width = '200px'
+                   #        )#,
+                   #
+                   #     #imageOutput('pathwayPlot')
+                        )
                    )
            )
   ),

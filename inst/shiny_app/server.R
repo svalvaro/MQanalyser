@@ -1274,10 +1274,16 @@ function(input, output) {
     })
 
 
+    # Edox is the same as edo but changing the geneID for the gene Names.
+
     edox <- reactive({
         edox <- clusterProfiler::setReadable(edo(),
                                              input$enrich_organism,
                                              'ENTREZID')
+
+        # edox <- clusterProfiler::setReadable(edo2,
+        #                                      'org.Hs.eg.db',
+        #                                      'ENTREZID')
         return(edox)
     })
 
@@ -1403,6 +1409,25 @@ function(input, output) {
     })
 
 
+
+
+    # Biological Comparison
+
+    output$bio_comparison <- renderPlot(height = 900, {
+        #bp2 <- pairwise_termsim(simplify(bp, cutoff=0.7, by="p.adjust", select_fun=min))
+
+        # bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress_network(),
+        #                                             ont="BP",
+        #                                             OrgDb = 'org.Hs.eg.db'))
+
+        bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress(),
+                                                    ont=input$go_ontology,
+                                                    OrgDb = input$enrich_organism))
+        enrichplot::emapplot(bp)
+
+    })
+
+
     # Gene Ontology Table
 
 
@@ -1473,29 +1498,6 @@ function(input, output) {
 
 
 
-
-    #### GENE NETWORK Plots####
-
-    ## Plots gene network
-
-    # Biological Comparison
-
-    output$bio_comparison <- renderPlot(height = 900, {
-        #bp2 <- pairwise_termsim(simplify(bp, cutoff=0.7, by="p.adjust", select_fun=min))
-
-        # bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress_network(),
-        #                                             ont="BP",
-        #                                             OrgDb = 'org.Hs.eg.db'))
-
-        bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress(),
-                                                    ont="BP",
-                                                    OrgDb = 'org.Hs.eg.db'))
-        enrichplot::emapplot(bp)
-
-    })
-
-
-
     # Circus PLot
 
     output$enr_circusplot <- renderPlot(height = 1000,{
@@ -1522,6 +1524,20 @@ function(input, output) {
     })
 
 
+    # Disease Tabular format
+
+
+    output$diseaseTable <- DT::renderDataTable({
+
+        DT::datatable(as.data.frame(edox()),
+                      extensions = 'Scroller',
+
+                      options = list(scrollY=500,
+                                     scrollX=30),
+                      width = '400px')
+    })
+
+
     #### PATHWAY ANALYSIS ####
 
     #KEGG analysis1
@@ -1541,6 +1557,7 @@ function(input, output) {
         #                                   pvalueCutoff = 0.05,
         #                                   #verbose = FALSE
         # )
+
 
 
 
@@ -1575,33 +1592,29 @@ function(input, output) {
     })
 
 
+    output$pathwayTable <- DT::renderDataTable({
+
+        # Change the ids to the names
+
+        kk <- clusterProfiler::setReadable(kegg_react1(),
+                                           input$enrich_organism,
+                                           'ENTREZID')
+
+        DT::datatable(as.data.frame(kk),
+                      extensions = 'Scroller',
+
+                      options = list(scrollY=500,
+                                     scrollX=30),
+                      width = '400px')
+    })
+
+
 
 
 
 #     # If pressed the button, it will open a new tab.
 #     observeEvent(input$GoToPathway, {
 #
-#         # Debugging the button
-# #
-# #         browser_to_use <- getOption('browser')
-# #         message(paste0('The browser is: ', browser_to_use))
-#
-#         url <- paste0("http://www.kegg.jp/kegg-bin/show_pathway?",
-#                       input$pathselec,
-#                       '/',
-#                       kegg_react1()[input$pathselec, "geneID"])
-#
-#
-#         message(paste0('Pathway selected is: ',input$pathselec))
-#
-#         message(paste0('The url is: ', url))
-#
-#         #clusterProfiler::browseKEGG(kegg_react1(), input$pathselec)
-#
-#
-#
-#     })
-
 
     output$pathwayButton <- renderUI({
 
@@ -1615,11 +1628,6 @@ function(input, output) {
 
         message(paste0('The url is: ', url))
 
-        # shiny::a(h4("Browse Selected Pathway",
-        #             class = "btn btn-default action-button" ,
-        #             style = "fontweight:600"),
-        #          target = "_blank",
-        #          href = url)
 
         shiny::a(
             actionBttn(
