@@ -43,6 +43,8 @@ function(input, output) {
 
                 # proteoInput <- read.delim('./inst/shiny_app/www/proteinGroups_example.txt')
 
+                # proteoInput <- read.delim('www/proteinGroups_example.txt')
+
                 #Remove reverse and reverse and contaminants and only identified by site
 
                 df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
@@ -385,7 +387,7 @@ function(input, output) {
 
         if (software_used() == 'MaxQuant') {
 
-            # columns = grep('LFQ', colnames(df))
+            # columns = grep('LFQ', colnames(proteoInput))
 
             # iBAQ failing here, check why.
             columns = grep(paste0(input$IntensityType,'.'), colnames(df))
@@ -1164,17 +1166,16 @@ function(input, output) {
 
 
         ## Unblock the other enrichment tabs
-        # shinyjs::runjs(
-        #     '
-        #         var tab = $(\'a[data-value="disease-tab"]\').parent();
-        #         $(tab).removeClass("disabled");
-        #         var tab = $(\'a[data-value="network-tab"]\').parent();
-        #         $(tab).removeClass("disabled");
-        #         var tab = $(\'a[data-value="pathway-tab"]\').parent();
-        #         $(tab).removeClass("disabled");
-        #         '
-        # )
-
+        shinyjs::runjs(
+            '
+                var tab = $(\'a[data-value="disease-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="network-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="pathway-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                '
+        )
 
         return(
             selectInput(
@@ -1182,27 +1183,47 @@ function(input, output) {
                 label = h4('Upregulated:'),
                 choices = c(Option1,
                             Option2,
-                            Option3
-                            )
+                            Option3)
                 )
             )
-
     })
 
         # Enrichment elements -------------------------------
+
+    # List containing the gene list and the failed to map number
+
+    geneListObject <- reactive({
+
+        geneListObject <- MQanalyser::create_geneList(
+            data_results = data_results(),
+            comparison_samples = input$comparison_enrch,
+            organism = input$enrich_organism)
+
+        # geneListObject <- MQanalyser::create_geneList(data_results = data_results,
+        #                             comparison_samples = 'Ctrl_vs_Tumor',
+        #                             organism = 'org.Hs.eg.db')
+    })
 
 
     geneList <- reactive({
 
 
-        geneList <- MQanalyser::create_geneList(
-            data_results = data_results(),
-            comparison_samples = input$comparison_enrch,
-            organism = input$enrich_organism) # adapt it to more organisms.
+        # geneList <- MQanalyser::create_geneList(
+        #     data_results = data_results(),
+        #     comparison_samples = input$comparison_enrch,
+        #     organism = input$enrich_organism) # adapt it to more organisms.
 
         # geneList <- MQanalyser::create_geneList(data_results = data_results,
         #                             comparison_samples = 'Ctrl_vs_Tumor',
         #                             organism = 'org.Hs.eg.db')
+
+        geneList <- geneListObject()$geneList$ratio
+
+        names(geneList) <- geneListObject()$geneList$ENTREZID
+
+        # geneList <- geneListObject$geneList$ratio
+        #
+        # names(geneList) <- geneListObject$geneList$ENTREZID
 
 
         # apply log2fc cut off:
@@ -1283,6 +1304,20 @@ function(input, output) {
             #icon = icon("stats", lib = "glyphicon"))
             icon = icon("info"),
             color = 'aqua')
+        return(info)
+    })
+
+
+    output$failedToMapGenes <- renderInfoBox({
+
+        failedToMap <- geneListObject()$failedToMap
+
+        info <- infoBox(
+            'Proteins Failed To map',
+            paste0(failedToMap, '% could not be map.'),
+            #icon = icon("stats", lib = "glyphicon"))
+            icon = icon("exclamation-triangle"),
+            color = 'yellow')
         return(info)
     })
 
@@ -1627,50 +1662,50 @@ function(input, output) {
     # Unblock the Preprocessing tab
 
 
-    # observeEvent(input$start_input, {
-    #
-    #     message('Unblocking the preprocessing tab ')
-    #
-    #      shinyjs::runjs(
-    #      '
-    #      var tab = $(\'a[data-value="preprocessing-tab"]\').parent();
-    #      $(tab).removeClass("disabled");
-    #      '
-    #      )
-    #
-    # })
+    observeEvent(input$start_input, {
+
+        message('Unblocking the preprocessing tab ')
+
+         shinyjs::runjs(
+         '
+         var tab = $(\'a[data-value="preprocessing-tab"]\').parent();
+         $(tab).removeClass("disabled");
+         '
+         )
+
+    })
 
     # Unblock the results, heatmap, comparison, volcano, profile and enrichment
     # tabs
 
-    # observeEvent(input$preprocessing_tabset,{
-    #
-    #     # If the user enters in one of the other three tabs creating the
-    #     # data_se() summarized experiment object, allow them to enter in the
-    #     # tabs
-    #     if (! input$preprocessing_tabset == 'contaminants_tab' ) {
-    #
-    #         message('Unblock the rest of the results and other tabs')
-    #
-    #         shinyjs::runjs(
-    #             '
-    #             var tab = $(\'a[data-value="results-tab"]\').parent();
-    #             $(tab).removeClass("disabled");
-    #             var tab = $(\'a[data-value="heatmap-tab"]\').parent();
-    #             $(tab).removeClass("disabled");
-    #             var tab = $(\'a[data-value="comparisons-tab"]\').parent();
-    #             $(tab).removeClass("disabled");
-    #             var tab = $(\'a[data-value="volcano-tab"]\').parent();
-    #             $(tab).removeClass("disabled");
-    #             var tab = $(\'a[data-value="profile-tab"]\').parent();
-    #             $(tab).removeClass("disabled");
-    #             var tab = $(\'a[data-value="enrichment-tab"]\').parent();
-    #             $(tab).removeClass("disabled");
-    #
-    #             '
-    #         )
-    #         }
-    # })
+    observeEvent(input$preprocessing_tabset,{
+
+        # If the user enters in one of the other three tabs creating the
+        # data_se() summarized experiment object, allow them to enter in the
+        # tabs
+        if (! input$preprocessing_tabset == 'contaminants_tab' ) {
+
+            message('Unblock the rest of the results and other tabs')
+
+            shinyjs::runjs(
+                '
+                var tab = $(\'a[data-value="results-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="heatmap-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="comparisons-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="volcano-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="profile-tab"]\').parent();
+                $(tab).removeClass("disabled");
+                var tab = $(\'a[data-value="enrichment-tab"]\').parent();
+                $(tab).removeClass("disabled");
+
+                '
+            )
+            }
+    })
 
     # The pathway tabs are unblock under the enrichment section.
 

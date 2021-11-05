@@ -29,5 +29,5 @@ library(SummarizedExperiment)
 library(colourpicker)
 library(shinycssloaders)
 library(stats)
-#library(shinyjs)
+library(shinyjs)
 

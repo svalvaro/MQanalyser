@@ -29,8 +29,19 @@ create_geneList <- function(data_results = data_results,
                                           toType = 'ENTREZID',
                                           OrgDb = organism, drop = T)
 
+
+
+
     colnames(df)[colnames(df)=='name'] = 'SYMBOL'
     colnames(df)[colnames(df)==paste0(comparison_samples,'_ratio')] = 'ratio'
+
+
+    # Failed_to_map
+
+    failedToMap <-format(
+        (1 - (nrow(ENTREZID)/nrow(df))) * 100,
+        digits = 3
+    )
 
 
     df <- merge(x=df,y=ENTREZID,by="SYMBOL")
@@ -42,11 +53,18 @@ create_geneList <- function(data_results = data_results,
     # It'll be good to return also the gene name so I can create a tabular
     # form of the enrichemnt.
 
+
+    to_return <- list(geneList = df,
+                      failedToMap = failedToMap
+                      )
+
     #create a named vector (the geneList)
 
-    geneList <- df$ratio
+    # geneList <- df$ratio
+    #
+    # names(geneList) <- df$ENTREZID
+    #
+    # return(geneList)
 
-    names(geneList) <- df$ENTREZID
-
-    return(geneList)
+    return(to_return)
 }
