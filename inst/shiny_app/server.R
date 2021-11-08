@@ -41,7 +41,7 @@ function(input, output) {
 
                 df <- read.delim(inFile$datapath)
 
-                # proteoInput <- read.delim('./inst/shiny_app/www/proteinGroups_example.txt')
+                # proteoInput <- read.delim('./inst/shiny_app/www/data/proteinGroups_example.txt')
 
                 # proteoInput <- read.delim('www/proteinGroups_example.txt')
 
@@ -140,7 +140,7 @@ function(input, output) {
 
     experiment_design <- reactive({
 
-        # experiment_design <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/experiment_design_example.txt')
+        # experiment_design <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/data/experiment_design_example.txt')
 
         # experiment_design <- read.delim('www/experiment_design_example_spectronaut.txt')
 
@@ -806,16 +806,70 @@ function(input, output) {
 
     #### Heatmap plot ####
 
-    output$heatmaply <- renderPlotly(
 
 
-            MQanalyser::plot_heatmaply(dep(),
-                                       intensity_type = input$IntensityType,
-                                       dendogram = input$dendogram_input,
-                                       k_row = input$k_row_input,
-                                       k_col = input$k_col_input) %>%
-                layout(height = 1000, width = 1000)
-        )
+
+    output$heatmaply <- renderPlotly({
+
+        shiny::req(input$heatmapInteractive)
+
+        if (input$heatmapInteractive == FALSE) {
+            return(NULL)
+        }
+
+
+        MQanalyser::plot_heatmaply(dep(),
+                                   intensity_type = input$IntensityType,
+                                   dendogram = input$dendogram_input,
+                                   k_row = input$k_row_input,
+                                   k_col = input$k_col_input) %>%
+            layout(height = 1000, width = 1000)
+
+    }
+    )
+
+    output$heatMapNonInteractive <- renderPlot(height = 1000, width = 1000,{
+
+        if (input$heatmapInteractive == TRUE) {
+            return(NULL)
+        }
+
+        DEP::plot_heatmap(dep = dep(),
+                          type = 'centered')
+
+    }
+    )
+
+    # output$heatmapUI <- renderUI({
+    #
+    #     shiny::req(input$heatmapInteractive)
+    #
+    #     if (input$heatmapInteractive == FALSE) {
+    #         return(
+    #             #shinycssloaders::withSpinner(
+    #
+    #             plotOutput('heatMapNonInteractive')#,
+    #             #     image = 'images/logoTransparentSmall.gif',
+    #             #     image.width = '200px'
+    #             # )
+    #
+    #         )
+    #
+    #
+    #     }else{
+    #
+    #         return(
+    #             shinycssloaders::withSpinner(
+    #                 plotlyOutput('heatmaply'),
+    #                 image = 'images/logoTransparentSmall.gif',
+    #                 image.width = '200px'
+    #         )
+    #         )
+    #
+    #
+    #     }
+    #
+    # })
 
     #### Correlation plot ####
     output$plot_correlation <- renderPlotly(

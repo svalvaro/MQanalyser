@@ -407,6 +407,22 @@ navbarPage(fluid = TRUE,
                sidebarPanel(id = 'sidebar',
                             width = 2,
 
+                            tags$div(
+                              title = "The interactive version is under development since it might slow down, or crash the application",
+
+                              shinyWidgets::switchInput(
+                                inputId = "heatmapInteractive",
+                                label = "Interactive",
+                                labelWidth = "80px",
+                                onStatus = 'success',
+                                value = FALSE,
+                                offStatus = 'danger')
+                            ),
+
+
+
+                            br(),
+
                         selectInput(inputId = 'dendogram_input',
                                     label = 'Type of Clustering',
                                     choices = c('Proteins and the samples' = 'both',
@@ -427,11 +443,24 @@ navbarPage(fluid = TRUE,
                         ),
                 mainPanel(
                     box(
-                        shinycssloaders::withSpinner(
-                            plotlyOutput('heatmaply'),
-                            image = 'images/logoTransparentSmall.gif',
-                            image.width = '200px'
-                            )
+
+                            #plotlyOutput('heatmaply'),
+                            #uiOutput('heatmapUI')
+
+                                  shinycssloaders::withSpinner(
+
+                                  plotOutput('heatMapNonInteractive'),
+                                      image = 'images/logoTransparentSmall.gif',
+                                      image.width = '200px'
+                                  ),
+
+                                  shinycssloaders::withSpinner(
+                                                    plotlyOutput('heatmaply'),
+                                                    image = 'images/logoTransparentSmall.gif',
+                                                    image.width = '200px'
+                                            )
+
+
                         )
                     )
                 )
