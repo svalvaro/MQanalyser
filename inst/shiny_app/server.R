@@ -537,7 +537,7 @@ function(input, output) {
 
     output$plot_before_normalization <- renderPlotly({
         `Before normalization` = data_filt()
-        #ggplotly(DEP::plot_normalization(`Before normalization`))
+        # ggplotly(DEP::plot_normalization(`Before normalization`))
 
         MQanalyser::plot_normalization_interactive(`Before normalization`)
     })
@@ -1271,8 +1271,8 @@ function(input, output) {
             organism = input$enrich_organism)
 
         # geneListObject <- MQanalyser::create_geneList(data_results = data_results,
-        #                             comparison_samples = 'Ctrl_vs_Tumor',
-        #                             organism = 'org.Hs.eg.db')
+        #                             comparison_samples = 'ND_vs_HFD',
+        #                             organism = 'org.Mm.eg.db')
     })
 
     geneList <- reactive({
@@ -1477,9 +1477,9 @@ function(input, output) {
     output$bio_comparison <- renderPlot(height = 900, {
         #bp2 <- pairwise_termsim(simplify(bp, cutoff=0.7, by="p.adjust", select_fun=min))
 
-        # bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress_network(),
+        # bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress,
         #                                             ont="BP",
-        #                                             OrgDb = 'org.Hs.eg.db'))
+        #                                             OrgDb = 'org.Mm.eg.db'))
 
         bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress(),
                                                     ont=input$go_ontology,
@@ -1586,8 +1586,17 @@ function(input, output) {
 
     kegg_react1 <- reactive({
 
+        if (input$enrich_organism == 'org.Hs.eg.db' ) {
+            organism <-  'hsa'
+        }
+
+        if (input$enrich_organism == 'org.Mm.eg.db' ) {
+            organism <-  'mmu'
+        }
+
+
         kk <- clusterProfiler::enrichKEGG(gene=diffExpress(),
-                                          organism = 'hsa',
+                                          organism = organism,
                                           #minGSSize = 120,
                                           pvalueCutoff = 0.05,
                                           #verbose = FALSE
