@@ -9,7 +9,8 @@
 #'
 #' @examples
 plot_contaminants <- function(proteoInput,
-                              intensityType = 'LFQ'
+                              intensityType = 'LFQ',
+                              interactive = FALSE
                               ){
 
     # what_to_plot <- c('frequency', 'intensity')
@@ -61,7 +62,13 @@ plot_contaminants <- function(proteoInput,
                 )+
             scale_colour_manual(values = colors)
 
-    return(
-        ggplotly(p, tooltip = c('y', 'key', 'colour'))
-    )
+    if (interactive == TRUE) {
+        return(
+            ggplotly(p, tooltip = c('y', 'key', 'colour'))
+        )
+    }else{
+        return(
+            p
+        )
+    }
 }

@@ -367,9 +367,45 @@ function(input, output) {
     output$contaminantsPlot <- renderPlotly(
 
         MQanalyser::plot_contaminants(proteoInput = proteoInput(),
-                                      intensityType = input$intensityType)%>%
-        layout(height = 800)
+                                      intensityType = input$intensityType,
+                                      interactive = TRUE)%>%
+        layout(height = 800, width = 800)
     )
+
+    output$contaminantsPlotNonInteractive <- renderPlot(height = 800, width = 800,{
+
+        MQanalyser::plot_contaminants(proteoInput = proteoInput(),
+                                      intensityType = input$intensityType,
+                                      interactive = FALSE)
+    })
+
+
+    output$contaminantsUI <- renderUI({
+
+        message(paste0('Value of the contaminants: ', input$contaminantsInteractive))
+
+        if (input$contaminantsInteractive == FALSE) {
+            return(
+                shinycssloaders::withSpinner(
+
+                    plotOutput('contaminantsPlotNonInteractive'),
+                    image = 'images/logoTransparentSmall.gif',
+                    image.width = '200px'
+                )
+            )
+
+
+        }else{
+
+            return(
+                shinycssloaders::withSpinner(
+                    plotlyOutput('contaminantsPlot'),
+                    image = 'images/logoTransparentSmall.gif',
+                    image.width = '200px'
+                )
+            )
+        }
+    })
 
     #shinyjs::onclick('filter_tab',)
 
@@ -805,9 +841,6 @@ function(input, output) {
     )
 
     #### Heatmap plot ####
-
-
-
 
     output$heatmaply <- renderPlotly({
 

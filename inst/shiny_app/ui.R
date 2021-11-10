@@ -217,9 +217,20 @@ navbarPage(fluid = TRUE,
 
                      checkboxInput(inputId = 'removeContaminantsInput',
                                    label = h4('Remove Contaminants'),
-                                   value = TRUE)
-                     # Reverse and Identified by one hit will be removed
-                     #automatically
+                                   value = TRUE),
+
+                     tags$div(
+                       title = "The interactive version is under development since it might slow down, or crash the application",
+
+                       shinyWidgets::switchInput(
+                         inputId = "contaminantsInteractive",
+                         label = "Interactive",
+                         labelWidth = "80px",
+                         onStatus = 'success',
+                         value = FALSE,
+                         offStatus = 'danger'),
+                     )
+
                    ),
                    mainPanel(
                      column(width = 10,
@@ -232,12 +243,14 @@ navbarPage(fluid = TRUE,
                             br(),
                             br(),
                             hr(),
-                            box(width = 10,height = 850,
-                                shinycssloaders::withSpinner(
-                                  plotlyOutput('contaminantsPlot'),
-                                  image = 'images/logoTransparentSmall.gif',
-                                  image.width = '200px')
-                                )
+
+                            uiOutput('contaminantsUI')
+                            # box(width = 10,height = 850,
+                            #     shinycssloaders::withSpinner(
+                            #       plotlyOutput('contaminantsPlot'),
+                            #       image = 'images/logoTransparentSmall.gif',
+                            #       image.width = '200px')
+                            #     )
                             )
                      )
                    )
@@ -418,8 +431,6 @@ navbarPage(fluid = TRUE,
                                 value = FALSE,
                                 offStatus = 'danger'),
                             ),
-
-
 
                             br(),
 
