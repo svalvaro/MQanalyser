@@ -416,7 +416,7 @@ navbarPage(fluid = TRUE,
                                 labelWidth = "80px",
                                 onStatus = 'success',
                                 value = FALSE,
-                                offStatus = 'danger')
+                                offStatus = 'danger'),
                             ),
 
 
@@ -442,26 +442,9 @@ navbarPage(fluid = TRUE,
                                      min = 0, max = 50)
                         ),
                 mainPanel(
-                    box(
 
-                            #plotlyOutput('heatmaply'),
-                            #uiOutput('heatmapUI')
+                  uiOutput('heatmapUI')
 
-                                  shinycssloaders::withSpinner(
-
-                                  plotOutput('heatMapNonInteractive'),
-                                      image = 'images/logoTransparentSmall.gif',
-                                      image.width = '200px'
-                                  ),
-
-                                  shinycssloaders::withSpinner(
-                                                    plotlyOutput('heatmaply'),
-                                                    image = 'images/logoTransparentSmall.gif',
-                                                    image.width = '200px'
-                                            )
-
-
-                        )
                     )
                 )
             ),

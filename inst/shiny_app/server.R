@@ -840,36 +840,32 @@ function(input, output) {
     }
     )
 
-    # output$heatmapUI <- renderUI({
-    #
-    #     shiny::req(input$heatmapInteractive)
-    #
-    #     if (input$heatmapInteractive == FALSE) {
-    #         return(
-    #             #shinycssloaders::withSpinner(
-    #
-    #             plotOutput('heatMapNonInteractive')#,
-    #             #     image = 'images/logoTransparentSmall.gif',
-    #             #     image.width = '200px'
-    #             # )
-    #
-    #         )
-    #
-    #
-    #     }else{
-    #
-    #         return(
-    #             shinycssloaders::withSpinner(
-    #                 plotlyOutput('heatmaply'),
-    #                 image = 'images/logoTransparentSmall.gif',
-    #                 image.width = '200px'
-    #         )
-    #         )
-    #
-    #
-    #     }
-    #
-    # })
+    output$heatmapUI <- renderUI({
+
+        message(paste0('Value of the heatmap: ', input$heatmapInteractive))
+
+        if (input$heatmapInteractive == FALSE) {
+            return(
+                shinycssloaders::withSpinner(
+
+                plotOutput('heatMapNonInteractive'),
+                    image = 'images/logoTransparentSmall.gif',
+                    image.width = '200px'
+                )
+                )
+
+
+        }else{
+
+            return(
+                shinycssloaders::withSpinner(
+                    plotlyOutput('heatmaply'),
+                    image = 'images/logoTransparentSmall.gif',
+                    image.width = '200px'
+                    )
+            )
+            }
+    })
 
     #### Correlation plot ####
     output$plot_correlation <- renderPlotly(
