@@ -2,7 +2,7 @@ tagList(
 
 #### navbar ####
 navbarPage(fluid = TRUE,
-           #id = 'tabs-menu',
+           id = 'tabs_menu',
 
     ##### style css ####
     titlePanel(
@@ -957,6 +957,8 @@ navbarPage(fluid = TRUE,
 #### Disease Analysis Tab ####
   tabPanel(title = h4('Disease Analysis'),
            value = 'disease-tab',
+
+           shinyalert::useShinyalert(),
            sidebarLayout(
              sidebarPanel(id = 'sidebar',
                           width = 2
@@ -967,6 +969,7 @@ navbarPage(fluid = TRUE,
                    tabsetPanel(type = 'tabs',
 
                                tabPanel('Disease Enrichment',
+
                                         hr(),
                                         # print('Dot plot is similar to bar
                                         #        plot with the capability to encode another score as dot size.'),

@@ -1523,6 +1523,32 @@ function(input, output) {
 
     #### Disease Analysis Plots ####
 
+    # Warning pop up that the disease tab is only available for human data
+
+    observeEvent(input$tabs_menu, {
+
+        message('user in this tab')
+
+        req(input$enrich_organism)
+
+        message(paste0('organism', input$enrich_organism))
+
+        if (! input$enrich_organism == 'org.Hs.eg.db' &&
+            input$tabs_menu == 'disease-tab') {
+
+            message('alert launch')
+            return(
+                shinyalert::shinyalert("Disease Analaysis Unavailable",
+                                       "This part is only available with human species",
+                                       type="error",
+                                       closeOnClickOutside = TRUE,
+                                       closeOnEsc = TRUE,
+                                       timer = 6000)
+            )
+        }
+
+    })
+
     ## DISEASE PLOTS
 
     # Disease Enrichment
