@@ -94,18 +94,18 @@ navbarPage(fluid = TRUE,
                   h4('Exapmles of the file(s) to be uploaded:'),
                   fluidRow(
 
-                      column(5,a(href='proteinGroup_example.txt',
+                      column(5,a(href='data/proteinGroups_example.txt',
                                  'proteinGroups.txt',
                                  download=NA,
                                  target='_blank') ),
 
-                      column(5,a(href='experiment_design_example.txt',
+                      column(5,a(href='data/experiment_design_example.txt',
                                  'experiment_design.txt',
                                  download=NA,
                                  target='_blank') ),
 
 
-                      column(5,a(href='user_genes_examples.txt',
+                      column(5,a(href='data/user_genes_examples.txt',
                                  'Genes example',
                                  download=NA,
                                  target='_blank')
