@@ -850,7 +850,6 @@ function(input, output) {
             return(NULL)
         }
 
-
         MQanalyser::plot_heatmaply(dep(),
                                    intensity_type = input$IntensityType,
                                    dendogram = input$dendogram_input,
@@ -861,17 +860,39 @@ function(input, output) {
     }
     )
 
+
+    heatmapPlot <- reactive({
+        p <- DEP::plot_heatmap(dep = dep(),
+                          type = 'centered')
+        return(
+            p
+        )
+    })
+
     output$heatMapNonInteractive <- renderPlot(height = 1000, width = 1000,{
 
         if (input$heatmapInteractive == TRUE) {
             return(NULL)
         }
 
-        DEP::plot_heatmap(dep = dep(),
-                          type = 'centered')
+        heatmapPlot()
 
     }
     )
+
+
+    output$heatmapDownloader <- downloadHandler(
+
+        filename = function(){
+            'heatmap.png'
+        },
+
+        content = function(file){
+            ggplot2::ggsave(file, heatmapPlot())
+        }
+    )
+
+
 
     output$heatmapUI <- renderUI({
 

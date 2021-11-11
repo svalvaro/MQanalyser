@@ -450,7 +450,10 @@ navbarPage(fluid = TRUE,
                         sliderInput(inputId = 'k_col_input',
                                      label = 'Colour clusters, samples',
                                      value = 0,
-                                     min = 0, max = 50)
+                                     min = 0, max = 50)#,
+
+                        # downloadButton(outputId = 'heatmapDownloader',
+                        #                label = 'Download the heatmap')
                         ),
                 mainPanel(
 
