@@ -1554,6 +1554,8 @@ function(input, output) {
     # Disease Enrichment
     output$enr_dotplot <- renderPlot(height = 1000,{
 
+        shiny::req(input$enrich_organism == 'org.Hs.eg.db')
+
         enrichplot::dotplot(edo(),showCategory = 25)
 
     })
@@ -1561,6 +1563,7 @@ function(input, output) {
     # Disease GSEA
 
     output$enr_gseadotplot <- renderPlot(height = 1000,{
+        shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         if(nrow(edo()) <1){
             print('Cant print')
@@ -1572,6 +1575,7 @@ function(input, output) {
     # Disease plot of enriched terms
 
     output$heatmapnrich <- renderPlotly({
+        shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         ggplotly(heatplot(edox() ,foldChange=geneList())) %>%
 
@@ -1580,6 +1584,7 @@ function(input, output) {
 
     #Output overlapping distributions
     output$enr_ridgeplot <- renderPlot(height = 800, width =1200,{
+        shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         ridgeplot(edo2())
     })
@@ -1587,6 +1592,7 @@ function(input, output) {
     # Disease Association
 
     output$upset <- renderPlot(height = 800, width = 1200,{
+        shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         enrichplot::upsetplot(edo())
 
@@ -1595,6 +1601,7 @@ function(input, output) {
     # Circus PLot
 
     output$enr_circusplot <- renderPlot(height = 1000,{
+        shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         cnetplot(edox(),  circular = TRUE, colorEdge = TRUE)
 
@@ -1603,6 +1610,7 @@ function(input, output) {
     #Gene Network
 
     output$enr_networkplot <- renderPlot(height = 900, width = 800, {
+        shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         cnetplot(edox(), node_label = "all")
     })
@@ -1610,6 +1618,7 @@ function(input, output) {
     #Enrichment Map
 
     output$enr_mapplot <- renderPlot(height = 1000, width = 900, {
+        shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         enrichplot::emapplot(pairwise_termsim(edo())#, node_scale=input$enrich_nodes
                              ,layout="kk")
@@ -1618,6 +1627,7 @@ function(input, output) {
     # Disease Tabular format
 
     output$diseaseTable <- DT::renderDataTable({
+        shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         DT::datatable(as.data.frame(edox()),
                       extensions = 'Scroller',
