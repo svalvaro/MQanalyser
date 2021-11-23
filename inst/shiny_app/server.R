@@ -163,7 +163,8 @@ function(input, output) {
     output$ed_out <- renderRHandsontable({
 
         rhandsontable(experiment_design(), height =  500) %>%
-            hot_col('replicate', format = '0a')
+            hot_col('replicate', format = '0a') %>%
+            rhandsontable::hot_col('label', readOnly = TRUE)
     })
 
     ed_final <- reactiveValues()
