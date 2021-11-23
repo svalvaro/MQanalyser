@@ -175,8 +175,12 @@ function(input, output) {
             return(NULL)
         } else{
 
-        ed_final$data <-  rhandsontable::hot_to_r(input$ed_out)
+
+            ed_final$data <-  rhandsontable::hot_to_r(input$ed_out)
         }
+
+        print('The experiment design is:')
+        print(ed_final$data)
 
     })
 
