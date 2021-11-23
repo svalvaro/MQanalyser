@@ -43,7 +43,7 @@ function(input, output) {
 
                 # proteoInput <- read.delim('./inst/shiny_app/www/data/proteinGroups_example.txt')
 
-                # proteoInput <- read.delim('www/proteinGroups_example.txt')
+                # proteoInput <- read.delim('~/Downloads/proteinGroups.txt')
 
                 #Remove reverse and reverse and contaminants and only identified by site
 
@@ -73,6 +73,8 @@ function(input, output) {
         } else if(demo$start == TRUE){
 
             df <- read.delim('www/data/proteinGroups_example.txt')
+
+
 
             #Remove reverse and reverse and contaminants and only identified by site
 
@@ -110,16 +112,44 @@ function(input, output) {
     })
 
     #### Experiment Design ####
+
+    # The names has to be dependent on the intensity type, found error when
+    # fractions
+
     experiment_names <- reactive({
 
         if (software_used() == 'MaxQuant') {
 
-            experiment_names <- proteoInput() %>%
-                select(contains('Intensity.')) %>%
-                select(-contains('LFQ'))
+            if(input$IntensityType == 'Intensity'){
 
-            experiment_names <- base::colnames(experiment_names)
-            experiment_names <- gsub('Intensity.', '', experiment_names)
+                experiment_names <- proteoInput() %>%
+                    select(contains('Intensity.')) %>%
+                    select(-contains('LFQ'))
+
+                experiment_names <- base::colnames(experiment_names)
+                experiment_names <- gsub('Intensity.', '', experiment_names)
+            }
+
+            if(input$IntensityType == 'LFQ'){
+
+                experiment_names <- proteoInput() %>%
+                    select(contains('LFQ'))
+
+                experiment_names <- base::colnames(experiment_names)
+                experiment_names <- gsub('LFQ.intensity.', '', experiment_names)
+            }
+
+            if(input$IntensityType == 'iBAQ'){
+
+                experiment_names <- proteoInput() %>%
+                    select(contains('iBAQ.')) %>%
+                    select(-contains('peptides'))
+
+                experiment_names <- base::colnames(experiment_names)
+                experiment_names <- gsub('iBAQ.', '', experiment_names)
+            }
+
+
 
         } else if (software_used() == 'Spectronaut'){
 
@@ -143,6 +173,8 @@ function(input, output) {
         # experiment_design <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/data/experiment_design_example.txt')
 
         # experiment_design <- read.delim('www/experiment_design_example_spectronaut.txt')
+        #experiment_design <- read.delim('~/Downloads/experiment_design.txt')
+
 
         inFile <- input$optional_exp_design
 
@@ -424,7 +456,7 @@ function(input, output) {
 
         if (software_used() == 'MaxQuant') {
 
-            # columns = grep('LFQ', colnames(proteoInput))
+            # columns = grep('LFQ.', colnames(proteoInput))
 
             # iBAQ failing here, check why.
             columns = grep(paste0(input$IntensityType,'.'), colnames(df))
@@ -433,6 +465,7 @@ function(input, output) {
             data_unique <- DEP::make_unique(df, 'Gene.names', 'Protein.IDs', delim = ';')
 
             # data_unique <- DEP::make_unique(proteoInput, 'Gene.names', 'Protein.IDs', delim = ';')
+
 
         } else if (software_used() == 'Spectronaut'){
             # Find the columns with the LFQ or iBAQ intensity
@@ -457,6 +490,8 @@ function(input, output) {
 
             colnames(df)[columns] <-  gsub(pattern = '\\[.*\\] ','',base::colnames(df)[columns])
 
+
+
             # Make unique
             data_unique <- DEP::make_unique(df,'PG.Genes', 'PG.ProteinGroups', delim = ';')
 
@@ -465,10 +500,16 @@ function(input, output) {
             #exp_design[,'label'] <- gsub('\\[.*\\] ','',exp_design[,'label'])
         }
 
+        message('The experiment names are:\n')
+        print(colnames(data_unique[columns]))
         # Creates a SummarizedExperiment,
         data_se <- DEP::make_se(data_unique, columns = columns, expdesign = exp_design)
 
-        # data_se <- DEP::make_se(data_unique, columns = columns, experiment_design)
+        message('Summarized Experiment created')
+
+        return(data_se)
+
+        #data_se <- DEP::make_se(data_unique, columns = columns, expdesign=experiment_design)
         #View(as.data.frame(data_se@elementMetadata))
         })
 
@@ -491,7 +532,7 @@ function(input, output) {
          } else if(n_replicates < 6 ){
              threshold <-2 #If there are 4 or 5 replicates,  NA accepted is 2.
          } else if (n_replicates >= 6){
-             threshold<- trunc(n_replicates / 2) #If there are 6 or more. NA accepted is half of the max.
+             threshold <- trunc(n_replicates / 2) #If there are 6 or more. NA accepted is half of the max.
          }
 
         sliderInput(inputId = 'nas_threshold',
@@ -529,6 +570,7 @@ function(input, output) {
     output$barplot_missvals <- renderPlotly(
         MQanalyser::plot_protsidentified(data_filt())%>%
             layout(height = 800, width = 850)
+        #MQanalyser::plot_protsidentified(data_filt)
     )
 
 
