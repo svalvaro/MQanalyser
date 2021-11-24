@@ -179,7 +179,7 @@ navbarPage(fluid = TRUE,
                                      style = 'color:#990000'),
                               target = '_blank'),
                        style = "font-size: 85%"),
-                     p(tags$em("Last updated: October 2021"),
+                     p(tags$em("Last updated: November 2021"),
                        style = 'font-size:75%'))
             )
             ),
