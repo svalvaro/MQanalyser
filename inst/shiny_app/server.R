@@ -116,6 +116,10 @@ function(input, output) {
     # The names has to be dependent on the intensity type, found error when
     # fractions
 
+
+    # Addition of a fourth column containing boolean values (TRUE/FALSE) to
+    # include that experiment or not.
+
     experiment_names <- reactive({
 
         if (software_used() == 'MaxQuant') {
@@ -194,9 +198,31 @@ function(input, output) {
 
     output$ed_out <- renderRHandsontable({
 
-        rhandsontable(experiment_design(), height =  500) %>%
+        df <- experiment_design()
+
+        # Add the new column include to remove the experiments that are not
+        # wanted
+
+        df$Include <- TRUE
+
+        rhandsontable(#experiment_design(),
+                    df,
+                    height =  500) %>%
             hot_col('replicate', format = '0a') %>%
-            rhandsontable::hot_col('label', readOnly = TRUE)
+            rhandsontable::hot_col('label', readOnly = TRUE)%>%
+            hot_table(highlightRow = TRUE) %>%
+        hot_col(col = "Include",
+                renderer = "
+                    function (instance, td, row, col, prop, value, cellProperties) {
+                        Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
+                        var col_value = instance.getData()[row][3]
+
+                        if (col_value == false) {
+
+                            td.style.background = 'pink';
+                        }
+                    }
+                ")
     })
 
     ed_final <- reactiveValues()
