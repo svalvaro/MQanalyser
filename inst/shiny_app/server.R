@@ -209,24 +209,36 @@ function(input, output) {
                     df,
                     height =  500) %>%
             hot_col('replicate', format = '0a') %>%
+
             rhandsontable::hot_col('label', readOnly = TRUE)%>%
+
             hot_table(highlightRow = TRUE) %>%
-        hot_col(col = "Include",
+
+            hot_col(col = "Include",
                 renderer = "
                     function (instance, td, row, col, prop, value, cellProperties) {
                         Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
 
                         var col_value = instance.getData()[row][3]
 
+                        if (col_value === false) {
+
+                            td.style.background = 'pink';
+                        }
+                    }
+                ") %>%
+
+            hot_col(col = c("label", "condition", "replicate"),
+                    renderer = "
+                    function (instance, td, row, col, prop, value, cellProperties) {
+                        Handsontable.renderers.TextRenderer.apply(this, arguments);
+
+                        var col_value = instance.getData()[row][3]
 
                         if (col_value === false) {
 
-
                             td.style.background = 'pink';
-
                         }
-
-
                     }
                 ")
     })
