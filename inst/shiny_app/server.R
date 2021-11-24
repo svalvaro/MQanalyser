@@ -788,6 +788,7 @@ function(input, output) {
         MQanalyser::plot_histogram_imputed(
 
             data_to_be_imputed = data_to_be_imputed(),
+            bins = input$imputation_bins,
             combined = input$combined_imputation) %>%
             layout(height = 900, width = 1400)
     )

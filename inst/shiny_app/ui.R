@@ -17,8 +17,6 @@ navbarPage(fluid = TRUE,
                               tags$title("Proteomics Analyser"))
     ),
     theme = shinytheme(theme ='flatly'),
-
-
 #### DATA INPUT ####
 
     tabPanel(h4('Data \nInput'),
@@ -353,7 +351,14 @@ navbarPage(fluid = TRUE,
 
                                             checkboxInput(inputId = 'combined_imputation',
                                                           label = h4('Combine the samples into one plot'),
-                                                          value = FALSE)
+                                                          value = FALSE),
+
+
+                                            sliderInput('imputation_bins',
+                                                        label = 'Number of bins',
+                                                        min = 1,
+                                                        max = 100,
+                                                        value = 30)
                                                        ),
 
                                           mainPanel(

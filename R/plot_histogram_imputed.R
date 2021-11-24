@@ -7,6 +7,7 @@
 #'
 #' @examples
 plot_histogram_imputed <- function(data_to_be_imputed,
+                                   bins = 30,
                                    combined = FALSE){
 
     colnames(data_to_be_imputed) <- c('Protein.ID',
@@ -17,7 +18,7 @@ plot_histogram_imputed <- function(data_to_be_imputed,
     p <-     ggplot(data_to_be_imputed, aes( x = `Log2 Intensity`,
                                              fill = Imputed))+
                     geom_histogram(alpha = 0.4,
-                                   bins = 30,
+                                   bins = bins,
                                    position = 'identity')+
                     theme_bw()+
                     ylab('Frequency')+
