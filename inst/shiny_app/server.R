@@ -215,12 +215,18 @@ function(input, output) {
                 renderer = "
                     function (instance, td, row, col, prop, value, cellProperties) {
                         Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
+
                         var col_value = instance.getData()[row][3]
 
-                        if (col_value == false) {
+
+                        if (col_value === false) {
+
 
                             td.style.background = 'pink';
+
                         }
+
+
                     }
                 ")
     })
@@ -229,12 +235,17 @@ function(input, output) {
 
     observeEvent(input$start_input, {
 
-        if (is.null(input$proteinInput) && is.null(input$optional_exp_design) && demo$start == FALSE) {
+        if (is.null(input$proteinInput) && is.null(input$optional_exp_design) &&
+            demo$start == FALSE) {
             return(NULL)
         } else{
 
-
             ed_final$data <-  rhandsontable::hot_to_r(input$ed_out)
+
+            # Remove the rows containing FALSE in include.
+            print(ed_final$data$Include)
+
+            ed_final$data <- ed_final$data[! ed_final$data$Include == FALSE,]
         }
 
         print('The experiment design is:')
