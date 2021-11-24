@@ -214,7 +214,7 @@ function(input, output) {
 
             hot_table(highlightRow = TRUE) %>%
 
-            hot_col(col = "Include",
+            hot_col(col = "Include", halign = 'htCenter',
                 renderer = "
                     function (instance, td, row, col, prop, value, cellProperties) {
                         Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
@@ -241,6 +241,7 @@ function(input, output) {
                         }
                     }
                 ")
+
     })
 
     ed_final <- reactiveValues()
