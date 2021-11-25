@@ -113,10 +113,6 @@ function(input, output) {
 
     #### Experiment Design ####
 
-    # The names has to be dependent on the intensity type, found error when
-    # fractions
-
-
     # Addition of a fourth column containing boolean values (TRUE/FALSE) to
     # include that experiment or not.
 
@@ -240,7 +236,26 @@ function(input, output) {
                             td.style.background = 'pink';
                         }
                     }
-                ")
+                ") #%>%
+            # hot_col(col = "replicate",
+            #         halign = "htCenter",
+            #         renderer ="
+            #         function (instance, td, row, col, prop, value, cellProperties) {
+            #             Handsontable.renderers.TextRenderer.apply(this, arguments);
+            #
+            #             tbl = this.HTMLWidgets.widgets[0]
+            #
+            #             var length_col = tbl.rows.length;;
+            #
+            #
+            #
+            #             console.log('the length of replicates is:' + length_col)
+            #             /*
+            #             for (var i = 0; i < length_col; i++) {
+            #                 console.log(i);
+            #             } */
+            #         }
+            #         " )
 
     })
 
