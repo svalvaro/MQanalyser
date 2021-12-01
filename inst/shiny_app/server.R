@@ -1754,6 +1754,17 @@ function(input, output) {
                       width = '400px')
     })
 
+    # Download the table button
+
+    output$download_disease_table <- downloadHandler(
+
+
+        filename = function(){ 'disease_results.csv'},
+        content = function(fname){
+            write.csv(edox(), fname)
+        }
+    )
+
     #### PATHWAY ANALYSIS ####
 
     #KEGG analysis1
@@ -1803,6 +1814,14 @@ function(input, output) {
 
     })
 
+
+    pathway_table <- reactive({
+        # Change the ids to the names
+        kk <- clusterProfiler::setReadable(kegg_react1(),
+                                           input$enrich_organism,
+                                           'ENTREZID')
+    })
+
     output$pathway_selector <- renderUI({
 
         selectInput(inputId = 'pathselec',
@@ -1817,17 +1836,30 @@ function(input, output) {
 
         # Change the ids to the names
 
-        kk <- clusterProfiler::setReadable(kegg_react1(),
-                                           input$enrich_organism,
-                                           'ENTREZID')
+        # kk <- clusterProfiler::setReadable(kegg_react1(),
+        #                                    input$enrich_organism,
+        #                                    'ENTREZID')
 
-        DT::datatable(as.data.frame(kk),
+        DT::datatable(as.data.frame(pathway_table()),
                       extensions = 'Scroller',
 
                       options = list(scrollY=500,
                                      scrollX=30),
-                      width = '400px')
+                      width = '400px', rownames = FALSE)
     })
+
+    # Download the table button
+
+    output$download_pathway_table <- downloadHandler(
+
+
+        filename = function(){ 'pathway_results.csv'},
+        content = function(fname){
+            write.csv(pathway_table(), fname)
+        }
+    )
+
+
 
 #     # If pressed the button, it will open a new tab.
 #     observeEvent(input$GoToPathway, {

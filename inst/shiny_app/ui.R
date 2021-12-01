@@ -1074,7 +1074,11 @@ navbarPage(fluid = TRUE,
                                           DT::dataTableOutput('diseaseTable'),
                                           image = 'images/logoTransparentSmall.gif',
                                           image.width = '200px'
-                                        )
+                                        ),
+                                        downloadButton(
+                                          outputId = 'download_disease_table',
+                                          label = 'Download Table')
+
                                         )
                                )
                    )
@@ -1126,7 +1130,10 @@ navbarPage(fluid = TRUE,
 
                                       shinycssloaders::withSpinner(
                                         DT::dataTableOutput('pathwayTable')
-                                      )
+                                      ),
+                                      downloadButton(
+                                        outputId = 'download_pathway_table',
+                                        label = 'Download Table')
                              )
 
 
