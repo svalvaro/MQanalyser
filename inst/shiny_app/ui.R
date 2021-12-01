@@ -949,7 +949,12 @@ navbarPage(fluid = TRUE,
                                              DT::dataTableOutput('geneOntologyDataTable'),
                                              image = 'images/logoTransparentSmall.gif',
                                              image.width = '200px'
-                                           )
+                                           ),
+                                           downloadButton(
+                                             outputId = 'download_enrichment_table',
+                                             label = 'Download Table')
+
+
                                            )
                                   )
                       )

@@ -43,7 +43,7 @@ function(input, output) {
 
                 # proteoInput <- read.delim('./inst/shiny_app/www/data/proteinGroups_example.txt')
 
-                # proteoInput <- read.delim('~/Downloads/proteinGroups.txt')
+                #proteoInput <- read.delim('~/Downloads/HN0468-2_filtered_proteinGroups.txt')
 
                 #Remove reverse and reverse and contaminants and only identified by site
 
@@ -1614,6 +1614,29 @@ function(input, output) {
                                      scrollX=30),
                       width = '400px')
     })
+
+    # Download the table button
+
+    output$download_enrichment_table <- downloadHandler(
+
+        # req(input$go_ontology)
+        #
+        # if(input$go_ontology == 'CC'){
+        #     nameFile = 'Cellular_Component'
+        # } else if (input$go_ontology == 'MF'){
+        #     nameFile = 'Molecular_Function'
+        # } else{
+        #     nameFile = 'Biological_Function'
+        # }
+
+        filename = function(){ 'enrichment_results.csv'},
+        content = function(fname){
+            write.csv(geneOntologyTable(), fname)
+        }
+    )
+
+
+
 
     #### Disease Analysis Plots ####
 
