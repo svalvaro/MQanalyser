@@ -43,7 +43,7 @@ function(input, output) {
 
                 # proteoInput <- read.delim('./inst/shiny_app/www/data/proteinGroups_example.txt')
 
-                #proteoInput <- read.delim('~/Downloads/HN0468-2_filtered_proteinGroups.txt')
+                #proteoInput <- read.delim('~/Downloads/proteinGroups (2).txt')
 
                 #Remove reverse and reverse and contaminants and only identified by site
 
@@ -173,7 +173,7 @@ function(input, output) {
         # experiment_design <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/data/experiment_design_example.txt')
 
         # experiment_design <- read.delim('www/experiment_design_example_spectronaut.txt')
-        #experiment_design <- read.delim('~/Downloads/experiment_design.txt')
+        #experiment_design <- read.delim('~/Downloads/experiment_design(1).txt')
 
 
         inFile <- input$optional_exp_design
@@ -657,7 +657,7 @@ function(input, output) {
         } else{
             data_norm <- data_filt()
         }
-         #data_norm <- DEP::normalize_vsn(data_filt)
+         # data_norm <- DEP::normalize_vsn(data_filt)
 
         #meanSdPlot(data_norm)
         #data_norm <- normalize_vsn(data_filt)
@@ -1385,9 +1385,9 @@ function(input, output) {
             comparison_samples = input$comparison_enrch,
             organism = input$enrich_organism)
 
-        # geneListObject <- MQanalyser::create_geneList(data_results = data_results,
-        #                             comparison_samples = 'ND_vs_HFD',
-        #                             organism = 'org.Mm.eg.db')
+        geneListObject <- MQanalyser::create_geneList(data_results = data_results,
+                                    comparison_samples = 'HEK_vs_III',
+                                    organism = 'org.Hs.eg.db')
     })
 
     geneList <- reactive({
@@ -1579,9 +1579,15 @@ function(input, output) {
 
     output$enr_gseaplot <- renderPlot(height = 800, {
 
+        if (is.null(edo2())) {
+
+            message('Can not plot, not enough proteins')
+            return(NULL)
+        }
+
         if(input$runscore == 'all'){
             enrichplot::gseaplot2(edo2(), geneSetID = 1)
-            # enrichplot::gseaplot2(edo2, geneSetID = 1)
+             #enrichplot::gseaplot2(edo2, geneSetID = 1)
         } else{
             enrichplot::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
         }
@@ -1634,9 +1640,6 @@ function(input, output) {
             write.csv(geneOntologyTable(), fname)
         }
     )
-
-
-
 
     #### Disease Analysis Plots ####
 
@@ -1891,58 +1894,6 @@ function(input, output) {
             target = "_blank",
             href = url)
     })
-
-    # Pathway plot Visualization in the shiny
-
-    # output$pathwayPlot <- renderImage({
-    #
-    #     pathview::pathview(gene.data = geneList(),
-    #                        pathway.id = input$pathselec,
-    #                        species = 'hsa',
-    #                        limit = list(gene=max(abs(geneList())), cpd=1))
-    #
-    #
-    #     path_img <- paste0(getwd(),'/', input$pathselec,'.pathview.png')
-    #
-    #     message(paste0('the path of the image is\n:', path_img))
-    #
-    #     #path_img <- paste0(getwd(),'/', 'hsa04512','.pathview.png')
-    #
-    #     # path_img <- '/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/hsa05146.pathview.png'
-    #
-    #
-    #     # Read PNG
-    #
-    #     #img <- png::readPNG(path_img)
-    #
-    #
-    #     # return(
-    #     #     grid::grid.raster(img)
-    #     #
-    #     # )
-    #
-    #     list(src = path_img,
-    #          contentType = 'image/png',
-    #          width = 400,
-    #          height = 300,
-    #          alt = "This is alternate text")
-    # }, deleteFile = FALSE)
-    #
-    #
-    # onSessionEnded(function() {
-    #     cat("Session Ended\n")
-    #
-    #     cat(paste0('working dir', getwd()))
-    #
-    #     files_to_remove <- list.files(
-    #         path =  '/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/',
-    #         pattern = 'hsa*')
-    #
-    #     cat(files_to_remove)
-    #     base::file.remove(
-    #         paste0('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/',
-    #                files_to_remove))
-    # })
 
     #### Block the tabs ####
 
