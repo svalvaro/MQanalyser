@@ -43,38 +43,40 @@ function(input, output) {
 
                 # proteoInput <- read.delim('./inst/shiny_app/www/data/proteinGroups_example.txt')
 
-                #proteoInput <- read.delim('~/Downloads/proteinGroups (2).txt')
+                # proteoInput <- read.delim('~/Downloads/HN0468-2_filtered_proteinGroups.txt')
 
                 #Remove reverse and reverse and contaminants and only identified by site
 
-                df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
+                # The user might have modified the proteinGroups.txt and this columns are not present
 
-                # Remove the contaminants if checkbox is pressed
-                if (input$removeContaminantsInput) {
+                if (c('Reverse', 'Only.identified.by.site', 'Potential.contaminant') %in% names(df)) {
 
-                    df <- df[(df$Potential.contaminant == ''),]
+                    df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
+
+                    # Remove the contaminants if checkbox is pressed
+                    if (input$removeContaminantsInput) {
+
+                        df <- df[(df$Potential.contaminant == ''),]
+                    }
                 }
 
-                # If the file ends in csv is from Spectronaut, read accordingly
+            # If the file ends in csv is from Spectronaut, read accordingly
 
             } else if (endsWith(as.character(inFile$datapath), suffix = '.csv')){
 
-                #message(paste0(inFile, 'ends with .csv'))
 
                 df <- read_csv(inFile$datapath, na = 'NaN')
 
                 #df <- read_csv('./inst/shiny_app/www/data/Pivot_ProteinQuant_example.csv',na = 'NaN')
 
                 # Remove the contamintants is only if checkbox is pressed.
-                # Need to find a file with contaminants first.
+                # Need to find a file with contaminants first use FASTA
             }
 
         # If they press DEMO
         } else if(demo$start == TRUE){
 
             df <- read.delim('www/data/proteinGroups_example.txt')
-
-
 
             #Remove reverse and reverse and contaminants and only identified by site
 
@@ -173,7 +175,7 @@ function(input, output) {
         # experiment_design <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/data/experiment_design_example.txt')
 
         # experiment_design <- read.delim('www/experiment_design_example_spectronaut.txt')
-        #experiment_design <- read.delim('~/Downloads/experiment_design(2).txt')
+        # experiment_design <- read.delim('~/Downloads/experiment_design(3).txt')
 
 
         inFile <- input$optional_exp_design
@@ -423,6 +425,9 @@ function(input, output) {
     #### Filter out contaminants ####
 
     output$contaminants_box <- renderInfoBox({
+
+
+
         # Number of contaminants proteins
         contaminants <- proteoInput() %>%
             select('Potential.contaminant')
@@ -449,6 +454,11 @@ function(input, output) {
 
     output$contaminantsPlot <- renderPlotly(
 
+        # if (! 'Potential.contaminant' %in% names(proteoInput())) {
+        #
+        #     return(NULL)
+        # }
+
         MQanalyser::plot_contaminants(proteoInput = proteoInput(),
                                       intensityType = input$intensityType,
                                       interactive = TRUE)%>%
@@ -470,6 +480,14 @@ function(input, output) {
                 'Provide Fasta file to remove the contaminats,\n
                 This part is under development'
             )
+        }
+
+        if (! 'Potential.contaminant' %in% names(proteoInput())) {
+
+            return('Contaminants Column is not present in the proteinGroups,
+                   Contaminants might be present.
+                   Did you modify the proteinGroups.txt?
+                   ')
         }
 
         message(paste0('Value of the contaminants: ', input$contaminantsInteractive))
@@ -509,15 +527,23 @@ function(input, output) {
 
         if (software_used() == 'MaxQuant') {
 
-            # columns = grep('LFQ.', colnames(proteoInput))
 
-            # iBAQ failing here, check why.
+            df$iBAQ.peptides <- NULL
+
+            # columns = grep('iBAQ.', colnames(df))
+
             columns = grep(paste0(input$IntensityType,'.'), colnames(df))
 
             # Adds two columns at the end with an unique gene and protein name.
             data_unique <- DEP::make_unique(df, 'Gene.names', 'Protein.IDs', delim = ';')
 
             # data_unique <- DEP::make_unique(proteoInput, 'Gene.names', 'Protein.IDs', delim = ';')
+
+            if (input$IntensityType == 'iBAQ') {
+                # Remove the iBAQ. from the column names: iBAQ.sample1, iBAQ.sample2
+
+                names(data_unique)[columns] <- gsub('iBAQ.','',names(data_unique)[columns])
+            }
 
 
         } else if (software_used() == 'Spectronaut'){
@@ -529,6 +555,7 @@ function(input, output) {
                 # remove the ending of the names
                 colnames(df)[columns] <-  gsub(pattern = '.raw.PG.Quantity','',base::colnames(df)[columns])
             }else{
+
                 columns <-  grep('PG.IBAQ', colnames(df))
                 # remove the ending of the names
                 colnames(df)[columns] <-  gsub(pattern = '.raw.PG.IBAQ','',base::colnames(df)[columns])
