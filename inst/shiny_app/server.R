@@ -465,6 +465,13 @@ function(input, output) {
 
     output$contaminantsUI <- renderUI({
 
+        if (software_used() == 'Spectronaut') {
+            return(
+                'Provide Fasta file to remove the contaminats,\n
+                This part is under development'
+            )
+        }
+
         message(paste0('Value of the contaminants: ', input$contaminantsInteractive))
 
         if (input$contaminantsInteractive == FALSE) {
