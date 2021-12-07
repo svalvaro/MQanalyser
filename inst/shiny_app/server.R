@@ -63,7 +63,7 @@ function(input, output) {
 
                 df <- read_csv(inFile$datapath, na = 'NaN')
 
-                 #df <- read_csv('www/Pivot_ProteinQuant_example.csv',na = 'NaN')
+                #df <- read_csv('./inst/shiny_app/www/data/Pivot_ProteinQuant_example.csv',na = 'NaN')
 
                 # Remove the contamintants is only if checkbox is pressed.
                 # Need to find a file with contaminants first.
@@ -173,7 +173,7 @@ function(input, output) {
         # experiment_design <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/data/experiment_design_example.txt')
 
         # experiment_design <- read.delim('www/experiment_design_example_spectronaut.txt')
-        #experiment_design <- read.delim('~/Downloads/experiment_design(1).txt')
+        #experiment_design <- read.delim('~/Downloads/experiment_design(2).txt')
 
 
         inFile <- input$optional_exp_design
@@ -518,6 +518,7 @@ function(input, output) {
 
             if (input$IntensityType == 'LFQ') {
                 columns <-  grep('PG.Quantity', colnames(df))
+
                 # remove the ending of the names
                 colnames(df)[columns] <-  gsub(pattern = '.raw.PG.Quantity','',base::colnames(df)[columns])
             }else{
@@ -621,6 +622,11 @@ function(input, output) {
 
 
     output$heatmap_nas <- renderPlot(height = 800,width = 700,{
+
+        if (nrow(data_filt())==nrow(data_se())) {
+            message("No missing values, the heatmap will not be plotted")
+            return(NULL)
+        }
 
         # Make it into plotly and iteractive!
         DEP::plot_missval(data_filt())
@@ -1345,7 +1351,6 @@ function(input, output) {
         Option1 <- gsub(pattern = '_.*', '', comparison)
         Option2 <- gsub(pattern = '.*_', '', comparison)
         Option3 <- paste0('Combine: ', Option1, ' and ' , Option2)
-
 
         message(paste0('Option1: ' , Option1))
         message(paste0('Option2: ' , Option2))
