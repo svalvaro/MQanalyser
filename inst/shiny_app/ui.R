@@ -33,13 +33,11 @@ navbarPage(fluid = TRUE,
                               multiple = FALSE,
                               accept = 'text'),
 
-                    verbatimTextOutput('sw_used'),
-
                     uiOutput('intensity_selector'),
 
-                    verbatimTextOutput('IntensityFound_message'),
+                    # verbatimTextOutput('IntensityFound_message'),
                     hr(),
-                    br(),
+                    #br(),
 
                     fileInput(inputId = 'optional_exp_design',
                               label='Provide the experiment design (Optional)',
@@ -112,31 +110,79 @@ navbarPage(fluid = TRUE,
                 ),
 
                 mainPanel(
-                    fluidRow(
-                        column(8,
-                               box(title = h3('Experiment Design'),
-                                   width = 10,
-                                   h4('Welcome to analysis of the results
+                    #fluidRow(
+                        column(
+                          width = 8,
+
+                          fluidRow(
+
+                            column(width = 6,
+                                   shinydashboard::infoBoxOutput('softwareUsedBox',
+                                                                 width = 8)
+                            ),
+
+                            column(width = 6,
+                                   shinydashboard::infoBoxOutput('intensityBox',
+                                                                 width = 8)
+                            )
+                            ),
+
+                          fluidRow(
+
+                            box(title = h3('Experiment Design'),
+                                width = 10,
+                                h4('Welcome to analysis of the results
                                       of LC-MS/MS'),
-                                   h5('Start by uploading the proteinGroups.txt
+                                h5('Start by uploading the proteinGroups.txt
                                       table provided.'),
-                                   h5('Please Edit the next table by adding the
+                                h5('Please Edit the next table by adding the
                                       Condition and Replicate.'),
-                                   h5('Alternatively an experiment design can
+                                h5('Alternatively an experiment design can
                                       be uploaded. Be sure that the Sample
                                       names are correct.'),
-                                   hr(),
+                                hr(),
 
-                                   #DTOutput('experiment_design')
-                                   #DT::dataTableOutput('ed_out'),
-                                   rHandsontableOutput('ed_out'),
-                                   br(),
-                                   downloadButton(
-                                    outputId = 'download_experiment_design',
-                                    label = 'Download (Press Start
-                                    Analysis First)'),
-                                   )
-                               ),
+                                rHandsontableOutput('ed_out'),
+                                br(),
+                                downloadButton(
+                                  outputId = 'download_experiment_design',
+                                  label = 'Download (Press Start
+                                    Analysis First)')
+                            )
+                          )
+                          ),
+                        # column(
+                        #   width = 8,
+                        #
+                        #   shinydashboard::infoBoxOutput('softwareUsedBox',
+                        #                                 width = 8),
+                        #
+                        #   shinydashboard::infoBoxOutput('intensityBox',
+                        #                                 width = 8),
+                        #
+                        #   box(title = h3('Experiment Design'),
+                        #       width = 10,
+                        #       h4('Welcome to analysis of the results
+                        #               of LC-MS/MS'),
+                        #       h5('Start by uploading the proteinGroups.txt
+                        #               table provided.'),
+                        #       h5('Please Edit the next table by adding the
+                        #               Condition and Replicate.'),
+                        #       h5('Alternatively an experiment design can
+                        #               be uploaded. Be sure that the Sample
+                        #               names are correct.'),
+                        #       hr(),
+                        #
+                        #       #DTOutput('experiment_design')
+                        #       #DT::dataTableOutput('ed_out'),
+                        #       rHandsontableOutput('ed_out'),
+                        #       br(),
+                        #       downloadButton(
+                        #         outputId = 'download_experiment_design',
+                        #         label = 'Download (Press Start
+                        #             Analysis First)'),
+                        #   )
+                        # ),
 
                         column(3,
                                br(),
@@ -153,7 +199,7 @@ navbarPage(fluid = TRUE,
                                  uiOutput('start_analysis')
                                    #)
                                )
-                        )
+                        #)
                     )
                 ),
 

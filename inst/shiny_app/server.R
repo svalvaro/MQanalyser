@@ -104,13 +104,24 @@ function(input, output) {
 
     })
 
-    output$sw_used <- renderText({
+    output$softwareUsedBox <- renderInfoBox({
+
         if (is.null(proteoInput())) {
-            print("")
-        }else{
-            print(paste0('Software used: ', software_used()))
+            return(NULL)
         }
 
+        icon <- "check-square"
+
+        color <- 'green'
+
+
+        info <- infoBox(
+            'Software used:',
+            paste0('\n', software_used()),
+            #icon = icon("stats", lib = "glyphicon"))
+            icon = icon(icon),
+            color = color)
+        return(info)
     })
 
     #### Experiment Design ####
@@ -403,6 +414,32 @@ function(input, output) {
         }
     })
 
+    output$intensityBox <- renderInfoBox({
+
+        if (IntensityFound() == TRUE) {
+            title_box <- paste0(input$IntensityType, '  was found.')
+            subtitle_box <- ' You can continue with the analysis.'
+            icon <- "check-square"
+            color <- 'green'
+
+        }else{
+            title_box <- paste0(input$IntensityType, '  was not found.')
+            subtitle_box <- ' You must select another type of Intensity.'
+            icon <- "exclamation-circle"
+            color <- 'red'
+        }
+
+        info <- infoBox(
+            title =  title_box,
+            value = subtitle_box,
+            #icon = icon("stats", lib = "glyphicon"))
+            icon = icon(icon),
+            color = color)
+        return(info)
+    })
+
+
+
     #### User Genes ####
 
     user_genes <- reactive({
@@ -425,8 +462,6 @@ function(input, output) {
     #### Filter out contaminants ####
 
     output$contaminants_box <- renderInfoBox({
-
-
 
         # Number of contaminants proteins
         contaminants <- proteoInput() %>%
