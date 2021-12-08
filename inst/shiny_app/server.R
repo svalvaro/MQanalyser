@@ -357,6 +357,8 @@ function(input, output) {
 
         intensityToUse <- input$IntensityType
 
+        message(paste0('The user selects intensity:', intensityToUse))
+
         if (is.null(software_used())) {
             return(NULL)
 
@@ -452,21 +454,85 @@ function(input, output) {
     # inside the FASTA
 
     contaminants_fasta <- reactive({
+
         if (software_used() == 'MaxQuant') {
             return(NULL)
         }
 
-        contaminants_fasta <- seqinr::read.fasta(file = 'www/data/MaxQuant_Contaminants_Default.fasta' )
+        inFile <- input$contaminantsFastaInput
+
+        # If no file is loaded and no pressed demo
+        if (input$fastaOptions == "Use MaxQuant default"){
+            message('User uses the default contaminants.fasta')
+            contaminants_fasta <- seqinr::read.fasta(file = 'www/data/MaxQuant_Contaminants_Default.fasta')
+        }
+
+        if(!is.null(inFile) && input$fastaOptions == "Upload Custom"){
+            message('User uploads a fasta with contaminants')
+            contaminants_fasta <- seqinr::read.fasta(file = inFile$datapath )
+        }
+
+        if(is.null(inFile) && input$fastaOptions == "Upload Custom"){
+            message('Waiting for the user to upload a fasta with contaminants')
+            return(NULL)
+        }
+
+
         # contaminants_fasta <- seqinr::read.fasta(file = 'inst/shiny_app/www/data/MaxQuant_Contaminants_Default.fasta' )
+        # contaminants_fasta <- seqinr::read.fasta(file = '~/Downloads/MaxQuant_Contaminants_Default.fasta')
+
+        return(contaminants_fasta)
+    })
+
+    output$fastaSelection <- renderUI({
+
+        if (software_used() == 'MaxQuant') {
+            return(NULL)
+        }
+
+        # radioButtons(inputId = "fastaOptions",
+        #              h4("Contaminants proteins:"),
+        #              choices = c("Use MaxQuant default",
+        #                          "Upload Custom"),
+        #              selected = 'default')
+
+        radioGroupButtons(
+            inputId = "fastaOptions",
+            label = h4("Contaminants proteins"),
+            choices = c("Use MaxQuant default",
+                        "Upload Custom"),
+        status = "primary",
+        checkIcon = list(
+            yes = icon("ok",
+                       lib = "glyphicon"),
+            no = icon("remove",
+                      lib = "glyphicon"))
+        )
+
+    })
+
+    output$fastaInput <- renderUI({
+
+        if (software_used() == 'MaxQuant') {
+            return(NULL)
+        }
+
+        shiny::req(input$fastaOptions == 'Upload Custom')
+
+        fileInput(inputId = 'contaminantsFastaInput',
+                  label = h4('Upload a FASTA file containing contaminant proteins'),
+                  multiple = FALSE,
+                  accept = 'txt')
     })
 
     proteoInputClean <- reactive({
 
+        df <- proteoInput()
+
         if (software_used() == 'MaxQuant') {
-            df <- proteoInput()
 
-
-            if (c('Reverse', 'Only.identified.by.site', 'Potential.contaminant') %in% names(df)) {
+            if (c('Reverse', 'Only.identified.by.site',
+                  'Potential.contaminant') %in% names(df)) {
 
                 df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
 
@@ -480,8 +546,6 @@ function(input, output) {
 
         if (software_used() == 'Spectronaut') {
 
-            df <- proteoInput()
-
             # Change the name of some columns to make it like proteinGroups
 
             colnames(df)[colnames(df) %in% c("PG.Genes", "PG.ProteinGroups")] <- c("Gene.names", "Protein.IDs")
@@ -493,8 +557,8 @@ function(input, output) {
             # Compare the proteinIds, with the proteinIDs of the contaminants,
             # if they match, mark it as '+', to be removed later
 
-            # df$Potential.contaminant[which(df$Protein.IDs %in% names(contaminants_fasta))] <- '+'
-            df$Potential.contaminant[which(df$Protein.IDs %in% names(contaminants_fasta()))] <- '+'
+            # df$Potential.contaminant[which(df$Gene.names %in% names(contaminants_fasta))] <- '+'
+            df$Potential.contaminant[which(df$Gene.names %in% names(contaminants_fasta()))] <- '+'
 
             # Remove the contaminants if checkbox is pressed
             if (input$removeContaminantsInput) {
@@ -512,12 +576,7 @@ function(input, output) {
         # Number of contaminants proteins
         contaminants <- proteoInputClean()$Potential.contaminant
 
-        #contaminants <- contaminants2[contaminants2$Potential.contaminant == '+',]
-
-
         total_contaminants <- length(contaminants[grep('.+',contaminants)])
-
-        #total_contaminants <- length(contaminants)
 
         message(paste0('The number of contaminants is: ', total_contaminants))
 
@@ -539,11 +598,6 @@ function(input, output) {
     })
 
     output$contaminantsPlot <- renderPlotly(
-
-        # MQanalyser::plot_contaminants(proteoInput = df,
-        #                               softwareUsed = 'Spectronaut',
-        #                               intensityType = 'LFQ',
-        #                               interactive = TRUE)
 
         MQanalyser::plot_contaminants(proteoInput = proteoInputClean(),
                                       softwareUsed = software_used(),
@@ -611,7 +665,7 @@ function(input, output) {
 
     data_se <- reactive({
 
-        df <- proteoInput()
+        df <- proteoInputClean()
 
         exp_design <- ed_final$data
 
@@ -690,6 +744,7 @@ function(input, output) {
 
     output$na_threshold  <- renderUI({
 
+
         # Check number of replicates
 
         n_replicates <- max(ed_final$data$replicate)
@@ -715,6 +770,10 @@ function(input, output) {
     })
 
     data_filt <- reactive({
+
+        if (is.null(data_se())) {
+            return(NULL)
+        }
 
         # Avoid warning message while rendering
         shiny::req(input$nas_threshold)

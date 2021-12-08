@@ -230,6 +230,10 @@ navbarPage(fluid = TRUE,
                                    label = h4('Remove Contaminants'),
                                    value = TRUE),
 
+                     uiOutput('fastaSelection'),
+
+                     uiOutput('fastaInput'),
+
                      tags$div(
                        title = "The interactive version is under development since it might slow down, or crash the application",
 
@@ -237,7 +241,7 @@ navbarPage(fluid = TRUE,
                          inputId = "contaminantsInteractive",
                          label = "Interactive",
                          labelWidth = "80px",
-                         onStatus = 'success',
+                         #onStatus = 'success',
                          value = FALSE,
                          offStatus = 'danger'),
                      )
