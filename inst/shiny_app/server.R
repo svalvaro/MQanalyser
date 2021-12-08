@@ -490,18 +490,13 @@ function(input, output) {
             return(NULL)
         }
 
-        # radioButtons(inputId = "fastaOptions",
-        #              h4("Contaminants proteins:"),
-        #              choices = c("Use MaxQuant default",
-        #                          "Upload Custom"),
-        #              selected = 'default')
 
         radioGroupButtons(
             inputId = "fastaOptions",
             label = h4("Contaminants proteins"),
             choices = c("Use MaxQuant default",
                         "Upload Custom"),
-        status = "primary",
+        status = "success",
         checkIcon = list(
             yes = icon("ok",
                        lib = "glyphicon"),
@@ -546,6 +541,11 @@ function(input, output) {
 
         if (software_used() == 'Spectronaut') {
 
+            if (is.null(contaminants_fasta())) {
+                message('Waiting for the user to upload a fasta file')
+                return(NULL)
+            }
+
             # Change the name of some columns to make it like proteinGroups
 
             colnames(df)[colnames(df) %in% c("PG.Genes", "PG.ProteinGroups")] <- c("Gene.names", "Protein.IDs")
@@ -573,6 +573,10 @@ function(input, output) {
 
     output$contaminants_box <- renderInfoBox({
 
+        if (is.null(proteoInputClean())) {
+            return(NULL)
+        }
+
         # Number of contaminants proteins
         contaminants <- proteoInputClean()$Potential.contaminant
 
@@ -599,6 +603,9 @@ function(input, output) {
 
     output$contaminantsPlot <- renderPlotly(
 
+
+
+
         MQanalyser::plot_contaminants(proteoInput = proteoInputClean(),
                                       softwareUsed = software_used(),
                                       intensityType = input$intensityType,
@@ -607,6 +614,10 @@ function(input, output) {
     )
 
     output$contaminantsPlotNonInteractive <- renderPlot(height = 800, width = 800,{
+        if (is.null(proteoInputClean())) {
+            return(NULL)
+        }
+
 
         MQanalyser::plot_contaminants(proteoInput = proteoInputClean(),
                                       softwareUsed = software_used(),
