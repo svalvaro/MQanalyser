@@ -14,38 +14,50 @@ plot_contaminants <- function(proteoInput,
                               interactive = FALSE
                               ){
 
-    # what_to_plot <- c('frequency', 'intensity')
-
     if (softwareUsed == 'MaxQuant') {
 
+        # df <- proteoInput %>% select(contains(
+        #     c( 'Contaminant', 'LFQ','Gene.names')))
         df <- proteoInput %>% select(contains(
-            c( 'Contaminant', 'LFQ','Gene.names')))
+            c( 'Contaminant', intensityType,'Gene.names')))
 
-        names(df) <- gsub('LFQ.intensity.','',names(df))
-
-
+        names(df) <- gsub(paste0(intensityType,'.intensity.'),'',names(df))
     }
 
     if (softwareUsed == 'Spectronaut') {
 
-        df <- proteoInput %>% select(contains(
-            c( 'Contaminant', 'PG.Quantity','Gene.names')))
+        if (intensityType == 'LFQ') {
 
-        columns <-  grep('PG.Quantity', colnames(df))
+            df <- proteoInput %>% select(contains(
+                c( 'Contaminant', 'PG.Quantity','Gene.names')))
 
-        # remove the ending of the names
-        colnames(df)[columns] <-  gsub(pattern = '.raw.PG.Quantity','',base::colnames(df)[columns])
+            columns <-  grep('PG.Quantity', colnames(df))
+
+            # remove the ending of the names
+            colnames(df)[columns] <-  gsub(pattern = '.raw.PG.Quantity','',base::colnames(df)[columns])
+
+        }
+
+        if (intensityType == 'iBAQ') {
+
+            df <- proteoInput %>% select(contains(
+                c( 'Contaminant', 'PG.IBAQ','Gene.names')))
+
+            columns <-  grep('PG.IBAQ', colnames(df))
+
+            # remove the ending of the names
+            colnames(df)[columns] <-  gsub(pattern = '.raw.PG.IBAQ','',base::colnames(df)[columns])
+        }
 
         colnames(df)[columns] <-  gsub(pattern = '\\[.*\\] ','',base::colnames(df)[columns])
 
     }
 
-
     df2 <- reshape2::melt(df, id.var = c('Potential.contaminant','Gene.names'))
 
     df2 <- df2[!is.na(df2$value),]
 
-    # Change the + for TRUE or FALSEs
+    # Change the + for Contaminat or Not Contaminant
     df2$Potential.contaminant <- ifelse(df2$Potential.contaminant == '+',
                                         'Contaminant', 'Not Contaminant')
 
@@ -54,13 +66,7 @@ plot_contaminants <- function(proteoInput,
 
     df2 <- df2[!df2$value == '-Inf',]
 
-    # Gsub the intensity type
-
-    # df2$variable <- gsub(pattern = 'LFQ.intensity.', replacement = '',
-    #                      x = df2$variable)
-
     colnames(df2)[colnames(df2)=='value'] <- 'Log2.Intensity'
-
 
     # Colors for the plot
 
@@ -69,7 +75,6 @@ plot_contaminants <- function(proteoInput,
     }else{
         colors <- '#FFDFD3'
     }
-
 
     p <- ggplot(df2, aes( y = Log2.Intensity,  key = Gene.names))+
             #gghalves::geom_half_point()+
@@ -84,7 +89,6 @@ plot_contaminants <- function(proteoInput,
                 axis.text.x = element_blank(),
                 axis.ticks.x = element_blank(),
                 legend.title = element_blank()
-
                 )+
             scale_colour_manual(values = colors)
 

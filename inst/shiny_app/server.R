@@ -41,7 +41,7 @@ function(input, output) {
 
                 df <- read.delim(inFile$datapath)
 
-                # df <- read.delim('./inst/shiny_app/www/data/proteinGroups_example.txt')
+                # proteoInput <- read.delim('./inst/shiny_app/www/data/proteinGroups_example.txt')
                 # proteoInput <- read.delim('~/Downloads/HN0468-2_filtered_proteinGroups.txt')
 
                 #Remove reverse and reverse and contaminants and only identified by site
@@ -603,39 +603,26 @@ function(input, output) {
 
     output$contaminantsPlot <- renderPlotly(
 
-
-
-
         MQanalyser::plot_contaminants(proteoInput = proteoInputClean(),
                                       softwareUsed = software_used(),
-                                      intensityType = input$intensityType,
+                                      intensityType = input$IntensityType,
                                       interactive = TRUE)%>%
         layout(height = 800, width = 800)
     )
 
     output$contaminantsPlotNonInteractive <- renderPlot(height = 800, width = 800,{
+
         if (is.null(proteoInputClean())) {
             return(NULL)
         }
 
-
         MQanalyser::plot_contaminants(proteoInput = proteoInputClean(),
                                       softwareUsed = software_used(),
-                                      intensityType = input$intensityType,
+                                      intensityType = input$IntensityType,
                                       interactive = FALSE)
     })
 
-
-
-
     output$contaminantsUI <- renderUI({
-
-        # if (software_used() == 'Spectronaut') {
-        #     return(
-        #         'Provide Fasta file to remove the contaminats,\n
-        #         This part is under development'
-        #     )
-        # }
 
         if (software_used() == 'MaxQuant' && !'Potential.contaminant' %in% names(proteoInput())) {
 
