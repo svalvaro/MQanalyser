@@ -42,11 +42,9 @@ function(input, output) {
                 df <- read.delim(inFile$datapath)
 
                 # proteoInput <- read.delim('./inst/shiny_app/www/data/proteinGroups_example.txt')
-
                 # proteoInput <- read.delim('~/Downloads/HN0468-2_filtered_proteinGroups.txt')
 
                 #Remove reverse and reverse and contaminants and only identified by site
-
                 # The user might have modified the proteinGroups.txt and this columns are not present
 
                 if (c('Reverse', 'Only.identified.by.site', 'Potential.contaminant') %in% names(df)) {
@@ -67,10 +65,18 @@ function(input, output) {
 
                 df <- read_csv(inFile$datapath, na = 'NaN')
 
-                #df <- read_csv('./inst/shiny_app/www/data/Pivot_ProteinQuant_example.csv',na = 'NaN')
+                # df$Potential.contaminant <- ''
+                #
+                # df$Potential.contaminant[which(df$PG.ProteinGroups %in% names(fasta()))] <- '+'
+                #
+                # # df <- read_csv('./inst/shiny_app/www/data/Pivot_ProteinQuant_example.csv',na = 'NaN')
+                #
+                # # Remove the contaminants if checkbox is pressed
+                # if (input$removeContaminantsInput) {
+                #
+                #     df <- df[(df$Potential.contaminant == ''),]
+                # }
 
-                # Remove the contamintants is only if checkbox is pressed.
-                # Need to find a file with contaminants first use FASTA
             }
 
         # If they press DEMO
@@ -461,10 +467,50 @@ function(input, output) {
 
     #### Filter out contaminants ####
 
+    # If the user uploads a file from Spectronaut, I need to open a fasta file
+    # and remove the proteins from the proteoInput that match the contaminants
+    # inside the FASTA
+
+    contaminants_fasta <- reactive({
+        if (software_used() == 'MaxQuant') {
+            return(NULL)
+        }
+
+        fasta <- seqinr::read.fasta(file = 'www/data/MaxQuant_Contaminants_Default.fasta' )
+        # fasta <- seqinr::read.fasta(file = 'inst/shiny_app/www/data/MaxQuant_Contaminants_Default.fasta' )
+    })
+
+    proteoInputClean <- reactive({
+
+        if (software_used() == 'MaxQuant') {
+            df <- proteoInput()
+        }
+
+        if (software_used() == 'Spectronaut') {
+
+            df <- proteoInput()
+
+            df$Potential.contaminant <- ''
+
+            df$Potential.contaminant[which(df$PG.ProteinGroups %in% names(contaminants_fasta()))] <- '+'
+
+            # df2 <- read_csv('./inst/shiny_app/www/data/Pivot_ProteinQuant_example.csv',na = 'NaN')
+
+            # Remove the contaminants if checkbox is pressed
+            if (input$removeContaminantsInput) {
+
+                df <- df[(df$Potential.contaminant == ''),]
+            }
+        }
+
+        return(df)
+    })
+
+
     output$contaminants_box <- renderInfoBox({
 
         # Number of contaminants proteins
-        contaminants <- proteoInput() %>%
+        contaminants <- proteoInputClean() %>%
             select('Potential.contaminant')
 
         contaminants <- contaminants[contaminants$Potential.contaminant == '+',]
@@ -489,12 +535,8 @@ function(input, output) {
 
     output$contaminantsPlot <- renderPlotly(
 
-        # if (! 'Potential.contaminant' %in% names(proteoInput())) {
-        #
-        #     return(NULL)
-        # }
 
-        MQanalyser::plot_contaminants(proteoInput = proteoInput(),
+        MQanalyser::plot_contaminants(proteoInput = proteoInputClean(),
                                       intensityType = input$intensityType,
                                       interactive = TRUE)%>%
         layout(height = 800, width = 800)
@@ -502,22 +544,24 @@ function(input, output) {
 
     output$contaminantsPlotNonInteractive <- renderPlot(height = 800, width = 800,{
 
-        MQanalyser::plot_contaminants(proteoInput = proteoInput(),
+        MQanalyser::plot_contaminants(proteoInput = proteoInputClean(),
                                       intensityType = input$intensityType,
                                       interactive = FALSE)
     })
 
 
+
+
     output$contaminantsUI <- renderUI({
 
-        if (software_used() == 'Spectronaut') {
-            return(
-                'Provide Fasta file to remove the contaminats,\n
-                This part is under development'
-            )
-        }
+        # if (software_used() == 'Spectronaut') {
+        #     return(
+        #         'Provide Fasta file to remove the contaminats,\n
+        #         This part is under development'
+        #     )
+        # }
 
-        if (! 'Potential.contaminant' %in% names(proteoInput())) {
+        if (software_used() == 'MaxQuant' && !'Potential.contaminant' %in% names(proteoInput())) {
 
             return('Contaminants Column is not present in the proteinGroups,
                    Contaminants might be present.

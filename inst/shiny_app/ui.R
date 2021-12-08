@@ -20,7 +20,7 @@ navbarPage(fluid = TRUE,
 #### DATA INPUT ####
 
     tabPanel(h4('Data \nInput'),
-            # class = 'bg-light',
+
             sidebarLayout(
                 sidebarPanel(id = 'sidebar',
                              width = 2,
@@ -35,9 +35,7 @@ navbarPage(fluid = TRUE,
 
                     uiOutput('intensity_selector'),
 
-                    # verbatimTextOutput('IntensityFound_message'),
                     hr(),
-                    #br(),
 
                     fileInput(inputId = 'optional_exp_design',
                               label='Provide the experiment design (Optional)',
@@ -88,43 +86,50 @@ navbarPage(fluid = TRUE,
 
                   #Download a file example
                   h4('Exapmles of the file(s) to be uploaded:'),
+
                   fluidRow(
 
-                      column(5,a(href='data/proteinGroups_example.txt',
-                                 'proteinGroups.txt',
-                                 download=NA,
-                                 target='_blank') ),
+                      column(
+                        width = 6,
+                        tags$a(href='data/proteinGroups_example.txt',
+                          'proteinGroups.txt',
+                          download=NA,
+                          target='_blank'),
 
-                      column(5,a(href='data/experiment_design_example.txt',
-                                 'experiment_design.txt',
-                                 download=NA,
-                                 target='_blank') ),
+                        tags$a(href='data/user_genes_examples.txt',
+                               'Genes example',
+                               download=NA,
+                               target='_blank')
+                        ),
 
-
-                      column(5,a(href='data/user_genes_examples.txt',
-                                 'Genes example',
-                                 download=NA,
-                                 target='_blank')
-                             ),
+                      column(
+                        width = 6,
+                        tags$a(href='data/experiment_design_example.txt',
+                          'experiment_design.txt',
+                          download=NA,
+                          target='_blank')
+                        )
                       )
-                ),
+
+
+
+                  ),
 
                 mainPanel(
-                    #fluidRow(
                         column(
-                          width = 8,
+                          width = 9,
 
                           fluidRow(
 
                             column(width = 6,
                                    shinydashboard::infoBoxOutput('softwareUsedBox',
                                                                  width = 8)
-                            ),
+                                   ),
 
                             column(width = 6,
                                    shinydashboard::infoBoxOutput('intensityBox',
                                                                  width = 8)
-                            )
+                                   )
                             ),
 
                           fluidRow(
@@ -148,41 +153,9 @@ navbarPage(fluid = TRUE,
                                   outputId = 'download_experiment_design',
                                   label = 'Download (Press Start
                                     Analysis First)')
+                                )
                             )
-                          )
                           ),
-                        # column(
-                        #   width = 8,
-                        #
-                        #   shinydashboard::infoBoxOutput('softwareUsedBox',
-                        #                                 width = 8),
-                        #
-                        #   shinydashboard::infoBoxOutput('intensityBox',
-                        #                                 width = 8),
-                        #
-                        #   box(title = h3('Experiment Design'),
-                        #       width = 10,
-                        #       h4('Welcome to analysis of the results
-                        #               of LC-MS/MS'),
-                        #       h5('Start by uploading the proteinGroups.txt
-                        #               table provided.'),
-                        #       h5('Please Edit the next table by adding the
-                        #               Condition and Replicate.'),
-                        #       h5('Alternatively an experiment design can
-                        #               be uploaded. Be sure that the Sample
-                        #               names are correct.'),
-                        #       hr(),
-                        #
-                        #       #DTOutput('experiment_design')
-                        #       #DT::dataTableOutput('ed_out'),
-                        #       rHandsontableOutput('ed_out'),
-                        #       br(),
-                        #       downloadButton(
-                        #         outputId = 'download_experiment_design',
-                        #         label = 'Download (Press Start
-                        #             Analysis First)'),
-                        #   )
-                        # ),
 
                         column(3,
                                br(),
@@ -191,16 +164,10 @@ navbarPage(fluid = TRUE,
                                br(),
                                br(),
                                br(),
-                               #box(
-                                 # actionButton(inputId = "start_input",
-                                 #                label = "Start Analysis",
-                                 #                icon = icon("play"))
 
                                  uiOutput('start_analysis')
-                                   #)
                                )
-                        #)
-                    )
+                        )
                 ),
 
     # Footer -------------------------------
@@ -223,7 +190,7 @@ navbarPage(fluid = TRUE,
                                      style = 'color:#990000'),
                               target = '_blank'),
                        style = "font-size: 85%"),
-                     p(tags$em("Last updated: November 2021"),
+                     p(tags$em("Last updated: December 2021"),
                        style = 'font-size:75%'))
             )
             ),
@@ -289,12 +256,7 @@ navbarPage(fluid = TRUE,
                             hr(),
 
                             uiOutput('contaminantsUI')
-                            # box(width = 10,height = 850,
-                            #     shinycssloaders::withSpinner(
-                            #       plotlyOutput('contaminantsPlot'),
-                            #       image = 'images/logoTransparentSmall.gif',
-                            #       image.width = '200px')
-                            #     )
+
                             )
                      )
                    )

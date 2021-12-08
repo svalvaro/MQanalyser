@@ -31,4 +31,5 @@ library(shinycssloaders)
 library(stats)
 library(shinyjs)
 library(stringi)
+library(seqinr)
 
