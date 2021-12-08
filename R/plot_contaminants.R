@@ -10,15 +10,40 @@
 #' @examples
 plot_contaminants <- function(proteoInput,
                               intensityType = 'LFQ',
+                              softwareUsed = 'Spectronaut',
                               interactive = FALSE
                               ){
 
     # what_to_plot <- c('frequency', 'intensity')
 
-    df <- proteoInput %>% select(contains(
-        c('Experiment', 'Contaminant', 'LFQ','Gene.names')))
+    if (softwareUsed == 'MaxQuant') {
+
+        df <- proteoInput %>% select(contains(
+            c( 'Contaminant', 'LFQ','Gene.names')))
+
+        names(df) <- gsub('LFQ.intensity.','',names(df))
+
+
+    }
+
+    if (softwareUsed == 'Spectronaut') {
+
+        df <- proteoInput %>% select(contains(
+            c( 'Contaminant', 'PG.Quantity','Gene.names')))
+
+        columns <-  grep('PG.Quantity', colnames(df))
+
+        # remove the ending of the names
+        colnames(df)[columns] <-  gsub(pattern = '.raw.PG.Quantity','',base::colnames(df)[columns])
+
+        colnames(df)[columns] <-  gsub(pattern = '\\[.*\\] ','',base::colnames(df)[columns])
+
+    }
+
 
     df2 <- reshape2::melt(df, id.var = c('Potential.contaminant','Gene.names'))
+
+    df2 <- df2[!is.na(df2$value),]
 
     # Change the + for TRUE or FALSEs
     df2$Potential.contaminant <- ifelse(df2$Potential.contaminant == '+',
@@ -31,10 +56,11 @@ plot_contaminants <- function(proteoInput,
 
     # Gsub the intensity type
 
-    df2$variable <- gsub(pattern = 'LFQ.intensity.', replacement = '',
-                         x = df2$variable)
+    # df2$variable <- gsub(pattern = 'LFQ.intensity.', replacement = '',
+    #                      x = df2$variable)
 
     colnames(df2)[colnames(df2)=='value'] <- 'Log2.Intensity'
+
 
     # Colors for the plot
 

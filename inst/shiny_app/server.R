@@ -41,22 +41,13 @@ function(input, output) {
 
                 df <- read.delim(inFile$datapath)
 
-                # proteoInput <- read.delim('./inst/shiny_app/www/data/proteinGroups_example.txt')
+                # df <- read.delim('./inst/shiny_app/www/data/proteinGroups_example.txt')
                 # proteoInput <- read.delim('~/Downloads/HN0468-2_filtered_proteinGroups.txt')
 
                 #Remove reverse and reverse and contaminants and only identified by site
                 # The user might have modified the proteinGroups.txt and this columns are not present
 
-                if (c('Reverse', 'Only.identified.by.site', 'Potential.contaminant') %in% names(df)) {
 
-                    df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
-
-                    # Remove the contaminants if checkbox is pressed
-                    if (input$removeContaminantsInput) {
-
-                        df <- df[(df$Potential.contaminant == ''),]
-                    }
-                }
 
             # If the file ends in csv is from Spectronaut, read accordingly
 
@@ -65,18 +56,7 @@ function(input, output) {
 
                 df <- read_csv(inFile$datapath, na = 'NaN')
 
-                # df$Potential.contaminant <- ''
-                #
-                # df$Potential.contaminant[which(df$PG.ProteinGroups %in% names(fasta()))] <- '+'
-                #
-                # # df <- read_csv('./inst/shiny_app/www/data/Pivot_ProteinQuant_example.csv',na = 'NaN')
-                #
-                # # Remove the contaminants if checkbox is pressed
-                # if (input$removeContaminantsInput) {
-                #
-                #     df <- df[(df$Potential.contaminant == ''),]
-                # }
-
+                # df <- read_csv('./inst/shiny_app/www/data/Pivot_ProteinQuant_example.csv',na = 'NaN')
             }
 
         # If they press DEMO
@@ -476,25 +456,45 @@ function(input, output) {
             return(NULL)
         }
 
-        fasta <- seqinr::read.fasta(file = 'www/data/MaxQuant_Contaminants_Default.fasta' )
-        # fasta <- seqinr::read.fasta(file = 'inst/shiny_app/www/data/MaxQuant_Contaminants_Default.fasta' )
+        contaminants_fasta <- seqinr::read.fasta(file = 'www/data/MaxQuant_Contaminants_Default.fasta' )
+        # contaminants_fasta <- seqinr::read.fasta(file = 'inst/shiny_app/www/data/MaxQuant_Contaminants_Default.fasta' )
     })
 
     proteoInputClean <- reactive({
 
         if (software_used() == 'MaxQuant') {
             df <- proteoInput()
+
+
+            if (c('Reverse', 'Only.identified.by.site', 'Potential.contaminant') %in% names(df)) {
+
+                df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
+
+                # Remove the contaminants if checkbox is pressed
+                if (input$removeContaminantsInput) {
+
+                    df <- df[(df$Potential.contaminant == ''),]
+                }
+            }
         }
 
         if (software_used() == 'Spectronaut') {
 
             df <- proteoInput()
 
+            # Change the name of some columns to make it like proteinGroups
+
+            colnames(df)[colnames(df) %in% c("PG.Genes", "PG.ProteinGroups")] <- c("Gene.names", "Protein.IDs")
+
+            # Add a new column with the contaminants
+
             df$Potential.contaminant <- ''
 
-            df$Potential.contaminant[which(df$PG.ProteinGroups %in% names(contaminants_fasta()))] <- '+'
+            # Compare the proteinIds, with the proteinIDs of the contaminants,
+            # if they match, mark it as '+', to be removed later
 
-            # df2 <- read_csv('./inst/shiny_app/www/data/Pivot_ProteinQuant_example.csv',na = 'NaN')
+            # df$Potential.contaminant[which(df$Protein.IDs %in% names(contaminants_fasta))] <- '+'
+            df$Potential.contaminant[which(df$Protein.IDs %in% names(contaminants_fasta()))] <- '+'
 
             # Remove the contaminants if checkbox is pressed
             if (input$removeContaminantsInput) {
@@ -510,11 +510,16 @@ function(input, output) {
     output$contaminants_box <- renderInfoBox({
 
         # Number of contaminants proteins
-        contaminants <- proteoInputClean() %>%
-            select('Potential.contaminant')
+        contaminants <- proteoInputClean()$Potential.contaminant
 
-        contaminants <- contaminants[contaminants$Potential.contaminant == '+',]
-        total_contaminants <- length(contaminants)
+        #contaminants <- contaminants2[contaminants2$Potential.contaminant == '+',]
+
+
+        total_contaminants <- length(contaminants[grep('.+',contaminants)])
+
+        #total_contaminants <- length(contaminants)
+
+        message(paste0('The number of contaminants is: ', total_contaminants))
 
         if(total_contaminants == 0){
             icon <- "check-square"
@@ -535,8 +540,13 @@ function(input, output) {
 
     output$contaminantsPlot <- renderPlotly(
 
+        # MQanalyser::plot_contaminants(proteoInput = df,
+        #                               softwareUsed = 'Spectronaut',
+        #                               intensityType = 'LFQ',
+        #                               interactive = TRUE)
 
         MQanalyser::plot_contaminants(proteoInput = proteoInputClean(),
+                                      softwareUsed = software_used(),
                                       intensityType = input$intensityType,
                                       interactive = TRUE)%>%
         layout(height = 800, width = 800)
@@ -545,6 +555,7 @@ function(input, output) {
     output$contaminantsPlotNonInteractive <- renderPlot(height = 800, width = 800,{
 
         MQanalyser::plot_contaminants(proteoInput = proteoInputClean(),
+                                      softwareUsed = software_used(),
                                       intensityType = input$intensityType,
                                       interactive = FALSE)
     })
