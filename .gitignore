@@ -4,6 +4,7 @@
 .RData
 .Ruserdata
 data.RData
+debugging_script.R
 MQanaylser.Rproj
 README.Rmd
 data.Rdata
