@@ -938,22 +938,13 @@ navbarPage(fluid = TRUE,
                                            br(),
 
                                            uiOutput('preRankedPlotUI')
-
-                                           # shinycssloaders::withSpinner(
-                                           #   plotOutput('enr_gseaplot'),
-                                           #   image = 'images/logoTransparentSmall.gif',
-                                           #   image.width = '200px'
-                                           #   )
                                            ),
 
 
                                   tabPanel('Network',
                                            hr(),
-                                           shinycssloaders::withSpinner(
-                                             plotOutput('bio_comparison'),
-                                             image = 'images/logoTransparentSmall.gif',
-                                             image.width = '200px'
-                                           )
+                                           uiOutput('networkEnrichmentUI')
+
                                   ),
 
 

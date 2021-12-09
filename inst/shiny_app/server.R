@@ -1807,13 +1807,13 @@ function(input, output) {
                 'The Gene Set Enrichment Analysis did not found any gene
                 enriched under the specific p-value cut-off'
             )
-        }
-        else{
+        }else{
+
             shinycssloaders::withSpinner(
-                plotOutput('enr_gseaplot'),
-                image = 'images/logoTransparentSmall.gif',
-                image.width = '200px'
-            )
+              plotOutput('enr_gseaplot'),
+              image = 'images/logoTransparentSmall.gif',
+              image.width = '200px'
+              )
         }
     })
 
@@ -1830,6 +1830,24 @@ function(input, output) {
                                                     ont=input$go_ontology,
                                                     OrgDb = input$enrich_organism))
         enrichplot::emapplot(bp)
+
+    })
+
+
+    output$networkEnrichmentUI <- renderUI({
+
+        if (length(diffExpress())== 0) {
+
+            print('The Gene Set Enrichment Analysis did not found any gene
+                enriched under the specific p-value cut-off')
+        }else{
+
+            shinycssloaders::withSpinner(
+                plotOutput('bio_comparison'),
+                image = 'images/logoTransparentSmall.gif',
+                image.width = '200px'
+            )
+        }
 
     })
 
