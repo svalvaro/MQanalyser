@@ -42,7 +42,6 @@ function(input, output) {
                 df <- read.delim(inFile$datapath)
 
                 # proteoInput <- read.delim('./inst/shiny_app/www/data/proteinGroups_example.txt')
-                # proteoInput <- read.delim('~/Downloads/HN0468-2_filtered_proteinGroups.txt')
 
                 #Remove reverse and reverse and contaminants and only identified by site
                 # The user might have modified the proteinGroups.txt and this columns are not present
@@ -52,7 +51,6 @@ function(input, output) {
             # If the file ends in csv is from Spectronaut, read accordingly
 
             } else if (endsWith(as.character(inFile$datapath), suffix = '.csv')){
-
 
                 df <- read_csv(inFile$datapath, na = 'NaN')
 
@@ -169,12 +167,6 @@ function(input, output) {
 
     experiment_design <- reactive({
 
-        # experiment_design <- read.delim('/home/alvaro/Documents/R/proteomics/MQanalyser/inst/shiny_app/www/data/experiment_design_example.txt')
-
-        # experiment_design <- read.delim('www/experiment_design_example_spectronaut.txt')
-        # experiment_design <- read.delim('~/Downloads/experiment_design(3).txt')
-
-
         inFile <- input$optional_exp_design
 
         if (is.null(inFile) & demo$start == FALSE){
@@ -195,12 +187,9 @@ function(input, output) {
 
         df <- experiment_design()
 
-        # Add the new column include to remove the experiments that are not
-        # wanted
-
         df$Include <- TRUE
 
-        rhandsontable(#experiment_design(),
+        rhandsontable(
                     df,
                     height =  500) %>%
             hot_col('replicate', format = '0a') %>%
@@ -672,7 +661,7 @@ function(input, output) {
 
             df$iBAQ.peptides <- NULL
 
-            # columns = grep('iBAQ.', colnames(df))
+            # columns = grep('LFQ', colnames(df))
 
             columns = grep(paste0(input$IntensityType,'.'), colnames(df))
 
@@ -741,7 +730,6 @@ function(input, output) {
     # Selec the NAs allowd
 
     output$na_threshold  <- renderUI({
-
 
         # Check number of replicates
 
@@ -1566,14 +1554,22 @@ function(input, output) {
 
     geneListObject <- reactive({
 
+        message(paste0('The comparison of the samples for enrichment is: ', input$comparison_enrch))
+
+        message(paste0('The organism  for enrichment is: ', input$enrich_organism))
+        # geneListObject <- MQanalyser::create_geneList(
+        #     data_results = data_results,
+        #     comparison_samples = 'HEK_vs_III',
+        #     organism = 'org.Hs.eg.db')
+
         geneListObject <- MQanalyser::create_geneList(
             data_results = data_results(),
             comparison_samples = input$comparison_enrch,
             organism = input$enrich_organism)
 
-        geneListObject <- MQanalyser::create_geneList(data_results = data_results,
-                                    comparison_samples = 'HEK_vs_III',
-                                    organism = 'org.Hs.eg.db')
+        # geneListObject <- MQanalyser::create_geneList(data_results = data_results,
+        #                             comparison_samples = 'HEK_vs_TM',
+        #                             organism = 'org.Hs.eg.db')
     })
 
     geneList <- reactive({
@@ -1607,7 +1603,7 @@ function(input, output) {
         }else if(input$upregulatedSelection == Option1){
 
             geneList <- geneList[geneList > log2(input$fc_enrichment)]
-            #geneList <- geneList[geneList > log2(1.5)]
+            # geneList <- geneList[geneList > log2(1.5)]
 
             #The negative values, which means the upregulated in Tumour or
             # option2
@@ -1638,7 +1634,13 @@ function(input, output) {
     # Enrichment for gsea
     edo2 <- reactive({
         # edo2 <- DOSE::gseDO(geneList)
+        message('edo2 being generated')
+
         edo2 <- DOSE::gseDO(geneList())
+
+        message('edo2 created:')
+        print(as.data.frame(edo2))
+
         return(edo2)
     })
 
@@ -1688,7 +1690,6 @@ function(input, output) {
     # GO terms plots
 
     geneOntologyTable <- reactive({
-
 
         df <-  clusterProfiler::groupGO(gene = diffExpress(),
                                         keyType = 'ENTREZID',
@@ -1741,7 +1742,6 @@ function(input, output) {
             title = 'Biological Function'
         }
 
-
         df <- geneOntologyTable()%>%
                  select(contains(c('Description', 'count')))
 
@@ -1757,10 +1757,27 @@ function(input, output) {
             theme(legend.position = 'none')+
             scale_fill_manual(values = mycolors)
 
-
         ggplotly(p)%>%
 
             layout(height = 1000, width = 1200)
+    })
+
+    enriched_plot_preranked <- reactive({
+
+        if (is.null(edo2())) {
+
+            message('Can not plot, not enough proteins')
+            return(NULL)
+        }
+
+        if(input$runscore == 'all'){
+            p <- enrichplot::gseaplot2(edo2(), geneSetID = 1, pvalue_table = F)
+            #enrichplot::gseaplot2(edo2, geneSetID = 1)
+        } else{
+            p <- enrichplot::gseaplot(edo2(), geneSetID = 1, by = input$runscore, pvalue_table = F)
+        }
+
+        return(p)
     })
 
     output$enr_gseaplot <- renderPlot(height = 800, {
@@ -1771,12 +1788,25 @@ function(input, output) {
             return(NULL)
         }
 
-        if(input$runscore == 'all'){
-            enrichplot::gseaplot2(edo2(), geneSetID = 1)
-             #enrichplot::gseaplot2(edo2, geneSetID = 1)
-        } else{
-            enrichplot::gseaplot(edo2(), geneSetID = 1, by = input$runscore)
+        rows_edo2 <- nrow(as.data.frame(edo2()))
+
+        message(paste0('The number of rows of edo2 is:', rows_edo2))
+
+
+        if (rows_edo2 == 0) {
+
+            message('Can not plot, not enough proteins')
+            return(NULL)
         }
+
+        if (is.null(enriched_plot_preranked())) {
+            message('The plot is null')
+            return(NULL)
+        }
+
+        message('edo2() is not null, can the gsea enrichment plot be created?')
+
+        return(enriched_plot_preranked())
     })
 
     # Biological Comparison
