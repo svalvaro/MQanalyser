@@ -1664,12 +1664,21 @@ function(input, output) {
 
         a <- length(diffExpress())
 
+        icon = "info"
+        color = 'aqua'
+
+        if (a == 0) {
+            color = 'red'
+            icon = "exclamation-triangle"
+        }
+
+
         info <- infoBox(
             'Proteins Enriched',
             paste0(a, ' proteins used for enrichment.'),
             #icon = icon("stats", lib = "glyphicon"))
-            icon = icon("info"),
-            color = 'aqua')
+            icon = icon(icon),
+            color =  color)
         return(info)
     })
 
@@ -1800,7 +1809,10 @@ function(input, output) {
 
     output$preRankedPlotUI <- renderUI({
 
+        message('Plotting network enrichment')
+
         rows_edo2 <- nrow(as.data.frame(edo2()))
+        message(paste0('Number of rows edo2: ', rows_edo2))
 
         if (rows_edo2 == 0) {
             print(
@@ -1898,7 +1910,6 @@ function(input, output) {
                                        timer = 6000)
             )
         }
-
     })
 
     ## DISEASE PLOTS
@@ -1915,9 +1926,13 @@ function(input, output) {
     # Disease GSEA
 
     output$enr_gseadotplot <- renderPlot(height = 1000,{
+
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
-        if(nrow(edo()) <1){
+        message('Disease GSEA plot')
+        message(paste0('Number of rows of edo2:', nrow(edo2())))
+
+        if(nrow(edo2()) <1){
             print('Cant print')
         }else{
             dotplot(edo2(), showCategory=20) + ggtitle("dotplot for GSEA")
