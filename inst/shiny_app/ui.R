@@ -937,11 +937,13 @@ navbarPage(fluid = TRUE,
                                                        width = '300px'),
                                            br(),
 
-                                           shinycssloaders::withSpinner(
-                                             plotOutput('enr_gseaplot'),
-                                             image = 'images/logoTransparentSmall.gif',
-                                             image.width = '200px'
-                                             )
+                                           uiOutput('preRankedPlotUI')
+
+                                           # shinycssloaders::withSpinner(
+                                           #   plotOutput('enr_gseaplot'),
+                                           #   image = 'images/logoTransparentSmall.gif',
+                                           #   image.width = '200px'
+                                           #   )
                                            ),
 
 

@@ -1696,17 +1696,7 @@ function(input, output) {
                                         OrgDb = input$enrich_organism,
                                         ont = input$go_ontology,
                                         level = input$go_level) %>%
-            as.data.frame() #%>%
-            #select(contains(c('Description', 'count')))
-
-
-        # df <-  clusterProfiler::groupGO(gene = diffExpress,
-        #                                 keyType = 'ENTREZID',
-        #                                 OrgDb = org.Hs.eg.db,
-        #                                 ont = 'CC',
-        #                                 level = 10) %>%
-        #     as.data.frame()# %>%
-        #     #select(contains(c('Description', 'count')))
+            as.data.frame()
 
         rownames(df) <- NULL
 
@@ -1726,10 +1716,9 @@ function(input, output) {
             pattern = geneListObject()$geneList$ENTREZID,
             replacement = geneListObject()$geneList$SYMBOL,
             vectorize_all = F
-        )
+            )
 
         return(df)
-
     })
 
     output$go_classification_plot <- renderPlotly({
@@ -1809,7 +1798,26 @@ function(input, output) {
         return(enriched_plot_preranked())
     })
 
-    # Biological Comparison
+    output$preRankedPlotUI <- renderUI({
+
+        rows_edo2 <- nrow(as.data.frame(edo2()))
+
+        if (rows_edo2 == 0) {
+            print(
+                'The Gene Set Enrichment Analysis did not found any gene
+                enriched under the specific p-value cut-off'
+            )
+        }
+        else{
+            shinycssloaders::withSpinner(
+                plotOutput('enr_gseaplot'),
+                image = 'images/logoTransparentSmall.gif',
+                image.width = '200px'
+            )
+        }
+    })
+
+    # Network Biological Comparison
 
     output$bio_comparison <- renderPlot(height = 900, {
         #bp2 <- pairwise_termsim(simplify(bp, cutoff=0.7, by="p.adjust", select_fun=min))
@@ -1840,16 +1848,6 @@ function(input, output) {
     # Download the table button
 
     output$download_enrichment_table <- downloadHandler(
-
-        # req(input$go_ontology)
-        #
-        # if(input$go_ontology == 'CC'){
-        #     nameFile = 'Cellular_Component'
-        # } else if (input$go_ontology == 'MF'){
-        #     nameFile = 'Molecular_Function'
-        # } else{
-        #     nameFile = 'Biological_Function'
-        # }
 
         filename = function(){ 'enrichment_results.csv'},
         content = function(fname){
