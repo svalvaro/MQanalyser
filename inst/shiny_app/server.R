@@ -76,13 +76,41 @@ function(input, output) {
         return(df)
     })
 
+    # Infobox containing the matris RowsxColumns of the proteoInput
+
+    output$matrixDimensions <- renderInfoBox({
+
+        if (is.null(proteoInput())) {
+            return(NULL)
+        }
+
+        rows <- nrow(proteoInput())
+        columns <- ncol(proteoInput())
+
+        message(paste0('nrows proteoInput', rows))
+        message(paste0('columns proteoInput', columns))
+
+        icon <- "info"
+
+        color <- 'green'
+
+
+        info <- infoBox(
+            'Dimensions data:',
+            paste0('Rows: ', rows,'\n' ,'\nColumns: ',columns),
+            #icon = icon("stats", lib = "glyphicon"))
+            icon = icon(icon),
+            color = color)
+        return(info)
+    })
+
     #### Software used ####
 
     software_used <- reactive({
 
         software_used <- MQanalyser::check_software_input(proteoInput())
 
-        message(paste0('Software used:', software_used))
+        message(paste0('Software used: \n', software_used))
 
         return(software_used)
 
@@ -383,7 +411,7 @@ function(input, output) {
 
     output$IntensityFound_message <- renderText({
         if (IntensityFound() == TRUE) {
-            print(paste0(input$IntensityType, '  was found. \nYou can continue with the analysis.'))
+            print(paste0(input$IntensityType, '  was found. \nYou can continue \nwith the analysis.'))
         }else{
             print(paste0(input$IntensityType, ' was not found. \nPlease select another intensity.'))
         }
@@ -399,7 +427,7 @@ function(input, output) {
 
         }else{
             title_box <- paste0(input$IntensityType, '  was not found.')
-            subtitle_box <- ' You must select another type of Intensity.'
+            subtitle_box <- ' You must select another \ntype of Intensity.'
             icon <- "exclamation-circle"
             color <- 'red'
         }

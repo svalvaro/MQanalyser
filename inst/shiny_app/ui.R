@@ -117,19 +117,22 @@ navbarPage(fluid = TRUE,
 
                 mainPanel(
                         column(
-                          width = 9,
+                          width = 11,
 
                           fluidRow(
 
-                            column(width = 6,
-                                   shinydashboard::infoBoxOutput('softwareUsedBox',
-                                                                 width = 8)
+                            column(width = 4,
+                                   shinydashboard::infoBoxOutput('softwareUsedBox', width = 12)
                                    ),
 
-                            column(width = 6,
+                            column(width = 4,
                                    shinydashboard::infoBoxOutput('intensityBox',
-                                                                 width = 8)
-                                   )
+                                                                 width = 12)
+                                   ),
+                            column(4,
+                                   shinydashboard::infoBoxOutput('matrixDimensions',
+                                                                 width = 12),
+                            )
                             ),
 
                           fluidRow(
@@ -157,7 +160,7 @@ navbarPage(fluid = TRUE,
                             )
                           ),
 
-                        column(3,
+                        column(1,
                                br(),
                                br(),
                                br(),
