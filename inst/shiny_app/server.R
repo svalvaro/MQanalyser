@@ -146,8 +146,6 @@ function(input, output) {
                 experiment_names <- gsub('iBAQ.', '', experiment_names)
             }
 
-
-
         } else if (software_used() == 'Spectronaut'){
 
             # proteinGroups <- prot_quant
@@ -1696,7 +1694,7 @@ function(input, output) {
     })
 
     #### Enrichment Analysis Plots ####
-    # GO terms plots
+        # Gene Ontology -------------------------------
 
     geneOntologyTable <- reactive({
 
@@ -1714,7 +1712,6 @@ function(input, output) {
         df <- drop_na(df)
 
         df <- df[order(df$Count, decreasing = TRUE),]
-
 
         # Create a new column with the gene names not only the IDs
         # For that I need to map the column geneId, which the genes are separated
@@ -1760,6 +1757,8 @@ function(input, output) {
             layout(height = 1000, width = 1200)
     })
 
+
+        # prerank score plot -------------------------------
     enriched_plot_preranked <- reactive({
 
         if (is.null(edo2())) {
@@ -1829,21 +1828,60 @@ function(input, output) {
         }
     })
 
-    # Network Biological Comparison
-
-    output$bio_comparison <- renderPlot(height = 900, {
-        #bp2 <- pairwise_termsim(simplify(bp, cutoff=0.7, by="p.adjust", select_fun=min))
-
-        # bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress,
-        #                                             ont="BP",
-        #                                             OrgDb = 'org.Mm.eg.db'))
+        # Network -------------------------------
+    # Table
+    network_enrich_table <- reactive({
+        message('Creating the Gene Network in enrichment tab')
 
         bp <- enrichplot::pairwise_termsim(enrichGO(diffExpress(),
                                                     ont=input$go_ontology,
                                                     OrgDb = input$enrich_organism))
-        enrichplot::emapplot(bp)
+        return(bp)
+    })
+
+    # Plot
+    output$network_renrichment <- renderPlot(height = 900, {
+
+        enrichplot::emapplot(network_enrich_table())
 
     })
+
+    # Table to Visualize
+
+    # Download the table button
+
+    netEnrichReadable <- reactive({
+        message('Creating the Gene Network in enrichment tab for downloading')
+
+        bp <- clusterProfiler::setReadable(network_enrich_table(),
+                                           OrgDb = input$enrich_organism)
+
+        bp <- as.data.frame(bp)
+        return(bp)
+    })
+
+
+    output$netEnrichReadableOut <- DT::renderDataTable({
+
+        DT::datatable(netEnrichReadable(),
+                      extensions = 'Scroller',
+
+                      options = list(scrollY=300,
+                                     scrollX=30),
+                      width = '300px',height = '200px')
+    })
+
+
+    output$download_network_table <- downloadHandler(
+
+        filename = function(){ 'network_results.csv'},
+        content = function(fname){
+            write.csv(x = netEnrichReadable(),
+                      fname,
+                      row.names = FALSE)
+        }
+
+    )
 
 
     output$networkEnrichmentUI <- renderUI({
@@ -1854,16 +1892,41 @@ function(input, output) {
                 enriched under the specific p-value cut-off')
         }else{
 
-            shinycssloaders::withSpinner(
-                plotOutput('bio_comparison'),
-                image = 'images/logoTransparentSmall.gif',
-                image.width = '200px'
+            fluidRow(
+                column(
+                    width = 12,
+
+                    tabBox(height = 900, width = 900,
+                        shinycssloaders::withSpinner(
+                            plotOutput('network_renrichment'),
+                            image = 'images/logoTransparentSmall.gif',
+                            image.width = '200px'
+                        )
+                    ),
+
+
+
+                    br(),
+
+                    tabBox(height = 300, width = 600,
+                        DT::dataTableOutput('netEnrichReadableOut')
+
+                    ),
+                    br(),
+                    tabBox(
+
+                        downloadButton(outputId = 'download_network_table',
+                                       label = 'Download table')
+                    )
+
+
+                )
             )
         }
 
     })
 
-    # Gene Ontology Table
+        # GO table -------------------------------
 
     output$geneOntologyDataTable <- DT::renderDataTable({
 

@@ -887,7 +887,7 @@ navbarPage(fluid = TRUE,
                     )
                     ),
 
-                mainPanel(
+                mainPanel(height = 2000,
 
                   fluidPage(
                     fluidRow(
@@ -942,8 +942,13 @@ navbarPage(fluid = TRUE,
 
 
                                   tabPanel('Network',
+
                                            hr(),
-                                           uiOutput('networkEnrichmentUI')
+
+                                           uiOutput('networkEnrichmentUI')#,
+
+                                           # downloadButton(outputId = 'download_network_table',
+                                           #                label = 'Download table')
 
                                   ),
 
