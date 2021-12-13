@@ -258,11 +258,6 @@ function(input, output) {
         if (is.null(proteoInput())) {
             return(NULL)
         }
-#
-#         validate(need(proteoInput(),"proteoInput not found"))
-#
-#         validate(need(expDesignEditable(),"Dataframe not found"))
-
 
         df <- expDesignEditable()
 
@@ -289,7 +284,7 @@ function(input, output) {
                     }
                 ") %>%
 
-            hot_col(col = c("label", "condition", "replicate"),
+            hot_col(col = c("label", "condition", "replicate"),halign = 'htCenter',
                     renderer = "
                     function (instance, td, row, col, prop, value, cellProperties) {
                         Handsontable.renderers.TextRenderer.apply(this, arguments);
@@ -743,7 +738,6 @@ function(input, output) {
 
         if (software_used() == 'MaxQuant') {
 
-
             df$iBAQ.peptides <- NULL
 
             # columns = grep('LFQ', colnames(df))
@@ -790,7 +784,7 @@ function(input, output) {
 
 
             # Make unique
-            data_unique <- DEP::make_unique(df,'PG.Genes', 'PG.ProteinGroups', delim = ';')
+            data_unique <- DEP::make_unique(df,'Gene.names', 'Protein.IDs', delim = ';')
 
             # Remove the brackets [1], [2], from the experiment design if there.
 
