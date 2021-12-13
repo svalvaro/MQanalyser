@@ -206,100 +206,6 @@ function(input, output) {
 
     #### Experiment design ####
 
-    # experiment_design <- reactive({
-    #
-    #     inFile <- input$optional_exp_design
-    #
-    #     if (is.null(inFile) & demo$start == FALSE){
-    #
-    #         df <- data.frame(label = experiment_names(),
-    #                          condition = ' ',
-    #                          replicate = as.numeric(' '))
-    #     } else if(demo$start == TRUE){
-    #         df <- read.delim('www/data/experiment_design_example.txt')
-    #     }else{
-    #         df <- read.delim(inFile$datapath)
-    #     }
-    #
-    #     return(df)
-    # })
-    #
-    # output$ed_out <- renderRHandsontable({
-    #
-    #     df <- experiment_design()
-    #
-    #     df$Include <- TRUE
-    #
-    #     rhandsontable(
-    #                 df,
-    #                 height =  500) %>%
-    #         hot_col('replicate', format = '0a') %>%
-    #
-    #         rhandsontable::hot_col('label', readOnly = TRUE)%>%
-    #
-    #         hot_table(highlightRow = TRUE) %>%
-    #
-    #         hot_col(col = "Include", halign = 'htCenter',
-    #             renderer = "
-    #                 function (instance, td, row, col, prop, value, cellProperties) {
-    #                     Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
-    #
-    #                     var col_value = instance.getData()[row][3]
-    #
-    #                     if (col_value === false) {
-    #
-    #                         td.style.background = 'pink';
-    #                     }
-    #                 }
-    #             ") %>%
-    #
-    #         hot_col(col = c("label", "condition", "replicate"),
-    #                 renderer = "
-    #                 function (instance, td, row, col, prop, value, cellProperties) {
-    #                     Handsontable.renderers.TextRenderer.apply(this, arguments);
-    #
-    #                     var col_value = instance.getData()[row][3]
-    #
-    #                     if (col_value === false) {
-    #
-    #                         td.style.background = 'pink';
-    #                     }
-    #                 }
-    #             ")
-    #
-    # })
-    #
-    # ed_final <- reactiveValues()
-    #
-    # observeEvent(input$start_input, {
-    #
-    #     if (is.null(input$proteinInput) && is.null(input$optional_exp_design) &&
-    #         demo$start == FALSE) {
-    #         return(NULL)
-    #     } else{
-    #
-    #         ed_final$data <-  rhandsontable::hot_to_r(input$ed_out)
-    #
-    #         # Remove the rows containing FALSE in include.
-    #         print(ed_final$data$Include)
-    #
-    #         ed_final$data <- ed_final$data[! ed_final$data$Include == FALSE,]
-    #     }
-    #
-    #     print('The experiment design is:')
-    #     print(ed_final$data)
-    #
-    # })
-    #
-    # output$download_experiment_design <- downloadHandler(
-    #
-    #     filename = function(){'experiment_design.txt'},
-    #     content = function(fname){
-    #         write_delim(ed_final$data, fname,delim = '\t')
-    #     }
-    # )
-
-
     experiment_design <- reactive({
 
         if (is.null(proteoInput())) {
@@ -309,8 +215,6 @@ function(input, output) {
         inFile <- input$optional_exp_design
 
         if (is.null(inFile) && demo$start == FALSE){
-
-
 
             df <- data.frame(label = experiment_names(),
                              condition = '',
@@ -348,36 +252,19 @@ function(input, output) {
 
     })
 
-
-
     output$ed_out <- renderRHandsontable({
 
 
-        # message('is this even here')
-        #
-        # print('exp design')
-        #
-        # print(experiment_design())
-        #
-        # print('finish')
-        #
         if (is.null(proteoInput())) {
             return(NULL)
         }
+#
+#         validate(need(proteoInput(),"proteoInput not found"))
+#
+#         validate(need(expDesignEditable(),"Dataframe not found"))
 
-        validate(need(proteoInput(),"proteoInput not found"))
-
-        validate(need(expDesignEditable(),"Dataframe not found"))
-        #
-        # if (is.null(experiment_design())) {
-        #     return(NULL)
-        # }
-        #
-        # print(expDesignEditable())
 
         df <- expDesignEditable()
-
-        #df$Include <- TRUE
 
         rhandsontable(
             df,
