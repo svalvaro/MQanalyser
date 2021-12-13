@@ -304,7 +304,7 @@ function(input, output) {
 
     observeEvent(input$ed_out, {
         userDT <- rhandsontable::hot_to_r(input$ed_out)
-        setDT(userDT)
+        data.table::setDT(userDT)
         userDT[, replicate := seq_len(.N), by = condition][is.na(condition) | condition == "", replicate := NA_integer_]
         expDesignEditable(userDT)
     })

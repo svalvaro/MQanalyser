@@ -32,4 +32,5 @@ library(stats)
 library(shinyjs)
 library(stringi)
 library(seqinr)
+library(data.table)
 
