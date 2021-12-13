@@ -62,7 +62,7 @@ plot_contaminants <- function(proteoInput,
                                         'Contaminant', 'Not Contaminant')
 
     # Log2 Value, and removed -Inf
-    df2$value <- log2(df2$value)
+    df2$value <- log2(as.numeric(df2$value))
 
     df2 <- df2[!df2$value == '-Inf',]
 

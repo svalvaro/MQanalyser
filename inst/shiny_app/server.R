@@ -71,6 +71,9 @@ function(input, output) {
 
                 df <- df[(df$Potential.contaminant == ''),]
             }
+            # Change the "filtered" to 0
+
+            df[df == "Filtered"] <- '0'
         }
 
         return(df)
@@ -136,10 +139,7 @@ function(input, output) {
         return(info)
     })
 
-    #### Experiment Design ####
-
-    # Addition of a fourth column containing boolean values (TRUE/FALSE) to
-    # include that experiment or not.
+    #### Experiment Names ####
 
     experiment_names <- reactive({
 
@@ -191,6 +191,8 @@ function(input, output) {
         return(experiment_names)
     })
 
+
+    #### Experiment design ####
     experiment_design <- reactive({
 
         inFile <- input$optional_exp_design
@@ -275,6 +277,20 @@ function(input, output) {
         print(ed_final$data)
 
     })
+
+
+    # observeEvent(input$ed_out, {
+    #
+    #     df <- ed_final$data
+    #
+    #     df <- df %>%
+    #         group_by(condition) %>%
+    #         mutate(replicate = 1:n())
+    #
+    #     print(df)
+    #
+    #
+    # })
 
     # Button to download the experiment design once the user has finished it.
 
