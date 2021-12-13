@@ -1,19 +1,19 @@
-label	condition	replicate
-Ctrl1_1	Ctrl	1
-Ctrl1_2	Ctrl	2
-Ctrl1_3	Ctrl	3
-Ctrl2_1	Ctrl	4
-Ctrl2_2	Ctrl	5
-Ctrl2_3	Ctrl	6
-Ctrl3_1	Ctrl	7
-Ctrl3_2	Ctrl	8
-Ctrl3_3	Ctrl	9
-Tumor1_1	Tumor	1
-Tumor1_2	Tumor	2
-Tumor1_3	Tumor	3
-Tumor2_1	Tumor	4
-Tumor2_2	Tumor	5
-Tumor2_3	Tumor	6
-Tumor3_1	Tumor	7
-Tumor3_2	Tumor	8
-Tumor3_3	Tumor	9
+label	condition	replicate	Include
+Ctrl1_1	Ctrl	1	TRUE
+Ctrl1_2	Ctrl	2	TRUE
+Ctrl1_3	Ctrl	3	TRUE
+Ctrl2_1	Ctrl	4	TRUE
+Ctrl2_2	Ctrl	5	TRUE
+Ctrl2_3	Ctrl	6	TRUE
+Ctrl3_1	Ctrl	7	TRUE
+Ctrl3_2	Ctrl	8	TRUE
+Ctrl3_3	Ctrl	9	TRUE
+Tumor1_1	Tumor	1	TRUE
+Tumor1_2	Tumor	2	TRUE
+Tumor1_3	Tumor	3	TRUE
+Tumor2_1	Tumor	4	TRUE
+Tumor2_2	Tumor	5	TRUE
+Tumor2_3	Tumor	6	TRUE
+Tumor3_1	Tumor	7	TRUE
+Tumor3_2	Tumor	8	TRUE
+Tumor3_3	Tumor	9	TRUE

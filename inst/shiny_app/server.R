@@ -43,11 +43,6 @@ function(input, output) {
 
                 # proteoInput <- read.delim('./inst/shiny_app/www/data/proteinGroups_example.txt')
 
-                #Remove reverse and reverse and contaminants and only identified by site
-                # The user might have modified the proteinGroups.txt and this columns are not present
-
-
-
             # If the file ends in csv is from Spectronaut, read accordingly
 
             } else if (endsWith(as.character(inFile$datapath), suffix = '.csv')){
@@ -143,6 +138,20 @@ function(input, output) {
 
     experiment_names <- reactive({
 
+        if (is.null(proteoInput())) {
+            return(NULL)
+        }
+
+        if (is.null(software_used())) {
+            return(NULL)
+        }
+
+        shiny::req(input$IntensityType)
+
+        print(paste0('user uploaded proteoInput: ', !is.null(proteoInput())))
+
+        #shiny::req(!is.null(proteoInput()))
+
         if (software_used() == 'MaxQuant') {
 
             if(input$IntensityType == 'Intensity'){
@@ -162,6 +171,9 @@ function(input, output) {
 
                 experiment_names <- base::colnames(experiment_names)
                 experiment_names <- gsub('LFQ.intensity.', '', experiment_names)
+
+                print('exp names')
+                print(experiment_names)
             }
 
             if(input$IntensityType == 'iBAQ'){
@@ -193,33 +205,183 @@ function(input, output) {
 
 
     #### Experiment design ####
+
+    # experiment_design <- reactive({
+    #
+    #     inFile <- input$optional_exp_design
+    #
+    #     if (is.null(inFile) & demo$start == FALSE){
+    #
+    #         df <- data.frame(label = experiment_names(),
+    #                          condition = ' ',
+    #                          replicate = as.numeric(' '))
+    #     } else if(demo$start == TRUE){
+    #         df <- read.delim('www/data/experiment_design_example.txt')
+    #     }else{
+    #         df <- read.delim(inFile$datapath)
+    #     }
+    #
+    #     return(df)
+    # })
+    #
+    # output$ed_out <- renderRHandsontable({
+    #
+    #     df <- experiment_design()
+    #
+    #     df$Include <- TRUE
+    #
+    #     rhandsontable(
+    #                 df,
+    #                 height =  500) %>%
+    #         hot_col('replicate', format = '0a') %>%
+    #
+    #         rhandsontable::hot_col('label', readOnly = TRUE)%>%
+    #
+    #         hot_table(highlightRow = TRUE) %>%
+    #
+    #         hot_col(col = "Include", halign = 'htCenter',
+    #             renderer = "
+    #                 function (instance, td, row, col, prop, value, cellProperties) {
+    #                     Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
+    #
+    #                     var col_value = instance.getData()[row][3]
+    #
+    #                     if (col_value === false) {
+    #
+    #                         td.style.background = 'pink';
+    #                     }
+    #                 }
+    #             ") %>%
+    #
+    #         hot_col(col = c("label", "condition", "replicate"),
+    #                 renderer = "
+    #                 function (instance, td, row, col, prop, value, cellProperties) {
+    #                     Handsontable.renderers.TextRenderer.apply(this, arguments);
+    #
+    #                     var col_value = instance.getData()[row][3]
+    #
+    #                     if (col_value === false) {
+    #
+    #                         td.style.background = 'pink';
+    #                     }
+    #                 }
+    #             ")
+    #
+    # })
+    #
+    # ed_final <- reactiveValues()
+    #
+    # observeEvent(input$start_input, {
+    #
+    #     if (is.null(input$proteinInput) && is.null(input$optional_exp_design) &&
+    #         demo$start == FALSE) {
+    #         return(NULL)
+    #     } else{
+    #
+    #         ed_final$data <-  rhandsontable::hot_to_r(input$ed_out)
+    #
+    #         # Remove the rows containing FALSE in include.
+    #         print(ed_final$data$Include)
+    #
+    #         ed_final$data <- ed_final$data[! ed_final$data$Include == FALSE,]
+    #     }
+    #
+    #     print('The experiment design is:')
+    #     print(ed_final$data)
+    #
+    # })
+    #
+    # output$download_experiment_design <- downloadHandler(
+    #
+    #     filename = function(){'experiment_design.txt'},
+    #     content = function(fname){
+    #         write_delim(ed_final$data, fname,delim = '\t')
+    #     }
+    # )
+
+
     experiment_design <- reactive({
+
+        if (is.null(proteoInput())) {
+            return(NULL)
+        }
 
         inFile <- input$optional_exp_design
 
-        if (is.null(inFile) & demo$start == FALSE){
+        if (is.null(inFile) && demo$start == FALSE){
+
+
 
             df <- data.frame(label = experiment_names(),
-                             condition = ' ',
-                             replicate = as.numeric(' '))
+                             condition = '',
+                             replicate = NA_integer_,
+                             Include = TRUE)
+
+            message('This taking place')
+
         } else if(demo$start == TRUE){
+
             df <- read.delim('www/data/experiment_design_example.txt')
         }else{
+
             df <- read.delim(inFile$datapath)
         }
+
+        print('user here hehe')
 
         return(df)
     })
 
+
+    expDesignEditable <- reactiveVal()
+
+    observeEvent(experiment_design(),{
+
+        if (is.null(proteoInput())) {
+            return(NULL)
+        }
+
+        message('is this even here1')
+        print(experiment_design())
+
+        expDesignEditable(experiment_design())
+
+    })
+
+
+
     output$ed_out <- renderRHandsontable({
 
-        df <- experiment_design()
 
-        df$Include <- TRUE
+        # message('is this even here')
+        #
+        # print('exp design')
+        #
+        # print(experiment_design())
+        #
+        # print('finish')
+        #
+        if (is.null(proteoInput())) {
+            return(NULL)
+        }
+
+        validate(need(proteoInput(),"proteoInput not found"))
+
+        validate(need(expDesignEditable(),"Dataframe not found"))
+        #
+        # if (is.null(experiment_design())) {
+        #     return(NULL)
+        # }
+        #
+        # print(expDesignEditable())
+
+        df <- expDesignEditable()
+
+        #df$Include <- TRUE
 
         rhandsontable(
-                    df,
-                    height =  500) %>%
+            df,
+            height =  500) %>%
             hot_col('replicate', format = '0a') %>%
 
             rhandsontable::hot_col('label', readOnly = TRUE)%>%
@@ -227,7 +389,7 @@ function(input, output) {
             hot_table(highlightRow = TRUE) %>%
 
             hot_col(col = "Include", halign = 'htCenter',
-                renderer = "
+                    renderer = "
                     function (instance, td, row, col, prop, value, cellProperties) {
                         Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
 
@@ -252,9 +414,19 @@ function(input, output) {
                             td.style.background = 'pink';
                         }
                     }
-                ")
+                ") %>%
+            hot_col(col = 'replicate', readOnly = TRUE)
 
     })
+
+
+    observeEvent(input$ed_out, {
+        userDT <- rhandsontable::hot_to_r(input$ed_out)
+        setDT(userDT)
+        userDT[, replicate := seq_len(.N), by = condition][is.na(condition) | condition == "", replicate := NA_integer_]
+        expDesignEditable(userDT)
+    })
+
 
     ed_final <- reactiveValues()
 
@@ -277,22 +449,6 @@ function(input, output) {
         print(ed_final$data)
 
     })
-
-
-    # observeEvent(input$ed_out, {
-    #
-    #     df <- ed_final$data
-    #
-    #     df <- df %>%
-    #         group_by(condition) %>%
-    #         mutate(replicate = 1:n())
-    #
-    #     print(df)
-    #
-    #
-    # })
-
-    # Button to download the experiment design once the user has finished it.
 
     output$download_experiment_design <- downloadHandler(
 
