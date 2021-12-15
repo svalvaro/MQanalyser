@@ -212,9 +212,14 @@ function(input, output) {
             return(NULL)
         }
 
+
+        shiny::req(experiment_names())
+
         inFile <- input$optional_exp_design
 
         if (is.null(inFile) && demo$start == FALSE){
+
+
 
             df <- data.frame(label = experiment_names(),
                              condition = '',
