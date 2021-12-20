@@ -897,6 +897,10 @@ function(input, output) {
 
     output$heatmap_nas <- renderPlot(height = 800,width = 700,{
 
+        if (is.null(data_filt())) {
+            return(NULL)
+        }
+
         if (nrow(data_filt())==nrow(data_se())) {
             message("No missing values, the heatmap will not be plotted")
             return(NULL)
