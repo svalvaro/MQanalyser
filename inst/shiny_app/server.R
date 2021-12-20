@@ -2091,6 +2091,10 @@ function(input, output) {
     # Disease Enrichment
     output$enr_dotplot <- renderPlot(height = 1000,{
 
+        if (length(diffExpress()) == 0) {
+            return(NULL)
+        }
+
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         enrichplot::dotplot(edo(),showCategory = 25)
@@ -2100,6 +2104,10 @@ function(input, output) {
     # Disease GSEA
 
     output$enr_gseadotplot <- renderPlot(height = 1000,{
+
+        if (length(diffExpress()) == 0) {
+            return(NULL)
+        }
 
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
@@ -2116,23 +2124,43 @@ function(input, output) {
     # Disease plot of enriched terms
 
     output$heatmapnrich <- renderPlotly({
+
+        if (length(diffExpress()) == 0) {
+            return(NULL)
+        }
+
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
-        ggplotly(heatplot(edox() ,foldChange=geneList())) %>%
+        ggplotly(enrichplot::heatplot(edox() ,foldChange=geneList())) %>%
 
             layout(height = 800, width = 1400)
     })
 
     #Output overlapping distributions
     output$enr_ridgeplot <- renderPlot(height = 800, width =1200,{
+
+        if (length(diffExpress()) == 0) {
+            return(NULL)
+        }
+
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
-        ridgeplot(edo2())
+        if(nrow(edo2()) <1){
+            print('Cant print')
+        }else{
+
+            enrichplot::ridgeplot(edo2())
+        }
     })
 
     # Disease Association
 
     output$upset <- renderPlot(height = 800, width = 1200,{
+
+        if (length(diffExpress()) == 0) {
+            return(NULL)
+        }
+
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         enrichplot::upsetplot(edo())
@@ -2142,6 +2170,11 @@ function(input, output) {
     # Circus PLot
 
     output$enr_circusplot <- renderPlot(height = 1000,{
+
+        if (length(diffExpress()) == 0) {
+            return(NULL)
+        }
+
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         cnetplot(edox(),  circular = TRUE, colorEdge = TRUE)
@@ -2151,6 +2184,11 @@ function(input, output) {
     #Gene Network
 
     output$enr_networkplot <- renderPlot(height = 900, width = 800, {
+
+        if (length(diffExpress()) == 0) {
+            return(NULL)
+        }
+
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         cnetplot(edox(), node_label = "all")
@@ -2159,6 +2197,11 @@ function(input, output) {
     #Enrichment Map
 
     output$enr_mapplot <- renderPlot(height = 1000, width = 900, {
+
+        if (length(diffExpress()) == 0) {
+            return(NULL)
+        }
+
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
         enrichplot::emapplot(pairwise_termsim(edo())#, node_scale=input$enrich_nodes
