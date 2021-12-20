@@ -124,7 +124,6 @@ function(input, output) {
 
         color <- 'green'
 
-
         info <- infoBox(
             'Software used:',
             paste0('\n', software_used()),
@@ -212,8 +211,23 @@ function(input, output) {
             return(NULL)
         }
 
+        # print(paste0('Intensity found: ', IntensityFound()))
+        #
+        #
+        # if(IntensityFound() == FALSE){
+        #     return(NULL)
+        # }
 
-        shiny::req(experiment_names())
+
+#
+#         if (is.null(experiment_names())){
+#             return(NULL)
+#         }
+
+
+        #shiny::req(experiment_names())
+
+        #print(paste0('exp names intensity:'), experiment_names())
 
         inFile <- input$optional_exp_design
 
@@ -261,6 +275,13 @@ function(input, output) {
 
 
         if (is.null(proteoInput())) {
+            return(NULL)
+        }
+
+        print(paste0('Intensity found: ', IntensityFound()))
+
+
+        if(IntensityFound() == FALSE){
             return(NULL)
         }
 

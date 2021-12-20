@@ -73,7 +73,7 @@ plot_volcano <- function(proteomics_results = NULL,
     # Reducing number of digits
 
     #results$fold_change <- format(round(results$fold_change, 2), nsmall = 2)
-    #results$log10_pvalues <- format(round(results$log10_pvalues, 2), nsmall = 2)
+    #results$log10_pvalues <- format(results$log10_pvalues, format = "e", digits = 2)
 
     #Plot
     p <- ggplot(results,  aes(x = fold_change, y = log10_pvalues,  key = Gene))+
