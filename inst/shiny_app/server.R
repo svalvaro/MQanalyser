@@ -1,6 +1,4 @@
 function(input, output) {
-
-
     #### Options and DEMO ####
 
     options(shiny.maxRequestSize=100*1024^2)## Set maximum upload size to 100MB
@@ -2358,6 +2356,26 @@ function(input, output) {
             target = "_blank",
             href = url)
     })
+
+
+    #### Interactions String database ####
+
+    interactions_plot <- reactive({
+
+        tring_db <- STRINGdb$new( version = "11.5", species=9606,
+                                  score_threshold=0, input_directory="")
+
+        myDF <- data.frame(gene = c('AAAS', 'AACS', 'AAMP', 'AASS', 'ABCB7', 'ABCD4'))
+        mapped <- string_db$map(myDF, 'gene', removeUnmappedRows = TRUE)
+        #string_db$plot_network(mapped$STRING_i)
+
+    })
+
+    output$stringPlot <- renderPlot({
+
+        string_db$plot_network(mapped$STRING_i)
+    })
+
 
     #### Block the tabs ####
 

@@ -1109,16 +1109,6 @@ tabPanel(h4("Results"),
                             width = 2,
                   uiOutput("pathway_selector"),
 
-                 # actionBttn(inputId = 'GoToPathway',
-                 #            label = 'Go to KEGG website',
-                 #            icon = NULL,
-                 #            style = "unite",
-                 #            color = "default",
-                 #            size = "md",
-                 #            block = FALSE,
-                 #            no_outline = TRUE
-                 #            ),
-
                  uiOutput('pathwayButton')
                  ),
 
@@ -1146,22 +1136,27 @@ tabPanel(h4("Results"),
                                         outputId = 'download_pathway_table',
                                         label = 'Download Table')
                              )
-
-
-                   # box(height = 2500, width = 2000,
-                   #      h4('KEGG Pathway'),
-                   #      hr(),
-                   #      shinycssloaders::withSpinner(
-                   #        plotOutput('enr_kegg1'),
-                   #        image = 'images/logoTransparentSmall.gif',
-                   #        image.width = '200px'
-                   #        )#,
-                   #
-                   #     #imageOutput('pathwayPlot')
                         )
                    )
            )
   ),
+
+
+#### Interactions STRING DB ####
+
+tabPanel(title = h4('Interactions'),
+         value = 'interactions-tab',
+         sidebarLayout(
+           sidebarPanel(id = 'sidebar',
+                        width = 2
+           ),
+
+           mainPanel(
+             plotOutput('stringPlot')
+           )
+         )
+),
+
 
 #### Logo panel ####
   tabPanel(id = 'logo_tab',
