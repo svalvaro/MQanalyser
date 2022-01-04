@@ -1147,12 +1147,26 @@ tabPanel(h4("Results"),
 tabPanel(title = h4('Interactions'),
          value = 'interactions-tab',
          sidebarLayout(
-           sidebarPanel(id = 'sidebar',
-                        width = 2
+           sidebarPanel(
+             id = 'sidebar',
+             width = 2,
+
+             sliderInput(
+               inputId = 'numberofInteractions',
+               label = 'Maximum proteins',min = 2,max = 1999, value = 50
+             ),
+
+             uiOutput('interactionsButton')
            ),
 
            mainPanel(
-             plotOutput('stringPlot')
+             shinycssloaders::withSpinner(
+               plotOutput('stringPlot'),
+               image = 'images/logoTransparentSmall.gif',
+               image.width = '200px'
+             )
+
+
            )
          )
 ),

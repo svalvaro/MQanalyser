@@ -2360,21 +2360,87 @@ function(input, output) {
 
     #### Interactions String database ####
 
-    interactions_plot <- reactive({
 
-        tring_db <- STRINGdb$new( version = "11.5", species=9606,
-                                  score_threshold=0, input_directory="")
+    interactionResults <- reactive({
 
-        myDF <- data.frame(gene = c('AAAS', 'AACS', 'AAMP', 'AASS', 'ABCB7', 'ABCD4'))
-        mapped <- string_db$map(myDF, 'gene', removeUnmappedRows = TRUE)
-        #string_db$plot_network(mapped$STRING_i)
 
+        # comparison FC
+
+        comparisonFC <- paste0(input$comparison_enrch, '_ratio')
+
+        message(paste0('Comparison: ', comparisonFC))
+
+        # comparison pvalAdjusted
+
+        comparisonPValAdj <- paste0(input$comparison_enrch, '_p.adj')
+
+        message(paste0('Comparison: ', comparisonPValAdj))
+
+
+        # Not sure what is the score for yet
+        string_db <- STRINGdb$new( version = "11.5", species=9606,
+                                   score_threshold = 200, input_directory="")
+
+
+        diffExpressGenes <- data_results() %>% select(contains(
+            c('name', comparisonFC, comparisonPValAdj)
+        ))
+
+        names(diffExpressGenes) <- c('gene', 'logFC','pvalue')
+
+        message(paste0('nrows ', nrow(diffExpressGenes)))
+
+        #diffExpressGenes <- data.frame(gene = c('AAAS', 'AACS', 'AAMP', 'AASS', 'ABCB7', 'ABCD4'))
+        mapped <- string_db$map(diffExpressGenes, 'gene', removeUnmappedRows = TRUE)
+
+        ids_trimmed <- mapped$STRING_id[1:input$numberofInteractions]
+
+        plot <- string_db$plot_network(ids_trimmed)
+
+        url <- string_db$get_link(ids_trimmed)
+
+        message(paste0('the url is for interactions: \n', url))
+
+        print('##')
+        string_db$get_link(ids_trimmed)
+
+        interactionResults <- list("plot" = plot, "url" = url)
+        return(interactionResults)
     })
 
-    output$stringPlot <- renderPlot({
 
-        string_db$plot_network(mapped$STRING_i)
+    output$stringPlot <- renderPlot(height = 800, width = 800,{
+
+
+        interactionResults()$plot
     })
+
+
+    output$interactionsButton <- renderUI({
+
+        url <- interactionResults()$url
+
+
+
+        message(paste0('The interactions url is: ', url))
+
+        shiny::a(
+            actionBttn(
+                inputId = 'GoToSTRING',
+                label = 'View Interacitvely',
+                icon = NULL,
+                style = "unite",
+                color = "default",
+                size = "md",
+                block = FALSE,
+                no_outline = TRUE
+            ),
+            target = "_blank",
+            href = url)
+    })
+
+
+
 
 
     #### Block the tabs ####
