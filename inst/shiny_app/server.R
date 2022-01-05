@@ -1641,7 +1641,9 @@ function(input, output) {
                 $(tab).removeClass("disabled");
                 var tab = $(\'a[data-value="pathway-tab"]\').parent();
                 $(tab).removeClass("disabled");
-                '
+                var tab = $(\'a[data-value="interactions-tab"]\').parent();
+                $(tab).removeClass("disabled");
+            '
         )
 
         return(
@@ -2381,7 +2383,6 @@ function(input, output) {
         string_db <- STRINGdb$new( version = "11.5", species=9606,
                                    score_threshold = 200, input_directory="")
 
-
         diffExpressGenes <- data_results() %>% select(contains(
             c('name', comparisonFC, comparisonPValAdj)
         ))
@@ -2399,9 +2400,6 @@ function(input, output) {
 
         url <- string_db$get_link(ids_trimmed)
 
-        message(paste0('the url is for interactions: \n', url))
-
-        print('##')
         string_db$get_link(ids_trimmed)
 
         interactionResults <- list("plot" = plot, "url" = url)
@@ -2411,7 +2409,6 @@ function(input, output) {
 
     output$stringPlot <- renderPlot(height = 800, width = 800,{
 
-
         interactionResults()$plot
     })
 
@@ -2419,8 +2416,6 @@ function(input, output) {
     output$interactionsButton <- renderUI({
 
         url <- interactionResults()$url
-
-
 
         message(paste0('The interactions url is: ', url))
 
@@ -2438,10 +2433,6 @@ function(input, output) {
             target = "_blank",
             href = url)
     })
-
-
-
-
 
     #### Block the tabs ####
 

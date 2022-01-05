@@ -9,6 +9,7 @@ var tab = $('a[data-value="enrichment-tab"]').parent().addClass("disabled");
 var tab = $('a[data-value="disease-tab"]').parent().addClass("disabled");
 var tab = $('a[data-value="network-tab"]').parent().addClass("disabled");
 var tab = $('a[data-value="pathway-tab"]').parent().addClass("disabled");
+var tab = $('a[data-value="interactions-tab"]').parent().addClass("disabled");
 
 $(function(){
   $(tab.parent()).on("click","li.disabled", function(e) {
