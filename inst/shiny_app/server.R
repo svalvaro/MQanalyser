@@ -1124,16 +1124,7 @@ function(input, output) {
         # Format the _p.val column to two decimals
         pval_to_format <- which(base::endsWith(names(data_results), '_p.val'))
 
-
-
         data_results[,pval_to_format] <- format(data_results[,pval_to_format], digits =  3)
-
-        # Format the _ratio columns to two decimals
-
-        # ratio_to_format <- which(base::endsWith(names(data_results), '_ratio'))
-        #
-        # data_results[,ratio_to_format] <- format(round(data_results[,ratio_to_format], 2), nsmall = 2)
-
 
         # Imputed proteins
 

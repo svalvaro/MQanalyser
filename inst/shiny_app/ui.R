@@ -5,10 +5,9 @@ navbarPage(fluid = TRUE,
            id = 'tabs_menu',
 
     ##### style css ####
+
     titlePanel(
-      title = tags$style(type="text/css",
-                         ".shiny-output-error { visibility: hidden; }",
-                         ".shiny-output-error:before { visibility: hidden; }"),
+      title = '',
 
       # Show the logo in the browser tab
       windowTitle = tags$head(tags$link(rel = "icon", type = "image/png",
@@ -1210,6 +1209,10 @@ tabPanel(title = h4('Interactions'),
 
     src = 'JavaScript/block-all-tabs.js'
 
-  )
+  ),
+
+tags$style(type="text/css",
+           ".shiny-output-error { visibility: hidden; }",
+           ".shiny-output-error:before { visibility: hidden; }")
 
 )
