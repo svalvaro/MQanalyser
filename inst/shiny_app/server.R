@@ -56,14 +56,14 @@ function(input, output) {
             df <- read.delim('www/data/proteinGroups_example.txt')
 
             #Remove reverse and reverse and contaminants and only identified by site
-
-            df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
-
-            # Remove the contaminants if checkbox is pressed
-            if (input$removeContaminantsInput) {
-
-                df <- df[(df$Potential.contaminant == ''),]
-            }
+#
+#             df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
+#
+#             # Remove the contaminants if checkbox is pressed
+#             if (input$removeContaminantsInput) {
+#
+#                 df <- df[(df$Potential.contaminant == ''),]
+#             }
             # Change the "filtered" to 0
 
             df[df == "Filtered"] <- '0'
@@ -613,7 +613,7 @@ function(input, output) {
                   accept = 'txt')
     })
 
-    proteoInputClean <- reactive({
+    proteoInputCombined <- reactive({
 
         df <- proteoInput()
 
@@ -625,10 +625,10 @@ function(input, output) {
                 df <- df[(df$Reverse == '')  & (df$Only.identified.by.site==''),]
 
                 # Remove the contaminants if checkbox is pressed
-                if (input$removeContaminantsInput) {
-
-                    df <- df[(df$Potential.contaminant == ''),]
-                }
+                # if (input$removeContaminantsInput) {
+                #
+                #     df <- df[(df$Potential.contaminant == ''),]
+                # }
             }
         }
 
@@ -654,15 +654,27 @@ function(input, output) {
             df$Potential.contaminant[which(df$Gene.names %in% names(contaminants_fasta()))] <- '+'
 
             # Remove the contaminants if checkbox is pressed
-            if (input$removeContaminantsInput) {
-
-                df <- df[(df$Potential.contaminant == ''),]
-            }
+            # if (input$removeContaminantsInput) {
+            #
+            #     df <- df[(df$Potential.contaminant == ''),]
+            # }
         }
 
         return(df)
     })
 
+    proteoInputClean <- reactive({
+
+        df <- proteoInputCombined()
+
+        if (input$removeContaminantsInput) {
+
+            df <- df[(df$Potential.contaminant == ''),]
+        }
+
+        return(df)
+
+    })
 
     output$contaminants_box <- renderInfoBox({
 
@@ -671,23 +683,26 @@ function(input, output) {
         }
 
         # Number of contaminants proteins
-        contaminants <- proteoInputClean()$Potential.contaminant
+        #contaminants <- proteoInputClean()$Potential.contaminant
+        contaminants <- proteoInputCombined()$Potential.contaminant
 
         total_contaminants <- length(contaminants[grep('.+',contaminants)])
 
         message(paste0('The number of contaminants is: ', total_contaminants))
 
-        if(total_contaminants == 0){
+        if(input$removeContaminantsInput == 1){
             icon <- "check-square"
             color <- 'green'
+            message <- paste0(total_contaminants, ' contaminants proteins removed')
         }else{
             icon <- "exclamation-circle"
             color <- 'red'
+            message <- paste0(total_contaminants, ' contaminants proteins present')
         }
 
         info <- infoBox(
             'Contaminant Proteins',
-            paste0(total_contaminants, ' contaminants proteins found.'),
+            message,
             #icon = icon("stats", lib = "glyphicon"))
             icon = icon(icon),
             color = color)
