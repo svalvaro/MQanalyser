@@ -2443,9 +2443,18 @@ function(input, output) {
 
         DT::datatable(as.data.frame(data_interactions()),
                       extensions = 'Scroller',
+                      selection = 'none',
 
-                      options = list(scrollY=500,
-                                     scrollX=30),
+
+                      options = list(
+                          scrollY=500,
+                          scrollX=30,
+                          select = list(style = 'os', items = 'row'),
+                          dom = 'Blfrtip',
+                          rowId = 0,
+                          buttons = c('selectAll', 'selectNone', 'selectRows')
+
+                          ),
                       width = '400px', rownames = FALSE)
     })
 
