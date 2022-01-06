@@ -1000,6 +1000,7 @@ function(input, output) {
     })
 
     data_imp <- reactive({
+
         if(input$input_imputation == 'Manual'){
             data_imp <-DEP::impute(data_norm(),
                                    fun = "man",
@@ -1049,6 +1050,11 @@ function(input, output) {
 
         # If the value is NA, it will be imputed in the next step
         filtered_melt$Imputed[is.na(filtered_melt$value)] <- TRUE
+
+        if (input$input_imputation == 'none') {
+            message('No imputation')
+            filtered_melt$Imputed <- FALSE
+        }
 
         # Now obtain the already imputed values:
 
@@ -1135,7 +1141,7 @@ function(input, output) {
                                 group_by(Protein.ID) %>%
                                 summarise(Imputed = sum(Imputed == TRUE))
 
-        imputed_proteins$Imputed <- ifelse(imputed_proteins$Imputed > 0, FALSE, TRUE)
+        imputed_proteins$Imputed <- ifelse(imputed_proteins$Imputed == FALSE, FALSE, TRUE)
 
         colnames(imputed_proteins) <- c('name', 'Imputed')
 
