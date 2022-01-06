@@ -2374,37 +2374,90 @@ function(input, output) {
 
     #### Interactions String database ####
 
+    output$comparisons_interaction  <- renderUI({
+        selectInput(inputId = 'comparisons_inter',
+                    label = h4('Select the comparison:'),
+                    choices = unlist(comparisons()),
+                    selected = comparisons()[1])
+    })
 
-    interactionResults <- reactive({
+    data_interactions <- reactive({
+
+        req(input$comparisons_inter)
 
 
+        message(paste0('Comparison for interactiosn: ', input$comparisons_inter))
         # comparison FC
 
-        comparisonFC <- paste0(input$comparison_enrch, '_ratio')
+        comparisonFC <- paste0(input$comparisons_inter, '_ratio')
 
         message(paste0('Comparison: ', comparisonFC))
 
         # comparison pvalAdjusted
 
-        comparisonPValAdj <- paste0(input$comparison_enrch, '_p.adj')
+        comparisonPValAdj <- paste0(input$comparisons_inter, '_p.adj')
 
         message(paste0('Comparison: ', comparisonPValAdj))
 
-
-        # Not sure what is the score for yet
-        string_db <- STRINGdb$new( version = "11.5", species=9606,
-                                   score_threshold = 200, input_directory="")
+        comparisonSignificant <- paste0(input$comparisons_inter, '_significant')
 
         diffExpressGenes <- data_results() %>% select(contains(
-            c('name', comparisonFC, comparisonPValAdj)
+            c('name', comparisonFC, comparisonPValAdj, comparisonSignificant)
         ))
+
+        diffExpressGenes <- diffExpressGenes[which(diffExpressGenes[, comparisonSignificant] == TRUE),]
+
+        diffExpressGenes[,comparisonSignificant] <- NULL
 
         names(diffExpressGenes) <- c('gene', 'logFC','pvalue')
 
         message(paste0('nrows ', nrow(diffExpressGenes)))
 
+        return(diffExpressGenes)
+    })
+
+    # Return table so the user can select/ Unselect
+
+    # output$interactionResults <- DT::renderDataTable({
+    #
+    #     # message(paste0(
+    #     #     'Data interaction.s head: ' ,
+    #     #     head(data_interactions())
+    #     # )
+    #     # )
+    #
+    #         DT::datatable(
+    #             #data =  df,
+    #             data_interactions(),
+    #
+    #              #selection = 1,
+    #              extensions = 'Scroller',
+    #
+    #              options = list(scrollY=500, scrollX=100)
+    #             )
+    # })
+
+    output$interactionResults <- DT::renderDataTable({
+
+
+
+        DT::datatable(as.data.frame(data_interactions()),
+                      extensions = 'Scroller',
+
+                      options = list(scrollY=500,
+                                     scrollX=30),
+                      width = '400px', rownames = FALSE)
+    })
+
+    interactionResults <- reactive({
+
+        # Not sure what is the score for yet
+        string_db <- STRINGdb$new( version = "11.5", species=9606,
+                                   score_threshold = 200, input_directory="")
+
+
         #diffExpressGenes <- data.frame(gene = c('AAAS', 'AACS', 'AAMP', 'AASS', 'ABCB7', 'ABCD4'))
-        mapped <- string_db$map(diffExpressGenes, 'gene', removeUnmappedRows = TRUE)
+        mapped <- string_db$map(data_interactions(), 'gene', removeUnmappedRows = TRUE)
 
         ids_trimmed <- mapped$STRING_id[1:input$numberofInteractions]
 
@@ -2417,7 +2470,6 @@ function(input, output) {
         interactionResults <- list("plot" = plot, "url" = url)
         return(interactionResults)
     })
-
 
     output$stringPlot <- renderPlot(height = 800, width = 800,{
 

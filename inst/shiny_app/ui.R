@@ -86,9 +86,6 @@ navbarPage(fluid = TRUE,
                           target='_blank')
                         )
                       )
-
-
-
                   ),
 
                 mainPanel(
@@ -1150,6 +1147,8 @@ tabPanel(title = h4('Interactions'),
              id = 'sidebar',
              width = 2,
 
+             uiOutput('comparisons_interaction'),
+
              sliderInput(
                inputId = 'numberofInteractions',
                label = 'Maximum proteins',min = 2,max = 1999, value = 50
@@ -1159,16 +1158,27 @@ tabPanel(title = h4('Interactions'),
            ),
 
            mainPanel(
-             shinycssloaders::withSpinner(
-               plotOutput('stringPlot'),
-               image = 'images/logoTransparentSmall.gif',
-               image.width = '200px'
+             fluidRow(
+
+               column(
+                 width = 8,
+                 shinycssloaders::withSpinner(
+                   plotOutput('stringPlot'),
+                   image = 'images/logoTransparentSmall.gif',
+                   image.width = '200px'
+                 )
+               ),
+
+               column(
+                 width = 4,
+
+                 DT::dataTableOutput('interactionResults')
+
+                 )
              )
-
-
+             )
            )
-         )
-),
+         ),
 
 
 #### Logo panel ####
