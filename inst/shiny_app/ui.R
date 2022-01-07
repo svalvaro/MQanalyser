@@ -1159,6 +1159,7 @@ tabPanel(title = h4('Interactions'),
 
            mainPanel(
              fluidRow(
+               h4('Select the proteins on the table by holding Ctrl'),
 
                column(
                  width = 8,
@@ -1167,12 +1168,36 @@ tabPanel(title = h4('Interactions'),
                    image = 'images/logoTransparentSmall.gif',
                    image.width = '200px'
                  )
+                 #uiOutput('InteractionsPlotUI'),
+
+
                ),
 
                column(
                  width = 4,
 
+                 actionBttn(
+                  inputId = 'refreshInteractionTable',
+                  label = h4('Update'),
+                  icon = NULL,
+                  style = "unite",
+                  color = "default",
+                  size = "md",
+                  block = FALSE,
+                  no_outline = TRUE
+                 ),
+
+                 br(),
+                 br(),
+                 br(),
+
+                 # shinycssloaders::withSpinner(
+                 #   DT::dataTableOutput('interactionResults'),
+                 #   image = 'images/logoTransparentSmall.gif',
+                 #   image.width = '200px'
+                 # )
                  DT::dataTableOutput('interactionResults')
+
 
                  )
              )

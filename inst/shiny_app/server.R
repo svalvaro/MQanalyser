@@ -2385,7 +2385,6 @@ function(input, output) {
 
         req(input$comparisons_inter)
 
-
         message(paste0('Comparison for interactiosn: ', input$comparisons_inter))
         # comparison FC
 
@@ -2416,49 +2415,53 @@ function(input, output) {
         return(diffExpressGenes)
     })
 
-    # Return table so the user can select/ Unselect
 
-    # output$interactionResults <- DT::renderDataTable({
-    #
-    #     # message(paste0(
-    #     #     'Data interaction.s head: ' ,
-    #     #     head(data_interactions())
-    #     # )
-    #     # )
-    #
-    #         DT::datatable(
-    #             #data =  df,
-    #             data_interactions(),
-    #
-    #              #selection = 1,
-    #              extensions = 'Scroller',
-    #
-    #              options = list(scrollY=500, scrollX=100)
-    #             )
-    # })
-
-    output$interactionResults <- DT::renderDataTable({
-
-
+    output$interactionResults <- DT::renderDataTable(server = FALSE,{
 
         DT::datatable(as.data.frame(data_interactions()),
-                      extensions = 'Scroller',
-                      selection = 'none',
-
-
+                      extensions = c('Select', 'Buttons'),
                       options = list(
-                          scrollY=500,
-                          scrollX=30,
                           select = list(style = 'os', items = 'row'),
                           dom = 'Blfrtip',
                           rowId = 0,
-                          buttons = c('selectAll', 'selectNone', 'selectRows')
+                          buttons = c('selectAll', 'selectNone')
+                      ),
+                      selection = 'none',
+                      width = '400px',
+                      rownames = FALSE)
+    })
 
-                          ),
-                      width = '400px', rownames = FALSE)
+
+    interactionDataSelected <- reactive({
+
+        df <- data_interactions()
+
+        print(paste0('Selected rows by the user: ', input$interactionResults_rows_selected))
+
+        df <- df[input$interactionResults_rows_selected,]
+
+        print(head(df))
+
+        return(df)
+    })
+
+    interactionDataFinal <- reactiveValues(df = NULL)
+
+
+    observeEvent(input$refreshInteractionTable,{
+        print(
+            paste0('Rows selected: ', interactionDataSelected())
+            )
+
+        interactionDataFinal$df <- interactionDataSelected()
     })
 
     interactionResults <- reactive({
+        #rows_selected <- length(input$interactionResults_rows_selected)
+
+        if (is.null(interactionDataFinal$df)) {
+            return(NULL)
+        }
 
         # Not sure what is the score for yet
         string_db <- STRINGdb$new( version = "11.5", species=9606,
@@ -2466,7 +2469,10 @@ function(input, output) {
 
 
         #diffExpressGenes <- data.frame(gene = c('AAAS', 'AACS', 'AAMP', 'AASS', 'ABCB7', 'ABCD4'))
-        mapped <- string_db$map(data_interactions(), 'gene', removeUnmappedRows = TRUE)
+
+        mapped <- string_db$map(interactionDataFinal$df,
+                                'gene',
+                                removeUnmappedRows = TRUE)
 
         ids_trimmed <- mapped$STRING_id[1:input$numberofInteractions]
 
@@ -2490,6 +2496,10 @@ function(input, output) {
 
         url <- interactionResults()$url
 
+        if (is.null(url)) {
+            return(NULL)
+        }
+
         message(paste0('The interactions url is: ', url))
 
         shiny::a(
@@ -2506,6 +2516,28 @@ function(input, output) {
             target = "_blank",
             href = url)
     })
+
+    # output$InteractionsPlotUI <- renderUI({
+    #
+    #     # If less than two proteins are selected, don't create the plot
+    #
+    #     if (is.null(interactionDataFinal$df)) {
+    #         return(
+    #             h3('At least two proteins are needed, select them on the table!')
+    #         )
+    #     } else{
+    #
+    #         return(
+    #             shinycssloaders::withSpinner(
+    #                 plotOutput('stringPlot'),
+    #                 image = 'images/logoTransparentSmall.gif',
+    #                 image.width = '200px'
+    #             )
+    #         )
+    #     }
+    #
+    # })
+
 
     #### Block the tabs ####
 
@@ -2555,6 +2587,8 @@ function(input, output) {
             )
             }
     })
+
+
 
     # The pathway tabs are unblock under the enrichment section.
 
