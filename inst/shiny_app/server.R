@@ -2505,7 +2505,7 @@ function(input, output) {
         shiny::a(
             actionBttn(
                 inputId = 'GoToSTRING',
-                label = 'View Interacitvely',
+                label = 'View Interactively',
                 icon = NULL,
                 style = "unite",
                 color = "default",
