@@ -1991,7 +1991,7 @@ function(input, output) {
 
                       options = list(scrollY=300,
                                      scrollX=30),
-                      width = '300px',height = '200px')
+                      width = '600px',height = '1500px')
     })
 
 
@@ -2009,42 +2009,31 @@ function(input, output) {
 
     output$networkEnrichmentUI <- renderUI({
 
-        if (length(diffExpress())== 0) {
+        if (length(diffExpress()) == 0) {
 
             print('The Gene Set Enrichment Analysis did not found any gene
                 enriched under the specific p-value cut-off')
         }else{
 
-            fluidRow(
-                column(
-                    width = 12,
+           fluidRow(
+               column(width = 8,
+                      shinycssloaders::withSpinner(
+                          plotOutput('network_renrichment'),
+                          image = 'images/logoTransparentSmall.gif',
+                          image.width = '200px'
+                      )
+                      ),
+               column(
+                   width = 4,
+                   DT::dataTableOutput('netEnrichReadableOut'),
+                   br(),
+                   downloadButton(outputId = 'download_network_table',
+                                  label = 'Download table')
 
-                    tabBox(height = 900, width = 900,
-                        shinycssloaders::withSpinner(
-                            plotOutput('network_renrichment'),
-                            image = 'images/logoTransparentSmall.gif',
-                            image.width = '200px'
-                        )
-                    ),
-
-
-
-                    br(),
-
-                    tabBox(height = 300, width = 600,
-                        DT::dataTableOutput('netEnrichReadableOut')
-
-                    ),
-                    br(),
-                    tabBox(
-
-                        downloadButton(outputId = 'download_network_table',
-                                       label = 'Download table')
-                    )
+               )
+           )
 
 
-                )
-            )
         }
 
     })
@@ -2464,9 +2453,8 @@ function(input, output) {
         }
 
         # Not sure what is the score for yet
-        string_db <- STRINGdb$new( version = "11.5", species=9606,
+        string_db <- STRINGdb$new(version = "11.5", species=9606,
                                    score_threshold = 200, input_directory="")
-
 
         #diffExpressGenes <- data.frame(gene = c('AAAS', 'AACS', 'AAMP', 'AASS', 'ABCB7', 'ABCD4'))
 
