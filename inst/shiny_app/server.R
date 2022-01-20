@@ -2003,7 +2003,6 @@ function(input, output) {
                       fname,
                       row.names = FALSE)
         }
-
     )
 
 
@@ -2032,8 +2031,6 @@ function(input, output) {
 
                )
            )
-
-
         }
 
     })
@@ -2404,7 +2401,6 @@ function(input, output) {
         return(diffExpressGenes)
     })
 
-
     output$interactionResults <- DT::renderDataTable(server = FALSE,{
 
         DT::datatable(as.data.frame(data_interactions()),
@@ -2435,7 +2431,6 @@ function(input, output) {
     })
 
     interactionDataFinal <- reactiveValues(df = NULL)
-
 
     observeEvent(input$refreshInteractionTable,{
         print(
@@ -2479,7 +2474,6 @@ function(input, output) {
         interactionResults()$plot
     })
 
-
     output$interactionsButton <- renderUI({
 
         url <- interactionResults()$url
@@ -2504,28 +2498,6 @@ function(input, output) {
             target = "_blank",
             href = url)
     })
-
-    # output$InteractionsPlotUI <- renderUI({
-    #
-    #     # If less than two proteins are selected, don't create the plot
-    #
-    #     if (is.null(interactionDataFinal$df)) {
-    #         return(
-    #             h3('At least two proteins are needed, select them on the table!')
-    #         )
-    #     } else{
-    #
-    #         return(
-    #             shinycssloaders::withSpinner(
-    #                 plotOutput('stringPlot'),
-    #                 image = 'images/logoTransparentSmall.gif',
-    #                 image.width = '200px'
-    #             )
-    #         )
-    #     }
-    #
-    # })
-
 
     #### Block the tabs ####
 

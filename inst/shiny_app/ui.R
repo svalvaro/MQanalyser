@@ -1168,10 +1168,7 @@ tabPanel(title = h4('Interactions'),
                    image = 'images/logoTransparentSmall.gif',
                    image.width = '200px'
                  )
-                 #uiOutput('InteractionsPlotUI'),
-
-
-               ),
+                 ),
 
                column(
                  width = 4,
@@ -1191,19 +1188,251 @@ tabPanel(title = h4('Interactions'),
                  br(),
                  br(),
 
-                 # shinycssloaders::withSpinner(
-                 #   DT::dataTableOutput('interactionResults'),
-                 #   image = 'images/logoTransparentSmall.gif',
-                 #   image.width = '200px'
-                 # )
                  DT::dataTableOutput('interactionResults')
-
-
-                 )
+                )
              )
              )
            )
          ),
+
+#### Report Panel ####
+
+tabPanel(title = h4('Report'),
+         value = 'report-tab',
+        fluidPage(
+          fluidRow(
+            h3('What would you like to report?'),
+
+
+            fluidRow(
+
+              column(
+                width = 2,
+                # Experiment Design
+
+                shinyWidgets::checkboxGroupButtons(
+                  inputId = "preprocessing-report",
+                  label = h4("Include experiment design"),
+                  choices = "Experiment Design",
+                  individual = F,
+                  #status = "success",
+                  direction = "vertical",
+
+                  checkIcon = list(
+                    yes = tags$i(class = "fa fa-circle",
+                                 style = "color: aqua"),
+                    no = tags$i(class = "fa fa-circle-o",
+                                style = "color: aqua"))
+                )
+                ),
+
+              column(
+                width = 2,
+                # Preprocessing plots
+
+                shinyWidgets::checkboxGroupButtons(
+                  inputId = "preprocessing-report",
+                  label = h4("Preprocessing Plots"),
+                  choices = c("Contaminants",
+                              "Filtering out Missing Values",
+                              "Normalization",
+                              "Imputation"),
+                  individual = F,
+                  #status = "success",
+                  direction = "vertical",
+
+                  checkIcon = list(
+                    yes = tags$i(class = "fa fa-circle",
+                                 style = "color: aqua"),
+                    no = tags$i(class = "fa fa-circle-o",
+                                style = "color: aqua"))
+                )
+                ),
+
+
+              column(
+                width = 2,
+
+                # Heatmap
+
+                shinyWidgets::checkboxGroupButtons(
+                  inputId = "heatmap-report",
+                  label = h4("Heatmap Plot"),
+                  choices = "Heatmap",
+                  individual = F,
+                  #status = "success",
+                  direction = "vertical",
+
+                  checkIcon = list(
+                    yes = tags$i(class = "fa fa-circle",
+                                 style = "color: aqua"),
+                    no = tags$i(class = "fa fa-circle-o",
+                                style = "color: aqua"))
+                )
+              ),
+
+              column(
+                width = 2,
+                # Sample comparisons
+
+                shinyWidgets::checkboxGroupButtons(
+                  inputId = "sample-report",
+                  label = h4("Sample Comparisons Plots"),
+                  choices = c("Scatter Plot",
+                              "Correlation",
+                              "PCA"),
+                  individual = F,
+                  #status = "success",
+                  direction = "vertical",
+
+                  checkIcon = list(
+                    yes = tags$i(class = "fa fa-circle",
+                                 style = "color: aqua"),
+                    no = tags$i(class = "fa fa-circle-o",
+                                style = "color: aqua"))
+                )
+              ),
+              column(
+                width = 2,
+                # Volcano Plot
+
+                shinyWidgets::checkboxGroupButtons(
+                  inputId = "volcano-report",
+                  label = h4("Volcano"),
+                  choices = "Volcano Plot",
+                  individual = F,
+                  #status = "success",
+                  direction = "vertical",
+
+                  checkIcon = list(
+                    yes = tags$i(class = "fa fa-circle",
+                                 style = "color: aqua"),
+                    no = tags$i(class = "fa fa-circle-o",
+                                style = "color: aqua"))
+                )
+              )
+            ),
+
+
+            fluidRow(
+              column(
+                width = 2,
+                # Profile Plot
+
+                shinyWidgets::checkboxGroupButtons(
+                  inputId = "profile-report",
+                  label = h4("Profile Plot"),
+                  choices = "Profile Plot",
+                  individual = F,
+                  #status = "success",
+                  direction = "vertical",
+
+                  checkIcon = list(
+                    yes = tags$i(class = "fa fa-circle",
+                                 style = "color: aqua"),
+                    no = tags$i(class = "fa fa-circle-o",
+                                style = "color: aqua"))
+                )
+              ),
+
+              column(
+                width = 2,
+                # Enrichemnt Plots
+
+                shinyWidgets::checkboxGroupButtons(
+                  inputId = "enrichment-report",
+                  label = h4("Enrichment Plots"),
+                  choices = c("Gene Ontology",
+                              "GSEA Enrichment",
+                              "Network"
+                  ),
+                  individual = F,
+                  #status = "success",
+                  direction = "vertical",
+
+                  checkIcon = list(
+                    yes = tags$i(class = "fa fa-circle",
+                                 style = "color: aqua"),
+                    no = tags$i(class = "fa fa-circle-o",
+                                style = "color: aqua"))
+                )
+                ),
+
+              column(
+                width = 2,
+                # Disease Plots
+
+                shinyWidgets::checkboxGroupButtons(
+                  inputId = "disease-report",
+                  label = h4("Disease Plots"),
+
+                  choices = c("Disease Enrichment",
+                              "Disease GSEA",
+                              "Disease Heatmap",
+                              "Disease Density",
+                              "Disease association",
+                              "Circus Plot",
+                              "Disease Network",
+                              "Disease Map"
+                  ),
+                  individual = F,
+                  #status = "success",
+                  direction = "vertical",
+
+                  checkIcon = list(
+                    yes = tags$i(class = "fa fa-circle",
+                                 style = "color: aqua"),
+                    no = tags$i(class = "fa fa-circle-o",
+                                style = "color: aqua"))
+                )
+                ),
+
+              column(
+                width = 2,
+
+                # Pathway Plot
+
+                shinyWidgets::checkboxGroupButtons(
+                  inputId = "pathway-report",
+                  label = h4("Pathway Plot"),
+
+                  choices = "Pathway Plot",
+                  individual = F,
+                  #status = "success",
+                  direction = "vertical",
+
+                  checkIcon = list(
+                    yes = tags$i(class = "fa fa-circle",
+                                 style = "color: aqua"),
+                    no = tags$i(class = "fa fa-circle-o",
+                                style = "color: aqua"))
+                )
+              ),
+
+              column(
+                width = 2,
+                # Interactions Plot
+
+                shinyWidgets::checkboxGroupButtons(
+                  inputId = "interaction-report",
+                  label = h4("Interactions Network"),
+
+                  choices = "Interactions Plot",
+                  individual = F,
+                  #status = "success",
+                  direction = "vertical",
+
+                  checkIcon = list(
+                    yes = tags$i(class = "fa fa-circle",
+                                 style = "color: aqua"),
+                    no = tags$i(class = "fa fa-circle-o",
+                                style = "color: aqua"))
+                )
+              )
+            )
+            )
+          )
+        ),
 
 
 #### Logo panel ####
