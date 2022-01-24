@@ -1432,9 +1432,11 @@ tabPanel(title = h4('Report'),
                 # Format Plot
 
                 shinyWidgets::awesomeRadio(
-                    inputId = "format-report",
+                    inputId = "formatReport",
                     label = h4("What format would you prefer"),
-                    choices = c("PDF", "HTML", "Word"),
+                    choices = c("PDF",
+                                "HTML",
+                                "Word"),
                     selected = "PDF",
                     inline = TRUE,
                     checkbox = TRUE,
@@ -1449,12 +1451,7 @@ tabPanel(title = h4('Report'),
             br(),
 
             fluidRow(
-                shinyWidgets::actionBttn(
-                    inputId = "generateReport",
-                    label = "Generate Report",
-                    style = "float",
-                    color = "primary"
-                    )
+              downloadButton("generateReport", "Generate report")
                 )
             )
         ),

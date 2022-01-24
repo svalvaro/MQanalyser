@@ -34,4 +34,5 @@ library(stringi)
 library(seqinr)
 library(data.table)
 library(STRINGdb)
+library(rmarkdown)
 
