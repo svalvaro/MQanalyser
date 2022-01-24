@@ -1198,78 +1198,72 @@ tabPanel(title = h4('Interactions'),
 #### Report Panel ####
 
 tabPanel(title = h4('Report'),
-         value = 'report-tab',
+        value = 'report-tab',
         fluidPage(
-          fluidRow(
-            h3('What would you like to report?'),
-
-
             fluidRow(
+              h3('What would you like to report?'),
 
               column(
                 width = 2,
+                value = "checkbox-report",
                 # Experiment Design
 
-                shinyWidgets::checkboxGroupButtons(
-                  inputId = "preprocessing-report",
+                shinyWidgets::prettyCheckboxGroup(
+
+                  inputId = "experiment-report",
                   label = h4("Include experiment design"),
                   choices = "Experiment Design",
                   selected = "Experiment Design",
-                  individual = F,
-                  #status = "success",
-                  direction = "vertical",
-
-                  checkIcon = list(
-                    yes = tags$i(class = "fa fa-circle",
-                                 style = "color: aqua"),
-                    no = tags$i(class = "fa fa-circle-o",
-                                style = "color: aqua"))
-                )
+                  shape = "round",
+                  outline = TRUE,
+                  #fill = TRUE,
+                  animation = "pulse",
+                  bigger = TRUE,
+                  status = "info",
+                  plain = FALSE
+                  )
                 ),
 
               column(
                 width = 2,
-                # Preprocessing plots
 
-                shinyWidgets::checkboxGroupButtons(
-                  inputId = "preprocessing-report",
+                # Experiment Design
+
+                shinyWidgets::prettyCheckboxGroup(
+                  inputId = "contaminants-report",
                   label = h4("Preprocessing Plots"),
                   choices = c("Contaminants",
                               "Filtering out Missing Values",
                               "Normalization",
                               "Imputation"),
-                  individual = F,
-                  #status = "success",
-                  direction = "vertical",
-
-                  checkIcon = list(
-                    yes = tags$i(class = "fa fa-circle",
-                                 style = "color: aqua"),
-                    no = tags$i(class = "fa fa-circle-o",
-                                style = "color: aqua"))
+                  selected = "Imputation",
+                  shape = "round",
+                  outline = TRUE,
+                  #fill = TRUE,
+                  animation = "pulse",
+                  bigger = TRUE,
+                  status = "info",
+                  plain = FALSE
                 )
-                ),
-
+              ),
 
               column(
                 width = 2,
 
                 # Heatmap
 
-                shinyWidgets::checkboxGroupButtons(
+                shinyWidgets::prettyCheckboxGroup(
                   inputId = "heatmap-report",
                   label = h4("Heatmap Plot"),
                   choices = "Heatmap",
                   selected = "Heatmap",
-                  individual = F,
-                  #status = "success",
-                  direction = "vertical",
-
-                  checkIcon = list(
-                    yes = tags$i(class = "fa fa-circle",
-                                 style = "color: aqua"),
-                    no = tags$i(class = "fa fa-circle-o",
-                                style = "color: aqua"))
+                  shape = "round",
+                  outline = TRUE,
+                  #fill = TRUE,
+                  animation = "pulse",
+                  bigger = TRUE,
+                  status = "info",
+                  plain = FALSE
                 )
               ),
 
@@ -1277,7 +1271,7 @@ tabPanel(title = h4('Report'),
                 width = 2,
                 # Sample comparisons
 
-                shinyWidgets::checkboxGroupButtons(
+                shinyWidgets::prettyCheckboxGroup(
                   inputId = "sample-report",
                   label = h4("Sample Comparisons Plots"),
                   choices = c("Scatter Plot",
@@ -1285,58 +1279,52 @@ tabPanel(title = h4('Report'),
                               "PCA"),
                   selected = c("Correlation","PCA"),
 
-                  individual = F,
-                  #status = "success",
-                  direction = "vertical",
-
-                  checkIcon = list(
-                    yes = tags$i(class = "fa fa-circle",
-                                 style = "color: aqua"),
-                    no = tags$i(class = "fa fa-circle-o",
-                                style = "color: aqua"))
+                  shape = "round",
+                  outline = TRUE,
+                  #fill = TRUE,
+                  animation = "pulse",
+                  bigger = TRUE,
+                  status = "info",
+                  plain = FALSE
                 )
               ),
               column(
                 width = 2,
                 # Volcano Plot
 
-                shinyWidgets::checkboxGroupButtons(
+                shinyWidgets::prettyCheckboxGroup(
                   inputId = "volcano-report",
                   label = h4("Volcano"),
                   choices = "Volcano Plot",
                   selected = "Volcano Plot",
-                  individual = F,
-                  #status = "success",
-                  direction = "vertical",
-
-                  checkIcon = list(
-                    yes = tags$i(class = "fa fa-circle",
-                                 style = "color: aqua"),
-                    no = tags$i(class = "fa fa-circle-o",
-                                style = "color: aqua"))
+                  shape = "round",
+                  outline = TRUE,
+                  #fill = TRUE,
+                  animation = "pulse",
+                  bigger = TRUE,
+                  status = "info",
+                  plain = FALSE
                 )
-              )
-            ),
+                )
 
+            ),
 
             fluidRow(
               column(
                 width = 2,
                 # Profile Plot
 
-                shinyWidgets::checkboxGroupButtons(
+                shinyWidgets::prettyCheckboxGroup(
                   inputId = "profile-report",
                   label = h4("Profile Plot"),
                   choices = "Profile Plot",
-                  individual = F,
-                  #status = "success",
-                  direction = "vertical",
-
-                  checkIcon = list(
-                    yes = tags$i(class = "fa fa-circle",
-                                 style = "color: aqua"),
-                    no = tags$i(class = "fa fa-circle-o",
-                                style = "color: aqua"))
+                  shape = "round",
+                  outline = TRUE,
+                  #fill = TRUE,
+                  animation = "pulse",
+                  bigger = TRUE,
+                  status = "info",
+                  plain = FALSE
                 )
               ),
 
@@ -1344,7 +1332,7 @@ tabPanel(title = h4('Report'),
                 width = 2,
                 # Enrichemnt Plots
 
-                shinyWidgets::checkboxGroupButtons(
+                shinyWidgets::prettyCheckboxGroup(
                   inputId = "enrichment-report",
                   label = h4("Enrichment Plots"),
                   choices = c("Gene Ontology",
@@ -1354,15 +1342,13 @@ tabPanel(title = h4('Report'),
 
                   selected = c("GSEA Enrichment", "Network"),
 
-                  individual = F,
-                  #status = "success",
-                  direction = "vertical",
-
-                  checkIcon = list(
-                    yes = tags$i(class = "fa fa-circle",
-                                 style = "color: aqua"),
-                    no = tags$i(class = "fa fa-circle-o",
-                                style = "color: aqua"))
+                  shape = "round",
+                  outline = TRUE,
+                  #fill = TRUE,
+                  animation = "pulse",
+                  bigger = TRUE,
+                  status = "info",
+                  plain = FALSE
                 )
                 ),
 
@@ -1370,7 +1356,7 @@ tabPanel(title = h4('Report'),
                 width = 2,
                 # Disease Plots
 
-                shinyWidgets::checkboxGroupButtons(
+                shinyWidgets::prettyCheckboxGroup(
                   inputId = "disease-report",
                   label = h4("Disease Plots"),
 
@@ -1385,15 +1371,13 @@ tabPanel(title = h4('Report'),
                   ),
 
                   selected = "Disease Enrichment",
-                  individual = F,
-                  #status = "success",
-                  direction = "vertical",
-
-                  checkIcon = list(
-                    yes = tags$i(class = "fa fa-circle",
-                                 style = "color: aqua"),
-                    no = tags$i(class = "fa fa-circle-o",
-                                style = "color: aqua"))
+                  shape = "round",
+                  outline = TRUE,
+                  #fill = TRUE,
+                  animation = "pulse",
+                  bigger = TRUE,
+                  status = "info",
+                  plain = FALSE
                 )
                 ),
 
@@ -1402,21 +1386,19 @@ tabPanel(title = h4('Report'),
 
                 # Pathway Plot
 
-                shinyWidgets::checkboxGroupButtons(
+                shinyWidgets::prettyCheckboxGroup(
                   inputId = "pathway-report",
                   label = h4("Pathway Plot"),
 
                   choices = "Pathway Plot",
                   selected = "Pathway Plot",
-                  individual = F,
-                  #status = "success",
-                  direction = "vertical",
-
-                  checkIcon = list(
-                    yes = tags$i(class = "fa fa-circle",
-                                 style = "color: aqua"),
-                    no = tags$i(class = "fa fa-circle-o",
-                                style = "color: aqua"))
+                  shape = "round",
+                  outline = TRUE,
+                  #fill = TRUE,
+                  animation = "pulse",
+                  bigger = TRUE,
+                  status = "info",
+                  plain = FALSE
                 )
               ),
 
@@ -1424,27 +1406,57 @@ tabPanel(title = h4('Report'),
                 width = 2,
                 # Interactions Plot
 
-                shinyWidgets::checkboxGroupButtons(
+                shinyWidgets::prettyCheckboxGroup(
                   inputId = "interaction-report",
                   label = h4("Interactions Network"),
 
                   choices = "Interactions Plot",
 
                   selected = "Interactions Plot",
-                  individual = F,
-                  #status = "success",
-                  direction = "vertical",
-
-                  checkIcon = list(
-                    yes = tags$i(class = "fa fa-circle",
-                                 style = "color: aqua"),
-                    no = tags$i(class = "fa fa-circle-o",
-                                style = "color: aqua"))
+                  shape = "round",
+                  outline = TRUE,
+                  #fill = TRUE,
+                  animation = "pulse",
+                  bigger = TRUE,
+                  status = "info",
+                  plain = FALSE
                 )
               )
+            ),
+
+            fluidRow(
+
+
+              column(
+                width = 12,
+                # Format Plot
+
+                shinyWidgets::awesomeRadio(
+                    inputId = "format-report",
+                    label = h4("What format would you prefer"),
+                    choices = c("PDF", "HTML", "Word"),
+                    selected = "PDF",
+                    inline = TRUE,
+                    checkbox = TRUE,
+                    status = "info",
+                  )
+
+
+              )
+            ),
+
+            br(),
+            br(),
+
+            fluidRow(
+                shinyWidgets::actionBttn(
+                    inputId = "generateReport",
+                    label = "Generate Report",
+                    style = "float",
+                    color = "primary"
+                    )
+                )
             )
-            )
-          )
         ),
 
 
