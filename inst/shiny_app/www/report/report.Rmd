@@ -1,6 +1,8 @@
 ---
 title: "report.Rmd"
-output: html_document
+output: pdf_document
+params:
+    heatMap: NA
 ---
 
 ```{r setup, include=FALSE}
@@ -22,7 +24,7 @@ summary(cars)
 You can also embed plots, for example:
 
 ```{r pressure, echo=FALSE}
-plot(pressure)
+print(params$heatMap)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

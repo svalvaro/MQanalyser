@@ -2507,7 +2507,15 @@ function(input, output) {
     output$generateReport <- downloadHandler(
 
         # For PDF output, change this to "report.pdf"
-        filename = "report.html",
+        filename = reactive({
+            paste0("report.", input$formatReport)
+        }),
+        # filename =  function(){
+        #     paste("report", switch(input$formatReport,  "PDF"="pdf","Word"="docx"), sep=".")
+        # },
+
+
+
         content = function(file) {
             # Copy the report file to a temporary directory before processing it, in
             # case we don't have write permissions to the current working dir (which
@@ -2516,18 +2524,16 @@ function(input, output) {
             file.copy("www/report/report.Rmd", tempReport, overwrite = TRUE)
 
             # Set up parameters to pass to Rmd document
-            ##params <- list(file1 = RAW()[[1]])
-            # params <- list(RAW = RAW(),
-            #                table_names=table_names(),
-            #                RAW_irt=RAW_irt(),
-            #                irt_peptides_check=irt_peptides_check()
-            # )
+
+            params <- list(
+                heatMap = heatmapPlot()
+                )
 
             # Knit the document, passing in the `params` list, and eval it in a
             # child of the global environment (this isolates the code in the documenta
             # from the code in this app).
             rmarkdown::render(tempReport, output_file = file,
-                              # params = params,
+                              params = params,
                               envir = new.env(parent = globalenv())
             )
         }
