@@ -209,24 +209,6 @@ function(input, output) {
             return(NULL)
         }
 
-        # print(paste0('Intensity found: ', IntensityFound()))
-        #
-        #
-        # if(IntensityFound() == FALSE){
-        #     return(NULL)
-        # }
-
-
-#
-#         if (is.null(experiment_names())){
-#             return(NULL)
-#         }
-
-
-        #shiny::req(experiment_names())
-
-        #print(paste0('exp names intensity:'), experiment_names())
-
         inFile <- input$optional_exp_design
 
         if (is.null(inFile) && demo$start == FALSE){
@@ -2503,6 +2485,16 @@ function(input, output) {
 
 
 
+    heatmap_report <- reactive({
+
+        if (input$heatmapReport == TRUE) {
+            message('Heatmap added to the report')
+            return(heatmapPlot())
+        }else{
+            return(NULL)
+        }
+    })
+
 
     output$generateReport <- downloadHandler(
 
@@ -2525,15 +2517,40 @@ function(input, output) {
 
             # Set up parameters to pass to Rmd document
 
+            #params <- list()
+
+            #message(paste0('heatmap selected: ', input$heatmap-report))
+
+            # # Add experiment design
+            # if (input$experiment-report == 'Experiment Design'){
+            #     params[[length(params)+1]] <- ed_final$data
+            #     names(params[[length(params)+1]]) <- 'experimentDesign'
+            # }
+
+            print(paste0('heatmaps', input$heatmapReport))
+
             params <- list(
-                heatMap = heatmapPlot()
+                experimentDesign = "",
+                heatMap = heatmap_report()
                 )
+
+
+
+            id <- shiny::showNotification(
+                ui ="Rendering report...",
+                duration = NULL,
+                type = "message",
+                closeButton = FALSE
+            )
+            on.exit(shiny::removeNotification(id), add = TRUE)
+
 
             # Knit the document, passing in the `params` list, and eval it in a
             # child of the global environment (this isolates the code in the documenta
             # from the code in this app).
             rmarkdown::render(tempReport, output_file = file,
                               params = params,
+                              #output_format =
                               envir = new.env(parent = globalenv())
             )
         }

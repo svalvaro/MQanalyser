@@ -2,7 +2,31 @@
 title: "report.Rmd"
 output: pdf_document
 params:
+    experimentDesign: NA
+    contaminants: NA
+    missingValues: NA
+    normalization: NA
+    imputation: NA
     heatMap: NA
+    scatter: NA
+    correlation: NA
+    PCA: NA
+    volcano: NA
+    profile: NA
+    geneOntology: NA
+    GSEAenrichment: NA
+    network: NA
+    diseaseaseEnrinchment: NA
+    diseaseaseGSEA: NA
+    diseaseaseHeatmap: NA
+    diseaseaseDensity: NA
+    diseaseaseAssociation: NA
+    diseaseaseCircus: NA
+    diseaseaseNetwork: NA
+    diseaseaseMap: NA
+    pathway: NA
+    interactions: NA
+    
 ---
 
 ```{r setup, include=FALSE}
@@ -15,16 +39,30 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+
+
+## Experiment design
+
+
+
+```{r expdesign, echo=FALSE}
+print(params$experimentDesign)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
+
+\newpage
 ```{r pressure, echo=FALSE}
-print(params$heatMap)
+
+if (!is.null(params$heatMap)) {
+
+    print(params$heatMap)        
+}
+
+
+
+
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

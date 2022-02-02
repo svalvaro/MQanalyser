@@ -1252,19 +1252,36 @@ tabPanel(title = h4('Report'),
 
                 # Heatmap
 
-                shinyWidgets::prettyCheckboxGroup(
-                  inputId = "heatmap-report",
-                  label = h4("Heatmap Plot"),
-                  choices = "Heatmap",
-                  selected = "Heatmap",
+                # shinyWidgets::prettyCheckboxGroup(
+                #   inputId = "heatmapReport",
+                #   label = h4("Heatmap Plot"),
+                #   choices = "Heatmap",
+                #   selected = "Heatmap",
+                #   shape = "round",
+                #   outline = TRUE,
+                #   #fill = TRUE,
+                #   animation = "pulse",
+                #   bigger = TRUE,
+                #   status = "info",
+                #   plain = FALSE
+                # )
+
+
+
+                shinyWidgets::prettyCheckbox(
+                  inputId = "heatmapReport",
+                  label = "Include Heatmap Plot",
+                  value = TRUE,
+                  #icon = icon("check"),
                   shape = "round",
-                  outline = TRUE,
-                  #fill = TRUE,
-                  animation = "pulse",
-                  bigger = TRUE,
                   status = "info",
-                  plain = FALSE
+                  outline = TRUE,
+                  bigger = TRUE,
+                  plain = FALSE,
+                  animation = "pulse"
                 )
+
+
               ),
 
               column(
@@ -1305,6 +1322,22 @@ tabPanel(title = h4('Report'),
                   status = "info",
                   plain = FALSE
                 )
+
+                # shinyWidgets::prettyCheckbox(
+                #   inputId = "volcano-report",
+                #   value = TRUE,
+                #   label = 'Include'
+                #   shape = "round",
+                #   outline = TRUE,
+                #   #fill = TRUE,
+                #   animation = "pulse",
+                #   bigger = TRUE,
+                #   status = "info",
+                #   plain = FALSE
+                # )
+
+
+
                 )
 
             ),
