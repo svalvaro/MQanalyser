@@ -2481,9 +2481,7 @@ function(input, output) {
             href = url)
     })
 
-    #### Generate Report ####
-
-
+    #### Plots for the report ####
 
     heatmap_report <- reactive({
 
@@ -2496,6 +2494,7 @@ function(input, output) {
     })
 
 
+    #### report downloader ####
     output$generateReport <- downloadHandler(
 
         # For PDF output, change this to "report.pdf"
@@ -2506,8 +2505,6 @@ function(input, output) {
         #     paste("report", switch(input$formatReport,  "PDF"="pdf","Word"="docx"), sep=".")
         # },
 
-
-
         content = function(file) {
             # Copy the report file to a temporary directory before processing it, in
             # case we don't have write permissions to the current working dir (which
@@ -2516,18 +2513,6 @@ function(input, output) {
             file.copy("www/report/report.Rmd", tempReport, overwrite = TRUE)
 
             # Set up parameters to pass to Rmd document
-
-            #params <- list()
-
-            #message(paste0('heatmap selected: ', input$heatmap-report))
-
-            # # Add experiment design
-            # if (input$experiment-report == 'Experiment Design'){
-            #     params[[length(params)+1]] <- ed_final$data
-            #     names(params[[length(params)+1]]) <- 'experimentDesign'
-            # }
-
-            print(paste0('heatmaps', input$heatmapReport))
 
             params <- list(
                 experimentDesign = "",
