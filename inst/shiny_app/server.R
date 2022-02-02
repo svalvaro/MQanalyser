@@ -922,10 +922,13 @@ function(input, output) {
         `Before normalization` = data_filt()
         # ggplotly(DEP::plot_normalization(`Before normalization`))
 
-        MQanalyser::plot_normalization_interactive(`Before normalization`)
+        plotly::ggplotly(
+            MQanalyser::plot_normalization_interactive(`Before normalization`)
+        )
+
     })
 
-    output$plot_after_normalization <- renderPlotly({
+    normalized_plot <- reactive({
         `After normalization` = data_norm()
 
         if (input$normalize_input == TRUE) {
@@ -935,6 +938,13 @@ function(input, output) {
         }else{
             return(NULL)
         }
+    })
+
+    output$plot_after_normalization <- renderPlotly({
+
+        plotly::ggplotly(
+            normalized_plot()
+        )
     })
 
         data_norm <- reactive({
@@ -1075,13 +1085,22 @@ function(input, output) {
         return(imputed_melt)
     })
 
-    output$imputation <- renderPlotly(
+    imputation_plot <- reactive({
 
-        MQanalyser::plot_histogram_imputed(
+        p <- MQanalyser::plot_histogram_imputed(
 
             data_to_be_imputed = data_to_be_imputed(),
             bins = input$imputation_bins,
-            combined = input$combined_imputation) %>%
+            combined = input$combined_imputation)
+
+        return(p)
+    })
+
+    output$imputation <- renderPlotly(
+
+        plotly::ggplotly(
+            imputation_plot()
+        ) %>%
             layout(height = 900, width = 1400)
     )
 
@@ -2527,6 +2546,33 @@ function(input, output) {
         }
     })
 
+    # Normalization
+
+    normalization_report <- reactive({
+
+        if ("Normalization" %in% input$preprocessingReport) {
+
+            message('Normalized plot added to the report')
+            return(normalized_plot())
+
+        }else{
+            return(NULL)
+        }
+    })
+
+    imputation_report <- reactive({
+
+        if ("Imputation" %in% input$preprocessingReport) {
+
+            message('Imputation plot added to the report')
+            return(imputation_plot())
+
+        }else{
+            return(NULL)
+        }
+
+    })
+
     heatmap_report <- reactive({
 
         if (input$heatmapReport == TRUE) {
@@ -2562,6 +2608,8 @@ function(input, output) {
                 experimentDesign = expdesign_report(),
                 contaminants = contaminants_report(),
                 missingValues = missingValues_report(),
+                normalization = normalization_report(),
+                imputation = imputation_report(),
                 heatMap = heatmap_report()
                 )
 

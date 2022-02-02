@@ -51,6 +51,7 @@ plot_normalization_interactive <- function(se, ...) {
         scale_fill_brewer(palette = 'Set3')
 
 
-    ggplotly(p)
+    #ggplotly(p)
+    return(p)
 
 }

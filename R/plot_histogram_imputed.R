@@ -31,6 +31,6 @@ plot_histogram_imputed <- function(data_to_be_imputed,
         p <- p + facet_wrap(.~ Label)
     }
 
-    fig <- ggplotly(p)
-    return(fig)
+    #fig <- ggplotly(p)
+    return(p)
 }

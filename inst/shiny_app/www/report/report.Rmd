@@ -69,6 +69,21 @@ if (!is.null(params$missingValues)) {
 }
 ```
 
+\newpage
+
+```{r normalization}
+if (!is.null(params$normalization)) {
+
+    print(params$normalization)
+}
+```
+
+```{r imputation}
+if (!is.null(params$imputation)) {
+
+    print(params$imputation)
+}
+```
 
 \newpage
 ```{r heatmap}
@@ -79,4 +94,4 @@ if (!is.null(params$heatMap)) {
 }
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
