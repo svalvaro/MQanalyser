@@ -26,6 +26,6 @@ plot_protsidentified <- function(data_filt){
               legend.position = 'bottom')+
         scale_fill_manual(values = c('#A4DDED', '#FFDFD3'))
 
-    return(ggplotly(p))
+    return(p)
 
 }

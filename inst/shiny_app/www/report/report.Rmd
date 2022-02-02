@@ -30,39 +30,53 @@ params:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Proteomics Report
 
 
 
 ## Experiment design
 
+```{r expdesign}
+# Put it nice with Kabble extra
+
+if (!is.null(params$experimentDesign)) {
+
+    print(params$experimentDesign)
+}
+
+```
+
+\newpage
+
+```{r contaminants}
+if (!is.null(params$contaminants)) {
+
+    print(params$contaminants)
+}
+
+```
+
+\newpage
 
 
-```{r expdesign, echo=FALSE}
-print(params$experimentDesign)
+```{r missvalues}
+if (!is.null(params$missingValues)) {
+
+    print(params$missingValues)
+}
 ```
 
 
-
-
 \newpage
-```{r pressure, echo=FALSE}
+```{r heatmap}
 
 if (!is.null(params$heatMap)) {
 
     print(params$heatMap)        
 }
-
-
-
-
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

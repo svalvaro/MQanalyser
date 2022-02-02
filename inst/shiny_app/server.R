@@ -565,7 +565,6 @@ function(input, output) {
             return(NULL)
         }
 
-
         radioGroupButtons(
             inputId = "fastaOptions",
             label = h4("Contaminants proteins"),
@@ -700,16 +699,21 @@ function(input, output) {
         layout(height = 800, width = 800)
     )
 
-    output$contaminantsPlotNonInteractive <- renderPlot(height = 800, width = 800,{
-
+    contaminants_non_interactive <- reactive({
         if (is.null(proteoInputClean())) {
             return(NULL)
         }
 
-        MQanalyser::plot_contaminants(proteoInput = proteoInputClean(),
+        p <- MQanalyser::plot_contaminants(proteoInput = proteoInputClean(),
                                       softwareUsed = software_used(),
                                       intensityType = input$IntensityType,
                                       interactive = FALSE)
+        return(p)
+    })
+
+    output$contaminantsPlotNonInteractive <- renderPlot(height = 800, width = 800,{
+
+        contaminants_non_interactive()
     })
 
     output$contaminantsUI <- renderUI({
@@ -883,8 +887,15 @@ function(input, output) {
         return(data_filt)
     })
 
+
+    missvalues_plot <- reactive({
+        p <- MQanalyser::plot_protsidentified(data_filt())
+
+        return(p)
+    })
+
     output$barplot_missvals <- renderPlotly(
-        MQanalyser::plot_protsidentified(data_filt())%>%
+        plotly::ggplotly(missvalues_plot())%>%
             layout(height = 800, width = 850)
         #MQanalyser::plot_protsidentified(data_filt)
     )
@@ -2045,11 +2056,8 @@ function(input, output) {
 
     observeEvent(input$tabs_menu, {
 
-        message('user in this tab')
-
         req(input$enrich_organism)
 
-        message(paste0('organism', input$enrich_organism))
 
         if (! input$enrich_organism == 'org.Hs.eg.db' &&
             input$tabs_menu == 'disease-tab') {
@@ -2483,6 +2491,42 @@ function(input, output) {
 
     #### Plots for the report ####
 
+
+    expdesign_report <- reactive({
+        if (input$experimentReport == TRUE) {
+            message('Experiment design added to the report')
+            return(ed_final$data)
+        }else{
+            return(NULL)
+        }
+    })
+
+
+    # Contaminants
+
+    contaminants_report <- reactive({
+        if ("Contaminants" %in% input$preprocessingReport) {
+
+            message('Contaminants added to the report')
+            return(contaminants_non_interactive())
+        }else{
+            return(NULL)
+        }
+    })
+
+    # Missing Values
+
+    missingValues_report <- reactive({
+        if ("missing" %in% input$preprocessingReport) {
+
+            message('Missing values added to the report')
+            return(missvalues_plot())
+
+        }else{
+            return(NULL)
+        }
+    })
+
     heatmap_report <- reactive({
 
         if (input$heatmapReport == TRUE) {
@@ -2515,7 +2559,9 @@ function(input, output) {
             # Set up parameters to pass to Rmd document
 
             params <- list(
-                experimentDesign = "",
+                experimentDesign = expdesign_report(),
+                contaminants = contaminants_report(),
+                missingValues = missingValues_report(),
                 heatMap = heatmap_report()
                 )
 

@@ -1208,20 +1208,18 @@ tabPanel(title = h4('Report'),
                 value = "checkbox-report",
                 # Experiment Design
 
-                shinyWidgets::prettyCheckboxGroup(
-
-                  inputId = "experiment-report",
-                  label = h4("Include experiment design"),
-                  choices = "Experiment Design",
-                  selected = "Experiment Design",
+                shinyWidgets::prettyCheckbox(
+                  inputId = "experimentReport",
+                  label = "Include Experiment Design",
+                  value = TRUE,
+                  #icon = icon("check"),
                   shape = "round",
-                  outline = TRUE,
-                  #fill = TRUE,
-                  animation = "pulse",
-                  bigger = TRUE,
                   status = "info",
-                  plain = FALSE
-                  )
+                  outline = TRUE,
+                  bigger = TRUE,
+                  plain = FALSE,
+                  animation = "pulse"
+                )
                 ),
 
               column(
@@ -1230,10 +1228,10 @@ tabPanel(title = h4('Report'),
                 # Experiment Design
 
                 shinyWidgets::prettyCheckboxGroup(
-                  inputId = "contaminants-report",
+                  inputId = "preprocessingReport",
                   label = h4("Preprocessing Plots"),
                   choices = c("Contaminants",
-                              "Filtering out Missing Values",
+                              "Filtering out Missing Values" ="missing",
                               "Normalization",
                               "Imputation"),
                   selected = "Imputation",
@@ -1251,22 +1249,6 @@ tabPanel(title = h4('Report'),
                 width = 2,
 
                 # Heatmap
-
-                # shinyWidgets::prettyCheckboxGroup(
-                #   inputId = "heatmapReport",
-                #   label = h4("Heatmap Plot"),
-                #   choices = "Heatmap",
-                #   selected = "Heatmap",
-                #   shape = "round",
-                #   outline = TRUE,
-                #   #fill = TRUE,
-                #   animation = "pulse",
-                #   bigger = TRUE,
-                #   status = "info",
-                #   plain = FALSE
-                # )
-
-
 
                 shinyWidgets::prettyCheckbox(
                   inputId = "heatmapReport",
