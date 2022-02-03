@@ -706,7 +706,7 @@ tabPanel(h4("Results"),
                         label = "Gene Names",
                         labelWidth = "80px",
                         onStatus = 'success',
-                        value = FALSE,
+                        value = TRUE,
                         offStatus = 'danger')
                       ),
 
@@ -1288,38 +1288,20 @@ tabPanel(title = h4('Report'),
                 width = 2,
                 # Volcano Plot
 
-                shinyWidgets::prettyCheckboxGroup(
-                  inputId = "volcano-report",
-                  label = h4("Volcano"),
-                  choices = "Volcano Plot",
-                  selected = "Volcano Plot",
+                shinyWidgets::prettyCheckbox(
+                  inputId = "volcanoReport",
+                  label = "Include Volcano Plot",
+                  value = TRUE,
+                  #icon = icon("check"),
                   shape = "round",
-                  outline = TRUE,
-                  #fill = TRUE,
-                  animation = "pulse",
-                  bigger = TRUE,
                   status = "info",
-                  plain = FALSE
+                  outline = TRUE,
+                  bigger = TRUE,
+                  plain = FALSE,
+                  animation = "pulse"
+                  )
                 )
-
-                # shinyWidgets::prettyCheckbox(
-                #   inputId = "volcano-report",
-                #   value = TRUE,
-                #   label = 'Include'
-                #   shape = "round",
-                #   outline = TRUE,
-                #   #fill = TRUE,
-                #   animation = "pulse",
-                #   bigger = TRUE,
-                #   status = "info",
-                #   plain = FALSE
-                # )
-
-
-
-                )
-
-            ),
+              ),
 
             fluidRow(
               column(

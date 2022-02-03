@@ -1469,6 +1469,39 @@ function(input, output) {
         return(volcano_Plot)
     })
 
+    # Volcano for the report, not plotly:
+
+    volcano_non_interactive <- reactive({
+
+        coord_x  <- NULL
+        coord_y <- NULL
+
+        if(input$modify_axis == TRUE){
+            coord_x  <- input$range_fc
+            coord_y <- input$range_pvalue
+        }
+
+        volcano_Plot <- MQanalyser::plot_volcano(
+            proteomics_results = data_results(),
+            sample_comparison = input$comparison_input,
+            foldchange_cutoff = input$input_fc,
+            p_value_cutoff = input$input_pvalue,
+            color_up = input$col_upregulated,
+            color_down = input$col_downregulated,
+            p_adj = input$p_adj_input,
+            show_genes_user = input$showgenes_volcano,
+            user_genes_de = user_genes_de(),
+            color_genes_de = input$col_selected,
+            alpha = input$volc_alpha,
+            coord_x = coord_x,
+            coord_y = coord_y,
+            show_genes_names = TRUE,
+            brushed_Points = input$brush_volcano,
+            font_gene_names = input$font_gene_names)
+
+        return(volcano_Plot)
+    })
+
     output$volcano_plot_plotly <- renderPlotly({
 
         coord_x  <- NULL
@@ -2533,7 +2566,6 @@ function(input, output) {
         }
     })
 
-
     # Contaminants
 
     contaminants_report <- reactive({
@@ -2627,6 +2659,32 @@ function(input, output) {
         }
     })
 
+    # PCA
+
+    PCA_report <- reactive({
+
+        if ("PCA" %in% input$sampleReport) {
+
+            message('PCA plot added to the report')
+            return(pca_reactive())
+
+        }else{
+            return(NULL)
+        }
+    })
+
+    # Volcano
+
+    volcano_report <- reactive({
+
+        if (input$volcanoReport == TRUE) {
+            message('Volcano added to the report')
+            return(volcano_non_interactive())
+        }else{
+            return(NULL)
+        }
+    })
+
 
 
 
@@ -2658,7 +2716,9 @@ function(input, output) {
                 imputation = imputation_report(),
                 heatMap = heatmap_report(),
                 scatter = scatter_report(),
-                correlation = correlation_report()
+                correlation = correlation_report(),
+                PCA = PCA_report(),
+                volcano = volcano_report()
                 )
 
 

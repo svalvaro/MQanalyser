@@ -30,7 +30,7 @@ params:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = F)
 ```
 
 ## Proteomics Report
@@ -111,5 +111,19 @@ if (!is.null(params$correlation)) {
 ```
 
 
+```{r PCA}
 
+if (!is.null(params$PCA)) {
+
+    print(params$PCA)            
+}
+```
+
+```{r volcano}
+
+if (!is.null(params$volcano)) {
+
+    print(params$volcano)            
+}
+```
 
