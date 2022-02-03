@@ -102,6 +102,7 @@ plot_profilely <- function(dep,
 
     } else{
 
-        return(ggplotly(p,tooltip = c('text')))
+        #return(ggplotly(p,tooltip = c('text')))
+      return(p)
     }
 }

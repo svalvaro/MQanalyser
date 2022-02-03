@@ -129,3 +129,11 @@ if (!is.null(params$volcano)) {
 }
 ```
 
+```{r profile}
+
+if (!is.null(params$profile)) {
+
+    print(params$profile)            
+}
+```
+

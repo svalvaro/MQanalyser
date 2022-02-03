@@ -1321,19 +1321,6 @@ function(input, output) {
             }
     })
 
-    #### Correlation plot ####
-
-    #just for the report, non interactive
-    correlation_plot <- reactive({
-        MQanalyser::plot_correlationly(dep(), interactive = FALSE)
-    })
-    output$plot_correlation <- renderPlotly(
-
-        MQanalyser::plot_correlationly(dep()) %>%
-            layout(height = 800, width = 800)
-
-    )
-
     #### Scatter plot ####
 
     # Select the sample to plot in the scatter plot
@@ -1375,6 +1362,69 @@ function(input, output) {
             scatter_plot(), tooltip = c('text')
         ) %>%
             layout(height = 1000, width = 1000 )
+    )
+
+
+    #### Correlation plot ####
+
+    #just for the report, non interactive
+    correlation_plot <- reactive({
+        MQanalyser::plot_correlationly(dep(), interactive = FALSE)
+    })
+    output$plot_correlation <- renderPlotly(
+
+        MQanalyser::plot_correlationly(dep()) %>%
+            layout(height = 800, width = 800)
+
+    )
+
+    #### PCA pot ####
+
+    # Number of proteins that are selected to calculate the PCA
+    output$pca_number_proteins  <- renderUI({
+
+        var <- apply(assay(dep()), 1, sd)
+
+        if (length(var)>500) {
+            value = 500
+        }else{
+            value = length(var)
+        }
+
+        sliderInput(inputId = 'pca_proteins',
+                    label = h4('Select the number of proteins:'),
+                    min = 2,
+                    max = length(var),
+                    value = value,
+                    step = 1)
+    })
+
+    # PCA plot
+
+    pca_reactive <- reactive({
+        pca_reactive <- MQanalyser::plot_pca_improved(dep = dep(),
+                                                      PC_x = 1,
+                                                      PC_y = 2,
+                                                      label_name = input$pca_label,
+                                                      n = input$pca_proteins)
+        return(pca_reactive)
+
+    })
+
+    output$pca_plot <- renderPlot(height = 800, width = 1200,{
+        pca_reactive()
+    })
+
+    # Download button for the PCA Plot
+    output$downloadPCA <- downloadHandler(
+
+        filename = function(){
+            'pca_plot.png'
+        },
+
+        content = function(file){
+            ggplot2::ggsave(file, pca_reactive())
+        }
     )
 
     #### Volcano plot ####
@@ -1444,7 +1494,7 @@ function(input, output) {
                 coord_x = coord_x,
                 coord_y = coord_y,
                 show_genes_names = FALSE
-                )
+            )
         }else{
 
             volcano_Plot <- MQanalyser::plot_volcano(
@@ -1515,7 +1565,7 @@ function(input, output) {
         return(
             volcano_Plot() %>%
                 layout(height = 1000, width = 1000)
-            )
+        )
     })
 
     output$volcano_plot_genes <- renderPlot(height = 1000, width = 1000,{
@@ -1563,69 +1613,22 @@ function(input, output) {
 
     output$downloadvolcano <- downloadHandler(
 
-            filename = function(){
-                'volcano.png'
-            },
+        filename = function(){
+            'volcano.png'
+        },
 
-            content = function(file){
-                ggplot2::ggsave(file, volcano_Plot())
-            }
+        content = function(file){
+            ggplot2::ggsave(file, volcano_Plot())
+        }
     )
 
-    #### PCA pot ####
 
-    # Number of proteins that are selected to calculate the PCA
-    output$pca_number_proteins  <- renderUI({
-
-        var <- apply(assay(dep()), 1, sd)
-
-        if (length(var)>500) {
-            value = 500
-        }else{
-            value = length(var)
-        }
-
-        sliderInput(inputId = 'pca_proteins',
-                    label = h4('Select the number of proteins:'),
-                    min = 2,
-                    max = length(var),
-                    value = value,
-                    step = 1)
-        })
-
-    # PCA plot
-
-    pca_reactive <- reactive({
-        pca_reactive <- MQanalyser::plot_pca_improved(dep = dep(),
-                                      PC_x = 1,
-                                      PC_y = 2,
-                                      label_name = input$pca_label,
-                                      n = input$pca_proteins)
-        return(pca_reactive)
-
-    })
-
-    output$pca_plot <- renderPlot(height = 800, width = 1200,{
-        pca_reactive()
-    })
-
-    # Download button for the PCA Plot
-    output$downloadPCA <- downloadHandler(
-
-            filename = function(){
-                'pca_plot.png'
-            },
-
-            content = function(file){
-                ggplot2::ggsave(file, pca_reactive())
-            }
-        )
 
     #### Profile Plot ####
 
-    output$plot_profile <- renderPlotly(
+    profile_reactive <- reactive({
 
-        MQanalyser::plot_profilely(dep = dep(),
+        p <- MQanalyser::plot_profilely(dep = dep(),
                                    centered = input$prof_centered,
                                    intensity_type = input$IntensityType,
                                    color = input$input_col_prof,
@@ -1637,7 +1640,16 @@ function(input, output) {
                                    clear_selection = input$clear_selection,
                                    prof_genes_de = input$prof_genes_de,
                                    user_genes_de = user_genes_de(),
-                                   color_genes_de = input$input_col_prof_de) %>%
+                                   color_genes_de = input$input_col_prof_de)
+        return(p)
+    })
+
+    output$plot_profile <- renderPlotly(
+
+         plotly::ggplotly(
+             profile_reactive(),
+             tooltip = c('text')
+         )%>%
 
             layout(height = 800, width = 1200)
     )
@@ -1659,8 +1671,8 @@ function(input, output) {
                 selection = 0,
                 extensions = 'Scroller',
 
-                  options = list(scrollY=500, scrollX=100)
-                )
+                options = list(scrollY=500, scrollX=100)
+            )
         }else{
             DT::datatable(
                 MQanalyser::plot_profilely(
@@ -1674,9 +1686,12 @@ function(input, output) {
                 extensions = 'Scroller',
 
                 options = list(scrollY=500, scrollX=100)
-                )
-            }
+            )
+        }
     })
+
+
+
 
     #### Enrichment Analysis ####
         # Comparisons -------------------------------
@@ -2689,7 +2704,17 @@ function(input, output) {
 
     # Profile
 
-    profile_report <-
+    profile_report <- reactive({
+
+        if ("profile" %in% input$proteinReport) {
+            message('Volcano added to the report')
+            return(profile_reactive())
+        }else{
+            return(NULL)
+        }
+
+
+    })
 
 
 
@@ -2724,7 +2749,8 @@ function(input, output) {
                 correlation = correlation_report(),
                 PCA = PCA_report(),
                 heatMap = heatmap_report(),
-                volcano = volcano_report()
+                volcano = volcano_report(),
+                profile = profile_report()
                 )
 
 
