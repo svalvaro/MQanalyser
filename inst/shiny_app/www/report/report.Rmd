@@ -7,10 +7,10 @@ params:
     missingValues: NA
     normalization: NA
     imputation: NA
-    heatMap: NA
     scatter: NA
     correlation: NA
     PCA: NA
+    heatMap: NA
     volcano: NA
     profile: NA
     geneOntology: NA
@@ -86,13 +86,7 @@ if (!is.null(params$imputation)) {
 ```
 
 \newpage
-```{r heatmap}
 
-if (!is.null(params$heatMap)) {
-
-    print(params$heatMap)        
-}
-```
 
 ```{r scatter}
 
@@ -116,6 +110,14 @@ if (!is.null(params$correlation)) {
 if (!is.null(params$PCA)) {
 
     print(params$PCA)            
+}
+```
+
+```{r heatmap}
+
+if (!is.null(params$heatMap)) {
+
+    print(params$heatMap)        
 }
 ```
 

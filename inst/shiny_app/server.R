@@ -2619,17 +2619,6 @@ function(input, output) {
 
     })
 
-    # Heatmap
-
-    heatmap_report <- reactive({
-
-        if (input$heatmapReport == TRUE) {
-            message('Heatmap added to the report')
-            return(heatmapPlot())
-        }else{
-            return(NULL)
-        }
-    })
 
     # Scatter Plot
 
@@ -2673,17 +2662,34 @@ function(input, output) {
         }
     })
 
+
+    # Heatmap
+
+    heatmap_report <- reactive({
+
+        if ("heatmap" %in% input$proteinReport) {
+            message('Heatmap added to the report')
+            return(heatmapPlot())
+        }else{
+            return(NULL)
+        }
+    })
+
     # Volcano
 
     volcano_report <- reactive({
 
-        if (input$volcanoReport == TRUE) {
+        if ("volcano" %in% input$proteinReport) {
             message('Volcano added to the report')
             return(volcano_non_interactive())
         }else{
             return(NULL)
         }
     })
+
+    # Profile
+
+    profile_report <-
 
 
 
@@ -2714,10 +2720,10 @@ function(input, output) {
                 missingValues = missingValues_report(),
                 normalization = normalization_report(),
                 imputation = imputation_report(),
-                heatMap = heatmap_report(),
                 scatter = scatter_report(),
                 correlation = correlation_report(),
                 PCA = PCA_report(),
+                heatMap = heatmap_report(),
                 volcano = volcano_report()
                 )
 

@@ -1245,23 +1245,23 @@ tabPanel(title = h4('Report'),
                 )
               ),
 
-              column(
-                width = 2,
-                # Heatmap
-
-                shinyWidgets::prettyCheckbox(
-                  inputId = "heatmapReport",
-                  label = "Include Heatmap Plot",
-                  value = TRUE,
-                  #icon = icon("check"),
-                  shape = "round",
-                  status = "info",
-                  outline = TRUE,
-                  bigger = TRUE,
-                  plain = FALSE,
-                  animation = "pulse"
-                )
-              ),
+              # column(
+              #   width = 2,
+              #   # Heatmap
+              #
+              #   shinyWidgets::prettyCheckbox(
+              #     inputId = "heatmapReport",
+              #     label = "Include Heatmap Plot",
+              #     value = TRUE,
+              #     #icon = icon("check"),
+              #     shape = "round",
+              #     status = "info",
+              #     outline = TRUE,
+              #     bigger = TRUE,
+              #     plain = FALSE,
+              #     animation = "pulse"
+              #   )
+              # ),
 
               column(
                 width = 2,
@@ -1288,30 +1288,14 @@ tabPanel(title = h4('Report'),
                 width = 2,
                 # Volcano Plot
 
-                shinyWidgets::prettyCheckbox(
-                  inputId = "volcanoReport",
-                  label = "Include Volcano Plot",
-                  value = TRUE,
-                  #icon = icon("check"),
-                  shape = "round",
-                  status = "info",
-                  outline = TRUE,
-                  bigger = TRUE,
-                  plain = FALSE,
-                  animation = "pulse"
-                  )
-                )
-              ),
-
-            fluidRow(
-              column(
-                width = 2,
-                # Profile Plot
-
                 shinyWidgets::prettyCheckboxGroup(
-                  inputId = "profile-report",
-                  label = h4("Profile Plot"),
-                  choices = "Profile Plot",
+                  inputId = "proteinReport",
+                  label = h4("Protein Level Plots"),
+                  choices = c("Heatmap Plot" = "heatmap",
+                              "Volcano Plot" = "volcano",
+                              "Profile Plot" = "profile"),
+                  selected = c("heatmap","volcano"),
+
                   shape = "round",
                   outline = TRUE,
                   #fill = TRUE,
@@ -1320,7 +1304,27 @@ tabPanel(title = h4('Report'),
                   status = "info",
                   plain = FALSE
                 )
+                )
               ),
+
+            fluidRow(
+              # column(
+              #   width = 2,
+              #   # Profile Plot
+              #
+              #   # shinyWidgets::prettyCheckboxGroup(
+              #   #   inputId = "profile-report",
+              #   #   label = h4("Profile Plot"),
+              #   #   choices = "Profile Plot",
+              #   #   shape = "round",
+              #   #   outline = TRUE,
+              #   #   #fill = TRUE,
+              #   #   animation = "pulse",
+              #   #   bigger = TRUE,
+              #   #   status = "info",
+              #   #   plain = FALSE
+              #   # )
+              # ),
 
               column(
                 width = 2,
