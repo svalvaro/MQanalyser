@@ -1247,7 +1247,6 @@ tabPanel(title = h4('Report'),
 
               column(
                 width = 2,
-
                 # Heatmap
 
                 shinyWidgets::prettyCheckbox(
@@ -1262,8 +1261,6 @@ tabPanel(title = h4('Report'),
                   plain = FALSE,
                   animation = "pulse"
                 )
-
-
               ),
 
               column(
@@ -1271,9 +1268,9 @@ tabPanel(title = h4('Report'),
                 # Sample comparisons
 
                 shinyWidgets::prettyCheckboxGroup(
-                  inputId = "sample-report",
+                  inputId = "sampleReport",
                   label = h4("Sample Comparisons Plots"),
-                  choices = c("Scatter Plot",
+                  choices = c("Scatter Plot" = "scatter",
                               "Correlation",
                               "PCA"),
                   selected = c("Correlation","PCA"),

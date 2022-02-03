@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-plot_correlationly <- function(dep){
+plot_correlationly <- function(dep, interactive = TRUE){
 
     cor_mat <- cor(assay(dep))
 
@@ -18,5 +18,18 @@ plot_correlationly <- function(dep){
                          key.title = 'Pearson Corr.',
                          label_names = c('row', 'column', 'correlation')
                          )
-    return(p)
+    if (interactive == FALSE) {
+        return(
+            gplots::heatmap.2(cor_mat,
+                              col = couls(20),
+                              trace = 'none',
+                              key.title =  'Pearson corr.',
+                              density.info = 'none'
+            )
+        )
+
+    }else{
+        return(p)
+    }
+
 }

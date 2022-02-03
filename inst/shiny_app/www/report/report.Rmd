@@ -94,4 +94,22 @@ if (!is.null(params$heatMap)) {
 }
 ```
 
+```{r scatter}
+
+if (!is.null(params$scatter)) {
+
+    print(params$scatter)        
+}
+```
+
+```{r correlation}
+
+if (!is.null(params$correlation)) {
+
+    base::eval(params$correlation$call)        
+}
+```
+
+
+
 

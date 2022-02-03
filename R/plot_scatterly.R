@@ -70,7 +70,11 @@ plot_scatterly <- function(dep = NULL,
                           size = 2,
                           color = color_genes_de)
     }
-    return(
-        plotly::ggplotly(p = p, tooltip = c('text'))
-    )
+    # return(
+    #     plotly::ggplotly(p = p, tooltip = c('text'))
+    # )
+
+     return(
+         p
+     )
 }

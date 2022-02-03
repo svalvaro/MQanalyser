@@ -1322,6 +1322,11 @@ function(input, output) {
     })
 
     #### Correlation plot ####
+
+    #just for the report, non interactive
+    correlation_plot <- reactive({
+        MQanalyser::plot_correlationly(dep(), interactive = FALSE)
+    })
     output$plot_correlation <- renderPlotly(
 
         MQanalyser::plot_correlationly(dep()) %>%
@@ -1350,7 +1355,9 @@ function(input, output) {
                     choices = unlist(dep()$ID),selected = unlist(dep()$ID)[2])
     })
 
-    output$scatterplot <- renderPlotly(
+
+    scatter_plot <- reactive({
+
         MQanalyser::plot_scatterly(dep = dep(),
                                    x_sample = input$x_sample_input,
                                    y_sample = input$y_sample_input,
@@ -1360,8 +1367,14 @@ function(input, output) {
                                    color_genes_de = input$color_de_scatter,
                                    alpha = input$input_alpha,
                                    intensity_type = input$IntensityType,
-                                   show_lm = input$input_lm) %>%
-                        layout(height = 1000, width = 1000 )
+                                   show_lm = input$input_lm)
+    })
+
+    output$scatterplot <- renderPlotly(
+        plotly::ggplotly(
+            scatter_plot(), tooltip = c('text')
+        ) %>%
+            layout(height = 1000, width = 1000 )
     )
 
     #### Volcano plot ####
@@ -2560,6 +2573,7 @@ function(input, output) {
         }
     })
 
+    # Imputation
     imputation_report <- reactive({
 
         if ("Imputation" %in% input$preprocessingReport) {
@@ -2573,6 +2587,8 @@ function(input, output) {
 
     })
 
+    # Heatmap
+
     heatmap_report <- reactive({
 
         if (input$heatmapReport == TRUE) {
@@ -2582,6 +2598,36 @@ function(input, output) {
             return(NULL)
         }
     })
+
+    # Scatter Plot
+
+    scatter_report <- reactive({
+
+        if ("scatter" %in% input$sampleReport) {
+
+            message('Scatter plot added to the report')
+            return(scatter_plot())
+
+        }else{
+            return(NULL)
+        }
+    })
+
+    # Correlation plot
+
+    correlation_report <- reactive({
+
+        if ("Correlation" %in% input$sampleReport) {
+
+            message('Correlation plot added to the report')
+            return(correlation_plot())
+
+        }else{
+            return(NULL)
+        }
+    })
+
+
 
 
     #### report downloader ####
@@ -2610,7 +2656,9 @@ function(input, output) {
                 missingValues = missingValues_report(),
                 normalization = normalization_report(),
                 imputation = imputation_report(),
-                heatMap = heatmap_report()
+                heatMap = heatmap_report(),
+                scatter = scatter_report(),
+                correlation = correlation_report()
                 )
 
 
