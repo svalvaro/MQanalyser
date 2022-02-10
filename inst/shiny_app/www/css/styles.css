@@ -1,12 +1,104 @@
 
 .shiny-notification {
-              height: 100px;
-              width: 800px;
-              position:fixed;
-              top: calc(50% - 50px);;
-              left: calc(50% - 400px);;
-            }
+  height: 100px;
+  width: 800px;
+  position:fixed;
+  top: calc(50% - 50px);;
+  left: calc(50% - 400px);;
+}
 
 #sidebar {
-        background-color: #AFD8E6;
-    }
+        /* background-color: #AFD8E6; */
+        background: rgb(255,240,210);
+        background: linear-gradient(35deg, rgba(255,240,210,1) 0%, rgba(221,227,156,1) 100%); 
+        
+}
+
+/* .main-sidebar { */
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#333333+0,488a99+100 */
+  /* background: #333333; Old browsers */
+  /* background: -moz-linear-gradient(top, #333333 0%, #488a99 100%); FF3.6-15 */
+  /* background: -webkit-linear-gradient(top, #333333 0%,#488a99 100%); Chrome10-25,Safari5.1-6 */
+  /* background: linear-gradient(to bottom, #333333 0%,#488a99 100%); W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  /* filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#488a99',GradientType=0 ); IE6-9 */
+  /* border-left-color: rgba(0, 0, 0, 1)!important; */
+/* } */
+
+
+.navbar {
+  background: rgb(27,73,66);
+  background: linear-gradient(90deg, rgba(27,73,66,1) 0%, rgba(44,55,53,1) 100%); 
+
+
+
+}
+
+
+
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+body {
+  font-family: 'Lato', Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif!important;
+}
+
+
+
+.
+
+/* Action buttons, load demo and download pictures */
+/* Maybe add border in white */
+/* .action-button {
+  background: rgb(72,138,153);
+  background: linear-gradient(90deg, rgba(72,138,153,1) 0%, rgba(66,64,64,1) 100%);
+}
+.bttn-unite.bttn-default {
+
+  color: white !important;
+
+  border: 3px white !important;
+
+}
+
+.action-button::before {
+  background: rgba(51,51,51,1) !important;
+}
+
+.action-button::after {
+  background:rgba(72,138,153,1) !important;
+}
+
+/* Button Groups for the checkbox */
+
+/* .btn-primary {
+  background-color: rgb(72,138,153) !important;
+  border: 1px white !important;
+}
+
+.btn-primary.active {
+  background-color: rgb(60, 106, 133) !important;
+
+} */
+
+/* Download button  for table and upload button*/
+
+/* .btn-default {
+  background-color: rgb(214, 246, 253) !important;
+} */ 
+
+/* Confirm button in the demo data pop up */
+
+/* .confirm {
+  background-color: rgba(72,138,153,1) !important;
+}
+
+.sa-line {
+  background-color: rgba(72,138,153,1) !important;
+}
+
+.sa-icon {
+  border-color: rgba(72,138,153,1) !important;
+} */
+
+/* .animate {
+  background-color: rgba(72,138,153,1) !important;
+} */
