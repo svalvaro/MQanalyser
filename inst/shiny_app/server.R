@@ -220,8 +220,6 @@ function(input, output) {
                              replicate = NA_integer_,
                              Include = TRUE)
 
-            message('This taking place')
-
         } else if(demo$start == TRUE){
 
             df <- read.delim('www/data/experiment_design_example.txt')
@@ -229,8 +227,6 @@ function(input, output) {
 
             df <- read.delim(inFile$datapath)
         }
-
-        print('user here hehe')
 
         return(df)
     })
@@ -244,7 +240,6 @@ function(input, output) {
             return(NULL)
         }
 
-        message('is this even here1')
         print(experiment_design())
 
         expDesignEditable(experiment_design())
