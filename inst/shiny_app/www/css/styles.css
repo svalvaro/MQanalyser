@@ -8,9 +8,9 @@
 }
 
 #sidebar {
-        /* background-color: #AFD8E6; */
-        background: rgb(255,240,210);
-        background: linear-gradient(35deg, rgba(255,240,210,1) 0%, rgba(221,227,156,1) 100%); 
+        /* background-color: #AFD8E6; */  
+  background: rgb(250,240,210);
+  background: linear-gradient(90deg, rgba(250,240,210,1) 0%, rgba(255,239,204,1) 100%); 
         
 }
 
