@@ -15,7 +15,7 @@ params:
     profile: NA
     geneOntology: NA
     GSEAenrichment: NA
-    network: NA
+    networkEnrichment: NA
     diseaseaseEnrinchment: NA
     diseaseaseGSEA: NA
     diseaseaseHeatmap: NA
@@ -144,4 +144,22 @@ if (!is.null(params$geneOntology)) {
     print(params$geneOntology)            
 }
 ```
+
+```{r GSEAenrichment}
+
+if (!is.null(params$GSEAenrichment)) {
+
+    print(params$GSEAenrichment)            
+}
+```
+
+```{r networkEnrichment}
+
+if (!is.null(params$networkEnrichment)) {
+
+    print(params$networkEnrichment)            
+}
+```
+
+
 

@@ -1942,7 +1942,7 @@ function(input, output) {
             title = 'Biological Function'
         }
 
-        df <- geneOntologyTable()%>%
+        df <- geneOntologyTable() %>%
             select(contains(c('Description', 'count')))
 
         mycolors <- grDevices::colorRampPalette(brewer.pal(8, "Set2"))(nrow(df))
@@ -1988,6 +1988,8 @@ function(input, output) {
 
         return(p)
     })
+
+
 
     output$enr_gseaplot <- renderPlot(height = 800, {
 
@@ -2052,9 +2054,15 @@ function(input, output) {
     })
 
     # Plot
+
+    networkEnrichment_reactive <- reactive({
+        p <- enrichplot::emapplot(network_enrich_table())
+        return(p)
+    })
+
     output$network_renrichment <- renderPlot(height = 900, {
 
-        enrichplot::emapplot(network_enrich_table())
+        networkEnrichment_reactive()
 
     })
 
@@ -2734,13 +2742,30 @@ function(input, output) {
 
     geneOntology_report <- reactive({
 
-        if ("Gene ontology" %in% input$enrichmentReport) {
+        if ("Gene Ontology" %in% input$enrichmentReport) {
             message('Gene Ontology added to the report')
             return(geneOntologyReactive())
         }else{
             return(NULL)
         }
+    })
 
+    preRanked_report <- reactive({
+        if ("GSEA Enrichment" %in% input$enrichmentReport) {
+            message("Preranked Plot added to the report")
+            return(enriched_plot_preranked())
+        }else{
+            return(NULL)
+        }
+    })
+
+    networkEnrichment_report <- reactive({
+        if ("Network" %in% input$enrichmentReport) {
+            message("Network Enrichment Plot added to the report")
+            return(networkEnrichment_reactive())
+        }else{
+            return(NULL)
+        }
     })
 
 
@@ -2777,7 +2802,9 @@ function(input, output) {
                 heatMap = heatmap_report(),
                 volcano = volcano_report(),
                 profile = profile_report(),
-                geneOntology = geneOntology_report()
+                geneOntology = geneOntology_report(),
+                GSEAenrichment = preRanked_report(),
+                networkEnrichment = networkEnrichment_report()
                 )
 
 

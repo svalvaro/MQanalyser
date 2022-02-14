@@ -23,7 +23,7 @@ navbarPage(fluid = TRUE,
             sidebarLayout(
                 sidebarPanel(id = 'sidebar',
                              width = 2,
-                  shinyalert::useShinyalert(),
+
                   shinyjs::useShinyjs(),
 
                     fileInput(inputId = 'proteinInput',
@@ -1281,19 +1281,14 @@ tabPanel(title = h4('Report'),
                   label = h4("Enrichment Plots"),
                   choices = c("Gene Ontology",
                               "GSEA Enrichment",
-                              "Network"
-                  ),
-
+                              "Network"),
                   selected = c("GSEA Enrichment", "Network"),
-
                   shape = "round",
                   outline = TRUE,
-                  #fill = TRUE,
                   animation = "pulse",
                   bigger = TRUE,
                   status = "info",
-                  plain = FALSE
-                )
+                  plain = FALSE )
                 ),
 
               column(
@@ -1317,7 +1312,6 @@ tabPanel(title = h4('Report'),
                   selected = "Disease Enrichment",
                   shape = "round",
                   outline = TRUE,
-                  #fill = TRUE,
                   animation = "pulse",
                   bigger = TRUE,
                   status = "info",
