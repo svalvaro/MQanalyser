@@ -37,14 +37,14 @@ navbarPage(fluid = TRUE,
                     hr(),
 
                     fileInput(inputId = 'optional_exp_design',
-                              label='Provide the experiment design (Optional)',
+                              label= h4('Provide the experiment design (Optional)'),
                               multiple= FALSE,
                               accept= 'text'),
                     br(),
 
                     fileInput(inputId = 'user_genes',
-                              label='Provide a list of desired genes to check
-                              in the analysis: (Optional)',
+                              label= h4('Provide a list of desired genes to check
+                              in the analysis: (Optional)'),
                               multiple= FALSE,
                               accept= 'text'),
                     hr(),
@@ -63,29 +63,21 @@ navbarPage(fluid = TRUE,
                   #Download a file example
                   h4('Exapmles of the file(s) to be uploaded:'),
 
-                  fluidRow(
 
-                      column(
-                        width = 6,
-                        tags$a(href='data/proteinGroups_example.txt',
-                          'proteinGroups.txt',
-                          download=NA,
-                          target='_blank'),
+                  tags$a(href='data/proteinGroups_example.txt',
+                    h5('proteinGroups'),
+                    download=NA,
+                    target='_blank'),
 
-                        tags$a(href='data/user_genes_examples.txt',
-                               'Genes example',
-                               download=NA,
-                               target='_blank')
-                        ),
+                  tags$a(href='data/user_genes_examples.txt',
+                         h5('Genes example'),
+                         download=NA,
+                         target='_blank'),
+                  tags$a(href='data/experiment_design_example.txt',
+                         h5('experiment Design'),
+                         download=NA,
+                         target='_blank')
 
-                      column(
-                        width = 6,
-                        tags$a(href='data/experiment_design_example.txt',
-                          'experiment_design.txt',
-                          download=NA,
-                          target='_blank')
-                        )
-                      )
                   ),
 
                 mainPanel(
