@@ -11,7 +11,7 @@ plot_correlationly <- function(dep, interactive = TRUE){
 
     cor_mat <- cor(assay(dep))
 
-    couls <-grDevices::colorRampPalette(RColorBrewer::brewer.pal(9, "YlGnBu"))
+    couls <-grDevices::colorRampPalette(RColorBrewer::brewer.pal(9, "YlGn"))
 
     p <- heatmaply::heatmaply(cor_mat,
                          colors =  couls(256),

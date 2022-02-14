@@ -101,7 +101,7 @@ body {
 
 .btn-default{
   color: #ffffff;
-  background-color: rgba(92,147,137,1) !important;
+  background-color: rgba(113,168,115,1) !important;
   border-color: rgb(50, 90, 53) !important;
 }
 
@@ -144,3 +144,18 @@ body {
 
 }
 
+
+/* Checkboxes such as Remove Contaminats */
+
+
+.checkbox-info {
+  background-color: black !important;
+}
+
+
+/* Titles on subpanels */
+
+/* a {
+  color: rgb(50, 90, 53)!important;
+  text-decoration: none;
+} */
