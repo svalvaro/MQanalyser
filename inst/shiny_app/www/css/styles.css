@@ -28,9 +28,6 @@
 .navbar {
   background: rgb(27,73,66);
   background: linear-gradient(90deg, rgba(27,73,66,1) 0%, rgba(44,55,53,1) 100%); 
-
-
-
 }
 
 
@@ -43,28 +40,24 @@ body {
 
 
 
-.
-
-/* Action buttons, load demo and download pictures */
-/* Maybe add border in white */
-/* .action-button {
-  background: rgb(72,138,153);
-  background: linear-gradient(90deg, rgba(72,138,153,1) 0%, rgba(66,64,64,1) 100%);
-}
 .bttn-unite.bttn-default {
 
-  color: white !important;
+  background: rgb(92,147,137);
+  background: linear-gradient(90deg, rgba(92,147,137,1) 0%, rgba(69,124,74,1) 100%); 
+
+  color: rgb(255, 255, 255) !important;
 
   border: 3px white !important;
 
 }
 
 .action-button::before {
-  background: rgba(51,51,51,1) !important;
+  background:rgba(27,73,66,1) !important;
+  
 }
 
 .action-button::after {
-  background:rgba(72,138,153,1) !important;
+  background: rgb(180, 148, 4) !important;
 }
 
 /* Button Groups for the checkbox */
