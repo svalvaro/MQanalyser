@@ -1296,20 +1296,20 @@ tabPanel(title = h4('Report'),
                 # Disease Plots
 
                 shinyWidgets::prettyCheckboxGroup(
-                  inputId = "disease-report",
+                  inputId = "diseaseReport",
                   label = h4("Disease Plots"),
 
-                  choices = c("Disease Enrichment",
-                              "Disease GSEA",
-                              "Disease Heatmap",
-                              "Disease Density",
-                              "Disease association",
+                  choices = c("Enrichment",
+                              "GSEA",
+                              "Heatmap",
+                              "Density",
+                              "Association",
                               "Circus Plot",
-                              "Disease Network",
-                              "Disease Map"
+                              "Network",
+                              "Map"
                   ),
 
-                  selected = "Disease Enrichment",
+                  selected = "Enrichment",
                   shape = "round",
                   outline = TRUE,
                   animation = "pulse",
@@ -1325,7 +1325,7 @@ tabPanel(title = h4('Report'),
                 # Pathway Plot
 
                 shinyWidgets::prettyCheckboxGroup(
-                  inputId = "pathway-report",
+                  inputId = "pathwayReport",
                   label = h4("Pathway Plot"),
 
                   choices = "Pathway Plot",
@@ -1345,7 +1345,7 @@ tabPanel(title = h4('Report'),
                 # Interactions Plot
 
                 shinyWidgets::prettyCheckboxGroup(
-                  inputId = "interaction-report",
+                  inputId = "interactionReport",
                   label = h4("Interactions Network"),
 
                   choices = "Interactions Plot",

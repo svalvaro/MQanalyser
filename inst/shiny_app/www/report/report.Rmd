@@ -163,3 +163,71 @@ if (!is.null(params$networkEnrichment)) {
 
 
 
+```{r diseaseaseEnrinchment}
+
+if (!is.null(params$diseaseaseEnrinchment)) {
+
+    print(params$diseaseaseEnrinchment)            
+}
+```
+
+```{r diseaseaseGSEA}
+
+if (!is.null(params$diseaseaseGSEA)) {
+
+    print(params$diseaseaseGSEA)            
+}
+```
+
+```{r diseaseaseHeatmap}
+
+if (!is.null(params$diseaseaseHeatmap)) {
+
+    print(params$diseaseaseHeatmap)            
+}
+```
+
+
+```{r diseaseaseDensity}
+
+if (!is.null(params$diseaseaseDensity)) {
+
+    print(params$diseaseaseDensity)            
+}
+```
+
+
+```{r diseaseaseAssociation}
+
+if (!is.null(params$diseaseaseAssociation)) {
+
+    print(params$diseaseaseAssociation)            
+}
+```
+
+```{r diseaseaseCircus}
+
+if (!is.null(params$diseaseaseCircus)) {
+
+    print(params$diseaseaseCircus)            
+}
+```
+
+```{r diseaseaseNetwork}
+
+if (!is.null(params$diseaseaseNetwork)) {
+
+    print(params$diseaseaseNetwork)            
+}
+```
+
+```{r diseaseaseMap}
+
+if (!is.null(params$diseaseaseMap)) {
+
+    print(params$diseaseaseMap)            
+}
+```
+
+
+

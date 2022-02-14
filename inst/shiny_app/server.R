@@ -2181,7 +2181,8 @@ function(input, output) {
     ## DISEASE PLOTS
 
     # Disease Enrichment
-    output$enr_dotplot <- renderPlot(height = 1000,{
+
+    disEnrichmentReact <- reactive({
 
         if (length(diffExpress()) == 0) {
             return(NULL)
@@ -2189,14 +2190,21 @@ function(input, output) {
 
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
-        enrichplot::dotplot(edo(),showCategory = 25)
+        p <- enrichplot::dotplot(edo(),showCategory = 25)
+
+        return(p)
+
+    })
+
+    output$enr_dotplot <- renderPlot(height = 1000,{
+
+        disEnrichmentReact()
 
     })
 
     # Disease GSEA
 
-    output$enr_gseadotplot <- renderPlot(height = 1000,{
-
+    disGSEAReact <- reactive({
         if (length(diffExpress()) == 0) {
             return(NULL)
         }
@@ -2209,13 +2217,21 @@ function(input, output) {
         if(nrow(edo2()) <1){
             print('Cant print')
         }else{
-            dotplot(edo2(), showCategory=20) + ggtitle("dotplot for GSEA")
+            p <- dotplot(edo2(), showCategory=20) + ggtitle("dotplot for GSEA")
+
+            return(p)
         }
+
+    })
+
+    output$enr_gseadotplot <- renderPlot(height = 1000,{
+
+        disGSEAReact()
     })
 
     # Disease plot of enriched terms
 
-    output$heatmapnrich <- renderPlotly({
+    disHeatMapReact <- reactive({
 
         if (length(diffExpress()) == 0) {
             return(NULL)
@@ -2223,14 +2239,21 @@ function(input, output) {
 
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
-        ggplotly(enrichplot::heatplot(edox() ,foldChange=geneList())) %>%
+        p <- enrichplot::heatplot(edox() ,foldChange=geneList())
+
+        return(p)
+    })
+
+    output$heatmapnrich <- renderPlotly({
+
+        ggplotly(disHeatMapReact()) %>%
 
             layout(height = 800, width = 1400)
     })
 
     #Output overlapping distributions
-    output$enr_ridgeplot <- renderPlot(height = 800, width =1200,{
 
+    disOverlapReact <- reactive({
         if (length(diffExpress()) == 0) {
             return(NULL)
         }
@@ -2241,27 +2264,42 @@ function(input, output) {
             print('Cant print')
         }else{
 
-            enrichplot::ridgeplot(edo2())
+            p <- enrichplot::ridgeplot(edo2())
+            return(p)
         }
+
+
+    })
+
+    output$enr_ridgeplot <- renderPlot(height = 800, width =1200,{
+
+        disOverlapReact()
+
     })
 
     # Disease Association
 
-    output$upset <- renderPlot(height = 800, width = 1200,{
-
+    disUpsetReact <- reactive({
         if (length(diffExpress()) == 0) {
             return(NULL)
         }
 
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
-        enrichplot::upsetplot(edo())
+        p <- enrichplot::upsetplot(edo())
+
+        return(p)
+    })
+
+    output$upset <- renderPlot(height = 800, width = 1200,{
+
+        disUpsetReact()
 
     })
 
     # Circus PLot
 
-    output$enr_circusplot <- renderPlot(height = 1000,{
+    disCircusReact <- reactive({
 
         if (length(diffExpress()) == 0) {
             return(NULL)
@@ -2269,35 +2307,54 @@ function(input, output) {
 
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
-        cnetplot(edox(),  circular = TRUE, colorEdge = TRUE)
+        p <- cnetplot(edox(),  circular = TRUE, colorEdge = TRUE)
+
+        return(p)
+    })
+
+    output$enr_circusplot <- renderPlot(height = 1000,{
+
+        disCircusReact()
 
     })
 
     #Gene Network
 
-    output$enr_networkplot <- renderPlot(height = 900, width = 800, {
-
+    disNetworkReact <- reactive({
         if (length(diffExpress()) == 0) {
             return(NULL)
         }
 
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
-        cnetplot(edox(), node_label = "all")
+        p <- cnetplot(edox(), node_label = "all")
+
+        return(p)
+    })
+
+    output$enr_networkplot <- renderPlot(height = 900, width = 800, {
+
+        disNetworkReact()
     })
 
     #Enrichment Map
 
-    output$enr_mapplot <- renderPlot(height = 1000, width = 900, {
-
+    disEnrichMapReact <- reactive({
         if (length(diffExpress()) == 0) {
             return(NULL)
         }
 
         shiny::req(input$enrich_organism == 'org.Hs.eg.db')
 
-        enrichplot::emapplot(pairwise_termsim(edo())#, node_scale=input$enrich_nodes
+        p  <- enrichplot::emapplot(pairwise_termsim(edo())#, node_scale=input$enrich_nodes
                              ,layout="kk")
+
+        return(p)
+    })
+
+    output$enr_mapplot <- renderPlot(height = 1000, width = 900, {
+
+        disEnrichMapReact()
     })
 
     # Disease Tabular format
@@ -2593,9 +2650,11 @@ function(input, output) {
             href = url)
     })
 
+
     #### Plots for the report ####
 
 
+        # Experiment design --------------------
     expdesign_report <- reactive({
         if (input$experimentReport == TRUE) {
             message('Experiment design added to the report')
@@ -2605,7 +2664,7 @@ function(input, output) {
         }
     })
 
-    # Contaminants
+         # Contaminants --------------------------
 
     contaminants_report <- reactive({
         if ("Contaminants" %in% input$preprocessingReport) {
@@ -2617,7 +2676,7 @@ function(input, output) {
         }
     })
 
-    # Missing Values
+        # Missing Values --------------------------
 
     missingValues_report <- reactive({
         if ("missing" %in% input$preprocessingReport) {
@@ -2630,7 +2689,7 @@ function(input, output) {
         }
     })
 
-    # Normalization
+        # Normalization --------------------------
 
     normalization_report <- reactive({
 
@@ -2644,7 +2703,8 @@ function(input, output) {
         }
     })
 
-    # Imputation
+        # Imputation --------------------------
+
     imputation_report <- reactive({
 
         if ("Imputation" %in% input$preprocessingReport) {
@@ -2658,8 +2718,7 @@ function(input, output) {
 
     })
 
-
-    # Scatter Plot
+        # Scatter Plot --------------------------
 
     scatter_report <- reactive({
 
@@ -2673,7 +2732,7 @@ function(input, output) {
         }
     })
 
-    # Correlation plot
+        # Correlation plot --------------------------
 
     correlation_report <- reactive({
 
@@ -2687,7 +2746,7 @@ function(input, output) {
         }
     })
 
-    # PCA
+        # PCA --------------------------
 
     PCA_report <- reactive({
 
@@ -2702,7 +2761,7 @@ function(input, output) {
     })
 
 
-    # Heatmap
+        # Heatmap --------------------------
 
     heatmap_report <- reactive({
 
@@ -2714,7 +2773,7 @@ function(input, output) {
         }
     })
 
-    # Volcano
+        # Volcano --------------------------
 
     volcano_report <- reactive({
 
@@ -2726,7 +2785,7 @@ function(input, output) {
         }
     })
 
-    # Profile
+        # Profile --------------------------
 
     profile_report <- reactive({
 
@@ -2738,7 +2797,7 @@ function(input, output) {
         }
     })
 
-    # Gene Ontology
+        # Gene Ontology --------------------------
 
     geneOntology_report <- reactive({
 
@@ -2750,6 +2809,8 @@ function(input, output) {
         }
     })
 
+        # Preranked --------------------------
+
     preRanked_report <- reactive({
         if ("GSEA Enrichment" %in% input$enrichmentReport) {
             message("Preranked Plot added to the report")
@@ -2759,6 +2820,7 @@ function(input, output) {
         }
     })
 
+        # Network Enrichment --------------------------
     networkEnrichment_report <- reactive({
         if ("Network" %in% input$enrichmentReport) {
             message("Network Enrichment Plot added to the report")
@@ -2768,9 +2830,84 @@ function(input, output) {
         }
     })
 
+        # Disease Plots -----------------
+
+    disEnrichment <- reactive({
+        if ("Enrichment" %in% input$diseaseReport) {
+            message("Disease Enrichment Plot added to the report")
+            return(disEnrichmentReact())
+        }else{
+            return(NULL)
+        }
+    })
+
+    disGSEA_report <- reactive({
+        if ("GSEA" %in% input$diseaseReport) {
+            message("Disease GSEA Plot added to the report")
+            return(disGSEAReact())
+        }else{
+            return(NULL)
+        }
+    })
+
+    disHeatMap_report <- reactive({
+        if ("Heatmap" %in% input$diseaseReport) {
+            message("Disease Heatmap Plot added to the report")
+            return(disHeatMapReact())
+        }else{
+            return(NULL)
+        }
+    })
+
+    disOverlap_report <- reactive({
+        if ("Density" %in% input$diseaseReport) {
+            message("Disease Density Plot added to the report")
+            return(disOverlapReact())
+        }else{
+            return(NULL)
+        }
+    })
+
+    disUpset_report <- reactive({
+        if ("Association" %in% input$diseaseReport) {
+            message("Disease Association Plot added to the report")
+            return(disUpsetReact())
+        }else{
+            return(NULL)
+        }
+    })
+
+    disCircus_report <- reactive({
+        if ("Circus Plot" %in% input$diseaseReport) {
+            message("Disease Circus Plot Plot added to the report")
+            return(disCircusReact())
+        }else{
+            return(NULL)
+        }
+    })
+
+    disNetwork_report <- reactive({
+        if ("Network" %in% input$diseaseReport) {
+            message("Disease Network Plot added to the report")
+            return(disNetworkReact())
+        }else{
+            return(NULL)
+        }
+    })
+
+    disEnrichMap_report <- reactive({
+        if ("Map" %in% input$diseaseReport) {
+            message("Disease Map Plot added to the report")
+            return(disEnrichMapReact())
+        }else{
+            return(NULL)
+        }
+    })
+
 
 
     #### report downloader ####
+
     output$generateReport <- downloadHandler(
 
         # For PDF output, change this to "report.pdf"
@@ -2804,7 +2941,15 @@ function(input, output) {
                 profile = profile_report(),
                 geneOntology = geneOntology_report(),
                 GSEAenrichment = preRanked_report(),
-                networkEnrichment = networkEnrichment_report()
+                networkEnrichment = networkEnrichment_report(),
+                diseaseaseEnrinchment = disEnrichment(),
+                diseaseaseGSEA = disGSEA_report(),
+                diseaseaseHeatmap = disHeatMap_report(),
+                diseaseaseDensity = disOverlap_report(),
+                diseaseaseAssociation = disUpset_report(),
+                diseaseaseCircus = disCircus_report(),
+                diseaseaseNetwork = disNetwork_report(),
+                diseaseaseMap = disEnrichMap_report(),
                 )
 
 
