@@ -2949,7 +2949,7 @@ function(input, output) {
                 diseaseaseAssociation = disUpset_report(),
                 diseaseaseCircus = disCircus_report(),
                 diseaseaseNetwork = disNetwork_report(),
-                diseaseaseMap = disEnrichMap_report(),
+                diseaseaseMap = disEnrichMap_report()
                 )
 
 
