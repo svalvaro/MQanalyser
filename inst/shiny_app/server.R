@@ -341,6 +341,19 @@ function(input, output) {
         }
     )
 
+    # Dynamic download
+
+    output$downloaderExperimentUI <- renderUI({
+        if (is.null(ed_final$data)) {
+            return(NULL)
+        }
+
+        downloadButton(
+            outputId = 'download_experiment_design',
+            label = 'Download ')
+
+    })
+
     #### Pop-up message when pressed start analysis ####
 
     observeEvent(input$start_input, {

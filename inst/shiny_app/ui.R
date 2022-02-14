@@ -115,11 +115,13 @@ navbarPage(fluid = TRUE,
 
                                rHandsontableOutput('ed_out'),
                                br(),
-                               downloadButton(
-                                 outputId = 'download_experiment_design',
-                                 label = 'Download (Press Start
-                              Analysis First)')
-                               )
+
+                               uiOutput('downloaderExperimentUI')
+                              #  downloadButton(
+                              #    outputId = 'download_experiment_design',
+                              #    label = 'Download (Press Start
+                              # Analysis First)')
+                                )
                            ),
                     column(width = 2,
                            br(),
