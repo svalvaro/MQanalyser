@@ -13,7 +13,7 @@ function(input, output) {
                                type="success",
                                closeOnClickOutside = TRUE,
                                closeOnEsc = TRUE,
-                               timer = 6000)
+                               timer = 60000)
     })
 
     #### protein Input MaxQuant or Spectronaut ####

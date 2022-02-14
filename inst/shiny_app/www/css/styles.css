@@ -38,7 +38,14 @@ body {
   font-family: 'Lato', Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif!important;
 }
 
+.action-button {
+  background: rgb(92,147,137);
+  background: linear-gradient(90deg, rgba(92,147,137,1) 0%, rgba(69,124,74,1) 100%); 
 
+  color: rgb(255, 255, 255) !important;
+
+  border: 3px white !important;
+}
 
 .bttn-unite.bttn-default {
 
@@ -62,11 +69,12 @@ body {
 
 /* Button Groups for the checkbox */
 
-/* .btn-primary {
+.btn-primary {
   background-color: rgb(72,138,153) !important;
   border: 1px white !important;
 }
 
+/*
 .btn-primary.active {
   background-color: rgb(60, 106, 133) !important;
 
@@ -80,18 +88,43 @@ body {
 
 /* Confirm button in the demo data pop up */
 
-/* .confirm {
-  background-color: rgba(72,138,153,1) !important;
+.confirm {
+  background-color: rgb(50, 90, 53) !important;
 }
 
 .sa-line {
-  background-color: rgba(72,138,153,1) !important;
+  background-color: rgb(50, 90, 53) !important;
 }
 
 .sa-icon {
-  border-color: rgba(72,138,153,1) !important;
-} */
+  border-color: rgb(50, 90, 53) !important;
+}
+
+.sa-placeholder {
+
+}
 
 /* .animate {
   background-color: rgba(72,138,153,1) !important;
 } */
+
+
+/* Slider bars */
+
+.irs-bar {
+  top: 25px;
+  height: 8px;
+  border-top: 1px solid rgb(50, 90, 53) !important;
+  border-bottom: 1px solid rgb(50, 90, 53) !important;
+  background: rgb(50, 90, 53) !important;
+}
+
+.irs-single {
+  color: #fff;
+  text-shadow: none;
+  padding: 1px 3px;
+  background-color: rgb(50, 90, 53) !important;
+  border-radius: 3px;
+  font-size: 11px;
+  line-height: 1.333;
+}

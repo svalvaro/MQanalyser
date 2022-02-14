@@ -81,61 +81,58 @@ navbarPage(fluid = TRUE,
                   ),
 
                 mainPanel(
-                        column(
-                          width = 11,
 
-                          fluidRow(
+                  fluidRow(
+                    column(width = 4,
+                           shinydashboard::infoBoxOutput('softwareUsedBox', width = 12)
+                    ),
 
-                            column(width = 4,
-                                   shinydashboard::infoBoxOutput('softwareUsedBox', width = 12)
-                                   ),
+                    column(width = 4,
+                           shinydashboard::infoBoxOutput('intensityBox',
+                                                         width = 12)
+                    ),
+                    column(4,
+                           shinydashboard::infoBoxOutput('matrixDimensions',
+                                                         width = 12),
+                    )
+                  ),
 
-                            column(width = 4,
-                                   shinydashboard::infoBoxOutput('intensityBox',
-                                                                 width = 12)
-                                   ),
-                            column(4,
-                                   shinydashboard::infoBoxOutput('matrixDimensions',
-                                                                 width = 12),
-                            )
-                            ),
+                  fluidRow(
+                    column(width = 3),
+                    column(width = 7,
+                           box(title = h3('Experiment Design'),
+                               width = 10,
+                               h4('Welcome to analysis of the results
+                                of LC-MS/MS'),
+                               h5('Start by uploading the proteinGroups.txt
+                                table provided.'),
+                               h5('Please Edit the next table by adding the
+                                Condition and Replicate.'),
+                               h5('Alternatively an experiment design can
+                                be uploaded. Be sure that the Sample
+                                names are correct.'),
+                               hr(),
 
-                          fluidRow(
-
-                            box(title = h3('Experiment Design'),
-                                width = 10,
-                                h4('Welcome to analysis of the results
-                                      of LC-MS/MS'),
-                                h5('Start by uploading the proteinGroups.txt
-                                      table provided.'),
-                                h5('Please Edit the next table by adding the
-                                      Condition and Replicate.'),
-                                h5('Alternatively an experiment design can
-                                      be uploaded. Be sure that the Sample
-                                      names are correct.'),
-                                hr(),
-
-                                rHandsontableOutput('ed_out'),
-                                br(),
-                                downloadButton(
-                                  outputId = 'download_experiment_design',
-                                  label = 'Download (Press Start
-                                    Analysis First)')
-                                )
-                            )
-                          ),
-
-                        column(1,
+                               rHandsontableOutput('ed_out'),
                                br(),
-                               br(),
-                               br(),
-                               br(),
-                               br(),
-                               br(),
-
-                                 uiOutput('start_analysis')
+                               downloadButton(
+                                 outputId = 'download_experiment_design',
+                                 label = 'Download (Press Start
+                              Analysis First)')
                                )
-                        )
+                           ),
+                    column(width = 2,
+                           br(),
+                           br(),
+                           br(),
+                           br(),
+                           br(),
+                           br(),
+
+                           uiOutput('start_analysis')
+                           )
+                    )
+                  )
                 ),
 
     # Footer -------------------------------
@@ -166,8 +163,6 @@ navbarPage(fluid = TRUE,
 #### Preprocessing ####
 
     # uiOutput('preprocessing-tab'),
-
-
 
     tabPanel(
       title = h4("Preprocessing"),
