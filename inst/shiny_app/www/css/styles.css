@@ -128,3 +128,45 @@ body {
   font-size: 11px;
   line-height: 1.333;
 }
+
+
+/* Button to upload files */
+
+.btn-default{
+  color: #ffffff;
+  background-color: rgba(92,147,137,1) !important;
+  border-color: rgb(50, 90, 53) !important;
+}
+
+
+/* Checkboxes for the report mainly */
+
+.pretty input:checked ~ .state.p-info-o label::before, .pretty.p-toggle .state.p-info-o label::before {
+  border-color: rgb(50, 90, 53) !important;
+}
+
+.pretty.p-default:not(.p-fill) input:checked ~ .state.p-info-o label::after {
+  background-color: rgb(50, 90, 53)!important;
+  
+}
+
+.checkbox-info input[type="checkbox"]:checked + label::before, .checkbox-info input[type="radio"]:checked + label::before {
+  background-color: rgb(50, 90, 53)!important;
+
+  border-color: rgb(50, 90, 53)!important;
+
+}
+
+
+/* rendering report  */
+
+
+
+.shiny-notification-message {
+
+  color: rgb(50, 90, 53)!important;
+  background-color: rgb(202, 235, 204)!important;
+  border: 1px solid rgb(50, 90, 53)!important;
+
+}
+
