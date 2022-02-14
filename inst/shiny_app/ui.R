@@ -1230,24 +1230,6 @@ tabPanel(title = h4('Report'),
                 )
               ),
 
-              # column(
-              #   width = 2,
-              #   # Heatmap
-              #
-              #   shinyWidgets::prettyCheckbox(
-              #     inputId = "heatmapReport",
-              #     label = "Include Heatmap Plot",
-              #     value = TRUE,
-              #     #icon = icon("check"),
-              #     shape = "round",
-              #     status = "info",
-              #     outline = TRUE,
-              #     bigger = TRUE,
-              #     plain = FALSE,
-              #     animation = "pulse"
-              #   )
-              # ),
-
               column(
                 width = 2,
                 # Sample comparisons
@@ -1262,7 +1244,6 @@ tabPanel(title = h4('Report'),
 
                   shape = "round",
                   outline = TRUE,
-                  #fill = TRUE,
                   animation = "pulse",
                   bigger = TRUE,
                   status = "info",
@@ -1280,10 +1261,8 @@ tabPanel(title = h4('Report'),
                               "Volcano Plot" = "volcano",
                               "Profile Plot" = "profile"),
                   selected = c("heatmap","volcano"),
-
                   shape = "round",
                   outline = TRUE,
-                  #fill = TRUE,
                   animation = "pulse",
                   bigger = TRUE,
                   status = "info",
@@ -1293,30 +1272,12 @@ tabPanel(title = h4('Report'),
               ),
 
             fluidRow(
-              # column(
-              #   width = 2,
-              #   # Profile Plot
-              #
-              #   # shinyWidgets::prettyCheckboxGroup(
-              #   #   inputId = "profile-report",
-              #   #   label = h4("Profile Plot"),
-              #   #   choices = "Profile Plot",
-              #   #   shape = "round",
-              #   #   outline = TRUE,
-              #   #   #fill = TRUE,
-              #   #   animation = "pulse",
-              #   #   bigger = TRUE,
-              #   #   status = "info",
-              #   #   plain = FALSE
-              #   # )
-              # ),
-
               column(
                 width = 2,
                 # Enrichemnt Plots
 
                 shinyWidgets::prettyCheckboxGroup(
-                  inputId = "enrichment-report",
+                  inputId = "enrichmentReport",
                   label = h4("Enrichment Plots"),
                   choices = c("Gene Ontology",
                               "GSEA Enrichment",

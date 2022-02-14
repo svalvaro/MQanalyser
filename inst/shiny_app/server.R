@@ -1931,7 +1931,8 @@ function(input, output) {
         return(df)
     })
 
-    output$go_classification_plot <- renderPlotly({
+
+    geneOntologyReactive <- reactive({
 
         if(input$go_ontology == 'CC'){
             title = 'Cellular Component'
@@ -1942,7 +1943,7 @@ function(input, output) {
         }
 
         df <- geneOntologyTable()%>%
-                 select(contains(c('Description', 'count')))
+            select(contains(c('Description', 'count')))
 
         mycolors <- grDevices::colorRampPalette(brewer.pal(8, "Set2"))(nrow(df))
 
@@ -1956,7 +1957,14 @@ function(input, output) {
             theme(legend.position = 'none')+
             scale_fill_manual(values = mycolors)
 
-        ggplotly(p)%>%
+        return(p)
+    })
+
+    output$go_classification_plot <- renderPlotly({
+
+
+
+        ggplotly(geneOntologyReactive())%>%
 
             layout(height = 1000, width = 1200)
     })
@@ -2724,8 +2732,16 @@ function(input, output) {
 
     # Gene Ontology
 
+    geneOntology_report <- reactive({
 
+        if ("Gene ontology" %in% input$enrichmentReport) {
+            message('Gene Ontology added to the report')
+            return(geneOntologyReactive())
+        }else{
+            return(NULL)
+        }
 
+    })
 
 
 
@@ -2760,7 +2776,8 @@ function(input, output) {
                 PCA = PCA_report(),
                 heatMap = heatmap_report(),
                 volcano = volcano_report(),
-                profile = profile_report()
+                profile = profile_report(),
+                geneOntology = geneOntology_report()
                 )
 
 

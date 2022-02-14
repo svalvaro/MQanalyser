@@ -137,3 +137,11 @@ if (!is.null(params$profile)) {
 }
 ```
 
+```{r geneOntology}
+
+if (!is.null(params$geneOntology)) {
+
+    print(params$geneOntology)            
+}
+```
+
