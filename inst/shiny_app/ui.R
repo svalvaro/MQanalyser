@@ -1308,15 +1308,13 @@ tabPanel(title = h4('Report'),
                               "Network",
                               "Map"
                   ),
-
                   selected = "Enrichment",
                   shape = "round",
                   outline = TRUE,
                   animation = "pulse",
                   bigger = TRUE,
                   status = "info",
-                  plain = FALSE
-                )
+                  plain = FALSE)
                 ),
 
               column(
@@ -1324,15 +1322,12 @@ tabPanel(title = h4('Report'),
 
                 # Pathway Plot
 
-                shinyWidgets::prettyCheckboxGroup(
+                shinyWidgets::prettyCheckbox(
                   inputId = "pathwayReport",
-                  label = h4("Pathway Plot"),
-
-                  choices = "Pathway Plot",
-                  selected = "Pathway Plot",
+                  label = "Pathway Plot",
+                  value = TRUE,
                   shape = "round",
                   outline = TRUE,
-                  #fill = TRUE,
                   animation = "pulse",
                   bigger = TRUE,
                   status = "info",
@@ -1344,13 +1339,10 @@ tabPanel(title = h4('Report'),
                 width = 2,
                 # Interactions Plot
 
-                shinyWidgets::prettyCheckboxGroup(
+                shinyWidgets::prettyCheckbox(
                   inputId = "interactionReport",
-                  label = h4("Interactions Network"),
-
-                  choices = "Interactions Plot",
-
-                  selected = "Interactions Plot",
+                  label = "Interactions Network",
+                  value = TRUE,
                   shape = "round",
                   outline = TRUE,
                   #fill = TRUE,

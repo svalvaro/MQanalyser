@@ -229,5 +229,11 @@ if (!is.null(params$diseaseaseMap)) {
 }
 ```
 
+```{r pathway}
 
+if (!is.null(params$pathway)) {
+
+    print(params$pathway)            
+}
+```
 

@@ -2398,26 +2398,22 @@ function(input, output) {
 
         kk <- clusterProfiler::enrichKEGG(gene=diffExpress(),
                                           organism = organism,
-                                          #minGSSize = 120,
                                           pvalueCutoff = 0.05,
-                                          #verbose = FALSE
         )
 
-        # kk <- clusterProfiler::enrichKEGG(gene=diffExpress,
-        #                                   organism = 'hsa',
-        #                                   #minGSSize = 120,
-        #                                   pvalueCutoff = 0.05,
-        #                                   #verbose = FALSE
-        # )
-
         return(kk)
+    })
+
+    pathway_plot <- reactive({
+        p <- dotplot(kegg_react1(), showCategory =20)
+
+        return(p)
     })
 
     output$enr_kegg1 <- renderPlot(height = 900,{
 
 
-        #print(kegg_react1())
-        dotplot(kegg_react1(),showCategory =20)
+        print(pathway_plot())
     })
 
     pathways_id <- reactive({
@@ -2449,12 +2445,6 @@ function(input, output) {
 
 
     output$pathwayTable <- DT::renderDataTable({
-
-        # Change the ids to the names
-
-        # kk <- clusterProfiler::setReadable(kegg_react1(),
-        #                                    input$enrich_organism,
-        #                                    'ENTREZID')
 
         DT::datatable(as.data.frame(pathway_table()),
                       extensions = 'Scroller',
@@ -2832,6 +2822,7 @@ function(input, output) {
 
         # Disease Plots -----------------
 
+        # Disease Enrichment -----------------------
     disEnrichment <- reactive({
         if ("Enrichment" %in% input$diseaseReport) {
             message("Disease Enrichment Plot added to the report")
@@ -2841,6 +2832,7 @@ function(input, output) {
         }
     })
 
+        # Disease GSEA -----------------------
     disGSEA_report <- reactive({
         if ("GSEA" %in% input$diseaseReport) {
             message("Disease GSEA Plot added to the report")
@@ -2850,6 +2842,8 @@ function(input, output) {
         }
     })
 
+
+        # Disease Heatmap -----------------------
     disHeatMap_report <- reactive({
         if ("Heatmap" %in% input$diseaseReport) {
             message("Disease Heatmap Plot added to the report")
@@ -2859,6 +2853,7 @@ function(input, output) {
         }
     })
 
+        # Disease Density -----------------------
     disOverlap_report <- reactive({
         if ("Density" %in% input$diseaseReport) {
             message("Disease Density Plot added to the report")
@@ -2868,6 +2863,7 @@ function(input, output) {
         }
     })
 
+        # Disease Association -----------------------
     disUpset_report <- reactive({
         if ("Association" %in% input$diseaseReport) {
             message("Disease Association Plot added to the report")
@@ -2877,6 +2873,7 @@ function(input, output) {
         }
     })
 
+        # Disease Circus  -----------------------
     disCircus_report <- reactive({
         if ("Circus Plot" %in% input$diseaseReport) {
             message("Disease Circus Plot Plot added to the report")
@@ -2886,6 +2883,7 @@ function(input, output) {
         }
     })
 
+        # Disease Network -----------------------
     disNetwork_report <- reactive({
         if ("Network" %in% input$diseaseReport) {
             message("Disease Network Plot added to the report")
@@ -2895,6 +2893,7 @@ function(input, output) {
         }
     })
 
+        # Disease Map -----------------------
     disEnrichMap_report <- reactive({
         if ("Map" %in% input$diseaseReport) {
             message("Disease Map Plot added to the report")
@@ -2904,6 +2903,28 @@ function(input, output) {
         }
     })
 
+
+        # Pathway Plot -------------------------------
+
+    pathway_report <- reactive({
+        if (input$pathwayReport == TRUE) {
+            message('Pathway Plot added to the report')
+            return(pathway_plot())
+        }else{
+            return(NULL)
+        }
+    })
+
+        # Pathway Plot --------------------------
+
+    interactions_report  <- reactive({
+        if (input$interactionReport == TRUE) {
+            message('Interactions Plot added to the report')
+            return(ed_final$data)
+        }else{
+            return(NULL)
+        }
+    })
 
 
     #### report downloader ####
@@ -2949,7 +2970,8 @@ function(input, output) {
                 diseaseaseAssociation = disUpset_report(),
                 diseaseaseCircus = disCircus_report(),
                 diseaseaseNetwork = disNetwork_report(),
-                diseaseaseMap = disEnrichMap_report()
+                diseaseaseMap = disEnrichMap_report(),
+                pathway = pathway_report()
                 )
 
 
