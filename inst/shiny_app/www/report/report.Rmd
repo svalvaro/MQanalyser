@@ -237,3 +237,14 @@ if (!is.null(params$pathway)) {
 }
 ```
 
+```{r interactions}
+
+if (!is.null(params$interactions)) {
+
+    print(params$interactions)            
+}
+```
+
+
+
+

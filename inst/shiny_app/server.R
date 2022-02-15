@@ -2610,9 +2610,16 @@ function(input, output) {
         return(interactionResults)
     })
 
+    plotInteractions <- reactive({
+        p <- interactionResults()$plot
+
+        return(p)
+    })
+
     output$stringPlot <- renderPlot(height = 800, width = 800,{
 
-        interactionResults()$plot
+        plotInteractions()
+
     })
 
     output$interactionsButton <- renderUI({
@@ -2640,10 +2647,7 @@ function(input, output) {
             href = url)
     })
 
-
-    #### Plots for the report ####
-
-
+#### Plots for the report ####
         # Experiment design --------------------
     expdesign_report <- reactive({
         if (input$experimentReport == TRUE) {
@@ -2920,7 +2924,11 @@ function(input, output) {
     interactions_report  <- reactive({
         if (input$interactionReport == TRUE) {
             message('Interactions Plot added to the report')
-            return(ed_final$data)
+
+            p <- isolate(plotInteractions())
+
+            message(paste0("p is", p))
+            return(p)
         }else{
             return(NULL)
         }
@@ -2971,7 +2979,8 @@ function(input, output) {
                 diseaseaseCircus = disCircus_report(),
                 diseaseaseNetwork = disNetwork_report(),
                 diseaseaseMap = disEnrichMap_report(),
-                pathway = pathway_report()
+                pathway = pathway_report(),
+                interactions = interactions_report()
                 )
 
 

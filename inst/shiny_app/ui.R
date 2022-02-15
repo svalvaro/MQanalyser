@@ -1136,7 +1136,7 @@ tabPanel(title = h4('Interactions'),
 
              sliderInput(
                inputId = 'numberofInteractions',
-               label = 'Maximum proteins',min = 2,max = 1999, value = 50
+               label = h4('Maximum proteins'),min = 2,max = 1999, value = 50
              ),
 
              uiOutput('interactionsButton')
