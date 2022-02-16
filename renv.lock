@@ -1660,20 +1660,6 @@
         "yulab.utils"
       ]
     },
-    "ggupset": {
-      "Package": "ggupset",
-      "Version": "0.3.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "8e9eb92bf465601c07d17c5e8b75dce1",
-      "Requirements": [
-        "ggplot2",
-        "gtable",
-        "rlang",
-        "scales",
-        "tibble"
-      ]
-    },
     "glue": {
       "Package": "glue",
       "Version": "1.6.1",

@@ -3000,7 +3000,7 @@ function(input, output) {
 
 
             id <- shiny::showNotification(
-                ui ="Rendering report...",
+                ui ="Rendering report... it can take a couple of minutes",
                 duration = NULL,
                 type = "message",
                 closeButton = FALSE
