@@ -552,11 +552,13 @@ tabPanel(h4("Results"),
                             offset = 2,
 
                             br(),
+
                             shinycssloaders::withSpinner(
                               ui_element = plotlyOutput('plot_correlation'),
                                 image = 'images/logoTransparentSmall.gif',
                                 image.width = '200px'
                               )
+
                             )
                           )
                         ),
@@ -1234,6 +1236,7 @@ tabPanel(title = h4('Report'),
                 width = 2,
                 # Sample comparisons
 
+
                 shinyWidgets::prettyCheckboxGroup(
                   inputId = "sampleReport",
                   label = h4("Sample Comparisons Plots"),
@@ -1333,25 +1336,25 @@ tabPanel(title = h4('Report'),
                   status = "info",
                   plain = FALSE
                 )
-              ),
+              )#,
 
-              column(
-                width = 2,
-                # Interactions Plot
-
-                shinyWidgets::prettyCheckbox(
-                  inputId = "interactionReport",
-                  label = "Interactions Network",
-                  value = TRUE,
-                  shape = "round",
-                  outline = TRUE,
-                  #fill = TRUE,
-                  animation = "pulse",
-                  bigger = TRUE,
-                  status = "info",
-                  plain = FALSE
-                )
-              )
+              # column(
+              #   width = 2,
+              #   # Interactions Plot
+              #
+              #   shinyWidgets::prettyCheckbox(
+              #     inputId = "interactionReport",
+              #     label = "Interactions Network",
+              #     value = TRUE,
+              #     shape = "round",
+              #     outline = TRUE,
+              #     #fill = TRUE,
+              #     animation = "pulse",
+              #     bigger = TRUE,
+              #     status = "info",
+              #     plain = FALSE
+              #   )
+              # )
             ),
 
             fluidRow(

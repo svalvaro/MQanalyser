@@ -1376,15 +1376,21 @@ function(input, output) {
     #### Correlation plot ####
 
     #just for the report, non interactive
-    correlation_plot <- reactive({
-        MQanalyser::plot_correlationly(dep(), interactive = FALSE)
-    })
+    # correlation_plot <- reactive({
+    #
+    #
+    #     p <- MQanalyser::plot_correlationly(dep(), interactive = FALSE)
+    #
+    #
+    # })
+
     output$plot_correlation <- renderPlotly(
 
         MQanalyser::plot_correlationly(dep()) %>%
             layout(height = 800, width = 800)
 
     )
+
 
     #### PCA pot ####
 
@@ -2592,7 +2598,7 @@ function(input, output) {
         string_db <- STRINGdb$new(version = "11.5", species=9606,
                                    score_threshold = 200, input_directory="")
 
-        #diffExpressGenes <- data.frame(gene = c('AAAS', 'AACS', 'AAMP', 'AASS', 'ABCB7', 'ABCD4'))
+        # diffExpressGenes <- data.frame(gene = c('AAAS', 'AACS', 'AAMP', 'AASS', 'ABCB7', 'ABCD4'))
 
         mapped <- string_db$map(interactionDataFinal$df,
                                 'gene',
@@ -2729,11 +2735,14 @@ function(input, output) {
         # Correlation plot --------------------------
 
     correlation_report <- reactive({
+        # Much more trickier since the function does not return a plot, so
+        # it will return the dep() and the function plot_correlationly will
+        # be called from the Rmd
 
         if ("Correlation" %in% input$sampleReport) {
 
             message('Correlation plot added to the report')
-            return(correlation_plot())
+            return(dep())
 
         }else{
             return(NULL)
@@ -2979,8 +2988,8 @@ function(input, output) {
                 diseaseaseCircus = disCircus_report(),
                 diseaseaseNetwork = disNetwork_report(),
                 diseaseaseMap = disEnrichMap_report(),
-                pathway = pathway_report(),
-                interactions = interactions_report()
+                pathway = pathway_report()#,
+                #interactions = interactions_report()
                 )
 
 

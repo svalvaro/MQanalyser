@@ -100,10 +100,9 @@ if (!is.null(params$scatter)) {
 
 if (!is.null(params$correlation)) {
 
-    base::eval(params$correlation$call)        
+    MQanalyser::plot_correlationly(params$correlation, interactive = F)    
 }
 ```
-
 
 ```{r PCA}
 

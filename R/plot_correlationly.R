@@ -14,23 +14,30 @@ plot_correlationly <- function(dep, interactive = TRUE){
 
     couls <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(9, "YlGn"))
 
-    p <- heatmaply::heatmaply(cor_mat,
-                         colors =  couls(256),
-                         key.title = 'Pearson Corr.',
-                         label_names = c('row', 'column', 'correlation')
-                         )
+    # p <- heatmaply::heatmaply(cor_mat,
+    #                      colors =  couls(256),
+    #                      key.title = 'Pearson Corr.',
+    #                      label_names = c('row', 'column', 'correlation')
+    #                      )
     if (interactive == FALSE) {
 
-            p <- gplots::heatmap.2(cor_mat,
+        return(
+            gplots::heatmap.2(cor_mat,
                               col = couls(20),
                               trace = 'none',
                               key.title =  'Pearson corr.',
                               density.info = 'none'
+                              )
+        )
+    }else{
+        return(
+            heatmaply::heatmaply(cor_mat,
+                                 colors =  couls(256),
+                                 key.title = 'Pearson Corr.',
+                                 label_names = c('row', 'column', 'correlation')
             )
-
-
+        )
     }
-        return(p)
 
-
+    return(p)
 }
