@@ -2595,7 +2595,6 @@ function(input, output) {
             return(NULL)
         }
 
-        # Not sure what is the score for yet
         string_db <- STRINGdb$new(version = "11.5", species=9606,
                                   score_threshold = 200, input_directory="")
 
@@ -2611,6 +2610,9 @@ function(input, output) {
     })
 
     interactionResults <- reactive({
+
+        string_db <- STRINGdb$new(version = "11.5", species=9606,
+                                  score_threshold = 200, input_directory="")
 
         plot <- string_db$plot_network(interactionsTrimmed())
 
