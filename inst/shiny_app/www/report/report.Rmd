@@ -236,11 +236,15 @@ if (!is.null(params$pathway)) {
 }
 ```
 
+
 ```{r interactions}
 
 if (!is.null(params$interactions)) {
 
-    print(params$interactions)            
+    string_db <- STRINGdb$new(version = "11.5", species=9606,
+                               score_threshold = 200, input_directory="")
+    
+    print(string_db$plot_network(params$interactions))            
 }
 ```
 

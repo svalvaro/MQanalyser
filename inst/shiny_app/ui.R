@@ -1146,7 +1146,7 @@ tabPanel(title = h4('Interactions'),
 
            mainPanel(
              fluidRow(
-               h4('Select the proteins on the table by holding Ctrl'),
+               h4('Select the proteins on the table by holding ctrl/shift'),
 
                column(
                  width = 8,
@@ -1336,25 +1336,25 @@ tabPanel(title = h4('Report'),
                   status = "info",
                   plain = FALSE
                 )
-              )#,
+              ),
 
-              # column(
-              #   width = 2,
-              #   # Interactions Plot
-              #
-              #   shinyWidgets::prettyCheckbox(
-              #     inputId = "interactionReport",
-              #     label = "Interactions Network",
-              #     value = TRUE,
-              #     shape = "round",
-              #     outline = TRUE,
-              #     #fill = TRUE,
-              #     animation = "pulse",
-              #     bigger = TRUE,
-              #     status = "info",
-              #     plain = FALSE
-              #   )
-              # )
+              column(
+                width = 2,
+                # Interactions Plot
+
+                shinyWidgets::prettyCheckbox(
+                  inputId = "interactionReport",
+                  label = "Interactions Network",
+                  value = TRUE,
+                  shape = "round",
+                  outline = TRUE,
+                  #fill = TRUE,
+                  animation = "pulse",
+                  bigger = TRUE,
+                  status = "info",
+                  plain = FALSE
+                )
+              )
             ),
 
             fluidRow(

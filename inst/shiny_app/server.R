@@ -2587,8 +2587,9 @@ function(input, output) {
         interactionDataFinal$df <- interactionDataSelected()
     })
 
-    interactionResults <- reactive({
-        #rows_selected <- length(input$interactionResults_rows_selected)
+
+
+    interactionsTrimmed <- reactive({
 
         if (is.null(interactionDataFinal$df)) {
             return(NULL)
@@ -2596,7 +2597,7 @@ function(input, output) {
 
         # Not sure what is the score for yet
         string_db <- STRINGdb$new(version = "11.5", species=9606,
-                                   score_threshold = 200, input_directory="")
+                                  score_threshold = 200, input_directory="")
 
         # diffExpressGenes <- data.frame(gene = c('AAAS', 'AACS', 'AAMP', 'AASS', 'ABCB7', 'ABCD4'))
 
@@ -2606,11 +2607,16 @@ function(input, output) {
 
         ids_trimmed <- mapped$STRING_id[1:input$numberofInteractions]
 
-        plot <- string_db$plot_network(ids_trimmed)
+        return(ids_trimmed)
+    })
 
-        url <- string_db$get_link(ids_trimmed)
+    interactionResults <- reactive({
 
-        string_db$get_link(ids_trimmed)
+        plot <- string_db$plot_network(interactionsTrimmed())
+
+        url <- string_db$get_link(interactionsTrimmed())
+
+        string_db$get_link(interactionsTrimmed())
 
         interactionResults <- list("plot" = plot, "url" = url)
         return(interactionResults)
@@ -2928,16 +2934,13 @@ function(input, output) {
         }
     })
 
-        # Pathway Plot --------------------------
+        # Interactions Plot --------------------------
 
     interactions_report  <- reactive({
         if (input$interactionReport == TRUE) {
             message('Interactions Plot added to the report')
 
-            p <- isolate(plotInteractions())
-
-            message(paste0("p is", p))
-            return(p)
+            return(interactionsTrimmed())
         }else{
             return(NULL)
         }
@@ -2988,8 +2991,8 @@ function(input, output) {
                 diseaseaseCircus = disCircus_report(),
                 diseaseaseNetwork = disNetwork_report(),
                 diseaseaseMap = disEnrichMap_report(),
-                pathway = pathway_report()#,
-                #interactions = interactions_report()
+                pathway = pathway_report(),
+                interactions = interactions_report()
                 )
 
 
