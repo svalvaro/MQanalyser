@@ -2631,6 +2631,9 @@ function(input, output) {
     })
 
     output$stringPlot <- renderPlot(height = 800, width = 800,{
+        if (!is.null(plotInteractions())) {
+            return(NULL)
+        }
 
         plotInteractions()
 

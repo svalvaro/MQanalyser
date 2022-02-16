@@ -1358,8 +1358,6 @@ tabPanel(title = h4('Report'),
             ),
 
             fluidRow(
-
-
               column(
                 width = 12,
                 # Format Plot
@@ -1375,8 +1373,6 @@ tabPanel(title = h4('Report'),
                     checkbox = TRUE,
                     status = "info",
                   )
-
-
               )
             ),
 
