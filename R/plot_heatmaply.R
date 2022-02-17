@@ -11,6 +11,7 @@ plot_heatmaply <- function(dep,
                            intensity_type = 'LFQ',
                            #type = 'centered',
                            dendogram = 'both',
+                           top_contributors = NULL,
                            k_row = 0,
                            k_col = 0){
 
@@ -35,6 +36,16 @@ plot_heatmaply <- function(dep,
     df <- assay(filtered) - rowData(filtered, use.names = FALSE)$mean
 
 
+    # Filter for only the not contributors
+
+    if (!is.null(top_contributors)) {
+
+        df <- df[rownames(df) %in% top_contributors,]
+    }
+
+
+    message(paste0("head of heatmap matrix: ", head(df)))
+
     p <- heatmaply(as.matrix(df),
               colors =  rev(RColorBrewer::brewer.pal(11, "RdBu")),
               col_side_colors = Groupings,
@@ -44,5 +55,6 @@ plot_heatmaply <- function(dep,
               k_col = k_col,
               dendrogram = dendogram,
               plot_method = 'plotly')
+
     return(p)
 }

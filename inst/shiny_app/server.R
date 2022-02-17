@@ -1250,19 +1250,25 @@ function(input, output) {
 
     #### Heatmap plot ####
 
+    heatmapInteractive <- reactive({
+        p <- MQanalyser::plot_heatmaply(dep(),
+                                   intensity_type = input$IntensityType,
+                                   dendogram = 'both',#input$dendogram_input,
+                                   k_row = 0,#input$k_row_input,
+                                   k_col = 0,#input$k_col_input,
+                                   top_contributors = topContributors())
+
+        return(p)
+    })
     output$heatmaply <- renderPlotly({
 
-        shiny::req(input$heatmapInteractive)
+        # shiny::req(input$heatmapInteractive)
+        #
+        # if (input$heatmapInteractive == FALSE) {
+        #     return(NULL)
+        # }
 
-        if (input$heatmapInteractive == FALSE) {
-            return(NULL)
-        }
-
-        MQanalyser::plot_heatmaply(dep(),
-                                   intensity_type = input$IntensityType,
-                                   dendogram = input$dendogram_input,
-                                   k_row = input$k_row_input,
-                                   k_col = input$k_col_input) %>%
+        heatmapInteractive() %>%
             layout(height = 1000, width = 1000)
 
     }
@@ -1279,9 +1285,9 @@ function(input, output) {
 
     output$heatMapNonInteractive <- renderPlot(height = 1000, width = 1000,{
 
-        if (input$heatmapInteractive == TRUE) {
-            return(NULL)
-        }
+        # if (input$heatmapInteractive == TRUE) {
+        #     return(NULL)
+        # }
 
         heatmapPlot()
 
@@ -1327,6 +1333,68 @@ function(input, output) {
                     )
             )
             }
+    })
+
+
+    output$heatmapContributors <- renderUI({
+
+        if (is.null(dep())) {
+            return(NULL)
+        }
+
+
+       message(paste0('legnth names: ', length(dep()@NAMES )))
+       max <-  as.numeric(length(dep()@NAMES))
+
+       sliderInput(inputId = 'heatMaxContributors',
+                label = h4("Select the maximum number of contributors"),
+                   min = 2,
+                   max = max,
+
+                   value = 50,
+                step = 1)
+
+    })
+
+    comparisonsHeatmap <- reactive({
+
+        comparisons <- data_results() %>%
+            select(contains('vs') & contains('ratio'))
+
+        comparisons <- gsub(pattern = '_ratio',
+                            replacement = '',
+                            colnames(comparisons))
+    })
+
+    output$comparisonsHeatmap_out  <- renderUI({
+        selectInput(inputId = 'inpComparisonHeatmap',
+                    label = h4('Select the comparison for the Top Contributors:'),
+                    choices = unlist(comparisonsHeatmap()),
+                    selected = comparisonsHeatmap()[1])
+    })
+
+    topContributors <- reactive({
+        # It's going to be a vector of N gene names with the highest FC difference
+
+
+        df <- data_results() %>% select(contains(c("name", paste0(input$inpComparisonHeatmap, '_ratio'))))
+
+
+        colnames(df)[colnames(df) != 'name' ] <- 'ratioSelectedComparison'
+
+
+        # Obtain the absolute top contributors
+        df$ratioSelectedComparison <- abs(as.numeric(df$ratioSelectedComparison))
+
+        # Sort in descending order and obtain the N highest
+
+        df <- df[order(df$ratioSelectedComparison ,decreasing = TRUE),]
+
+        topContributors <- df[1:input$heatMaxContributors,]$name
+
+        return(topContributors)
+
+
     })
 
     #### Scatter plot ####

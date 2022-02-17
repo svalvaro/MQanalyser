@@ -428,8 +428,13 @@ tabPanel(h4("Results"),
                                 labelWidth = "80px",
                                 onStatus = 'success',
                                 value = FALSE,
-                                offStatus = 'danger'),
-                            )#,
+                                offStatus = 'danger')
+
+                            ),
+
+                            uiOutput('comparisonsHeatmap_out'),
+
+                            uiOutput('heatmapContributors')
 
                         #     br(),
                         #
@@ -456,7 +461,9 @@ tabPanel(h4("Results"),
                         ),
                 mainPanel(
 
-                  uiOutput('heatmapUI')
+                  #uiOutput('heatmapUI')
+
+                  plotlyOutput('heatmaply')
 
                     )
                 )
