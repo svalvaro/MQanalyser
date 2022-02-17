@@ -8,14 +8,14 @@
 }
 
 #sidebar {
-        /* background-color: #AFD8E6; */  
+        /* background-color: #AFD8E6; */
   background: rgb(250,240,210);
-  background: linear-gradient(90deg, rgba(250,240,210,1) 0%, rgba(255,239,204,1) 100%); 
-        
+  background: linear-gradient(90deg, rgba(250,240,210,1) 0%, rgba(255,239,204,1) 100%);
+
 }
 .navbar {
   background: rgb(27,73,66);
-  background: linear-gradient(90deg, rgba(27,73,66,1) 0%, rgba(44,55,53,1) 100%); 
+  background: linear-gradient(90deg, rgba(27,73,66,1) 0%, rgba(44,55,53,1) 100%);
 }
 
 
@@ -28,7 +28,7 @@ body {
 
 .action-button {
   background: rgb(92,147,137);
-  background: linear-gradient(90deg, rgba(92,147,137,1) 0%, rgba(69,124,74,1) 100%); 
+  background: linear-gradient(90deg, rgba(92,147,137,1) 0%, rgba(69,124,74,1) 100%);
 
   color: rgb(255, 255, 255) !important;
 
@@ -38,7 +38,7 @@ body {
 .bttn-unite.bttn-default {
 
   background: rgb(92,147,137);
-  background: linear-gradient(90deg, rgba(92,147,137,1) 0%, rgba(69,124,74,1) 100%); 
+  background: linear-gradient(90deg, rgba(92,147,137,1) 0%, rgba(69,124,74,1) 100%);
 
   color: rgb(255, 255, 255) !important;
 
@@ -48,7 +48,7 @@ body {
 
 .action-button::before {
   background:rgb(50, 90, 53) !important;
-  
+
 }
 
 .action-button::after {
@@ -86,7 +86,7 @@ body {
   background: rgb(50, 90, 53) !important;
 }
 
-.irs-single {
+.irs-single, .irs-min, .irs-max {
   color: #fff;
   text-shadow: none;
   padding: 1px 3px;
@@ -121,7 +121,7 @@ body {
 
 .pretty.p-default:not(.p-fill) input:checked ~ .state.p-info-o label::after {
   background-color: rgb(50, 90, 53)!important;
-  
+
 }
 
 .checkbox-info input[type="checkbox"]:checked + label::before, .checkbox-info input[type="radio"]:checked + label::before {
