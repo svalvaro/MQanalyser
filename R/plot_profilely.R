@@ -46,6 +46,8 @@ plot_profilely <- function(dep,
       df <- as.data.frame(assay(filtered))
     }
 
+
+
     df$name <- rownames(df)
 
     df_melt <- melt(df, id.vars = 'name')
@@ -97,6 +99,8 @@ plot_profilely <- function(dep,
       colnames(df[1]) <- 'Gene'
 
       colnames(df)[colnames(df) == "name"] <- "Genes"
+
+      df[,names(df) != "Genes"] <- as.numeric(format(round(df[,names(df) != "Genes"], 1)))
 
       return(df)
 
