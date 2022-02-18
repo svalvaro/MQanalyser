@@ -50,7 +50,7 @@ plot_profilely <- function(dep,
 
     df$name <- rownames(df)
 
-    df_melt <- melt(df, id.vars = 'name')
+    df_melt <- reshape2::melt(df, id.vars = 'name')
 
     colnames(df_melt) <- c('Gene', 'Label', 'Intensity') #It is centered intenseity (removed)
 
@@ -73,7 +73,7 @@ plot_profilely <- function(dep,
 
         df_selected <- df[selected_genes, ]
 
-        df_selected <- melt(df_selected, id.vars = 'name')
+        df_selected <- reshape2::melt(df_selected, id.vars = 'name')
 
         colnames(df_selected) <- c('Gene', 'Label', 'Intensity')
 
