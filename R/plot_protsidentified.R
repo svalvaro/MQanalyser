@@ -16,7 +16,7 @@ plot_protsidentified <- function(data_filt){
         `Valid Values` = colSums(!is.na(df))
                      )
 
-    df2 <- melt(df2, id.vars = 'Label')
+    df2 <- reshape2::melt(df2, id.vars = 'Label')
 
     p <- ggplot(df2, aes(x = Label, y = value, fill = variable))+
         geom_col(color = 'black')+
@@ -24,7 +24,7 @@ plot_protsidentified <- function(data_filt){
         ylab('Frequency')+
         theme(legend.title = element_blank(),
               legend.position = 'bottom')+
-        scale_fill_manual(values = c('#A4DDED', '#FFDFD3'))
+        scale_fill_manual(values = c('#ffefcc', '#71a873'))
 
     return(p)
 
