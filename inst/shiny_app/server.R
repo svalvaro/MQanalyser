@@ -1253,9 +1253,6 @@ function(input, output) {
     heatmapInteractive <- reactive({
         p <- MQanalyser::plot_heatmaply(dep(),
                                    intensity_type = input$IntensityType,
-                                   dendogram = 'both',#input$dendogram_input,
-                                   k_row = 0,#input$k_row_input,
-                                   k_col = 0,#input$k_col_input,
                                    top_contributors = topContributors())
 
         return(p)
@@ -1277,11 +1274,24 @@ function(input, output) {
         )
     })
 
-    output$heatMapNonInteractive <- renderPlot(height = 1000, width = 1000,{
+    # heatMapReactiveReport <- reactive({
+    #     # There are two options that the user selected all the top Contributors or not
+    #
+    #     if (input$topContInput == TRUE) {
+    #
+    #         # Changing the plot method to ggplot,
+    #         # Return the dep() so it can be generated in the repot
+    #         p <- MQanalyser::plot_heatmaply(dep(),
+    #                                         intensity_type = input$IntensityType,
+    #                                         top_contributors = topContributors(),
+    #                                         interactive = FALSE)
+    #     }else{
+    #         p <- heatmapPlot()
+    #     }
+    #     return(p)
+    # })
 
-        # if (input$heatmapInteractive == TRUE) {
-        #     return(NULL)
-        # }
+    output$heatMapNonInteractive <- renderPlot(height = 1000, width = 1000,{
 
         heatmapPlot()
 
@@ -1333,12 +1343,10 @@ function(input, output) {
             return(NULL)
         }
 
-
        sliderInput(inputId = 'heatMaxContributors',
                 label = h4("Select the maximum number of contributors"),
                    min = 2,
                     max = 200,
-                   #max = max,
                    value = 50,
                 step = 1)
 
@@ -1369,12 +1377,11 @@ function(input, output) {
     topContributors <- reactive({
         # It's going to be a vector of N gene names with the highest FC difference
 
-
         df <- data_results() %>% select(contains(c("name", paste0(input$inpComparisonHeatmap, '_ratio'))))
 
+        #df <- data_results %>% select(contains(c('name', 'Ctrl_vs_Tumor_ratio')))
 
         colnames(df)[colnames(df) != 'name' ] <- 'ratioSelectedComparison'
-
 
         # Obtain the absolute top contributors
         df$ratioSelectedComparison <- abs(as.numeric(df$ratioSelectedComparison))
@@ -1385,8 +1392,10 @@ function(input, output) {
 
         topContributors <- df[1:input$heatMaxContributors,]$name
 
-        return(topContributors)
+        #topContributors <- df[1:50,]$name
 
+
+        return(topContributors)
 
     })
 
@@ -2842,7 +2851,27 @@ function(input, output) {
 
         if ("heatmap" %in% input$proteinReport) {
             message('Heatmap added to the report')
-            return(heatmapPlot())
+
+            # If the user has selected the top Contributors method, the heatmap
+            # must be recreated on the .Rmd side.
+            # It needs dep(), top Contributors, and Intensity type.
+            # If it hasn't selected that, we just need the heatmap of all()
+
+            if (input$topContInput == TRUE) {
+
+                return(
+                    list(dep = dep(),
+                         intensityType = input$IntensityType,
+                         top_contributors = topContributors()
+                    )
+                )
+
+            }else{
+                return(
+                    heatmapPlot()
+                )
+            }
+
         }else{
             return(NULL)
         }
@@ -3044,6 +3073,7 @@ function(input, output) {
                 correlation = correlation_report(),
                 PCA = PCA_report(),
                 heatMap = heatmap_report(),
+                heatMapTopContributors = input$topContInput ,
                 volcano = volcano_report(),
                 profile = profile_report(),
                 geneOntology = geneOntology_report(),

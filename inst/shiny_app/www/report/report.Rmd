@@ -11,6 +11,7 @@ params:
     correlation: NA
     PCA: NA
     heatMap: NA
+    heatMapTopContributors: NA
     volcano: NA
     profile: NA
     geneOntology: NA
@@ -100,7 +101,8 @@ if (!is.null(params$scatter)) {
 
 if (!is.null(params$correlation)) {
 
-    MQanalyser::plot_correlationly(params$correlation, interactive = F)    
+    MQanalyser::plot_correlationly(params$correlation, interactive = F) 
+    
 }
 ```
 
@@ -112,11 +114,22 @@ if (!is.null(params$PCA)) {
 }
 ```
 
-```{r heatmap}
+```{r heatmap, echo = FALSE}
 
 if (!is.null(params$heatMap)) {
 
-    print(params$heatMap)        
+    if (params$heatMapTopContributors == TRUE) {
+
+        MQanalyser::plot_heatmaply(dep = params$heatMap$dep,
+                       intensity_type = params$heatMap$IntensityType,
+                       top_contributors = params$heatMap$topContributors,
+                       interactive = FALSE)
+
+
+    }else{
+        print(params$heatMap)
+    }
+    
 }
 ```
 

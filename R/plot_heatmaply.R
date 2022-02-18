@@ -9,11 +9,8 @@
 #' @examples
 plot_heatmaply <- function(dep,
                            intensity_type = 'LFQ',
-                           #type = 'centered',
-                           dendogram = 'both',
                            top_contributors = NULL,
-                           k_row = 0,
-                           k_col = 0){
+                           interactive = TRUE){
 
     row_data <- rowData(dep, use.names = FALSE)
 
@@ -44,17 +41,26 @@ plot_heatmaply <- function(dep,
     }
 
 
-    message(paste0("head of heatmap matrix: ", head(df)))
-
-    p <- heatmaply(as.matrix(df),
+    p <- heatmaply::heatmaply(as.matrix(df),
               colors =  rev(RColorBrewer::brewer.pal(11, "RdBu")),
               col_side_colors = Groupings,
               label_names = c('Gene', 'ID', 'Log2 FC'),
               key.title = 'Log 2 \nFold Change',
-              k_row = k_row,
-              k_col = k_col,
-              dendrogram = dendogram,
+              dendrogram = 'both',
               plot_method = 'plotly')
 
-    return(p)
+    if (interactive == FALSE) {
+        couls <- grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(11, "RdBu")))
+
+        return(
+
+            gplots::heatmap.2(as.matrix(df),
+                              col = couls(100),
+                              trace = 'none',
+                              key.title =  'Log2 FC.',
+                              density.info = 'none')
+        )
+    }else{
+        return(p)
+    }
 }
