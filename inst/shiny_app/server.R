@@ -1274,23 +1274,6 @@ function(input, output) {
         )
     })
 
-    # heatMapReactiveReport <- reactive({
-    #     # There are two options that the user selected all the top Contributors or not
-    #
-    #     if (input$topContInput == TRUE) {
-    #
-    #         # Changing the plot method to ggplot,
-    #         # Return the dep() so it can be generated in the repot
-    #         p <- MQanalyser::plot_heatmaply(dep(),
-    #                                         intensity_type = input$IntensityType,
-    #                                         top_contributors = topContributors(),
-    #                                         interactive = FALSE)
-    #     }else{
-    #         p <- heatmapPlot()
-    #     }
-    #     return(p)
-    # })
-
     output$heatMapNonInteractive <- renderPlot(height = 1000, width = 1000,{
 
         heatmapPlot()

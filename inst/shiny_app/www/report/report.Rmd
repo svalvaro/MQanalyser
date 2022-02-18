@@ -12,6 +12,7 @@ params:
     PCA: NA
     heatMap: NA
     heatMapTopContributors: NA
+    heatMap2: NA
     volcano: NA
     profile: NA
     geneOntology: NA
@@ -52,7 +53,7 @@ if (!is.null(params$experimentDesign)) {
 
 \newpage
 
-```{r contaminants}
+```{r contaminants, out.height='100%',out.width='100%'}
 if (!is.null(params$contaminants)) {
 
     print(params$contaminants)
@@ -132,6 +133,18 @@ if (!is.null(params$heatMap)) {
     
 }
 ```
+
+
+
+```{r heatmap2}
+
+if (!is.null(params$heatmap2)) {
+
+    print(params$heatmap2)            
+}
+
+```
+
 
 ```{r volcano}
 

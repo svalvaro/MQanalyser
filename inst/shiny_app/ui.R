@@ -970,7 +970,6 @@ tabPanel(h4("Results"),
   tabPanel(title = h4('Disease Analysis'),
            value = 'disease-tab',
 
-           shinyalert::useShinyalert(),
            sidebarLayout(
              sidebarPanel(id = 'sidebar',
                           width = 2

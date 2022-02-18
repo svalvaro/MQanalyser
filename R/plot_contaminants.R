@@ -71,9 +71,10 @@ plot_contaminants <- function(proteoInput,
     # Colors for the plot
 
     if (length(unique(df2$Potential.contaminant)) == 2) {
-        colors <- c('#A4DDED', '#FFDFD3')
+        colors <- c('#dd4b39', '#71a873')
     }else{
-        colors <- '#FFDFD3'
+        # colors <- '#FFDFD3'
+        colors <- '#71a873'
     }
 
     p <- ggplot(df2, aes( y = Log2.Intensity,  key = Gene.names))+
