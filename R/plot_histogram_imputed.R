@@ -15,7 +15,7 @@ plot_histogram_imputed <- function(data_to_be_imputed,
                                       'Log2 Intensity',
                                       'Imputed')
 
-    p <-     ggplot(data_to_be_imputed, aes( x = `Log2 Intensity`,
+     ggplot(data_to_be_imputed, aes( x = `Log2 Intensity`,
                                              fill = Imputed))+
                     geom_histogram(alpha = 0.4,
                                    bins = bins,
@@ -24,13 +24,11 @@ plot_histogram_imputed <- function(data_to_be_imputed,
                     ylab('Frequency')+
                     xlab('Log 2  Intensity')+
                     theme(legend.position = 'bottom')+
-                    scale_fill_manual(values = c('#00539CFF','red'))
+                    scale_fill_manual(values = c('#246526','red'))
 
     if (combined == FALSE) {
 
         p <- p + facet_wrap(.~ Label)
     }
-
-    #fig <- ggplotly(p)
     return(p)
 }

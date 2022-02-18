@@ -4,7 +4,12 @@
 \alias{plot_contaminants}
 \title{Title}
 \usage{
-plot_contaminants(proteoInput, intensityType = "LFQ")
+plot_contaminants(
+  proteoInput,
+  intensityType = "LFQ",
+  softwareUsed = "Spectronaut",
+  interactive = FALSE
+)
 }
 \arguments{
 \item{intensityType}{}

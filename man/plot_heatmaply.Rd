@@ -7,9 +7,8 @@
 plot_heatmaply(
   dep,
   intensity_type = "LFQ",
-  dendogram = "both",
-  k_row = 0,
-  k_col = 0
+  top_contributors = NULL,
+  interactive = TRUE
 )
 }
 \arguments{

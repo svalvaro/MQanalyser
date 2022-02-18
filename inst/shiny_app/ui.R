@@ -316,7 +316,7 @@ navbarPage(fluid = TRUE,
                                                                     'Minimum Value' = 'min',
                                                                     'Replace by 0' = 'zero',
                                                                     'No imputation' = 'none'),
-                                                        selected = 'MLE'),
+                                                        selected = 'Manual'),
 
                                             uiOutput('manual_imputation_scale'),
 

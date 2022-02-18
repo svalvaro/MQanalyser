@@ -4,7 +4,7 @@
 \alias{plot_correlationly}
 \title{Plot correlation interactively}
 \usage{
-plot_correlationly(dep)
+plot_correlationly(dep, interactive = TRUE)
 }
 \arguments{
 \item{intensity_type}{}

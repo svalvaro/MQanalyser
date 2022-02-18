@@ -886,12 +886,6 @@ function(input, output) {
         data_filt <- DEP::filter_missval(data_se(),
                                          thr = as.integer(input$nas_threshold))
 
-        # data_filt <- DEP::filter_missval(data_se,thr = 0)
-
-        # heatmaply(plot_missval(filter_missval(data_se,thr = 0)))
-
-        # plot_detect(data_filt)
-        # plot_coverage(data_filt)
         return(data_filt)
     })
 
@@ -921,7 +915,8 @@ function(input, output) {
         }
 
         # Make it into plotly and iteractive!
-        DEP::plot_missval(data_filt())
+        # DEP::plot_missval(data_filt())
+        MQanalyser::plot_heatmap_missvals(data_filt())
     })
 
     #### DATA normalization ####
@@ -1054,7 +1049,7 @@ function(input, output) {
 
         filtered <- filtered %>% select(-contains('group'))
 
-        filtered_melt <- melt(filtered, id.vars = 'Protein.ID')
+        filtered_melt <- reshape2::melt(filtered, id.vars = 'Protein.ID')
 
         # Create a new column calledd imputed
         filtered_melt$Imputed <- FALSE
@@ -1076,7 +1071,7 @@ function(input, output) {
 
         imputed$Protein.ID <- rownames(imputed)
 
-        imputed_melt <- melt(imputed, id.vars = 'Protein.ID')
+        imputed_melt <- reshape2::melt(imputed, id.vars = 'Protein.ID')
 
         # The column imputed_melt contained the data of the imputed table
         # and added a column specifying whether a protein in a specific group
