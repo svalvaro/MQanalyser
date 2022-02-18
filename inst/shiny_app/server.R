@@ -1262,12 +1262,6 @@ function(input, output) {
     })
     output$heatmaply <- renderPlotly({
 
-        # shiny::req(input$heatmapInteractive)
-        #
-        # if (input$heatmapInteractive == FALSE) {
-        #     return(NULL)
-        # }
-
         heatmapInteractive() %>%
             layout(height = 1000, width = 1000)
 
@@ -1310,47 +1304,41 @@ function(input, output) {
 
     output$heatmapUI <- renderUI({
 
-        message(paste0('Value of the heatmap: ', input$heatmapInteractive))
+        message(paste0('Show top contributors: ', input$topContInput))
 
-        if (input$heatmapInteractive == FALSE) {
+        if (input$topContInput == TRUE) {
             return(
+
                 shinycssloaders::withSpinner(
-
-                plotOutput('heatMapNonInteractive'),
+                    plotlyOutput('heatmaply'),
                     image = 'images/logoTransparentSmall.gif',
-                    image.width = '200px'
+                    image.width = '200px')
                 )
-                )
-
-
         }else{
 
             return(
                 shinycssloaders::withSpinner(
-                    plotlyOutput('heatmaply'),
+
+                    plotOutput('heatMapNonInteractive'),
                     image = 'images/logoTransparentSmall.gif',
-                    image.width = '200px'
-                    )
+                    image.width = '200px')
             )
-            }
+        }
     })
 
 
     output$heatmapContributors <- renderUI({
 
-        if (is.null(dep())) {
+        if (is.null(dep()) || input$topContInput == FALSE) {
             return(NULL)
         }
 
 
-       message(paste0('legnth names: ', length(dep()@NAMES )))
-       max <-  as.numeric(length(dep()@NAMES))
-
        sliderInput(inputId = 'heatMaxContributors',
                 label = h4("Select the maximum number of contributors"),
                    min = 2,
-                   max = max,
-
+                    max = 200,
+                   #max = max,
                    value = 50,
                 step = 1)
 
@@ -1367,6 +1355,11 @@ function(input, output) {
     })
 
     output$comparisonsHeatmap_out  <- renderUI({
+
+        if (is.null(dep()) || input$topContInput == FALSE) {
+            return(NULL)
+        }
+
         selectInput(inputId = 'inpComparisonHeatmap',
                     label = h4('Select the comparison for the Top Contributors:'),
                     choices = unlist(comparisonsHeatmap()),

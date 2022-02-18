@@ -420,14 +420,15 @@ tabPanel(h4("Results"),
                             width = 2,
 
                             tags$div(
-                              title = "The interactive version is under development since it might slow down, or crash the application",
+                              title = paste0("If off, all the differentiallly expressed will be shown.
+                                             If ON, only the N top contributors will."),
 
                               shinyWidgets::switchInput(
-                                inputId = "heatmapInteractive",
-                                label = "Interactive",
+                                inputId = "topContInput",
+                                label = "Top Contributors",
                                 labelWidth = "80px",
                                 onStatus = 'success',
-                                value = FALSE,
+                                value = TRUE,
                                 offStatus = 'danger')
 
                             ),
@@ -461,9 +462,9 @@ tabPanel(h4("Results"),
                         ),
                 mainPanel(
 
-                  #uiOutput('heatmapUI')
+                  uiOutput('heatmapUI')
 
-                  plotlyOutput('heatmaply')
+                  #plotlyOutput('heatmaply')
 
                     )
                 )
