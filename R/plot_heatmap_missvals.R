@@ -35,9 +35,9 @@ plot_heatmap_missvals <- function(data_filt){
         x = missval,
         colors  = c("white", "#71a873"),
         col_side_colors = Groupings,
-        #hide_colorbar = TRUE,
+        hide_colorbar = TRUE,
         dendrogram = 'both',
         show_dendrogram = c(FALSE, TRUE),
-        showticklabels = c(TRUE, FALSE)
-        )
+        showticklabels = c(TRUE, FALSE))
+
 }

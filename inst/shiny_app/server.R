@@ -1357,7 +1357,7 @@ function(input, output) {
 
         df <- data_results() %>% select(contains(c("name", paste0(input$inpComparisonHeatmap, '_ratio'))))
 
-        #df <- data_results %>% select(contains(c('name', 'Ctrl_vs_Tumor_ratio')))
+        # df <- data_results %>% select(contains(c('name', 'Ctrl_vs_Tumor_ratio')))
 
         colnames(df)[colnames(df) != 'name' ] <- 'ratioSelectedComparison'
 
@@ -1370,7 +1370,7 @@ function(input, output) {
 
         topContributors <- df[1:input$heatMaxContributors,]$name
 
-        #topContributors <- df[1:50,]$name
+        # topContributors <- df[1:50,]$name
 
 
         return(topContributors)

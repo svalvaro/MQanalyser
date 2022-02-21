@@ -101,7 +101,8 @@ body {
 
 .btn-default{
   color: #ffffff;
-  background-color: rgba(113,168,115,1) !important;
+  /* background-color: rgba(113,168,115,1) !important; */
+  background-color: rgba(69,124,74,1) !important;
   border-color: rgb(50, 90, 53) !important;
 }
 
@@ -159,3 +160,9 @@ body {
   color: rgb(50, 90, 53)!important;
   text-decoration: none;
 } */
+
+
+
+.alert-success, .bg-green, .callout.callout-success, .label-success, .modal-success .modal-body {
+  background-color: rgba(69,124,74,1)  !important;
+}
