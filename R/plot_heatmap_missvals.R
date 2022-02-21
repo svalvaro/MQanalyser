@@ -13,7 +13,7 @@ plot_heatmap_missvals <- function(data_filt){
     col_data <- colData(data_filt) %>%
         as.data.frame()
 
-    Groupings <- cbind( data_filt$replicate, data_filt$condition)
+    Groupings <- cbind(data_filt$replicate, data_filt$condition)
 
     colnames(Groupings) <- c('replicate', 'condition')
 
@@ -31,13 +31,30 @@ plot_heatmap_missvals <- function(data_filt){
     missval <- ifelse(is.na(missval), 0, 1)
 
 
-    p <- heatmaply::ggheatmap(
-        x = missval,
-        colors  = c("white", "#71a873"),
-        col_side_colors = Groupings,
-        hide_colorbar = TRUE,
-        dendrogram = 'both',
-        show_dendrogram = c(FALSE, TRUE),
-        showticklabels = c(TRUE, FALSE))
+    n <- nrow(Groupings)
+    qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
+    col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
+    col_vector <- col_vector[1:n]
+
+    p <- gplots::heatmap.2(x = missval, col = c("white", "#71a873"),
+                      trace = 'none',
+                      #key = FALSE,
+                      dendrogram = 'col',
+                      #lwid=c(0.1,4),
+                      labRow =  FALSE,
+                      ColSideColors = col_vector,
+                      key.ylab = 'Freq',
+                      key.title = 'Valid Values',
+                      key.xlab = '',
+                      tracecol = 'black',
+                      keysize = 1.5,
+                      key.xtickfun = function() {
+                          list(at = parent.frame()$scale01(c(0,1)),
+                                labels = c('Missing','Valid'))
+                          }
+
+                    )
+
+
 
 }
