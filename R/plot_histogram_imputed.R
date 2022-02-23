@@ -15,7 +15,7 @@ plot_histogram_imputed <- function(data_to_be_imputed,
                                       'Log2 Intensity',
                                       'Imputed')
 
-     ggplot(data_to_be_imputed, aes( x = `Log2 Intensity`,
+    p <-  ggplot(data_to_be_imputed, aes( x = `Log2 Intensity`,
                                              fill = Imputed))+
                     geom_histogram(alpha = 0.4,
                                    bins = bins,

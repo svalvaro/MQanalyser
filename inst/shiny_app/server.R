@@ -1028,19 +1028,11 @@ function(input, output) {
                                     fun = input$input_imputation)
         }
 
-         #data_imp <- DEP::impute(data_norm , fun = 'zero')
-        # data_imp <-DEP::impute(data_norm, fun = "man", shift = 1.8, scale = 0.3)
-
-        #plot_imputation(data_norm, data_imp)
-
-        #data_imp <- impute(data_norm, fun = "knn", rowmax = 0.9)
-    #  plot_imputation(data_norm, data_imp)
+        return(data_imp)
 
     })
 
     data_to_be_imputed <- reactive({
-
-        # filtered <- as.data.frame(data_filt@assays@data)
 
         # Obtain the data before being imputed
         filtered <- as.data.frame(data_filt()@assays@data)
