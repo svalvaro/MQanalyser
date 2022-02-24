@@ -1202,17 +1202,7 @@ tabPanel(title = h4('Report'),
                 value = "checkbox-report",
                 # Experiment Design
 
-                shinyWidgets::prettyCheckbox(
-                  inputId = "experimentReport",
-                  label = "Include Experiment Design",
-                  value = TRUE,
-                  shape = "round",
-                  status = "info",
-                  outline = TRUE,
-                  bigger = TRUE,
-                  plain = FALSE,
-                  animation = "pulse"
-                )
+                uiOutput('inputExpReport')
                 ),
 
               column(

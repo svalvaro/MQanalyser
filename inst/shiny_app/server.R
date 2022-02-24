@@ -2704,8 +2704,8 @@ function(input, output) {
             href = url)
     })
 
-#### Plots for the report ####
-        # Experiment design --------------------
+    #### Plots for the report ####
+            # Experiment design --------------------
     expdesign_report <- reactive({
         if (input$experimentReport == TRUE) {
             message('Experiment design added to the report')
@@ -2715,301 +2715,326 @@ function(input, output) {
         }
     })
 
-         # Contaminants --------------------------
+    output$inputExpReport <- renderUI({
 
-    contaminants_report <- reactive({
-        if ("Contaminants" %in% input$preprocessingReport) {
-
-            message('Contaminants added to the report')
-            return(contaminants_non_interactive())
-        }else{
-            return(NULL)
-        }
-    })
-
-        # Missing Values --------------------------
-
-    missingValues_report <- reactive({
-        if ("missing" %in% input$preprocessingReport) {
-
-            message('Missing values added to the report')
-            return(missvalues_plot())
-
-        }else{
-            return(NULL)
-        }
-    })
-
-        # Normalization --------------------------
-
-    normalization_report <- reactive({
-
-        if ("Normalization" %in% input$preprocessingReport) {
-
-            message('Normalized plot added to the report')
-            return(normalized_plot())
-
-        }else{
-            return(NULL)
-        }
-    })
-
-        # Imputation --------------------------
-
-    imputation_report <- reactive({
-
-        if ("Imputation" %in% input$preprocessingReport) {
-
-            message('Imputation plot added to the report')
-            return(imputation_plot())
-
-        }else{
+        if (is.null(ed_final$data)) {
             return(NULL)
         }
 
-    })
-
-        # Scatter Plot --------------------------
-
-    scatter_report <- reactive({
-
-        if ("scatter" %in% input$sampleReport) {
-
-            message('Scatter plot added to the report')
-            return(scatter_plot())
-
-        }else{
-            return(NULL)
-        }
-    })
-
-        # Correlation plot --------------------------
-
-    correlation_report <- reactive({
-        # Much more trickier since the function does not return a plot, so
-        # it will return the dep() and the function plot_correlationly will
-        # be called from the Rmd
-
-        if ("Correlation" %in% input$sampleReport) {
-
-            message('Correlation plot added to the report')
-            return(dep())
-
-        }else{
-            return(NULL)
-        }
-    })
-
-        # PCA --------------------------
-
-    PCA_report <- reactive({
-
-        if ("PCA" %in% input$sampleReport) {
-
-            message('PCA plot added to the report')
-            return(pca_reactive())
-
-        }else{
-            return(NULL)
-        }
+        shinyWidgets::prettyCheckbox(
+            inputId = "experimentReport",
+            label = "Include Experiment Design",
+            value = TRUE,
+            shape = "round",
+            status = "info",
+            outline = TRUE,
+            bigger = TRUE,
+            plain = FALSE,
+            animation = "pulse"
+        )
     })
 
 
-        # Heatmap --------------------------
 
-    heatmap_report <- reactive({
 
-        if ("heatmap" %in% input$proteinReport) {
-            message('Heatmap added to the report')
 
-            # If the user has selected the top Contributors method, the heatmap
-            # must be recreated on the .Rmd side.
-            # It needs dep(), top Contributors, and Intensity type.
-            # If it hasn't selected that, we just need the heatmap of all()
 
-            if (input$topContInput == TRUE) {
 
-                return(
-                    list(dep = dep(),
-                         intensityType = input$IntensityType,
-                         top_contributors = topContributors()
-                    )
-                )
+            # Contaminants --------------------------
+
+        contaminants_report <- reactive({
+            if ("Contaminants" %in% input$preprocessingReport) {
+
+                message('Contaminants added to the report')
+                return(contaminants_non_interactive())
+            }else{
+                return(NULL)
+            }
+        })
+
+            # Missing Values --------------------------
+
+        missingValues_report <- reactive({
+            if ("missing" %in% input$preprocessingReport) {
+
+                message('Missing values added to the report')
+                return(missvalues_plot())
 
             }else{
-                return(
-                    heatmapPlot()
-                )
+                return(NULL)
+            }
+        })
+
+            # Normalization --------------------------
+
+        normalization_report <- reactive({
+
+            if ("Normalization" %in% input$preprocessingReport) {
+
+                message('Normalized plot added to the report')
+                return(normalized_plot())
+
+            }else{
+                return(NULL)
+            }
+        })
+
+            # Imputation --------------------------
+
+        imputation_report <- reactive({
+
+            if ("Imputation" %in% input$preprocessingReport) {
+
+                message('Imputation plot added to the report')
+                return(imputation_plot())
+
+            }else{
+                return(NULL)
             }
 
-        }else{
-            return(NULL)
-        }
-    })
+        })
 
-        # Volcano --------------------------
+            # Scatter Plot --------------------------
 
-    volcano_report <- reactive({
+        scatter_report <- reactive({
 
-        if ("volcano" %in% input$proteinReport) {
-            message('Volcano added to the report')
-            return(volcano_non_interactive())
-        }else{
-            return(NULL)
-        }
-    })
+            if ("scatter" %in% input$sampleReport) {
 
-        # Profile --------------------------
+                message('Scatter plot added to the report')
+                return(scatter_plot())
 
-    profile_report <- reactive({
+            }else{
+                return(NULL)
+            }
+        })
 
-        if ("profile" %in% input$proteinReport) {
-            message('Volcano added to the report')
-            return(profile_reactive())
-        }else{
-            return(NULL)
-        }
-    })
+            # Correlation plot --------------------------
 
-        # Gene Ontology --------------------------
+        correlation_report <- reactive({
+            # Much more trickier since the function does not return a plot, so
+            # it will return the dep() and the function plot_correlationly will
+            # be called from the Rmd
 
-    geneOntology_report <- reactive({
+            if ("Correlation" %in% input$sampleReport) {
 
-        if ("Gene Ontology" %in% input$enrichmentReport) {
-            message('Gene Ontology added to the report')
-            return(geneOntologyReactive())
-        }else{
-            return(NULL)
-        }
-    })
+                message('Correlation plot added to the report')
+                return(dep())
 
-        # Preranked --------------------------
+            }else{
+                return(NULL)
+            }
+        })
 
-    preRanked_report <- reactive({
-        if ("GSEA Enrichment" %in% input$enrichmentReport) {
-            message("Preranked Plot added to the report")
-            return(enriched_plot_preranked())
-        }else{
-            return(NULL)
-        }
-    })
+            # PCA --------------------------
 
-        # Network Enrichment --------------------------
-    networkEnrichment_report <- reactive({
-        if ("Network" %in% input$enrichmentReport) {
-            message("Network Enrichment Plot added to the report")
-            return(networkEnrichment_reactive())
-        }else{
-            return(NULL)
-        }
-    })
+        PCA_report <- reactive({
 
-        # Disease Plots -----------------
+            if ("PCA" %in% input$sampleReport) {
 
-        # Disease Enrichment -----------------------
-    disEnrichment <- reactive({
-        if ("Enrichment" %in% input$diseaseReport) {
-            message("Disease Enrichment Plot added to the report")
-            return(disEnrichmentReact())
-        }else{
-            return(NULL)
-        }
-    })
+                message('PCA plot added to the report')
+                return(pca_reactive())
 
-        # Disease GSEA -----------------------
-    disGSEA_report <- reactive({
-        if ("GSEA" %in% input$diseaseReport) {
-            message("Disease GSEA Plot added to the report")
-            return(disGSEAReact())
-        }else{
-            return(NULL)
-        }
-    })
+            }else{
+                return(NULL)
+            }
+        })
 
 
-        # Disease Heatmap -----------------------
-    disHeatMap_report <- reactive({
-        if ("Heatmap" %in% input$diseaseReport) {
-            message("Disease Heatmap Plot added to the report")
-            return(disHeatMapReact())
-        }else{
-            return(NULL)
-        }
-    })
+            # Heatmap --------------------------
 
-        # Disease Density -----------------------
-    disOverlap_report <- reactive({
-        if ("Density" %in% input$diseaseReport) {
-            message("Disease Density Plot added to the report")
-            return(disOverlapReact())
-        }else{
-            return(NULL)
-        }
-    })
+        heatmap_report <- reactive({
 
-        # Disease Association -----------------------
-    disUpset_report <- reactive({
-        if ("Association" %in% input$diseaseReport) {
-            message("Disease Association Plot added to the report")
-            return(disUpsetReact())
-        }else{
-            return(NULL)
-        }
-    })
+            if ("heatmap" %in% input$proteinReport) {
+                message('Heatmap added to the report')
 
-        # Disease Circus  -----------------------
-    disCircus_report <- reactive({
-        if ("Circus Plot" %in% input$diseaseReport) {
-            message("Disease Circus Plot Plot added to the report")
-            return(disCircusReact())
-        }else{
-            return(NULL)
-        }
-    })
+                # If the user has selected the top Contributors method, the heatmap
+                # must be recreated on the .Rmd side.
+                # It needs dep(), top Contributors, and Intensity type.
+                # If it hasn't selected that, we just need the heatmap of all()
 
-        # Disease Network -----------------------
-    disNetwork_report <- reactive({
-        if ("Network" %in% input$diseaseReport) {
-            message("Disease Network Plot added to the report")
-            return(disNetworkReact())
-        }else{
-            return(NULL)
-        }
-    })
+                if (input$topContInput == TRUE) {
 
-        # Disease Map -----------------------
-    disEnrichMap_report <- reactive({
-        if ("Map" %in% input$diseaseReport) {
-            message("Disease Map Plot added to the report")
-            return(disEnrichMapReact())
-        }else{
-            return(NULL)
-        }
-    })
+                    return(
+                        list(dep = dep(),
+                             intensityType = input$IntensityType,
+                             top_contributors = topContributors()
+                        )
+                    )
+
+                }else{
+                    return(
+                        heatmapPlot()
+                    )
+                }
+
+            }else{
+                return(NULL)
+            }
+        })
+
+            # Volcano --------------------------
+
+        volcano_report <- reactive({
+
+            if ("volcano" %in% input$proteinReport) {
+                message('Volcano added to the report')
+                return(volcano_non_interactive())
+            }else{
+                return(NULL)
+            }
+        })
+
+            # Profile --------------------------
+
+        profile_report <- reactive({
+
+            if ("profile" %in% input$proteinReport) {
+                message('Volcano added to the report')
+                return(profile_reactive())
+            }else{
+                return(NULL)
+            }
+        })
+
+            # Gene Ontology --------------------------
+
+        geneOntology_report <- reactive({
+
+            if ("Gene Ontology" %in% input$enrichmentReport) {
+                message('Gene Ontology added to the report')
+                return(geneOntologyReactive())
+            }else{
+                return(NULL)
+            }
+        })
+
+            # Preranked --------------------------
+
+        preRanked_report <- reactive({
+            if ("GSEA Enrichment" %in% input$enrichmentReport) {
+                message("Preranked Plot added to the report")
+                return(enriched_plot_preranked())
+            }else{
+                return(NULL)
+            }
+        })
+
+            # Network Enrichment --------------------------
+        networkEnrichment_report <- reactive({
+            if ("Network" %in% input$enrichmentReport) {
+                message("Network Enrichment Plot added to the report")
+                return(networkEnrichment_reactive())
+            }else{
+                return(NULL)
+            }
+        })
+
+            # Disease Plots -----------------
+
+            # Disease Enrichment -----------------------
+        disEnrichment <- reactive({
+            if ("Enrichment" %in% input$diseaseReport) {
+                message("Disease Enrichment Plot added to the report")
+                return(disEnrichmentReact())
+            }else{
+                return(NULL)
+            }
+        })
+
+            # Disease GSEA -----------------------
+        disGSEA_report <- reactive({
+            if ("GSEA" %in% input$diseaseReport) {
+                message("Disease GSEA Plot added to the report")
+                return(disGSEAReact())
+            }else{
+                return(NULL)
+            }
+        })
 
 
-        # Pathway Plot -------------------------------
+            # Disease Heatmap -----------------------
+        disHeatMap_report <- reactive({
+            if ("Heatmap" %in% input$diseaseReport) {
+                message("Disease Heatmap Plot added to the report")
+                return(disHeatMapReact())
+            }else{
+                return(NULL)
+            }
+        })
 
-    pathway_report <- reactive({
-        if (input$pathwayReport == TRUE) {
-            message('Pathway Plot added to the report')
-            return(pathway_plot())
-        }else{
-            return(NULL)
-        }
-    })
+            # Disease Density -----------------------
+        disOverlap_report <- reactive({
+            if ("Density" %in% input$diseaseReport) {
+                message("Disease Density Plot added to the report")
+                return(disOverlapReact())
+            }else{
+                return(NULL)
+            }
+        })
 
-        # Interactions Plot --------------------------
+            # Disease Association -----------------------
+        disUpset_report <- reactive({
+            if ("Association" %in% input$diseaseReport) {
+                message("Disease Association Plot added to the report")
+                return(disUpsetReact())
+            }else{
+                return(NULL)
+            }
+        })
 
-    interactions_report  <- reactive({
-        if (input$interactionReport == TRUE) {
-            message('Interactions Plot added to the report')
+            # Disease Circus  -----------------------
+        disCircus_report <- reactive({
+            if ("Circus Plot" %in% input$diseaseReport) {
+                message("Disease Circus Plot Plot added to the report")
+                return(disCircusReact())
+            }else{
+                return(NULL)
+            }
+        })
 
-            return(interactionsTrimmed())
-        }else{
-            return(NULL)
-        }
-    })
+            # Disease Network -----------------------
+        disNetwork_report <- reactive({
+            if ("Network" %in% input$diseaseReport) {
+                message("Disease Network Plot added to the report")
+                return(disNetworkReact())
+            }else{
+                return(NULL)
+            }
+        })
+
+            # Disease Map -----------------------
+        disEnrichMap_report <- reactive({
+            if ("Map" %in% input$diseaseReport) {
+                message("Disease Map Plot added to the report")
+                return(disEnrichMapReact())
+            }else{
+                return(NULL)
+            }
+        })
+
+
+            # Pathway Plot -------------------------------
+
+        pathway_report <- reactive({
+            if (input$pathwayReport == TRUE) {
+                message('Pathway Plot added to the report')
+                return(pathway_plot())
+            }else{
+                return(NULL)
+            }
+        })
+
+            # Interactions Plot --------------------------
+
+        interactions_report  <- reactive({
+            if (input$interactionReport == TRUE) {
+                message('Interactions Plot added to the report')
+
+                return(interactionsTrimmed())
+            }else{
+                return(NULL)
+            }
+        })
 
 
     #### report downloader ####
