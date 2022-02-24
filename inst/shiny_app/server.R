@@ -415,6 +415,10 @@ function(input, output) {
 
     output$intensity_selector  <- renderUI({
 
+        if (is.null(software_used())) {
+            return(NULL)
+        }
+
         if (software_used() == 'MaxQuant') {
 
             radioButtons(inputId = "IntensityType",
@@ -486,6 +490,10 @@ function(input, output) {
     })
 
     output$intensityBox <- renderInfoBox({
+
+        if (is.null(IntensityFound())) {
+            return(NULL)
+        }
 
         if (IntensityFound() == TRUE) {
             title_box <- paste0(input$IntensityType, '  was found.')
@@ -2715,84 +2723,104 @@ function(input, output) {
         }
     })
 
-    output$inputExpReport <- renderUI({
+    # output$inputExpReport <- renderUI({
+    #
+    #     if (is.null(ed_final$data)) {
+    #         return(NULL)
+    #     }
+    #
+    #     shinyWidgets::prettyCheckbox(
+    #         inputId = "experimentReport",
+    #         label = "Include Experiment Design",
+    #         value = TRUE,
+    #         shape = "round",
+    #         status = "info",
+    #         outline = TRUE,
+    #         bigger = TRUE,
+    #         plain = FALSE,
+    #         animation = "pulse"
+    #     )
+    # })
 
-        if (is.null(ed_final$data)) {
+            # PreproCessing Plots --------------------------
+
+                # Contaminants
+
+    contaminants_report <- reactive({
+        if ("Contaminants" %in% input$preprocessingReport) {
+
+            message('Contaminants added to the report')
+            return(contaminants_non_interactive())
+        }else{
+            return(NULL)
+        }
+    })
+
+                # Missing Values
+
+    missingValues_report <- reactive({
+        if ("missing" %in% input$preprocessingReport) {
+
+            message('Missing values added to the report')
+            return(missvalues_plot())
+
+        }else{
+            return(NULL)
+        }
+    })
+
+                # Normalization
+
+    normalization_report <- reactive({
+
+        if ("Normalization" %in% input$preprocessingReport) {
+
+            message('Normalized plot added to the report')
+            return(normalized_plot())
+
+        }else{
+            return(NULL)
+        }
+    })
+
+                # Imputation
+
+    imputation_report <- reactive({
+
+        if ("Imputation" %in% input$preprocessingReport) {
+
+            message('Imputation plot added to the report')
+            return(imputation_plot())
+
+        }else{
             return(NULL)
         }
 
-        shinyWidgets::prettyCheckbox(
-            inputId = "experimentReport",
-            label = "Include Experiment Design",
-            value = TRUE,
-            shape = "round",
-            status = "info",
-            outline = TRUE,
-            bigger = TRUE,
-            plain = FALSE,
-            animation = "pulse"
-        )
     })
 
 
+    # output$inpPreprocessingReport <- renderUI({
+    #
+    #     # if (is.null(choicesPreprocessing())) {
+    #     #     return(NULL)
+    #     # }
+    #     message('Choices available for the user preprocessing:')
+    #     message(choicesPreprocessing$choices)
+    #
+    #     shinyWidgets::prettyCheckboxGroup(
+    #         inputId = "preprocessingReport",
+    #         label = h4("Preprocessing Plots"),
+    #         choices = choicesPreprocessing$choices,
+    #         shape = "round",
+    #         outline = TRUE,
+    #         animation = "pulse",
+    #         bigger = TRUE,
+    #         status = "info",
+    #         plain = FALSE
+    #     )
+    #
+    # })
 
-
-
-
-
-            # Contaminants --------------------------
-
-        contaminants_report <- reactive({
-            if ("Contaminants" %in% input$preprocessingReport) {
-
-                message('Contaminants added to the report')
-                return(contaminants_non_interactive())
-            }else{
-                return(NULL)
-            }
-        })
-
-            # Missing Values --------------------------
-
-        missingValues_report <- reactive({
-            if ("missing" %in% input$preprocessingReport) {
-
-                message('Missing values added to the report')
-                return(missvalues_plot())
-
-            }else{
-                return(NULL)
-            }
-        })
-
-            # Normalization --------------------------
-
-        normalization_report <- reactive({
-
-            if ("Normalization" %in% input$preprocessingReport) {
-
-                message('Normalized plot added to the report')
-                return(normalized_plot())
-
-            }else{
-                return(NULL)
-            }
-        })
-
-            # Imputation --------------------------
-
-        imputation_report <- reactive({
-
-            if ("Imputation" %in% input$preprocessingReport) {
-
-                message('Imputation plot added to the report')
-                return(imputation_plot())
-
-            }else{
-                return(NULL)
-            }
-
-        })
 
             # Scatter Plot --------------------------
 
