@@ -20,7 +20,6 @@ uiReport <- tabPanel(title = h4('Report'),
                          plain = FALSE,
                          animation = "pulse"
                      )
-                     #uiOutput('inputExpReport')
                  ),
 
                  column(
@@ -42,14 +41,11 @@ uiReport <- tabPanel(title = h4('Report'),
                          status = "info",
                          plain = FALSE
                      )
-
-                     #uiOutput('inpPreprocessingReport')
                  ),
 
                  column(
                      width = 2,
                      # Sample comparisons
-
 
                      shinyWidgets::prettyCheckboxGroup(
                          inputId = "sampleReport",
@@ -182,7 +178,6 @@ uiReport <- tabPanel(title = h4('Report'),
                      )
                  )
              ),
-
              br(),
              br(),
 

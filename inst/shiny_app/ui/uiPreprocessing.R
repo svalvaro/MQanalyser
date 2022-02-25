@@ -1,9 +1,6 @@
 uiPreprocessing <-     tabPanel(
     title = h4("Preprocessing"),
-
-    # id = 'preprocessing-tab',
     value = 'preprocessing-tab',
-    #style = 'pointer-events: none;',
 
     tabsetPanel(
         type = 'tabs',
@@ -38,7 +35,6 @@ uiPreprocessing <-     tabPanel(
                                  inputId = "contaminantsInteractive",
                                  label = "Interactive",
                                  labelWidth = "80px",
-                                 #onStatus = 'success',
                                  value = FALSE,
                                  offStatus = 'danger'),
                          )
@@ -51,13 +47,10 @@ uiPreprocessing <-     tabPanel(
                                 br(),
                                 shinydashboard::infoBoxOutput('contaminants_box',
                                                               width = 8),
-
                                 br(),
                                 br(),
                                 hr(),
-
                                 uiOutput('contaminantsUI')
-
                          )
                      )
                  )
@@ -66,8 +59,6 @@ uiPreprocessing <-     tabPanel(
         # Filter Missing Values -------------------------------
         tabPanel('Filter out missing values',
                  value = 'filter_tab',
-                 #shinyjs::onclick(expr = "$(tab).removeClass('disabled')"),
-
 
                  sidebarLayout(
                      sidebarPanel(id = 'sidebar',
@@ -76,7 +67,6 @@ uiPreprocessing <-     tabPanel(
 
 
                      mainPanel(fluid = FALSE,
-                               #fluidRow(
                                column(
                                    width = 8,
                                    height = 800,
@@ -85,12 +75,10 @@ uiPreprocessing <-     tabPanel(
                                        image = 'images/logoTransparentSmall.gif',
                                        image.width = '200px')
                                ),
-                               #column(width = 1),
 
                                column(
                                    width = 4,
                                    uiOutput('triggerjs'),
-                                   #tags$script("$(tab).removeClass('disabled')"),
                                    shinycssloaders::withSpinner(
                                        plotOutput('heatmap_nas'),
                                        image = 'images/logoTransparentSmall.gif',
@@ -135,6 +123,7 @@ uiPreprocessing <-     tabPanel(
         ),
         # Imputation missing values -------------------------------
         tabPanel('Imputation of the missing values',
+                 value = 'imputation_tab',
 
                  sidebarLayout(
                      sidebarPanel(id = 'sidebar',
@@ -161,7 +150,6 @@ uiPreprocessing <-     tabPanel(
                                   checkboxInput(inputId = 'combined_imputation',
                                                 label = h4('Combine the samples into one plot'),
                                                 value = FALSE),
-
 
                                   sliderInput('imputation_bins',
                                               label = 'Number of bins',

@@ -1,7 +1,5 @@
 uiResults <- tabPanel(h4("Results"),
                       value = "results-tab",
-                      # tags$style("class = disabled;"),
-
 
                       includeCSS("www/css/styles.css"),
 
@@ -42,7 +40,6 @@ uiResults <- tabPanel(h4("Results"),
                               fluidRow(
                                   column(align = 'center',
                                          width = 10,
-                                         #offset = 2,
                                          shinycssloaders::withSpinner(
                                              DT::dataTableOutput('proteomics_results'),
                                              image = 'images/logoTransparentSmall.gif',
@@ -55,6 +52,4 @@ uiResults <- tabPanel(h4("Results"),
                               )
                           )
                       )
-
-
 )

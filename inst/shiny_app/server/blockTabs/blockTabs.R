@@ -9,7 +9,7 @@ observeEvent(input$start_input, {
         '
          var tab = $(\'a[data-value="preprocessing-tab"]\').parent();
          $(tab).removeClass("disabled");
-         '
+        '
     )
 })
 
@@ -21,7 +21,7 @@ observeEvent(input$preprocessing_tabset,{
     # If the user enters in one of the other three tabs creating the
     # data_se() summarized experiment object, allow them to enter in the
     # tabs
-    if (! input$preprocessing_tabset == 'contaminants_tab' ) {
+    if (input$preprocessing_tabset == 'imputation_tab' ) {
 
         message('Unblock the rest of the results and other tabs')
 
@@ -39,9 +39,9 @@ observeEvent(input$preprocessing_tabset,{
                 $(tab).removeClass("disabled");
                 var tab = $(\'a[data-value="enrichment-tab"]\').parent();
                 $(tab).removeClass("disabled");
-
-                '
+            '
         )
+
     }
 })
 

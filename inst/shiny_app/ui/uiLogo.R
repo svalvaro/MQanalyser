@@ -5,7 +5,6 @@ uiLogo <-   tabPanel(id = 'logo_tab',
                          src='images/logo.png',
                          width = 150),
 
-
                      fluidRow(
                          column(9,
 
