@@ -42,18 +42,15 @@ knitr::opts_chunk$set(echo = FALSE, warning = F)
 ## Experiment design
 
 ```{r expdesign}
-# Put it nice with Kabble extra
 
 if (!is.null(params$experimentDesign)) {
 
-    print(params$experimentDesign)
+     kableExtra::kbl(params$experimentDesign, align = 'c') 
 }
 
 ```
 
-\newpage
-
-```{r contaminants, out.height='100%',out.width='100%'}
+```{r contaminants, fig.width=10, fig.height=12}
 if (!is.null(params$contaminants)) {
 
     print(params$contaminants)
@@ -61,36 +58,28 @@ if (!is.null(params$contaminants)) {
 
 ```
 
-\newpage
-
-
-```{r missvalues}
+```{r missvalues,fig.width=10, fig.height=12}
 if (!is.null(params$missingValues)) {
 
     print(params$missingValues)
 }
 ```
 
-\newpage
-
-```{r normalization}
+```{r normalization,fig.width=10, fig.height=12}
 if (!is.null(params$normalization)) {
 
     print(params$normalization)
 }
 ```
 
-```{r imputation}
+```{r imputation,fig.width=10, fig.height=12}
 if (!is.null(params$imputation)) {
 
     print(params$imputation)
 }
 ```
 
-\newpage
-
-
-```{r scatter}
+```{r scatter,fig.width=10, fig.height=12}
 
 if (!is.null(params$scatter)) {
 
@@ -98,7 +87,7 @@ if (!is.null(params$scatter)) {
 }
 ```
 
-```{r correlation}
+```{r correlation,fig.width=10, fig.height=12}
 
 if (!is.null(params$correlation)) {
 
@@ -107,7 +96,7 @@ if (!is.null(params$correlation)) {
 }
 ```
 
-```{r PCA}
+```{r PCA,fig.width=10, fig.height=12}
 
 if (!is.null(params$PCA)) {
 
@@ -115,7 +104,7 @@ if (!is.null(params$PCA)) {
 }
 ```
 
-```{r heatmap, echo = FALSE}
+```{r heatmap, echo = FALSE,fig.width=10, fig.height=12}
 
 if (!is.null(params$heatMap)) {
 
@@ -125,28 +114,21 @@ if (!is.null(params$heatMap)) {
                        intensity_type = params$heatMap$IntensityType,
                        top_contributors = params$heatMap$topContributors,
                        interactive = FALSE)
-
-
     }else{
         print(params$heatMap)
     }
-    
 }
 ```
 
-
-
-```{r heatmap2}
+```{r heatmap2,fig.width=10, fig.height=12}
 
 if (!is.null(params$heatmap2)) {
 
     print(params$heatmap2)            
 }
-
 ```
 
-
-```{r volcano}
+```{r volcano,fig.width=10, fig.height=12}
 
 if (!is.null(params$volcano)) {
 
@@ -154,7 +136,7 @@ if (!is.null(params$volcano)) {
 }
 ```
 
-```{r profile}
+```{r profile,fig.width=10, fig.height=12}
 
 if (!is.null(params$profile)) {
 
@@ -162,7 +144,7 @@ if (!is.null(params$profile)) {
 }
 ```
 
-```{r geneOntology}
+```{r geneOntology,fig.width=10, fig.height=12}
 
 if (!is.null(params$geneOntology)) {
 
@@ -170,7 +152,7 @@ if (!is.null(params$geneOntology)) {
 }
 ```
 
-```{r GSEAenrichment}
+```{r GSEAenrichment,fig.width=10, fig.height=12}
 
 if (!is.null(params$GSEAenrichment)) {
 
@@ -178,7 +160,7 @@ if (!is.null(params$GSEAenrichment)) {
 }
 ```
 
-```{r networkEnrichment}
+```{r networkEnrichment,fig.width=10, fig.height=12}
 
 if (!is.null(params$networkEnrichment)) {
 
@@ -186,9 +168,7 @@ if (!is.null(params$networkEnrichment)) {
 }
 ```
 
-
-
-```{r diseaseaseEnrinchment}
+```{r diseaseaseEnrinchment,fig.width=10, fig.height=12}
 
 if (!is.null(params$diseaseaseEnrinchment)) {
 
@@ -196,7 +176,7 @@ if (!is.null(params$diseaseaseEnrinchment)) {
 }
 ```
 
-```{r diseaseaseGSEA}
+```{r diseaseaseGSEA,fig.width=10, fig.height=12}
 
 if (!is.null(params$diseaseaseGSEA)) {
 
@@ -204,7 +184,7 @@ if (!is.null(params$diseaseaseGSEA)) {
 }
 ```
 
-```{r diseaseaseHeatmap}
+```{r diseaseaseHeatmap,fig.width=10, fig.height=12}
 
 if (!is.null(params$diseaseaseHeatmap)) {
 
@@ -213,7 +193,7 @@ if (!is.null(params$diseaseaseHeatmap)) {
 ```
 
 
-```{r diseaseaseDensity}
+```{r diseaseaseDensity,fig.width=10, fig.height=12}
 
 if (!is.null(params$diseaseaseDensity)) {
 
@@ -222,7 +202,7 @@ if (!is.null(params$diseaseaseDensity)) {
 ```
 
 
-```{r diseaseaseAssociation}
+```{r diseaseaseAssociation,fig.width=10, fig.height=12}
 
 if (!is.null(params$diseaseaseAssociation)) {
 
@@ -230,7 +210,7 @@ if (!is.null(params$diseaseaseAssociation)) {
 }
 ```
 
-```{r diseaseaseCircus}
+```{r diseaseaseCircus,fig.width=10, fig.height=12}
 
 if (!is.null(params$diseaseaseCircus)) {
 
@@ -238,7 +218,7 @@ if (!is.null(params$diseaseaseCircus)) {
 }
 ```
 
-```{r diseaseaseNetwork}
+```{r diseaseaseNetwork,fig.width=10, fig.height=12}
 
 if (!is.null(params$diseaseaseNetwork)) {
 
@@ -246,7 +226,7 @@ if (!is.null(params$diseaseaseNetwork)) {
 }
 ```
 
-```{r diseaseaseMap}
+```{r diseaseaseMap,fig.width=10, fig.height=12}
 
 if (!is.null(params$diseaseaseMap)) {
 
@@ -254,7 +234,7 @@ if (!is.null(params$diseaseaseMap)) {
 }
 ```
 
-```{r pathway}
+```{r pathway,fig.width=10, fig.height=12}
 
 if (!is.null(params$pathway)) {
 
@@ -263,7 +243,7 @@ if (!is.null(params$pathway)) {
 ```
 
 
-```{r interactions}
+```{r interactions,fig.width=10, fig.height=12, echo = FALSE,results='hide',fig.keep='all'}
 
 if (!is.null(params$interactions)) {
 

@@ -38,5 +38,6 @@ library(rmarkdown)
 library(ggnewscale)
 library(ggupset)
 library(grDevices)
+library(kableExtra)
 library(MQanalyser)
 
