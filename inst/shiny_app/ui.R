@@ -7,13 +7,9 @@ source("ui/uiPathwayAnalysis.R", local = TRUE)
 source("ui/uiDataInput.R", local = TRUE)
 source("ui/uiPreprocessing.R", local = TRUE)
 source("ui/uiResults.R", local = TRUE)
-source("ui/uiHeatmap.R", local = TRUE)
 source("ui/uiSampleComparisons.R", local = TRUE)
-source("ui/uiVolcano.R", local = TRUE)
-source("ui/uiProfile.R", local = TRUE)
 source("ui/uiEnrichmentAnalysis.R", local = TRUE)
 source("ui/uiDisease.R", local = TRUE)
-
 
 ##### UI
 tagList(
@@ -48,21 +44,9 @@ tagList(
 #### Results Panel ####
     uiResults,
 
-#### HeatMap ####
-
-    uiHeatmap,
-
 #### Sample Comparisons ####
 
     uiSampleComparisons,
-
-#### Volcano Plot ####
-
-    uiVolcano,
-
-#### Profile Plot ####
-
-    uiProfile,
 
 #### Enrichment analysis ####
 
