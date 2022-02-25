@@ -2,7 +2,7 @@
 
 heatmap_report <- reactive({
 
-    if ("heatmap" %in% input$proteinReport) {
+    if ("heatmap" %in% input$sampleReport) {
         message('Heatmap added to the report')
 
         # If the user has selected the top Contributors method, the heatmap
@@ -34,7 +34,7 @@ heatmap_report <- reactive({
 
 volcano_report <- reactive({
 
-    if ("volcano" %in% input$proteinReport) {
+    if ("volcano" %in% input$sampleReport) {
         message('Volcano added to the report')
         return(volcano_non_interactive())
     }else{
@@ -46,7 +46,7 @@ volcano_report <- reactive({
 
 profile_report <- reactive({
 
-    if ("profile" %in% input$proteinReport) {
+    if ("profile" %in% input$sampleReport) {
         message('Volcano added to the report')
         return(profile_reactive())
     }else{

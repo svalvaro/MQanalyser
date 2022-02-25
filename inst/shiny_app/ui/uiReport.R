@@ -49,26 +49,11 @@ uiReport <- tabPanel(title = h4('Report'),
 
                      shinyWidgets::prettyCheckboxGroup(
                          inputId = "sampleReport",
-                         label = h4("Sample Comparisons Plots"),
+                         label = h4("Visualizations"),
                          choices = c("Scatter Plot" = "scatter",
                                      "Correlation",
-                                     "PCA"),
-                         shape = "round",
-                         outline = TRUE,
-                         animation = "pulse",
-                         bigger = TRUE,
-                         status = "info",
-                         plain = FALSE
-                     )
-                 ),
-                 column(
-                     width = 2,
-                     # Volcano Plot
-
-                     shinyWidgets::prettyCheckboxGroup(
-                         inputId = "proteinReport",
-                         label = h4("Protein Level Plots"),
-                         choices = c("Heatmap Plot" = "heatmap",
+                                     "PCA",
+                                     "Heatmap Plot" = "heatmap",
                                      "Volcano Plot" = "volcano",
                                      "Profile Plot" = "profile"),
                          shape = "round",
