@@ -3,12 +3,10 @@ output$generateReport <- downloadHandler(
     # For PDF output, change this to "report.pdf"
     filename = reactive({
         paste0(
-            "Proteomics_report_", Sys.Date(),'.',
+            "Proteomics_Analyser_report_", format(Sys.Date(), "%d_%m_%y"),'.',
                input$formatReport)
 
     }),
-
-
 
     content = function(file) {
         # Copy the report file to a temporary directory before processing it, in
