@@ -1,6 +1,5 @@
 ---
 title: "report.Rmd"
-output: pdf_document
 params:
     experimentDesign: NA
     contaminants: NA
@@ -35,7 +34,7 @@ params:
 knitr::opts_chunk$set(echo = FALSE, warning = F)
 ```
 
-## Proteomics Report
+# Proteomics report
 
 
 

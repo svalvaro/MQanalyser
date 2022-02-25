@@ -2,11 +2,13 @@ output$generateReport <- downloadHandler(
 
     # For PDF output, change this to "report.pdf"
     filename = reactive({
-        paste0("report.", input$formatReport)
+        paste0(
+            "Proteomics_report_", Sys.Date(),'.',
+               input$formatReport)
+
     }),
-    # filename =  function(){
-    #     paste("report", switch(input$formatReport,  "PDF"="pdf","Word"="docx"), sep=".")
-    # },
+
+
 
     content = function(file) {
         # Copy the report file to a temporary directory before processing it, in
@@ -45,8 +47,6 @@ output$generateReport <- downloadHandler(
             interactions = interactions_report()
         )
 
-
-
         id <- shiny::showNotification(
             ui ="Rendering report... it can take a couple of minutes",
             duration = NULL,
@@ -57,11 +57,15 @@ output$generateReport <- downloadHandler(
 
 
         # Knit the document, passing in the `params` list, and eval it in a
-        # child of the global environment (this isolates the code in the documenta
+        # child of the global environment (this isolates the code in the document
         # from the code in this app).
-        rmarkdown::render(tempReport, output_file = file,
+        rmarkdown::render(tempReport,
+                          output_file = file,
                           params = params,
-                          #output_format =
+                          output_format = switch(input$formatReport,
+                                                 "PDF"= rmarkdown::pdf_document(),
+                                                 'HTML'= rmarkdown::html_document()
+                                                 ),
                           envir = new.env(parent = globalenv())
         )
     }

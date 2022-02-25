@@ -170,14 +170,16 @@ uiReport <- tabPanel(title = h4('Report'),
                          inputId = "formatReport",
                          label = h4("What format would you prefer"),
                          choices = c("PDF"='pdf',
-                                     "HTML"='HTML',
-                                     "Word"='docx'),
+                                     "HTML"='HTML'
+                                     ),
                          inline = TRUE,
                          checkbox = TRUE,
                          status = "info",
                      )
                  )
              ),
+
+
              br(),
              br(),
 
