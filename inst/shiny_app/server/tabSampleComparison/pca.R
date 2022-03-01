@@ -20,6 +20,9 @@ output$pca_number_proteins  <- renderUI({
 # PCA plot
 
 pca_reactive <- reactive({
+
+    req(input$pca_proteins)
+
     pca_reactive <- MQanalyser::plot_pca_improved(dep = dep(),
                                                   PC_x = 1,
                                                   PC_y = 2,
@@ -30,6 +33,7 @@ pca_reactive <- reactive({
 })
 
 output$pca_plot <- renderPlot(height = 800, width = 1200,{
+
     pca_reactive()
 })
 
