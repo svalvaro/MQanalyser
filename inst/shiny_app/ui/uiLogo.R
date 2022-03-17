@@ -21,7 +21,7 @@ uiLogo <-   tabPanel(id = 'logo_tab',
                                                 style = 'color:#990000'),
                                          target = '_blank'),
                                   style = "font-size: 85%"),
-                                p(tags$em("Last updated: January 2022"),
+                                p(tags$em("Last updated: March 2022"),
                                   style = 'font-size:75%'))
                      )
 )
