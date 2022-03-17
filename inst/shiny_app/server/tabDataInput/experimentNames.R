@@ -58,6 +58,16 @@ experiment_names <- reactive({
         experiment_names <- gsub('.raw.PG.Quantity', '', experiment_names)
 
         experiment_names <- gsub('\\[.*\\] ', '', experiment_names)
+
+    } else if (software_used() == 'MSFragger'){
+
+        experiment_names <- colnames(
+            proteoInput() %>% select(contains('Intensity'),
+                                     -contains(c('Total','Unique')))
+                                     )
+
+        experiment_names <- gsub(' Intensity', '', experiment_names)
+
     }
 
     message(paste0('The experiment names are:', experiment_names))

@@ -34,9 +34,6 @@ params:
 knitr::opts_chunk$set(echo = FALSE, warning = F)
 ```
 
-# Proteomics report
-
-
 
 ## Experiment design
 

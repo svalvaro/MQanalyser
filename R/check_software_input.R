@@ -20,10 +20,13 @@ check_software_input <- function(file){
 
         software_used <- 'MaxQuant'
 
-    } else if('PG.ProteinGroups' %in% base::colnames(file)&&
+    } else if('PG.ProteinGroups' %in% base::colnames(file) &&
               'PG.ProteinDescriptions' %in% base::colnames(file)) {
 
         software_used <- 'Spectronaut'
+    }else if('Protein ID' %in% colnames(file) &&
+             'Protein Existence' %in% colnames(file)){
+        software_used <- 'MSFragger'
     }
 
     message(paste0(software_used, ' software detected'))

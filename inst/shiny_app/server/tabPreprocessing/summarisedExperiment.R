@@ -50,6 +50,18 @@ data_se <- reactive({
         # Make unique
         data_unique <- DEP::make_unique(df,'Gene.names', 'Protein.IDs', delim = ';')
 
+    } else if ( software_used() == 'MSFragger'){
+
+        df_msfragger <- df %>% select(contains('Intensity'),
+                                       -contains(c('Total','Unique')))
+
+        columns <- which(colnames(df) %in% colnames(df_msfragger) )
+
+
+        colnames(df)[columns] <- gsub(' Intensity','', colnames(df)[columns])
+
+        data_unique <- DEP::make_unique(df,'Gene','Protein ID', delim = ';')
+
     }
 
     message('The experiment names are:\n')

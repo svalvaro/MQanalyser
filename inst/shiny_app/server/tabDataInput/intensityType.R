@@ -22,6 +22,13 @@ output$intensity_selector  <- renderUI({
                      choices = c("LFQ" = 'LFQ',
                                  "iBAQ" = 'iBAQ'),
                      selected = 'LFQ')
+
+    } else if (software_used() == 'MSFragger'){
+
+        radioButtons(inputId = "IntensityType",
+                     h4("Intensity type to analyze:"),
+                     choices = 'intensity',
+                     selected = 'intensity')
     }
 })
 
@@ -54,7 +61,16 @@ IntensityFound <- reactive({
         }else{
             columns <-  grep('PG.IBAQ', colnames(proteoInput()))
         }
+    } else if (software_used() == 'MSFragger'){
+
+
+        df <- proteoInput() %>% select(contains('Intensity'),
+                                          -contains(c('Total','Unique')))
+
+        columns <- which(colnames(proteoInput()) %in% colnames(df) )
     }
+
+    message(paste0("The columns with intensities are: ", columns))
 
     if (length(columns) == 0) {
 

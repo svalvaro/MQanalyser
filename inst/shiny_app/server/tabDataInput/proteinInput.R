@@ -11,7 +11,7 @@ proteoInput <- reactive({
 
         # If the file ends in txt is from MaxQuant, read accordingly
 
-        if (endsWith(as.character(inFile$datapath),suffix = '.txt')) {
+        if (endsWith(as.character(inFile$datapath),suffix = '.txt') ) {
 
             df <- read.delim(inFile$datapath)
 
@@ -21,6 +21,11 @@ proteoInput <- reactive({
 
             df <- read_csv(inFile$datapath, na = 'NaN')
 
+        }else if (endsWith(as.character(inFile$datapath),suffix = '.tsv') ){
+
+            df  <- readr::read_delim(inFile$datapath,
+                                           delim = "\t", escape_double = FALSE,
+                                           trim_ws = TRUE)
         }
 
         # If they press DEMO

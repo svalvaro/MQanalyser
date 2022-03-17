@@ -108,6 +108,10 @@ proteoInputClean <- reactive({
 
     df <- proteoInputCombined()
 
+    if(software_used() == 'MSFragger'){
+        return(df)
+    }
+
     if (input$removeContaminantsInput) {
 
         df <- df[(df$Potential.contaminant == ''),]
