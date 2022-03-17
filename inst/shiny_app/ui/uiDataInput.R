@@ -163,7 +163,7 @@ uiDataInput <-  tabPanel(
             ),
             style = "font-size: 85%"
         ),
-        p(tags$em("Last updated: January 2022"),
+        p(tags$em("Last updated: March 2022"),
           style = 'font-size:75%')
     ))
 )
